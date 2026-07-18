@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoScritta from '../../assets/images/logo_scritta.png';
+import topImg from '../../assets/images/top.png';
 ---
 
 <section class="hero">
@@ -9,18 +10,23 @@ import logoScritta from '../../assets/images/logo_scritta.png';
 		<Image src={logoScritta} alt="ROBOSECT" width={620} />
 		<span class="eyebrow hero-eyebrow">Robotics &middot; AI &middot; Computer Vision</span>
 		<h1>Automating Complexity</h1>
-		<p class="tagline">
-			ROBOSECT develops advanced robotic systems that combine Artificial Intelligence, Computer
-			Vision and Motion Planning to automate the manipulation, assembly, inspection and testing of
-			complex industrial products involving <strong>cables</strong> and other <strong>deformable
-			objects</strong>.
-		</p>
-		<p class="tagline">
-			From <strong>electrical panel quality control</strong> to <strong>wiring harness
-			remanufacturing</strong> and intelligent robot motion planning, our technologies enable
-			manufacturers to automate processes that have traditionally required skilled manual
-			operators.
-		</p>
+		<div class="tagline-row">
+			<Image src={topImg} alt="" width={280} class="tagline-image" />
+			<div class="tagline-box">
+				<p class="tagline">
+					ROBOSECT develops advanced robotic systems that combine Artificial Intelligence, Computer
+					Vision and Motion Planning to automate the manipulation, assembly, inspection and testing
+					of complex industrial products involving <strong class="glow-text">cables</strong> and other <strong
+						class="glow-text">deformable objects</strong>.
+				</p>
+				<p class="tagline">
+					From <strong>electrical panel quality control</strong> to <strong>wiring harness
+					remanufacturing</strong> and intelligent robot motion planning, our technologies enable
+					manufacturers to automate processes that have traditionally required skilled manual
+					operators.
+				</p>
+			</div>
+		</div>
 		<div class="cta-group">
 			<a href="#about" class="btn btn-primary">About ROBOSECT</a>
 			<a href="#technology" class="btn btn-primary">Explore Our Technology</a>
@@ -80,13 +86,95 @@ import logoScritta from '../../assets/images/logo_scritta.png';
 		}
 	}
 
+	.tagline-row {
+		--sync-duration: 4s;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1em;
+		max-width: 56em;
+		margin: 0 auto 1em;
+	}
+
+	@media (max-width: 780px) {
+		.tagline-row {
+			flex-direction: column;
+		}
+	}
+
+	.tagline-image {
+		flex-shrink: 0;
+		width: 280px;
+		height: auto;
+		border-radius: var(--border-radius);
+		animation: image-drift var(--sync-duration) ease-in-out infinite;
+		animation-delay: 0s;
+	}
+
+	@keyframes image-drift {
+		0%,
+		100% {
+			transform: translateX(-12px);
+		}
+		50% {
+			transform: translateX(18px);
+		}
+	}
+
+	.tagline-box {
+		max-width: 40em;
+		margin: 0;
+		padding: 1.5em 1.8em;
+		border: 1px solid rgba(84, 128, 241, 0.4);
+		border-radius: var(--border-radius);
+		animation: box-glow var(--sync-duration) ease-in-out infinite;
+		animation-delay: 0s;
+	}
+
+	.tagline-box .tagline {
+		margin: 0 0 1em;
+	}
+
+	.tagline-box .tagline:last-child {
+		margin-bottom: 0;
+	}
+
+	@keyframes box-glow {
+		0%,
+		100% {
+			border-color: rgba(84, 128, 241, 0.25);
+			box-shadow: 0 0 4px rgba(84, 128, 241, 0.1);
+		}
+		50% {
+			border-color: rgba(84, 128, 241, 0.9);
+			box-shadow: 0 0 16px rgba(84, 128, 241, 0.5);
+		}
+	}
+
 	.tagline {
 		font-weight: var(--font-weight);
 		font-size: 1.1em;
 		color: var(--color-fg);
-		max-width: 40em;
-		margin: 0 auto 1em;
 		text-align: justify;
+	}
+
+	.glow-text {
+		animation: glow-text-pulse var(--sync-duration) ease-in-out infinite;
+		animation-delay: 0s;
+	}
+
+	@keyframes glow-text-pulse {
+		0%,
+		100% {
+			text-shadow:
+				0 0 1px rgba(84, 128, 241, 0.2),
+				0 0 3px rgba(84, 128, 241, 0.1);
+		}
+		50% {
+			text-shadow:
+				0 0 5px rgba(84, 128, 241, 0.9),
+				0 0 12px rgba(84, 128, 241, 0.5);
+		}
 	}
 
 	.cta-group {
