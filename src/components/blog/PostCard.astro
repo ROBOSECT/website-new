@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const formattedDate = post.data.date.toLocaleDateString('en-GB', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+---
+
+<a href={`/blog/${post.id}`} class="post-card">
+	<Image src={post.data.cover} alt={post.data.coverAlt} width={480} class="cover" />
+	<div class="card-body">
+		<time>{formattedDate}</time>
+		<h3>{post.data.title}</h3>
+		<p>{post.data.description}</p>
+	</div>
+</a>
+
+<style>
+	.post-card {
+		display: block;
+		color: inherit;
+		background: var(--color-panel);
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		text-decoration: none;
+		transition: transform 0.2s ease;
+	}
+
+	.post-card:hover {
+		transform: translateY(-4px);
+		text-decoration: none;
+	}
+
+	.cover {
+		width: 100%;
+		height: auto;
+	}
+
+	.card-body {
+		padding: 1.5em;
+	}
+
+	time {
+		font-size: 0.85em;
+		color: var(--color-fg-light);
+	}
+
+	.card-body h3 {
+		margin: 0.4em 0;
+	}
+
+	.card-body p {
+		color: var(--color-fg);
+		margin: 0;
+	}
+</style>

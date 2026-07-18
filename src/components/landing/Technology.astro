@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import setupImg from '../../assets/images/setup.jpeg';
+
+const features = [
+	{
+		title: 'AI Perception',
+		text: 'Our AI perception stack combines RGB, RGB-D and 3D sensing with deep-learning models capable of detecting industrial components, cables, connectors and deformable linear objects. The perception system automatically reconstructs the real configuration of products, compensating for manufacturing tolerances and positioning errors while continuously monitoring process execution.',
+	},
+	{
+		title: 'Digital Manufacturing Integration',
+		text: 'ROBOSECT connects directly with engineering software and production databases to retrieve product information without manual programming. The platform automatically imports:',
+		list: ['CAD models', 'Electrical schematics', 'Connection lists', 'Component libraries', 'Production data'],
+		footer: 'allowing robots to configure themselves for new products with minimal operator intervention.',
+	},
+	{
+		title: 'Intelligent Planning',
+		text: 'Our planning engine combines:',
+		list: ['AI reasoning', 'Digital twins', 'Physics-based simulation', 'Collision avoidance'],
+		footer:
+			'to generate safe robotic trajectories that consider not only rigid objects but also cables, wiring harnesses and robot dress packs.',
+	},
+	{
+		title: 'Autonomous Robotic Execution',
+		text: 'The generated plans are executed by collaborative robotic systems equipped with custom end-effectors, vision sensors and force-controlled tools capable of:',
+		list: [
+			'Electrical continuity testing',
+			'Connector insertion',
+			'Cable routing',
+			'Wiring harness manipulation',
+			'Precision assembly',
+		],
+	},
+];
+---
+
+<section id="technology" class="technology">
+	<div class="container">
+		<header class="text-center">
+			<span class="eyebrow">How It Works</span>
+			<h2>Technology</h2>
+		</header>
+		<div class="tech-grid">
+			<Image src={setupImg} alt="ROBOSECT robotic setup" width={640} class="tech-image" />
+			<div>
+				{
+					features.map((f) => (
+						<div class="feature">
+							<h3>{f.title}</h3>
+							<p>{f.text}</p>
+							{f.list && (
+								<ul>
+									{f.list.map((item) => (
+										<li>{item}</li>
+									))}
+								</ul>
+							)}
+							{f.footer && <p>{f.footer}</p>}
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.tech-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 3em;
+		align-items: start;
+		margin-top: 3em;
+	}
+
+	@media (max-width: 780px) {
+		.tech-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.tech-image {
+		border-radius: var(--border-radius);
+		position: sticky;
+		top: 6em;
+	}
+
+	.feature {
+		margin-bottom: 2em;
+	}
+
+	.feature h3 {
+		color: var(--color-accent-blue);
+		font-size: 1.1em;
+	}
+
+	.feature ul {
+		margin: 0.5em 0 1em;
+		padding-left: 1.2em;
+	}
+
+	.feature li {
+		margin-bottom: 0.3em;
+	}
+</style>

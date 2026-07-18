@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const formattedDate = post.data.date.toLocaleDateString('en-GB', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+---
+
+<BaseLayout title={`${post.data.title} · ROBOSECT`} description={post.data.description}>
+	<article class="post">
+		<div class="container">
+			<a href="/blog" class="back-link">&larr; Back to blog</a>
+			<header>
+				<time>{formattedDate}</time>
+				<h1>{post.data.title}</h1>
+				{
+					post.data.tags.length > 0 && (
+						<ul class="tags">
+							{post.data.tags.map((tag) => (
+								<li>{tag}</li>
+							))}
+						</ul>
+					)
+				}
+			</header>
+			<Image
+				src={post.data.cover}
+				alt={post.data.coverAlt}
+				width={960}
+				class="cover"
+			/>
+			<div class="prose">
+				<slot />
+			</div>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.post {
+		padding-top: 8em;
+		padding-bottom: 4em;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-bottom: 2em;
+		color: var(--color-fg-light);
+	}
+
+	header {
+		text-align: center;
+		margin-bottom: 2em;
+	}
+
+	time {
+		font-size: 0.85em;
+		color: var(--color-fg-light);
+	}
+
+	.tags {
+		display: flex;
+		justify-content: center;
+		gap: 0.6em;
+		list-style: none;
+		padding: 0;
+		margin-top: 1em;
+	}
+
+	.tags li {
+		background: var(--color-panel);
+		padding: 0.2em 0.8em;
+		border-radius: 999px;
+		font-size: 0.8em;
+		color: var(--color-fg-light);
+	}
+
+	.cover {
+		width: 100%;
+		border-radius: var(--border-radius);
+		margin-bottom: 2em;
+	}
+
+	.prose {
+		max-width: 42em;
+		margin: 0 auto;
+		text-align: justify;
+	}
+
+	.prose :global(img) {
+		border-radius: var(--border-radius);
+		margin: 1.5em 0;
+	}
+</style>

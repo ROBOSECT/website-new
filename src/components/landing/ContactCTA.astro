@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import contactImg from '../../assets/images/contact_us.png';
+---
+
+<section id="contact" class="contact">
+	<div class="container text-center">
+		<header>
+			<span class="eyebrow">Contact</span>
+			<h2>Ready to Automate What Others Can't?</h2>
+			<p class="lead">
+				From intelligent inspection to advanced robotic manipulation, we help manufacturers
+				transform complex processes into smart automation solutions.
+			</p>
+		</header>
+		<div class="contact-banner">
+			<div class="contact-image-wrap">
+				<Image
+					src={contactImg}
+					alt="Get in touch with ROBOSECT"
+					width={640}
+					class="contact-image"
+				/>
+				<div class="contact-overlay">
+					<p class="closing">Let's discuss your next challenge.</p>
+					<p class="email"><a href="mailto:info@robosect.it">info@robosect.it</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.lead {
+		max-width: 36em;
+		margin: 0.3em auto 1em;
+		font-size: 1.1em;
+		color: var(--color-fg);
+	}
+
+	.contact-banner {
+		max-width: 480px;
+		margin: 3em auto 0;
+		background: var(--color-panel);
+		border: 1px solid var(--color-border-bg);
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.contact-banner:hover {
+		transform: translateY(-4px);
+		border-color: var(--color-border);
+	}
+
+	.contact-image-wrap {
+		position: relative;
+	}
+
+	.contact-image {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.contact-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		padding: 2em;
+		padding-top: 6%;
+	}
+
+	.closing {
+		font-family: var(--font-family-heading);
+		font-weight: 700;
+		font-size: 1.6em;
+		line-height: 1.2;
+		color: var(--color-fg-bold);
+		margin-bottom: 0.5em;
+		text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+	}
+
+	.email a {
+		font-size: 1.2em;
+		font-weight: var(--font-weight-bold);
+		color: var(--color-fg-bold);
+		border-bottom: 1px solid var(--color-accent-blue);
+	}
+
+	.email a:hover {
+		color: var(--color-accent-blue);
+		text-decoration: none;
+	}
+</style>

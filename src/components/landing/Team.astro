@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import teamRobotics from '../../assets/images/team_robotics.png';
+import teamAiVision from '../../assets/images/team_ai_vision.png';
+import teamSystem from '../../assets/images/team_system.png';
+import teamIndustrial from '../../assets/images/team_industrial.png';
+
+const roles = [
+	{
+		title: 'Robotics & Motion Planning',
+		text: 'Deep expertise in industrial robot programming, trajectory planning and collision-free motion for complex, cluttered environments.',
+		icon: teamRobotics,
+	},
+	{
+		title: 'AI & Computer Vision',
+		text: 'Research and engineering in deep learning, 3D perception and deformable object detection, built on years of academic publication and applied research.',
+		icon: teamAiVision,
+	},
+	{
+		title: 'Systems & Product Engineering',
+		text: 'Design and integration of end-effectors, sensing hardware and control software into reliable, production-ready robotic platforms.',
+		icon: teamSystem,
+	},
+	{
+		title: 'Industrial Partnerships',
+		text: 'Close collaboration with manufacturers and European research programs to turn academic innovation into deployed industrial technology.',
+		icon: teamIndustrial,
+	},
+];
+---
+
+<section id="team" class="team">
+	<div class="container text-center">
+		<header>
+			<span class="eyebrow">Team</span>
+			<h2>Our Team</h2>
+		</header>
+		<p class="lead">
+			ROBOSECT is built by a multidisciplinary team of robotics engineers, AI researchers and industrial automation specialists, with roots at the University of Bologna.
+		</p>
+		<p class="lead">
+			Together, our expertise spans four complementary domains that transform cutting-edge research into intelligent robotic systems ready for industrial deployment.
+		</p>
+
+		<div class="team-grid">
+			{
+				roles.map((role) => (
+					<div class="role-card">
+						<Image src={role.icon} alt="" width={320} class="role-icon" />
+						<div class="role-body">
+							<h3>{role.title}</h3>
+							<p>{role.text}</p>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.lead {
+		max-width: 42em;
+		margin: 0 auto 3em;
+	}
+
+	.team-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 2em;
+		text-align: left;
+	}
+
+	.role-card {
+		background: var(--color-panel);
+		border: 1px solid var(--color-border-bg);
+		border-radius: var(--border-radius);
+		padding: 1.5em 1.5em 0;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.role-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--color-border);
+	}
+
+	.role-icon {
+		width: 100%;
+		height: auto;
+		display: block;
+		border-radius: var(--border-radius);
+	}
+
+	.role-body {
+		padding: 1.5em 0;
+	}
+
+	.role-card h3 {
+		color: var(--color-accent-blue);
+		font-size: 1.05em;
+	}
+
+	.role-card p {
+		margin: 0;
+	}
+</style>

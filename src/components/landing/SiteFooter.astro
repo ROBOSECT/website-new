@@ -1,0 +1,106 @@
+---
+import { Image } from 'astro:assets';
+import logoUnibo from '../../assets/images/logo_unibo.png';
+import logoSpinoffUnibo from '../../assets/images/logo_spinoff_unibo.png';
+import logoCobo from '../../assets/images/logo_cobo.png';
+import logoEit from '../../assets/images/logo_EIT.png';
+---
+
+<footer class="site-footer">
+	<div class="container">
+		<div class="partner-logos">
+			<Image src={logoUnibo} alt="University of Bologna" width={140} />
+			<Image src={logoSpinoffUnibo} alt="UniBo Spinoff" width={140} />
+			<Image src={logoCobo} alt="CoBo" width={140} />
+			<Image src={logoEit} alt="EIT" width={140} />
+		</div>
+
+		<p class="legal">
+			<strong
+				>ROBOSECT SRL – Via Ugo Foscolo 7, 40136, Bologna – CF/PIVA: 04228581205 – Numero
+				REA BO - 578120 – Capitale Sociale 10.000 €</strong
+			>
+		</p>
+		<p class="legal">&copy; ROBOSECT SRL. All rights reserved.</p>
+
+		<p class="links">
+			<a
+				href="https://www.iubenda.com/privacy-policy/19864742"
+				class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe"
+				title="Privacy Policy">Privacy Policy</a
+			>
+			<a
+				href="https://www.iubenda.com/privacy-policy/19864742/cookie-policy"
+				class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe"
+				title="Cookie Policy">Cookie Policy</a
+			>
+			<a href="/docs/policy_gender_equality_diversity.pdf" class="policy-link"
+				>Policy gender equality and diversity</a
+			>
+		</p>
+	</div>
+
+	<script
+		type="text/javascript"
+		is:inline
+		define:vars={{ siteId: 3721122, cookiePolicyId: 19864742 }}
+	>
+		var _iub = _iub || [];
+		_iub.csConfiguration = { siteId, cookiePolicyId, lang: 'en-GB' };
+	</script>
+	<script
+		type="text/javascript"
+		is:inline
+		src="https://cs.iubenda.com/autoblocking/3721122.js"></script>
+	<script type="text/javascript" is:inline src="//cdn.iubenda.com/cs/gpp/stub.js"></script>
+	<script
+		type="text/javascript"
+		is:inline
+		src="//cdn.iubenda.com/cs/iubenda_cs.js"
+		charset="UTF-8"
+		async></script>
+	<script type="text/javascript" is:inline src="https://cdn.iubenda.com/iubenda.js" async
+	></script>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--color-panel);
+		padding: 4em 0 2em;
+		text-align: center;
+		font-size: 0.85em;
+		color: var(--color-fg-light);
+	}
+
+	.partner-logos {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 2em;
+		margin-bottom: 2em;
+	}
+
+	.partner-logos :global(img) {
+		width: 100px;
+		height: auto;
+		filter: grayscale(1) brightness(2);
+		opacity: 0.8;
+	}
+
+	.legal {
+		margin: 0 0 0.5em;
+	}
+
+	.links {
+		margin-top: 1.5em;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 1.5em;
+	}
+
+	.policy-link {
+		font-size: 0.9em;
+	}
+</style>

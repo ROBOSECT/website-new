@@ -1,0 +1,111 @@
+---
+import { Image } from 'astro:assets';
+import aboutImg from '../../assets/images/about_robosect.png';
+---
+
+<section id="about" class="intro">
+	<div class="container">
+		<header class="text-center">
+			<span class="eyebrow">Company</span>
+			<h2>About ROBOSECT</h2>
+			<p class="lead">Turning Robotics Research into Industrial Innovation.</p>
+		</header>
+		<div class="intro-grid">
+			<div class="intro-image-wrap">
+				<Image src={aboutImg} alt="ROBOSECT robotic system" width={900} class="intro-image" />
+				<div class="intro-image-overlay">
+					<p class="closing">
+						From research to factory floor, we transform complex automation challenges into
+						intelligent robotic solutions.
+					</p>
+				</div>
+			</div>
+			<div class="intro-text">
+				<p>
+					<strong>ROBOSECT</strong> is an Italian deep-tech startup and University of Bologna
+					spin-off specializing in AI-driven robotic automation. We develop advanced technologies
+					that combine <strong>Artificial Intelligence</strong>, <strong>Computer Vision</strong>,
+					<strong>Digital Twins</strong>, and <strong>Motion Planning</strong> to automate
+					manufacturing processes involving cables, wiring harnesses, connectors, and other
+					deformable objects.
+				</p>
+				<p>
+					Born from years of academic research and European innovation projects, our solutions
+					enable robots to perform tasks that traditionally required human expertise—bringing
+					greater efficiency, precision, flexibility, and traceability to modern industrial
+					production.
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.lead {
+		font-weight: var(--font-weight-bold);
+		font-size: 1.15em;
+		color: var(--color-fg-bold);
+		max-width: 32em;
+		margin: 0.3em auto 0;
+	}
+
+	.intro-grid {
+		display: grid;
+		grid-template-columns: 1.5fr 1fr;
+		gap: 3em;
+		align-items: center;
+		margin-top: 3em;
+	}
+
+	@media (max-width: 780px) {
+		.intro-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.intro-image-wrap {
+		position: relative;
+		background: var(--color-panel);
+		border: 1px solid var(--color-border-bg);
+		border-radius: var(--border-radius);
+		overflow: hidden;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.intro-image-wrap:hover {
+		transform: translateY(-4px);
+		border-color: var(--color-border);
+	}
+
+	.intro-image {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.intro-image-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 1.5em;
+		padding-bottom: 0.6em;
+		background: linear-gradient(180deg, rgba(28, 29, 38, 0) 40%, rgba(28, 29, 38, 0.9) 100%);
+	}
+
+	.intro-image-overlay .closing {
+		text-align: center;
+		font-weight: var(--font-weight-bold);
+		color: var(--color-fg-bold);
+		margin: 0;
+		text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+	}
+
+	.intro-text p {
+		text-align: justify;
+		font-size: 1.05em;
+	}
+</style>

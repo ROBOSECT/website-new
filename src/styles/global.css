@@ -1,0 +1,116 @@
+/* Design tokens carried over from the original robosect.it (HTML5 UP "Landed" template) */
+:root {
+  --color-bg: #1c1d26;
+  --color-bg-transparent: rgba(23, 24, 32, 0.95);
+  --color-panel: #272833;
+  --color-panel-transparent: rgba(39, 40, 51, 0.965);
+
+  --color-fg-bold: #ffffff;
+  --color-fg: rgba(255, 255, 255, 0.75);
+  --color-fg-light: rgba(255, 255, 255, 0.5);
+  --color-fg-lighter: rgba(255, 255, 255, 0.15);
+
+  --color-border: rgba(255, 255, 255, 0.3);
+  --color-border-bg: rgba(255, 255, 255, 0.075);
+
+  --color-accent-red: #e44c65;
+  --color-accent-blue: #5480f1;
+  --color-accent-green: #39c088;
+
+  --font-family: 'Inter', system-ui, Helvetica, sans-serif;
+  --font-family-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --font-weight: 400;
+  --font-weight-bold: 600;
+
+  --container-width: 70em;
+  --border-radius: 4px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
+  color: var(--color-fg);
+  background: var(--color-bg);
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--color-fg-bold);
+  margin: 0 0 0.5em 0;
+}
+
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0 0 1em 0;
+}
+
+a {
+  color: var(--color-accent-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 2em;
+}
+
+section {
+  padding: 6em 0;
+  border-bottom: 1px solid var(--color-border-bg);
+}
+
+section.alt {
+  background: var(--color-panel);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.eyebrow {
+  display: block;
+  text-align: center;
+  font-family: var(--font-family-mono);
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-blue);
+  margin-bottom: 0.7em;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

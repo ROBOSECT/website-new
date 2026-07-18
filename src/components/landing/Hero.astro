@@ -1,0 +1,141 @@
+---
+import { Image } from 'astro:assets';
+import logoScritta from '../../assets/images/logo_scritta.png';
+---
+
+<section class="hero">
+	<div class="hero-glow" aria-hidden="true"></div>
+	<div class="hero-content">
+		<Image src={logoScritta} alt="ROBOSECT" width={620} />
+		<span class="eyebrow hero-eyebrow">Robotics &middot; AI &middot; Computer Vision</span>
+		<h1>Automating Complexity</h1>
+		<p class="tagline">
+			ROBOSECT develops advanced robotic systems that combine Artificial Intelligence, Computer
+			Vision and Motion Planning to automate the manipulation, assembly, inspection and testing of
+			complex industrial products involving <strong>cables</strong> and other <strong>deformable
+			objects</strong>.
+		</p>
+		<p class="tagline">
+			From <strong>electrical panel quality control</strong> to <strong>wiring harness
+			remanufacturing</strong> and intelligent robot motion planning, our technologies enable
+			manufacturers to automate processes that have traditionally required skilled manual
+			operators.
+		</p>
+		<div class="cta-group">
+			<a href="#about" class="btn btn-primary">About ROBOSECT</a>
+			<a href="#technology" class="btn btn-primary">Explore Our Technology</a>
+			<a href="#contact" class="btn btn-primary">Contact Us</a>
+		</div>
+	</div>
+	<a href="#about" class="scroll-cue">↓</a>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		text-align: center;
+		border-bottom: none;
+	}
+
+	.hero-glow {
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			ellipse at center,
+			rgba(84, 128, 241, 0.18) 0%,
+			rgba(28, 29, 38, 0) 60%
+		);
+		z-index: 0;
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+		padding: 0 1.5em;
+	}
+
+	.hero-content :global(img) {
+		margin: 0 auto 1.5em;
+	}
+
+	.hero-eyebrow {
+		text-align: center;
+	}
+
+	.hero-content h1 {
+		font-size: 3.4em;
+		max-width: 16em;
+		margin: 0 auto 0.6em;
+	}
+
+	@media (max-width: 620px) {
+		.hero-content h1 {
+			font-size: 2.4em;
+		}
+	}
+
+	.tagline {
+		font-weight: var(--font-weight);
+		font-size: 1.1em;
+		color: var(--color-fg);
+		max-width: 40em;
+		margin: 0 auto 1em;
+		text-align: justify;
+	}
+
+	.cta-group {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 1em;
+		margin-top: 2em;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.85em 1.8em;
+		border-radius: var(--border-radius);
+		font-family: var(--font-family-heading);
+		font-weight: 600;
+		letter-spacing: 0.01em;
+	}
+
+	.btn:hover {
+		text-decoration: none;
+	}
+
+	.btn-primary {
+		background: var(--color-accent-blue);
+		color: var(--color-fg-bold);
+	}
+
+	.btn-primary:hover {
+		background: color-mix(in srgb, var(--color-accent-blue) 85%, white);
+	}
+
+	.scroll-cue {
+		position: absolute;
+		bottom: 2em;
+		left: 50%;
+		transform: translateX(-50%);
+		color: var(--color-fg-light);
+		font-size: 1.5em;
+		animation: bounce 2s infinite;
+	}
+
+	@keyframes bounce {
+		0%,
+		100% {
+			transform: translate(-50%, 0);
+		}
+		50% {
+			transform: translate(-50%, 8px);
+		}
+	}
+</style>
