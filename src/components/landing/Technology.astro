@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import setupImg from '../../assets/images/setup.jpeg';
+import introVideo from '../../assets/videos/video_introx.mp4';
 
 const features = [
 	{
@@ -61,8 +62,33 @@ const features = [
 				}
 			</div>
 		</div>
+		<div class="tech-video-wrap">
+			<span class="eyebrow">Prototype Connection Testing Platform</span>
+			<video src={introVideo} class="tech-video" controls playsinline muted loop></video>
+		</div>
 	</div>
 </section>
+
+<script>
+	const video = document.querySelector<HTMLVideoElement>('.tech-video');
+
+	if (video) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						video.play();
+					} else {
+						video.pause();
+					}
+				}
+			},
+			{ threshold: 0.5 }
+		);
+
+		observer.observe(video);
+	}
+</script>
 
 <style>
 	.tech-grid {
@@ -101,5 +127,19 @@ const features = [
 
 	.feature li {
 		margin-bottom: 0.3em;
+	}
+
+	.tech-video-wrap {
+		margin-top: 4em;
+		text-align: center;
+	}
+
+	.tech-video {
+		width: 100%;
+		max-width: 900px;
+		height: auto;
+		margin-top: 0.8em;
+		border-radius: var(--border-radius);
+		border: 1px solid var(--color-border-bg);
 	}
 </style>
