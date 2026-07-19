@@ -1,10 +1,40 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '../../assets/images/logo_scritta_bianco.png';
 ---
 
 <nav class="navbar">
 	<div class="container nav-inner">
-		<a href="/" class="brand">ROBOSECT</a>
-		<a href="/blog">Blog</a>
+		<a href="/" class="brand">
+			<Image src={logo} alt="ROBOSECT" height={28} />
+		</a>
+		<div class="nav-links">
+			<a href="/blog">Blog</a>
+			<span class="nav-separator" aria-hidden="true"></span>
+			<a
+				href="https://www.linkedin.com/company/robosect"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="ROBOSECT on LinkedIn"
+				class="linkedin-link"
+			>
+				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+					<path
+						d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.94v5.666H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.114 20.452H3.56V9h3.554v11.452z"
+					/>
+				</svg>
+			</a>
+			<a
+				href="mailto:info@robosect.it"
+				aria-label="Email ROBOSECT"
+				class="email-link"
+			>
+				<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<rect x="2" y="4" width="20" height="16" rx="2" />
+					<path d="m2 7 10 6 10-6" />
+				</svg>
+			</a>
+		</div>
 	</div>
 </nav>
 
@@ -25,13 +55,47 @@
 	}
 
 	.brand {
-		font-family: var(--font-family-heading);
-		font-weight: 700;
-		color: var(--color-fg-bold);
-		letter-spacing: 0.05em;
+		display: flex;
+		align-items: center;
+	}
+
+	.brand :global(img) {
+		display: block;
+		height: 28px;
+		width: auto;
 	}
 
 	.brand:hover {
 		text-decoration: none;
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 1.5em;
+	}
+
+	.nav-separator {
+		width: 1px;
+		height: 1.2em;
+		background: var(--color-border);
+	}
+
+	.linkedin-link {
+		display: flex;
+		align-items: center;
+		color: var(--color-fg-bold);
+	}
+
+	.linkedin-link:hover,
+	.email-link:hover {
+		color: var(--color-accent-blue);
+		text-decoration: none;
+	}
+
+	.email-link {
+		display: flex;
+		align-items: center;
+		color: var(--color-fg-bold);
 	}
 </style>
