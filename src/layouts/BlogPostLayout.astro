@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
@@ -13,9 +13,38 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 	month: 'long',
 	day: 'numeric',
 });
+const isoDate = post.data.date.toISOString();
+
+const coverImage = await getImage({ src: post.data.cover, width: 1200, format: 'jpg' });
+const canonicalURL = new URL(`/blog/${post.id}`, Astro.site).toString();
+
+const blogPostingSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'BlogPosting',
+	headline: post.data.title,
+	description: post.data.description,
+	image: new URL(coverImage.src, Astro.site).toString(),
+	datePublished: isoDate,
+	dateModified: isoDate,
+	mainEntityOfPage: canonicalURL,
+	author: {
+		'@type': 'Organization',
+		name: 'ROBOSECT SRL',
+	},
+	publisher: {
+		'@type': 'Organization',
+		name: 'ROBOSECT SRL',
+	},
+};
 ---
 
-<BaseLayout title={`${post.data.title} · ROBOSECT`} description={post.data.description}>
+<BaseLayout
+	title={post.data.title}
+	description={post.data.description}
+	image={{ src: post.data.cover, alt: post.data.coverAlt }}
+	type="article"
+>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} is:inline />
 	<article class="post">
 		<div class="container">
 			<a href="/blog" class="back-link">&larr; Back to blog</a>

@@ -7,9 +7,13 @@ import Technology from '../components/landing/Technology.astro';
 import Applications from '../components/landing/Applications.astro';
 import Team from '../components/landing/Team.astro';
 import ContactCTA from '../components/landing/ContactCTA.astro';
+
+const title = 'ROBOSECT — AI Robotics for Cable & Wiring Harness Automation';
+const description =
+	'ROBOSECT builds AI robots with computer vision and motion planning to automate manipulation, assembly, inspection and testing of cables and wiring harnesses.';
 ---
 
-<BaseLayout>
+<BaseLayout title={title} description={description}>
 	<Hero />
 	<Intro />
 	<Differentiators />

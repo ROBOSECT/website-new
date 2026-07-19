@@ -10,7 +10,7 @@ interface Props {
 const { title, description, lastUpdated } = Astro.props;
 ---
 
-<BaseLayout title={`${title} · ROBOSECT`} description={description}>
+<BaseLayout title={title} description={description}>
 	<article class="legal">
 		<div class="container">
 			<a href="/" class="back-link">&larr; Back to home</a>

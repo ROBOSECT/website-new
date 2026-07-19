@@ -3,6 +3,7 @@ import { getImage } from 'astro:assets';
 import SiteFooter from '../components/landing/SiteFooter.astro';
 import NavBar from '../components/landing/NavBar.astro';
 import iconaV2 from '../assets/images/icona_v2.png';
+import defaultOgSource from '../assets/images/about_robosect.png';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/600.css';
 import '@fontsource/space-grotesk/700.css';
@@ -16,15 +17,57 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  image?: { src: ImageMetadata; alt: string };
+  type?: 'website' | 'article';
+  noindex?: boolean;
 }
+
+const SITE_NAME = 'ROBOSECT';
 
 const {
   title = 'ROBOSECT',
-  description = 'ROBOSECT develops AI-powered robotic systems combining computer vision and motion planning to automate the manipulation, assembly, inspection and testing of cables, wiring harnesses and other deformable industrial products.',
+  description = 'ROBOSECT builds AI robots with computer vision and motion planning to automate manipulation, assembly, inspection and testing of cables and wiring harnesses.',
+  image,
+  type = 'website',
+  noindex = false,
 } = Astro.props;
+
+const pageTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
 
 const favicon32 = await getImage({ src: iconaV2, width: 32, height: 32, format: 'png' });
 const favicon180 = await getImage({ src: iconaV2, width: 180, height: 180, format: 'png' });
+
+const ogSource = image?.src ?? defaultOgSource;
+const ogAlt = image?.alt ?? 'ROBOSECT robotic system for cable and wiring harness automation';
+const ogImage = await getImage({
+  src: ogSource,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+});
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage.src, Astro.site);
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'ROBOSECT SRL',
+  alternateName: 'ROBOSECT',
+  url: 'https://www.robosect.it',
+  logo: new URL(favicon180.src, Astro.site).toString(),
+  description:
+    'ROBOSECT develops AI-powered robotic systems combining computer vision and motion planning to automate the manipulation, assembly, inspection and testing of cables, wiring harnesses and other deformable industrial products.',
+  email: 'info@robosect.it',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Via Ugo Foscolo 7',
+    addressLocality: 'Bologna',
+    postalCode: '40136',
+    addressCountry: 'IT',
+  },
+};
 ---
 
 <!doctype html>
@@ -34,9 +77,34 @@ const favicon180 = await getImage({ src: iconaV2, width: 180, height: 180, forma
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<link rel="canonical" href={canonicalURL} />
 		<link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
 		<link rel="apple-touch-icon" href={favicon180.src} />
-		<title>{title}</title>
+		<title>{pageTitle}</title>
+
+		<!-- Open Graph -->
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={ogImageURL} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={ogAlt} />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageURL} />
+		<meta name="twitter:image:alt" content={ogAlt} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} is:inline />
+
+		<slot name="head" />
 	</head>
 	<body>
 		<NavBar />
