@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import setupImg from '../../assets/images/setup.jpeg';
-import introVideo from '../../assets/videos/video_introx.mp4';
+import introVideo from '../../assets/videos/robosect_v4.mp4';
 
 const features = [
 	{
@@ -42,7 +40,20 @@ const features = [
 			<h2>Technology</h2>
 		</header>
 		<div class="tech-grid">
-			<Image src={setupImg} alt="ROBOSECT robotic setup" width={640} class="tech-image" />
+			<figure class="tech-media">
+				<video
+					src={introVideo}
+					width="1920"
+					height="1080"
+					class="tech-video"
+					controls
+					playsinline
+					muted
+					loop
+					preload="metadata"
+				></video>
+				<figcaption class="eyebrow">Prototype Connection Testing Platform</figcaption>
+			</figure>
 			<div>
 				{
 					features.map((f) => (
@@ -61,10 +72,6 @@ const features = [
 					))
 				}
 			</div>
-		</div>
-		<div class="tech-video-wrap">
-			<span class="eyebrow">Prototype Connection Testing Platform</span>
-			<video src={introVideo} class="tech-video" controls playsinline muted loop></video>
 		</div>
 	</div>
 </section>
@@ -105,10 +112,16 @@ const features = [
 		}
 	}
 
-	.tech-image {
-		border-radius: var(--border-radius);
+	.tech-media {
+		margin: 0;
 		position: sticky;
 		top: 6em;
+	}
+
+	@media (max-width: 780px) {
+		.tech-media {
+			position: static;
+		}
 	}
 
 	.feature {
@@ -129,17 +142,17 @@ const features = [
 		margin-bottom: 0.3em;
 	}
 
-	.tech-video-wrap {
-		margin-top: 4em;
-		text-align: center;
-	}
-
 	.tech-video {
+		display: block;
 		width: 100%;
-		max-width: 900px;
 		height: auto;
-		margin-top: 0.8em;
+		aspect-ratio: 16 / 9;
 		border-radius: var(--border-radius);
 		border: 1px solid var(--color-border-bg);
+	}
+
+	.tech-media figcaption {
+		margin-top: 0.8em;
+		text-align: center;
 	}
 </style>
