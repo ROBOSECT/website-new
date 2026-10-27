@@ -64,7 +64,7 @@ const features = [
 		</div>
 		<div class="tech-video-wrap">
 			<span class="eyebrow">Prototype Connection Testing Platform</span>
-			<video src={introVideo} class="tech-video" controls playsinline muted loop aria-label="Prototype Connection Testing Platform"></video>
+			<video src={introVideo} class="tech-video" controls playsinline muted loop></video>
 		</div>
 	</div>
 </section>
@@ -72,7 +72,7 @@ const features = [
 <script>
 	const video = document.querySelector<HTMLVideoElement>('.tech-video');
 
-	if (video && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+	if (video) {
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {

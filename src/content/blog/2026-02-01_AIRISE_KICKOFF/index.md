@@ -7,7 +7,7 @@ coverAlt: "ROBOSECT @ AIRISE 2026"
 tags: ["news"]
 ---
 
-## ROBOSECT Kicks Off the CONTENT Project with AIRISE.eu
+# ROBOSECT Kicks Off the CONTENT Project with AIRISE.eu
 
 We are excited to announce the official kick-off of CONTENT, a new innovation project developed within the AIRISE.eu initiative. Through this project, ROBOSECT will contribute its expertise in artificial intelligence and industrial automation to advance intelligent quality control solutions for manufacturing.
 

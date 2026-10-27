@@ -16,7 +16,7 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 const isoDate = post.data.date.toISOString();
 
 const coverImage = await getImage({ src: post.data.cover, width: 1200, format: 'jpg' });
-const canonicalURL = new URL(`/blog/${post.id}/`, Astro.site).toString();
+const canonicalURL = new URL(`/blog/${post.id}`, Astro.site).toString();
 
 const blogPostingSchema = {
 	'@context': 'https://schema.org',
