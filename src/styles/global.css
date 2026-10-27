@@ -24,6 +24,7 @@
   --font-weight-bold: 600;
 
   --container-width: 70em;
+  --text-align-body: justify;
   --border-radius: 4px;
 }
 
@@ -110,8 +111,11 @@ section.alt {
   margin-bottom: 0.7em;
 }
 
-.text-justify {
-  text-align: justify;
+/* Justified text leaves wide word gaps on narrow screens. */
+@media (max-width: 780px) {
+  :root {
+    --text-align-body: left;
+  }
 }
 
 img {
