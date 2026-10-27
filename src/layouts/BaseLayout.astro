@@ -107,8 +107,11 @@ const organizationSchema = {
 		<slot name="head" />
 	</head>
 	<body>
+		<a href="#main" class="skip-link">Skip to content</a>
 		<NavBar />
-		<slot />
+		<main id="main">
+			<slot />
+		</main>
 		<SiteFooter />
 	</body>
 </html>

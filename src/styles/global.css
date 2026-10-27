@@ -79,6 +79,25 @@ a:hover {
   text-decoration: underline;
 }
 
+:focus-visible {
+  outline: 2px solid var(--color-fg-bold);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 1em;
+  z-index: 100;
+  padding: 0.5em 1em;
+  background: var(--color-bg);
+  color: var(--color-fg-bold);
+}
+
+.skip-link:focus {
+  left: 1em;
+}
+
 .container {
   max-width: var(--container-width);
   margin: 0 auto;

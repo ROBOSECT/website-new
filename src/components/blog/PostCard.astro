@@ -15,10 +15,10 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 ---
 
 <a href={`/blog/${post.id}`} class="post-card">
-	<Image src={post.data.cover} alt={post.data.coverAlt} width={480} class="cover" />
+	<Image src={post.data.cover} alt="" width={480} class="cover" />
 	<div class="card-body">
 		<time>{formattedDate}</time>
-		<h3>{post.data.title}</h3>
+		<h2>{post.data.title}</h2>
 		<p>{post.data.description}</p>
 	</div>
 </a>
@@ -53,7 +53,8 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 		color: var(--color-fg-light);
 	}
 
-	.card-body h3 {
+	.card-body h2 {
+		font-size: 1.17em;
 		margin: 0.4em 0;
 	}
 
