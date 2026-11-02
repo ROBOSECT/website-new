@@ -1,7 +1,8 @@
-// The social preview images public/og-logo.png (EN) and public/og-logo-it.png (IT), 1200 × 630: the layout of the B2 cards
-// (proposte/B/work/og), with the logo D3 «Capocorda» (the kit's negativo, verbatim) whose stem runs on as the page cable down
-// out of the card. Do not edit the PNGs by hand: run `python3 tools/gen-logo.py` first (it copies the logotype), then
-//     node tools/gen-og.mjs            (from the site folder; Playwright from the global node modules)
+// The social preview images public/og-logo.png (EN) and public/og-logo-it.png (IT), 1200 × 630: an ink card with
+// the logo «Capocorda» (the kit's negativo, verbatim) whose stem runs on as the page cable down out of the card.
+// Do not edit the PNGs by hand: run `python3 tools/gen-logo.py` first (it copies the logotype), then
+//     node tools/gen-og.mjs            (from the site folder; Playwright from the global node modules: the import path
+//                                       below is machine-specific, point it at your own Playwright install)
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

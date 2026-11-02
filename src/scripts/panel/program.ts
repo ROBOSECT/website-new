@@ -1,5 +1,5 @@
 /**
- * One compartment's cell: layout and the program timeline (port of spec/v3/engine.js: layout, Builder,
+ * One compartment's cell: layout and the program timeline (layout, Builder,
  * compile, guardMorph). A program is authored once per layout into a Builder: the lead's arrival, the
  * robot program, the seat, the test current, power-up and the morph. Every channel is a pure
  * function of program time; the Sim (sim.ts) steps the physical parts (rope, joint flex) at 120 Hz.
@@ -47,7 +47,7 @@ export interface Tok {
 	/** px of scroll per program second (before the r clamp); arrival start above the duct */
 	k: number;
 	startOff: number;
-	/** slowed travel (client notes 6–7): pen line (× vh), nav height, shortest ramp-down and the ramp-up (× vh), r clamp,
+	/** slowed travel: pen line (× vh), nav height, shortest ramp-down and the ramp-up (× vh), r clamp,
 	 * end position of the cell (its H duct `endGap`·vh below the nav when the program ends) */
 	pen: number;
 	nav: number;
@@ -65,7 +65,7 @@ export type Bp = Tok['bp'];
 export const bpOf = (w: number): Bp => (w < 700 ? 'phone' : w < 1100 ? 'tablet' : 'desktop');
 
 /** slowed travel: the pen line, ramps (× vh), r ∈ [rMin, rMax], the cell's end position */
-/** vignettes (client note 14): gentler, shorter slow zones (r ≥ 0.45), a short ramp-up, the cell ends mid-screen (END_FRAC) */
+/** vignettes: gentler, shorter slow zones (r ≥ 0.45), a short ramp-up, the cell ends mid-screen (END_FRAC) */
 const SLOW = { pen: 0.7, rampD: 0.16, rampU: 0.25, rMin: 0.45, rMax: 0.9, endGap: 0.04 };
 
 /** tokens for a viewport width (stage width W = cabinet width) */
@@ -227,19 +227,19 @@ export interface CellCfg {
 	seed: number;
 	/** the finale (Contact): no morph; READY is scrubbed, the submit is an event */
 	finale?: boolean;
-	/** dramaturgy (pacing pass, MOTION-SPEC §3.5): the page's hold ratio r this compartment aims for (the scroll its program
+	/** dramaturgy: the page's hold ratio r this compartment aims for (the scroll its program
 	 * gets: lower r = more scroll), at most `n` wheel notches (100 px) for the whole program on tall screens, and the beats
 	 * that are this compartment's hero shot (their scroll weight × 1.25). Vignettes: r 0.46–0.50, n 8 (short screens plan at 0.35) */
 	pace?: { r: number; n: number; hero?: string[]; w?: Record<string, number> };
-	/** desktop only: the cell's offset from the stage centre, × the viewport width (CSS --cell-dx; art 12: the cells zig-zag
+	/** desktop only: the cell's offset from the stage centre, × the viewport width (CSS --cell-dx: the cells zig-zag
 	 * toward the side their lead comes in from) */
 	dx?: number;
 	layout?(T: Tok): { cx?: number; y0?: number; laneL?: number };
-	/** vignettes (client note 14): the one arm that works (the other is not drawn); absent = both arms (C4's test) */
+	/** vignettes: the one arm that works (the other is not drawn); absent = both arms (C4's test) */
 	solo?: 'L' | 'R';
 	program(B: Builder): void;
 }
-/** a camera job (vignettes, client note 12; drawn in place since client note 17, stage.ts visionAt: no inset, no words),
+/** a camera job (vignettes; drawn in place, stage.ts visionAt: no inset, no words),
  * with the vision job's overlays. Times are program time; `at` is the look point (stage px) over time (piecewise linear) */
 export interface Vf {
 	id: 'L' | 'R';
@@ -251,7 +251,7 @@ export interface Vf {
 	at: { t: number; x: number; y: number; r?: number }[];
 	/** the job's key times (overlays): register: lock, snap, plan, exec, seat; read: lock, ocr, match, pan, check */
 	k: Record<string, number>;
-	/** the job's data (the robots' model: the marker's address, the drawing's row); never printed (client note 17) */
+	/** the job's data (the robots' model: the marker's address, the drawing's row); never printed */
 	txt: Record<string, string>;
 	/** a point the job checks (stage px): +C5's input I0.0 LED */
 	tgt?: { x: number; y: number };
@@ -292,7 +292,7 @@ export interface Arrival {
 	vmax: number;
 	acc: number;
 }
-/** the feeder rule (vignettes, spec v2 §0.5): the lead leaves the duct slot along its axis at a constant speed of at most
+/** the feeder rule (vignettes): the lead leaves the duct slot along its axis at a constant speed of at most
  * 600 units/s (≤ 10 units per 1/60 s of program time: it never appears in a new place between two frames) and decelerates
  * over its last 8 units into the mouth */
 export const FEED = { v: 580, stop: 8 };
@@ -302,7 +302,7 @@ export interface Grip {
 	on: boolean;
 	gOff?: number;
 }
-/** the out-lead, routed by a robot (art 9): the conductor comes up out of the out-mouth into the open jaws waiting over it
+/** the out-lead, routed by a robot: the conductor comes up out of the out-mouth into the open jaws waiting over it
  * (t0 → tG, to E px above the tab), the jaws close, the arm carries it up and feeds its tip into the H duct's slot; at tR
  * it lets go and the duct takes it (the carrot from there on, B.out) */
 export interface OutLead {
@@ -350,14 +350,14 @@ export class Builder {
 	/** the -X4 test terminal under the H duct (C4), cell units */
 	x4: X4 | null = null;
 	/** the job's detail moments (a screw or a cage worked, the probes on, the lever thrown): from t0 on the device is a beat
-	 * that must be whole on screen (scroll.ts firstDeviceT). They were the loupe insets' windows until client note 17
-	 * removed every zoom: only their timing remains */
+	 * that must be whole on screen (scroll.ts firstDeviceT). Nothing is zoomed: only their
+	 * timing is used */
 	focus: { t0: number; t1: number; which: 'in' | 'out'; at?: { x: number; y: number; r: number } }[] = [];
 	beats: { t: number; name: string }[] = [];
-	/** the camera's vision jobs (vignettes +C2, +C5): drawn in place on the work (stage.ts visionAt), no inset, no words */
+	/** the camera's vision jobs (the +C2 and +C5 vignettes): drawn in place on the work (stage.ts visionAt), no inset, no words */
 	vf: Vf[] = [];
 	spans: { name: string; t0: number; t1: number }[] = [];
-	/** narrative scroll weights authored by a program (pacing pass): extra spans for scroll.ts paceSpans */
+	/** narrative scroll weights authored by a program: extra spans for scroll.ts paceSpans */
 	paces: { name: string; t0: number; t1: number; w: number }[] = [];
 	morphT = -1;
 	powerT = -1;
@@ -475,7 +475,7 @@ export class Builder {
 	seatFx(t: number) {
 		const G = this.G;
 		this.fx.push({ k: 'ring', t, x: G.inX, y: G.mouthY });
-		// one spark in the whole site, the visitor's (vignettes v2): the vignettes' self-seats keep the ring and the glow
+		// one spark in the whole site, the visitor's: the vignettes' self-seats keep the ring and the glow
 		if (this.cfg.finale) this.fx.push({ k: 'sparks', t, x: G.inX, y: G.mouthY, seed: (this.cfg.seed || 1) + 7 });
 	}
 	seat(t: number) {
@@ -549,7 +549,7 @@ export class Builder {
 			// the breaker was switched ON by the robot (its act channel is authored by the program)
 		} else d.act.to(t + 0.04, 1, 0, 'spring:actuate');
 		if (this.cfg.finale) return;
-		// the power-up plays out whole before the doors open (art 5: C3's four lights were cut at the first one): the lights,
+		// the power-up plays out whole before the doors open (else C3's four lights are cut at the first one): the lights,
 		// the relay's bounce, the PLC's lamp test and RUN, then a short hold
 		this.morphT = t + (POWER_HOLD[kind] ?? 0.35);
 		this.beat(this.morphT, 'morph');
@@ -579,7 +579,7 @@ export class Builder {
 		);
 	}
 	/**
-	 * the out-lead, routed by arm `id` (art 9): from t0 the conductor rises out of the out-mouth into the jaws waiting hJ
+	 * the out-lead, routed by arm `id`: from t0 the conductor rises out of the out-mouth into the jaws waiting hJ
 	 * above the tab (at tG its insulation ends gOff above the jaw centre, the copper above that: the jaws close); the arm
 	 * carries it up and feeds the tip into the duct slot (tipY); at tR it lets go and the duct takes it on (the carrot, from
 	 * where the tip is)
@@ -598,7 +598,7 @@ export class Builder {
 /** program time from power to the morph per device: its power-up whole, then a beat of stillness */
 export const POWER_HOLD: Partial<Record<DevKind, number>> = { X1: 0.3, K1: 0.28, X2: 0.38, A1: 0.36, A2: 0.34, Q1: 0.26 };
 /** the morph's program-time length (stage.ts): doors open and hold, the shell grows out of the device into the module, the
- * content comes in place (pacing pass: staged, so no frame of it shows text cut by a moving edge) */
+ * content comes in place (staged, so no frame of it shows text cut by a moving edge) */
 export const MORPH_DUR = 0.6;
 
 /* ------------------------------------------------------------------ compile */

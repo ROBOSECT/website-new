@@ -1,5 +1,5 @@
 /**
- * The robot pair's kinematics (MOTION-SPEC §5.1–5.3).
+ * The robot pair's kinematics.
  *
  * A stylized collaborative arm in the screen plane (the honest front view of a UR-type cobot), drawn on the
  * logo grid (modulo 4; 1 unit = 1 px × the stage scale s):

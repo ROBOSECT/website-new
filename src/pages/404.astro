@@ -1,7 +1,7 @@
 ---
 /**
- * 404 = a blown fuse (MOTION-SPEC v4 §7). Static: the lead comes down out of the duct into a fuse whose element is broken
- * and whose LED is off. The robot pair stands parked beside it in the cell. No device tag on screen (client note 17): the
+ * 404 = a blown fuse. Static: the lead comes down out of the duct into a fuse whose element is broken
+ * and whose LED is off. The robot pair stands parked beside it in the cell. No device tag on screen: the
  * status code is the only number.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -52,7 +52,7 @@ const pair = parkedMarkup({ tool: { L: 'gripper', R: 'probe' }, rack: { L: [null
 	}
 
 	.nf__tag {
-		font-family: var(--font-mono); /* taste-skill-ignore: the status code, the one mono line on the page */
+		font-family: var(--font-mono); /* the status code, the one mono line on the page */
 		font-size: 13px;
 		font-weight: 500;
 		letter-spacing: 0.08em;

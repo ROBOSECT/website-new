@@ -453,7 +453,7 @@ export const copy = {
 				address: 'Via Lazio 2, 40139 Bologna, Italy',
 				linkedin: 'Follow ROBOSECT on LinkedIn',
 			},
-			// Contact's showpiece (client notes 16 and 17, finale/SHOWPIECE-V2.md): the robots build this form, one part per job;
+			// Contact's showpiece: the robots build this form, one part per job;
 			// no codes and no words on the stage but the station's RESET and STOP
 			show: {
 				figureLabel: 'Animation, about {s} s: two robot arms build this contact form, one part per job, the Send button last. RESET runs it again, STOP stops the robots.',
@@ -476,7 +476,7 @@ export const copy = {
 			handoff: {
 				helper: 'Your email app opens with the request ready. It leaves only when you press Send there.',
 				live: 'Your email app should open with the request filled in. Press Send there to deliver it.',
-				// (review 3: the confirmation never claims the mail app opened, and says each thing once)
+				// (the confirmation never claims the mail app opened, and says each thing once)
 				receiptHeading: 'Your request is ready to send.',
 				lead: 'Your email app should open with it, addressed to info@robosect.it. Press Send there: nothing leaves until you do.',
 				nothingOpened: 'Nothing opened? Use Open the email again, or copy the message and write to info@robosect.it.',

@@ -1,5 +1,5 @@
 /**
- * Contact: the form the robots build (client note 17; finale/SHOWPIECE-V2.md §5–§6). Validity (batched: on change, on blur,
+ * Contact: the form the robots build. Validity (batched: on change, on blur,
  * or 400 ms after the last keystroke; nothing reacts per keystroke, no frame is ever scheduled by typing), the standby of the
  * cell while the visitor writes, the synchronous mail handoff, the length guard, the copy chain, the "nothing opened?"
  * detector and the confirmation. Sending just sends: no climax.
@@ -115,7 +115,7 @@ export function initContact(show: Show) {
 		let body = fullBody;
 		let href = url(body);
 		let shortened = false;
-		// the length guard (review 3, ENG-10): the identifying fields and the consent line always stay; only the free texts
+		// the length guard: the identifying fields and the consent line always stay; only the free texts
 		// are shortened (the message first, then how it is done today), each cut at a word boundary, then the note
 		if (href.length > MAX_URL) {
 			shortened = true;
@@ -174,7 +174,7 @@ export function initContact(show: Show) {
 	let announced = false;
 	function showReceipt(anim: boolean) {
 		if (!receipt.hidden) return;
-		// (review 3, SP-04: Enter in a field submits too; that field is hidden with the form, so the heading takes the focus)
+		// (Enter in a field submits too; that field is hidden with the form, so the heading takes the focus)
 		const ae = document.activeElement;
 		const focusWasHere = !ae || ae === document.body || form!.contains(ae);
 		form!.setAttribute('data-sent', '');
@@ -183,7 +183,7 @@ export function initContact(show: Show) {
 		receipt.hidden = false;
 		if (anim) receipt.setAttribute('data-appear', '');
 		if (focusWasHere) receiptH.focus({ preventScroll: true });
-		// (review 3, S7) the shorter confirmation replaces the taller form: its heading is brought just under the bar when it
+		// the shorter confirmation replaces the taller form: its heading is brought just under the bar when it
 		// is not on screen (html's scroll-padding-top is the bar's height)
 		const r = receiptH.getBoundingClientRect();
 		const bar = document.querySelector<HTMLElement>('[data-nav]')?.offsetHeight ?? 0;

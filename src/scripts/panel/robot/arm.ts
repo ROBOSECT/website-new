@@ -1,5 +1,5 @@
 /**
- * One arm's program (MOTION-SPEC §5.3). A program is a list of motion segments authored once per layout, then
+ * One arm's program. A program is a list of motion segments authored once per layout, then
  * evaluated as a pure function of program time:
  *
  *   ptp    joint-space move with quintic (minimum-jerk) time scaling; its duration keeps every joint within its speed

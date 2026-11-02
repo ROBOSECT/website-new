@@ -1,6 +1,5 @@
 /**
- * The 120 Hz simulation of one compartment (port of spec/v3/engine.js Sim + Rope3 and spec/v4/scroll.js
- * SimCache). Fixed step, pure function of program time: the same t always gives the same state, whether
+ * The 120 Hz simulation of one compartment (Sim, Rope3, SimCache). Fixed step, pure function of program time: the same t always gives the same state, whether
  * reached by scrolling down, by rewinding, or by stepping a cold sim from 0.
  *
  *   Rope3     the free span of a lead: Verlet nodes, distance constraints (i, i+1), push-only
@@ -305,7 +304,7 @@ export class Sim {
 	}
 }
 
-/* the out-lead (art 9): presented by the out-mouth, held and carried up by a gripper, let go into the duct slot */
+/* the out-lead: presented by the out-mouth, held and carried up by a gripper, let go into the duct slot */
 export function outCableStep(s: Sim) {
 	const B = s.B,
 		G = B.G,

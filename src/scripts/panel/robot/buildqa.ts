@@ -1,5 +1,5 @@
 /**
- * The robot QA at build time (robotics review 6: "fail the build on any violation"): every program, at the stage scales
+ * The robot QA at build time (the build fails on any violation): every program, at the stage scales
  * the site uses (desktop 2.4 to 1.7, tablet 1.8 and 1.15, phone 0.88 and the short-viewport cell), stepped through the real
  * simulation and its drawn shapes tested (robot/qa.ts). Run once per compartment per build (both languages share it).
  */
@@ -8,17 +8,17 @@ import { compile, tokens, type Bp } from '../program';
 import { runQa } from './qa';
 import { soloDu, soloK } from '../solo';
 
-// (review 3: each layout at its step's key: a one-arm cell runs there at the scale × solo.ts's multiplier, centred)
+// (each layout at its step's key: a one-arm cell runs there at the scale × solo.ts's multiplier, centred)
 const LAYOUTS: { W: number; bp: Bp; sc: number; key: string }[] = [
 	{ W: 1440, bp: 'desktop', sc: 2.4, key: 'd' },
 	{ W: 1440, bp: 'desktop', sc: 2.4, key: 'd1' },
 	{ W: 1440, bp: 'desktop', sc: 2.4, key: 'd1b' },
 	{ W: 1440, bp: 'desktop', sc: 2.3, key: 'd2' },
-	// (vignettes pass: 1440 × 900 runs at 2.15, 1366 × 768 at 1.85)
+	// (1440 × 900 runs at 2.15, 1366 × 768 at 1.85)
 	{ W: 1440, bp: 'desktop', sc: 2.15, key: 'd3' },
 	{ W: 1366, bp: 'desktop', sc: 1.85, key: 'd4' },
 	{ W: 1280, bp: 'desktop', sc: 1.7, key: 'd5' },
-	// (layout pass: tablets at 1.8 from 760 px tall, 1.15 under)
+	// (tablets at 1.8 from 760 px tall, 1.15 under)
 	{ W: 768, bp: 'tablet', sc: 1.8, key: 't2' },
 	{ W: 1024, bp: 'tablet', sc: 1.8, key: 't3' },
 	{ W: 1024, bp: 'tablet', sc: 1.15, key: 't4' },
@@ -55,7 +55,7 @@ export function assertRobots(n: number) {
 	if (bad.length) throw new Error(`robot QA failed (robot/qa.ts):\n  ${bad.join('\n  ')}`);
 }
 
-/* ------------------------------------------------------------------ +C7 the showpiece (SHOWPIECE-SPEC §17 A–B) */
+/* ------------------------------------------------------------------ +C7 the showpiece */
 import { compileNow } from '../showpiece/compile';
 import { runShowQa, type SpQa } from '../showpiece/qa';
 let spDone: SpQa | null = null;

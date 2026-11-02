@@ -1,5 +1,5 @@
 /**
- * The robots' skills: the vocabulary the seven programs are written in (MOTION-SPEC §5.4).
+ * The robots' skills: the vocabulary the seven programs are written in.
  *
  * The cell is an elevation: everything a tool works on is on the head tab's top face (or, in C4, the side of the -X4
  * test terminal), with its axis in the screen plane, so every approach and retreat for an insertion, a probe, a screw, a
@@ -305,7 +305,7 @@ export function park(tr: ArmTrack, t: number, o: { speed?: number } = {}) {
 	return tr;
 }
 /**
- * the out-lead (art 9): the gripper arm waits with open jaws over the out-mouth (from its own, outer side? no: it slides
+ * the out-lead: the gripper arm waits with open jaws over the out-mouth (from its own, outer side? no: it slides
  * along its axis from the in-lead to the out-mouth), the conductor rises into them, the jaws close, the arm carries it up
  * in a slight arc (the free span is a rope: it bows) and feeds the tip into the duct slot, lets go, backs off
  */

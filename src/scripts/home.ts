@@ -21,11 +21,11 @@ function initShow() {
 	const fig = document.querySelector<HTMLElement>('section[data-contact] [data-show]');
 	let show: ReturnType<typeof initShowpiece> | null = null;
 	try {
-		// the robots build the form (client note 17): when every part is built, the nav's indicator shows its seventh pin
+		// the robots build the form: when every part is built, the nav's indicator shows its seventh pin
 		if (fig) show = initShowpiece(fig, { onBuilt: (all) => panel?.setFormBuilt(all) });
 		// a form that is not unbuilt at load (reduced motion, or on screen at load) is built from the start: the nav's
-		// seventh pin at once, not only once the cell has drawn its first frame (story pass: with reduced motion on a phone
-		// the pin waited until the visitor reached Contact)
+		// seventh pin at once, not only once the cell has drawn its first frame (else, with reduced motion on a phone,
+		// the pin would wait until the visitor reached Contact)
 		if (fig && !document.querySelector('[data-contact-form]')?.hasAttribute('data-build')) panel?.setFormBuilt(true);
 	} catch (err) {
 		// the form never depends on the film: without it the form is a plain form and Send still hands the request off
@@ -42,7 +42,7 @@ function initNavState() {
 	document.querySelectorAll<HTMLElement>('[data-nav-link]').forEach((a) => links.set(a.dataset.navLink!, a));
 	if (!links.size) return;
 	// Contact has no link of its own: the bar's call to action (Let's talk / Parliamone) is its way in, so it is the one
-	// marked while Contact is the section on screen (client note 10, layout pass): its compartment at the 40 % line, or,
+	// marked while Contact is the section on screen: its compartment at the 40 % line, or,
 	// with no section there (its own top padding, the closing duct and the footer coming up), still in view below the bar
 	// once its top has passed the line. Visual positions (the panel's glide is a transform: the rect includes it).
 	const cta = document.querySelector<HTMLElement>('[data-nav-cta]');
@@ -70,8 +70,8 @@ function initNavState() {
 	// (the section events come only when the section changes: with none at the line, Contact is checked as the page moves)
 	window.addEventListener('scroll', () => !last && paint(''), { passive: true });
 	// in motion the panel knows where every compartment is drawn (the runs never show, the page glides): it names the
-	// compartment under 40 % of the screen each frame it moves (art 6: section boxes include their invisible runs, so
-	// observing them lagged one compartment)
+	// compartment under 40 % of the screen each frame it moves (section boxes include their invisible runs, so
+	// observing them would lag one compartment)
 	document.addEventListener('panel:section', (e) => paint((e as CustomEvent<string>).detail));
 	// static page (no JS motion: reduced motion, print): the stage crossing a thin line at 40 % of the screen
 	if (!('IntersectionObserver' in window)) return;
@@ -92,12 +92,12 @@ function initNavState() {
 	document.querySelectorAll<HTMLElement>('section[id] > .pin > .stage, section[id] > .stage').forEach((st) => io.observe(st));
 }
 
-/** one brand on screen (art 11): the bar's logo stays hidden while any part of the hero wordmark is in view below the bar
+/** one brand on screen: the bar's logo stays hidden while any part of the hero wordmark is in view below the bar
  * (the page loads at the top with it hidden: no flash), and comes in once the wordmark has gone under the bar */
 function initBrandOnce() {
 	const wm = document.querySelector<SVGElement>('[data-wordmark]');
 	const nav = document.querySelector<HTMLElement>('[data-nav]');
-	// (review 3, S13) the footer's big wordmark is the brand too: the bar's logo leaves while it is in view
+	// the footer's big wordmark is the brand too: the bar's logo leaves while it is in view
 	const foot = document.querySelector<HTMLElement>('.footer__mark');
 	if (!wm || !nav || !('IntersectionObserver' in window)) {
 		document.body.classList.remove('hero-brand-visible');

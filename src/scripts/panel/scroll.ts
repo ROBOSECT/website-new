@@ -1,5 +1,5 @@
 /**
- * Scroll → program time and the slowed travel (MOTION-SPEC v5 §3; client note 6). Port of spec/v4/scroll.js.
+ * Scroll → program time and the slowed travel.
  *
  *   Smooth   one critically damped follower of the native scroll position (exact per-frame solution,
  *            frame-rate independent): e(t) = (e0 + (v0 + ω e0) t)·e^(−ωt), ω = 2/τ
@@ -47,16 +47,16 @@ export class Smooth {
 	}
 }
 
-/** beats that read like detents under the wheel (v4; kept for the QA tools: the warp below uses narrative spans) */
+/** beats that read like detents under the wheel (kept for the QA tools: the warp below uses narrative spans) */
 export const KEY =
 	/^(seat|power|miss|self-seat|7\/7|ready|dual probe contact|lever ON|tap \.\d|L: cage open|R: cage open|in: cage open|.*: torque reached|.*: tool → .*|04 execute)$/;
 
 /**
- * Narrative weights (pacing pass, art 5, brief 4, client note 4): the scroll a program gets is spent by what the visitor
+ * Narrative weights: the scroll a program gets is spent by what the visitor
  * should see, not by program seconds. Transit (an arm travelling, a base turning to its rack, parking) is compressed to
  * `base`; each beat of the story gets a span of program time at a higher weight: the insertion, the screw run-down, the
  * cage, a probe contact, the tool coupling, the lever, the power-up and above all the morph. Weights are scroll per program
- * second relative to each other (the zone plan sets the absolute scale); the compartment's hero beats (cfg.pace.hero) ×1.25 (vignettes; v8 ×1.35).
+ * second relative to each other (the zone plan sets the absolute scale); the compartment's hero beats (cfg.pace.hero) ×1.25.
  */
 export const PACE_W = {
 	base: 0.22,
@@ -119,7 +119,7 @@ export function paceSpans(B: Compiled): PaceSpan[] {
 		else if (nm === 'lever ON') add('lever', t - 0.45, t + 0.35);
 		else if (nm === '01 perceive') add('scan', t - 0.05, t + 0.4);
 		else if (nm === '03 plan') add('plan', t - 0.02, t + 0.3);
-		// (review 3, V3: the drawing's outline held off the real tab from the lock, then its snap: both get the scroll)
+		// (the drawing's outline held off the real tab from the lock, then its snap: both get the scroll)
 		else if (nm === '02 integrate') add('register', t - 0.34, t + 0.32);
 		else if (nm === '04 execute') add('execute', t - 0.05, t + 0.3);
 		else if (nm === 'read') add('read', t - 0.08, t + 0.62);
@@ -203,7 +203,7 @@ export function paceOf(B: Compiled, wT: number, vh = 900) {
 	const r = paceR(B, vh);
 	return { kMax: (n * 100) / Math.max(0.1, wT), rMin: r, rMax: Math.max(T.rMax, r + 0.15), preferDelay: true };
 }
-/** short landscape screens (height ≤ 520, vignettes §10.4): the cell has ≈ 70–110 px of travel while it is whole on screen
+/** short landscape screens (height ≤ 520): the cell has ≈ 70–110 px of travel while it is whole on screen
  * (a physical limit); there a vignette plans at this hold ratio (1.6–2.9 notches) rather than flash by in one */
 export const SHORT_R = 0.35;
 export const SHORT_VH = 520;
@@ -215,7 +215,7 @@ export const paceR = (B: Compiled, vh: number) => {
 /** the page's speed floor at a height: R_FLOOR, or a little under SHORT_R on short screens */
 export const rFloor = (vh: number) => (vh <= SHORT_VH ? SHORT_R - 0.02 : R_FLOOR);
 
-/* ------------------------------------------------------------------ the slowed travel (client note 6) */
+/* ------------------------------------------------------------------ the slowed travel */
 
 /** unit ramp: q(u) 0 → 1 on [0, 1], a piecewise-quadratic smoothstep (q'(0) = q'(1) = 0, q' continuous):
  * the stage's speed 1 − (1 − r)·q is C¹, its offset (∫q) piecewise cubic, so CSS cubic-bezier keyframes
@@ -279,7 +279,7 @@ export class Slow {
 	}
 }
 
-/** the device beats: from the first of them to the end of the program the device must be fully on screen (client note 7) */
+/** the device beats: from the first of them to the end of the program the device must be fully on screen */
 export const DEVICE_BEAT = /^(seat|miss|self-seat|.*: cage open|.*: torque reached|tap \.\d|01 perceive|04 execute|read|lever ON|dual probe contact|power)$/;
 
 export interface ZoneIn {
@@ -357,7 +357,7 @@ export function zoneAt(k: number, o: ZoneIn, d = 0): Zone {
 	return { k, S, a: z.a, rd: z.rd, r: z.r, P, t1: z.t1, vis: z.t1 >= need - 0.5, d };
 }
 
-/** the floor of the page's screen speed in a zone: below it the page reads as stopped (client note 6) */
+/** the floor of the page's screen speed in a zone: below it the page reads as stopped */
 export const R_FLOOR = 0.42;
 /** the lowest scroll rate (px of scroll per program second) the planner may use to keep r ≥ rMin: only binding on landscape
  * phones, where the cell has ≈ 290 px to travel and the longest programs (+C4, 9 s with its tool change) need it */
@@ -385,7 +385,7 @@ function planAtDelay(o: ZoneIn & { kMax: number; rMin: number; rMax: number }, d
 	return { k, z };
 }
 
-/** build time and runtime: the largest k ≤ kMax with r ≥ rMin, then (note 7, a blocker) enough scroll before the first device
+/** build time and runtime: the largest k ≤ kMax with r ≥ rMin, then (a hard rule) enough scroll before the first device
  * beat for the device to be on screen; rMax is kept by lengthening short programs. When the cell cannot both come on
  * screen by its first device beat and keep the page moving at ≥ R_FLOOR (short viewports: little travel left once
  * the device is fully on screen), the program waits while the cell rises at 1× (delay d) instead of nearly stopping
@@ -472,7 +472,7 @@ export const RAMP_U_MIN = 200;
 export const END_FRAC = 0.46;
 /** short screens (≤ SHORT_VH): a longer ramp-up. There the cell's whole travel is ≈ 70–110 px, so the extra rise of a program
  * that trails a brisk wheel into the ramp-up (`lagRise`) would cost most of the program's scroll if the bench had to end
- * lower for it; a gentler ramp (speed r → 1 over 4 notches) keeps that rise small instead (real-wheel audit, 844 × 390:
+ * lower for it; a gentler ramp (speed r → 1 over 4 notches) keeps that rise small instead (real-wheel test, 844 × 390:
  * +C1's parked arm 11 px under the nav with the 200 px ramp) */
 export const RAMP_U_SHORT = 400;
 export const rampUpPx = (T: { rampU: number }, vh: number) => Math.max(T.rampU * vh, vh <= SHORT_VH ? RAMP_U_SHORT : RAMP_U_MIN);
@@ -481,17 +481,17 @@ export const rampUpPx = (T: { rampU: number }, vh: number) => Math.max(T.rampU *
 export const LINEAR_SLACK = 120;
 export const LINEAR_TAU = 0.012;
 
-/** the gap under the nav at the program end (px). Tall screens (pacing pass): the notch cap of a paced compartment keeps
+/** the gap under the nav at the program end (px). Tall screens: the notch cap of a paced compartment keeps
  * its scroll short there, so r is higher (≈ 0.35 at 1440 px tall) and the program's lag behind a brisk wheel (r·v·τ) is
  * more screen travel; the gap grows with the height so the last moves (an out-lead lifted into the duct) stay below the nav */
 export const endGapPx = (endGap: number, vh: number, r = 0.2) => Math.max(endGap * vh, END_GAP_MIN, 0.11 * vh - 70, 140 * r - 10);
 /** vignettes: how far the cell rises beyond its program-end position while the smoothed program time trails a brisk wheel by
- * LAG px of scroll (the audit's wheel, 100 px every 110 ms: ≈ 150 px, measured from the frame it caught): at r over the zone's last LAG px and through the ramp-up's start (its speed going r
+ * LAG px of scroll (a brisk test wheel, 100 px every 110 ms: ≈ 150 px, measured from the frame it caught): at r over the zone's last LAG px and through the ramp-up's start (its speed going r
  * → 1). The program's last moves (arms parking after the morph) must stay under the nav by that much: `tailUp` below (the
- * real-wheel audit: +C4's left arm, parking from -X4's socket just under the duct, 15 px under the nav at 1366 × 768) */
+ * real-wheel test: +C4's left arm, parking from -X4's socket just under the duct, 15 px under the nav at 1366 × 768) */
 export const LAG = 150;
 /** the arms' highest point at the program end stays this far under the nav (px) once `lagRise` is counted (1024 × 600: the
- * audit's wheel ran ≈ 7 px past the model's 150 px lag at +C6) */
+ * test wheel ran ≈ 7 px past the model's 150 px lag at +C6) */
 export const TAIL_MARGIN = 12;
 export const lagRise = (r: number, ru: number) => r * LAG + (1 - r) * ru * rampQ(Math.min(1, LAG / ru));
 
@@ -507,7 +507,7 @@ export function benchMarks(o: { penY: number; vh: number; nav: number; startOff:
 /** the zone inputs of a compiled program at a viewport (band and duct from the layout, stage px) */
 /** r: the hold ratio the zone is expected to have (the end gap grows with it: the program's lag behind a brisk wheel, r·v·τ,
  * is screen travel; ≈ 0.2 unless a notch cap raised it) */
-/** program time of the first device beat: from then to the end the device must be fully on screen (client note 7). A job's
+/** program time of the first device beat: from then to the end the device must be fully on screen. A job's
  * detail moment (B.focus) or a camera job (B.vf) counts from its start: the work it shows is on the device */
 export function firstDeviceT(B: Compiled) {
 	const first = B.beats.find((b) => DEVICE_BEAT.test(b.name));
@@ -517,10 +517,10 @@ export function firstDeviceT(B: Compiled) {
 export function zoneInputs(B: Compiled, warp: Warp, m: { penY: number; vh: number; nav: number; band?: number; r?: number }) {
 	const T = B.G.T;
 	const w1 = warp.w(firstDeviceT(B));
-	// (review 3, V5: the room phones kept under the bench for the close-ups is gone: client note 17 removed them, and the
-	// one-arm cells now use that height themselves, drawn ≈ 2× larger: scripts/panel/solo.ts)
+	// (no room kept under the bench on phones: there are no close-ups, and the one-arm cells use that height themselves,
+	// drawn ≈ 2× larger: scripts/panel/solo.ts)
 	const below = 0;
-	// (every height: on short screens too, with their longer ramp-up; the real-wheel audit of 844 × 390, 915 × 412,
+	// (every height: on short screens too, with their longer ramp-up; a real-wheel test of 844 × 390, 915 × 412,
 	// 932 × 430 and 740 × 360 caught parked arms 1–20 px under the nav without it)
 	const lagged = !!B.cfg.pace;
 	const bm = benchMarks({ penY: m.penY, vh: m.vh, nav: m.nav, startOff: T.startOff, duct: T.duct, band: m.band ?? T.band, devH: B.G.devH, endGap: T.endGap, r: m.r ?? paceR(B, m.vh), below, ru: lagged ? rampUpPx(T, m.vh) : 0, tailUp: lagged && B.rig?.topAbove ? B.rig.topAbove(B.tEnd - 0.6, B.tEnd) : 0 });
@@ -750,7 +750,7 @@ export class Track {
 		this.pinTop = L.pinTop;
 		this.y0 = Math.max(glide.end, L.pinTop + L.startY - L.penY);
 		this.yEnd = Math.max(this.y0 + 120, L.pinTop + L.floor - L.benchAt);
-		// client note 7: the end state never depends on scroll that may not exist: complete ≥ 0.25·vh before the bottom
+		// the end state never depends on scroll that may not exist: complete ≥ 0.25·vh before the bottom
 		const last = L.maxY - 0.25 * L.vh;
 		if (this.yEnd > last) {
 			this.yEnd = Math.max(glide.end + 60, last);

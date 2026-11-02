@@ -1,6 +1,6 @@
 /**
- * Wire-marker sleeves (client note 8): every compartment's name ("+C1 · THE PROBLEM") is printed on a sleeve threaded on
- * the test lead. As the tip comes down the lane (it rides the pen: the smoothed scroll + 0.70·vh, MOTION-SPEC §3.8) it
+ * Wire-marker sleeves: every compartment's name ("+C1 · THE PROBLEM") is printed on a sleeve threaded on
+ * the test lead. As the tip comes down the lane (it rides the pen: the smoothed scroll + 0.70·vh) it
  * carries the sleeve just above the copper; when the sleeve reaches its place beside the compartment's heading it catches
  * there (the lead keeps sliding through it) with a small spring settle, and a hairline bracket draws out from it to frame
  * the heading. A pure function of the pen, so it is scrubbed both ways like everything else; an anchor jump or a latch
@@ -99,7 +99,7 @@ export class Sleeve {
 			kq = Math.round(brK * 1000),
 			bq = Math.round(brO * 1000);
 		if (l[0] === yq && l[1] === oq && l[2] === kq && l[3] === bq) return;
-		// (each property only when it changed: while the sleeve rides the tip only its place does; engine pass)
+		// (each property only when it changed: while the sleeve rides the tip only its place does)
 		if (l[0] !== yq) {
 			L.style.translate = `0 ${(yq / 100).toFixed(2)}px`;
 			if (this.twin) this.twin.style.translate = `0 ${(yq / 100 + this.twinOff).toFixed(2)}px`;

@@ -1,12 +1,12 @@
 /**
- * The seven compartment programs (MOTION-SPEC §7, v9: client note 14 with notes 12 and 13).
+ * The seven compartment programs.
  *
  * +C1…+C6 are SIX VIGNETTES: short, light, scroll-scrubbed jobs, ONE tool on ONE arm (the other arm is not drawn, cfg.solo),
  * or the quick two-arm continuity test (+C4). The lead feeds itself out of the duct into the device wherever no arm handles
  * it (the duct is the feeder: ≤ 600 units/s, a short stop into the mouth), and after the power-up the out-lead runs on by
  * itself to the next compartment (B.selfOut): one cable through the whole page. Every tool appears once, the camera twice
- * on two different vision jobs, drawn in place on the work (B.vf, stage.ts visionAt). Client note 17: no zoom, no inset, no
- * word or code on screen: what each job says about ROBOSECT is told by what the robot does (STORY.md). No tool change, no
+ * on two different vision jobs, drawn in place on the work (B.vf, stage.ts visionAt). No zoom, no inset, no
+ * word or code on screen: what each job says about ROBOSECT is told by what the robot does. No tool change, no
  * two-hand hold (but +C4's probes), no spark: those are the Contact showpiece's. Every position comes from the layout (B.G),
  * so one script runs at every stage scale. Times are seconds of program time; the scroll maps them (scroll.ts), both ways.
  * The device tags below (-X1, -K1…) are the code's names for the devices; none is printed.
@@ -66,8 +66,8 @@ const C2 = CONNECTIONS[1],
 	C5 = CONNECTIONS[4];
 
 /** the first program time from `t0` at which arm `tr`'s tool (wrist to tip) is at least `d` px to the side of the vertical
- * line x: a lead rising out of a mouth on that line then never runs through the tool (story pass: +C6's out-lead used to
- * rise through the gripper as it lifted off the toggle) */
+ * line x: a lead rising out of a mouth on that line then never runs through the tool (without it +C6's out-lead would
+ * rise through the gripper as it lifts off the toggle) */
 function clearOf(tr: ArmTrack, x: number, t0: number, d: number) {
 	for (let t = t0; t < t0 + 2; t += 1 / 120) {
 		const k = tr.r.fk(tr.qAt(t), tr.toolAt(t));
@@ -104,11 +104,11 @@ export const PROGRAMS: Record<number, CellCfg> = {
 			const { L } = rig;
 			const top = G.mouthY,
 				surf = top - 0.1 * sc;
-			// (review 3, V1: the taught point 6 units off the real screw, as far as the bare tab between the screw and the mouth
+			// (the taught point 6 units off the real screw, as far as the bare tab between the screw and the mouth
 			// allows, so the miss reads at 1×)
 			const ghostX = G.pIn + s * 6 * sc;
 			// the taught point: the bit lands on bare plastic, 6 units off the real screw (this panel is a variant)
-			// (story pass: the taught point is drawn from the start, where the program believes the screw is, so the visitor sees
+			// (the taught point is drawn from the start, where the program believes the screw is, so the visitor sees
 			// the arm go to the drawing's screw, find nothing there, and feel its way to the real one)
 			L.wait(0.06);
 			B.fx.push({ k: 'ghostScrew', t: 0.04, t1: L.t + 0.75, x: ghostX, y: top });
@@ -323,7 +323,7 @@ export const PROGRAMS: Record<number, CellCfg> = {
 			d.rb.done();
 			park(R, R.t + 0.02);
 			// L backs off -X4's socket (just under the duct) and drops its probe level with the bench before it folds home: its
-			// park never sweeps the top of the cell as the page speeds up again (the real-wheel audit at 1366 × 768)
+			// park never sweeps the top of the cell as the page speeds up again (as a real wheel showed at 1366 × 768)
 			L.lin({ x: L.pose().P.x - 6 * sc, y: G.floor - 46 * sc }, 0, { v: 200 });
 			park(L, L.t + 0.02);
 			B.selfOut(B.powerT + 0.1);
@@ -450,14 +450,14 @@ export const PROGRAMS: Record<number, CellCfg> = {
 			B.focus.push({ t0: tp0 - 0.2, t1: tOn + 0.3, which: 'in', at: { x: G.pivot.x, y: G.pivot.y - 4 * sc, r: 9 } });
 			L.contact(tp0, tOn);
 			B.dev.act.to(tOn, 1, 0, 'spring:lever');
-			// (story pass: the hand leaves the knob up and away from it, across the out-mouth's line, toward home: the line is clear
-			// before the out-lead rises on it; it used to lift straight up over the out-mouth and the lead rose through the jaws)
+			// (the hand leaves the knob up and away from it, across the out-mouth's line, toward home: the line is clear before
+			// the out-lead rises on it; lifting straight up over the out-mouth, the lead would rise through the jaws)
 			const away = Math.sign(G.outX - L.pose().P.x) || -1;
 			L.lin({ x: G.outX + away * (6 * sc + G.T.cable / 2 + 4), y: G.floor - 40 * sc }, DOWN, { v: 200 });
 			B.pulse(tOn - 0.3, 0.24);
 			B.power(tOn + 0.04);
 			park(L, L.t + 0.02);
-			// the out-lead runs on once the gripper, folding home across the out-mouth's line, is clear of it (story pass)
+			// the out-lead runs on once the gripper, folding home across the out-mouth's line, is clear of it
 			B.selfOut(Math.max(B.powerT + 0.02, clearOf(L, G.outX, B.powerT, 5 * sc + G.T.cable / 2 + 3)));
 		},
 	},

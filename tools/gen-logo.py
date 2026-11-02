@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-The ROBOSECT logo D3 «Capocorda» in the site, from the client-approved kit. Do not edit the files below by hand: re-run
+The ROBOSECT logo «Capocorda» in the site, from the approved logo kit. Do not edit the files below by hand: re-run
 this (from the site folder) whenever the kit changes, then `node tools/gen-og.mjs` for the social images.
 
     python3 tools/gen-logo.py            (reads ../robosect-brand/logo-D3; LOGO_KIT=/path/to/logo-D3 for another copy)
 
 Writes
-  src/lib/cable-geometry.ts           the hero's R as a stroke: centreline, cable width, ferrule parts, N1 letters, clear space
+  src/lib/cable-geometry.ts           the hero's R as a stroke: centreline, cable width, ferrule parts, letters, clear space
                                       (the hero and the footer size themselves from it: nothing to copy by hand)
   src/scripts/panel/robot/logo.ts     the print on every robot arm: the wordmark, and the small-cut R where the arm is small
   src/assets/brand/                   the logotype for the nav and the footer (negativo, on ink), verbatim
@@ -186,7 +186,7 @@ clear = x1 - end[0]
 assert near(-svg_parts(K5 + '/01-logotipo/robosect-logotipo-colore.svg')[0][0], clear), 'clear space is not the ferrule length'
 
 geo = f'''{HEAD}/**
- * The cable R of the ROBOSECT logotype (logo D3 «Capocorda», N1), for the hero wordmark drawn as a stroke and the page cable.
+ * The cable R of the ROBOSECT logotype (logo «Capocorda»), for the hero wordmark drawn as a stroke and the page cable.
  * Units: cap height = 96. The R is one cable of width `w`: a tangent-continuous centreline (lines + constant-radius arcs).
  * rD runs from the cable's end at the ferrule back to the stem foot, so the page cable can continue straight down from the
  * stem: the R is where the cable starts. The ferrule (insulating collar + copper tube with strands) crimps the other end.
@@ -216,7 +216,7 @@ export const R_GEOMETRY = {{
 		collar: '{collar_d}',
 		cu: '{cu_d}',
 	}},
-	/** O-B-O-S-E-C-T outlines (N1: Space Grotesk 400, tracking -2), filled */
+	/** O-B-O-S-E-C-T outlines (Space Grotesk 400, tracking -2), filled */
 	letters: '{letters_d}',
 }} as const;
 '''
@@ -228,8 +228,8 @@ MARGIN = clear
 assert near(SVB[0], -MARGIN) and near(SVB[1], -MARGIN)
 box = lambda vb: '{ x: %s, y: %s, w: %s, h: %s }' % tuple(num(v) for v in vb)
 arm = f'''{HEAD}/**
- * The ROBOSECT logo on every robot's forearm (client note 16). The artwork is the logo kit's own path data, verbatim, literal
- * paint (client note 9): the colour logotype where the arm is drawn large enough, the small-cut R (the kit's R retouched for
+ * The ROBOSECT logo on every robot's forearm. The artwork is the logo kit's own path data, verbatim, literal
+ * paint: the colour logotype where the arm is drawn large enough, the small-cut R (the kit's R retouched for
  * small sizes) elsewhere. robot/draw.ts draws it into each arm's link group once (persistent nodes).
  */
 /** each drawing's box (cap height 96): the logotype «-stretto», the small-cut R without its margin */

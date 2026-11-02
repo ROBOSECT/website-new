@@ -1,5 +1,5 @@
 /**
- * The stylized devices (approved v2 board) with their terminals and micro-mechanics (MOTION-SPEC §4.1).
+ * The stylized devices with their terminals and micro-mechanics.
  * Shared by the build (Device.astro draws the static, tested state) and the browser.
  *
  * Geometry is the logo's grid: height 96 (the R's cap height), housing radius 12, and the head tab (12 tall, r 4) on top
@@ -12,7 +12,7 @@
  * (LEDs, the relay's armature, the breaker's flag, the PLC screen); no tool ever reaches it. The breaker's toggle stands
  * on the tab, between the mouths, and swings in the screen plane. 1 unit × --s px.
  * Colours: the body takes the colour of the module it opens into (light | dark | blue); the head tab is a light terminal
- * strip on every device (note 9.2). Every shape carries explicit hex paint attributes (paint.ts, client note 9): the
+ * strip on every device. Every shape carries explicit hex paint attributes (paint.ts): the
  * exported drawing functions return painted markup, nothing depends on CSS for its fill or stroke.
  */
 import { clamp01, f } from './core';
@@ -49,7 +49,7 @@ export const DEV: Record<DevKind, DevSpec> = {
 	Q1: { w: 60, h: 96, tag: '-Q1', module: 'dark', tp: 'push', tabW: 60, mouth: 13, port: 25, led: [0, 82], toggle: 4 },
 	X0: { w: 72, h: 40, tag: '-X0', module: 'blue', tp: 'pin', tabW: 52, mouth: 8, port: 20, led: [0, -5] },
 	F1: { w: 32, h: 96, tag: '-F1', module: 'light', tp: 'none', tabW: 40, mouth: 12, port: 0, led: [0, -5] },
-	/* the Contact showpiece's breaker (SHOWPIECE-SPEC §3): screw clamps, the toggle on the tab between the mouths, the
+	/* the Contact showpiece's breaker: screw clamps, the toggle on the tab between the mouths, the
 	   contact-position flag on its face. Mouths ±15, screws ±27 (the gripper that switches it reaches the knob clear of the wires) */
 	F7: { w: 62, h: 60, tag: '-F7', module: 'dark', tp: 'screw', tabW: 62, mouth: 15, port: 27, led: [0, 50], toggle: 0 },
 };
@@ -122,7 +122,7 @@ const rect = (x: number, y: number, w: number, h: number, r: number, cls: string
 	`<rect class="${cls}" x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="${r}"${extra}/>`;
 const circ = (cx: number, cy: number, r: number, cls: string, extra = '') => `<circle class="${cls}" cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}"${extra}/>`;
 /**
- * The live drawing's stable shape (engine pass): the browser keeps a device's moving parts as persistent nodes and only
+ * The live drawing's stable shape: the browser keeps a device's moving parts as persistent nodes and only
  * writes the values that change (svgpatch.ts). A part that comes and goes (an LED's lamp, a halo, the screw head's
  * highlight, a flag that changes colour) is then always drawn, hidden while it is off (opacity 0 or visibility hidden), so
  * no element appears or disappears from one frame to the next and nothing is re-parsed while a screw turns. The static
@@ -218,7 +218,7 @@ const FACES: Record<DevKind, (st: DevState) => string> = {
 			const a = ((-90 + 60 * k) * Math.PI) / 180;
 			s += led(36 + 8 * Math.cos(a), 22 + 8 * Math.sin(a), 2.1, clamp01(st.lit - k));
 		}
-		// the finale's chase (pacing pass, art 13): after 7/7 a bloom runs once round the ring, pin by pin, and lands on the
+		// the finale's chase: after 7/7 a bloom runs once round the ring, pin by pin, and lands on the
 		// centre pin, the visitor's connection
 		const sw = st.sweep ?? 0;
 		if ((sw > 0 && sw < 1) || STABLE) {
@@ -263,7 +263,7 @@ export const portPartsLive = (kind: DevKind, st: DevState) => stable(() => portP
 export const tabPainter = (raw: string) => paintSvg(raw, tabPaint);
 export const tabLedPainter = (kind: DevKind) => (raw: string) => paintSvg(raw, DEV[kind].led[1] < 0 ? tabPaint : bodyPaint(kind));
 
-/** the housing: the body's outline and, on the ink bodies, the moulding's highlight along its top edge (note 9.2) */
+/** the housing: the body's outline and, on the ink bodies, the moulding's highlight along its top edge */
 export function housing(kind: DevKind): string {
 	const D = DEV[kind];
 	let s = rect(0.75, 0.75, D.w - 1.5, D.h - 1.5, 12, 'housing');

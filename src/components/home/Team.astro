@@ -11,7 +11,7 @@ const { lang } = Astro.props;
 const t = copy[lang].team;
 const linkedinTbd = lang === 'it' ? '[TBD: URL del profilo LinkedIn]' : '[TBD: LinkedIn profile URL]';
 const mailSubject = encodeURIComponent(lang === 'it' ? 'Candidatura spontanea' : 'Open application');
-// screen readers never hear a placeholder (eng 13): the [TBD: …] part of an alt text is visual review copy only
+// screen readers never hear a placeholder: the [TBD: …] part of an alt text is visual review copy only
 const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim();
 ---
 

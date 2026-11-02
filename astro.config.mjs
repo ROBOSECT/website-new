@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // Build switches (environment):
 // - PANEL_EXTERNAL_JS=1  production: page scripts as hashed external modules (cacheable between / and /it/, no
 //                        'unsafe-inline' needed under a Content-Security-Policy). Default: inlined, so the static preview
-//                        (the Artifact, file://) runs without a server.
+//                        (file://) runs without a server.
 // - PANEL_NO_MINIFY=1    QA only: readable bundles for CPU profiles.
 const external = process.env.PANEL_EXTERNAL_JS === '1';
 

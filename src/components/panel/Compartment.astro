@@ -1,6 +1,6 @@
 ---
 /**
- * One compartment of the panel (MOTION-SPEC v5 §3.1, client note 6): a scroll track (.pin) holding the stage
+ * One compartment of the panel: a scroll track (.pin) holding the stage
  * and a run. Nothing sticks: while the compartment's program scrubs, the whole page glides (slows to r, never
  * 0), so the stage keeps rising and reaches the top as its program completes. The run is the extra scroll the
  * slowdown needs; the page is drawn G(Y) − C lower than its layout (scripts/panel: one scroll-driven CSS
@@ -48,10 +48,10 @@ assertRobots(n);
 const titleId = `${id}-title`;
 
 // build-time run lengths at the reference viewports, as Apx + B·svh (the slowed-travel plan depends on the height);
-// desktop in five height steps, each with its own stage scale (global.css; client note 7)
+// desktop in five height steps, each with its own stage scale (global.css)
 const REF: Record<Bp, [number, number]> = { phone: [390, 844], tablet: [900, 1024], desktop: [1440, 900] };
 const DESK: { key: string; s: number; h: [number, number] }[] = [
-	// (review 3, V6: 1300–1600 in two lines, so the CSS run follows the plan at 1440 px tall: ≤ 8 notches)
+	// (1300–1600 in two lines, so the CSS run follows the plan at 1440 px tall: ≤ 8 notches)
 	{ key: 'd', s: 2.4, h: [1400, 1600] },
 	{ key: 'd0', s: 2.4, h: [1300, 1399] },
 	// (vignettes: 2.4 has two runs here, the notch cap bends the plan at ≈ 1200 px: one line over both would be ≈ 70 px long)
@@ -62,7 +62,7 @@ const DESK: { key: string; s: number; h: [number, number] }[] = [
 	{ key: 'd4', s: 1.85, h: [760, 839] },
 	{ key: 'd5', s: 1.7, h: [600, 759] },
 ];
-// a one-arm cell at its step's multiplier and centring offset (review 3: scripts/panel/solo.ts)
+// a one-arm cell at its step's multiplier and centring offset (scripts/panel/solo.ts)
 const du = soloDu(cfg);
 const compileAt = (bp: Bp, sc: number | undefined, key: string) => {
 	const T = tokens(REF[bp][0], bp);
@@ -76,7 +76,7 @@ const compileAt = (bp: Bp, sc: number | undefined, key: string) => {
 	return compile(T, cfg);
 };
 // the run as a line in the viewport height over a range of heights, never below the plan at any height in it (a longer run
-// only means more scroll before the first device beat: the device is then on screen sooner, client note 7)
+// only means more scroll before the first device beat: the device is then on screen sooner)
 const runCss = (B: ReturnType<typeof compile>, h0: number, h1: number) => {
 	const P0 = runPx(B, h0).P,
 		slope = (runPx(B, h1).P - P0) / (h1 - h0);
@@ -86,8 +86,8 @@ const runCss = (B: ReturnType<typeof compile>, h0: number, h1: number) => {
 };
 // phones and tablets in two height ranges each (vignettes: one line over the whole range lengthened the runs of the middle
 // heights by 75–220 px, i.e. a hold ratio well under the compartment's own)
-// (layout pass: tablets in four, at their own stage scales: global.css 1.8 from 760 px tall, 1.15 under; review 3: the tall
-// tablets' 840–1099 in two, V6)
+// (tablets in four, at their own stage scales: global.css 1.8 from 760 px tall, 1.15 under; the tall tablets' 840–1099 in
+// two)
 const pins: Record<string, string> = {
 	p: runCss(compileAt('phone', 0.88, 'p'), 780, 1000),
 	p2: runCss(compileAt('phone', 0.88, 'p2'), 560, 779),
@@ -105,7 +105,7 @@ const B = compileAt('desktop', undefined, 'd');
 const rig = B.rig as Rig | null;
 const robStatic = rig ? staticCell(rig.cellState(0), rig.cellState(B.tEnd)) : '';
 
-// the wire marker printed on the sleeve: the compartment's plain name (client note 8; note 17: no codes on screen)
+// the wire marker printed on the sleeve: the compartment's plain name (no codes on screen)
 const marker = name;
 // the camera's vision job (stage.ts visionAt draws it in place: no viewfinder, no words)
 const vfJob = B.vf[0];
@@ -137,8 +137,8 @@ const devStatic = staticDevice(cfg.dev, cfg.dir, { tested: true, open: true, cuw
 			<div class="stage-head">
 				<header class="legend">
 					<p class="plate">
-						{/* the compartment's name is printed on its wire-marker sleeve (client note 8); screen readers read it here. No
-						     status line, no counter, no code (client note 17): the plate line is the legend's quiet top margin */}
+						{/* the compartment's name is printed on its wire-marker sleeve; screen readers read it here. No
+						     status line, no counter, no code: the plate line is the legend's quiet top margin */}
 						<span class="plate__tag visually-hidden">{marker}</span>
 					</p>
 					<div class="legend__head" data-legend-head>
@@ -194,7 +194,7 @@ const devStatic = staticDevice(cfg.dev, cfg.dir, { tested: true, open: true, cuw
 		{/* the run: extra scroll for the slowdown; the page glides over it, so it never shows */}
 		<div class="pin__run" aria-hidden="true"></div>
 	</div>
-	{/* the wire marker threaded on the lead (client note 8), motion mode: outside the track's clip, so it can ride the
+	{/* the wire marker threaded on the lead, motion mode: outside the track's clip, so it can ride the
 	     descending tip down the lane from above the stage before it settles beside the heading (scripts/panel/sleeve.ts) */}
 	<span class="sleeve sleeve--live" aria-hidden="true" data-sleeve><span class="sleeve__t">{marker}</span></span>
 </section>

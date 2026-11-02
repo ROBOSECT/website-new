@@ -1,14 +1,14 @@
 /**
- * The one-arm vignettes, staged for viewing without zooms (review 3: V1, V2, S5).
+ * The one-arm vignettes, staged for viewing without zooms.
  *
- * Since client note 17 removed the loupes and viewfinders, a one-arm cell (+C1, +C2, +C3, +C5, +C6: one robot, its rack and
- * the device) shows its job at the stage scale alone, and it sat at the side of a band laid out for two robots. Two moves:
+ * With no loupes or viewfinders, a one-arm cell (+C1, +C2, +C3, +C5, +C6: one robot, its rack and the device) shows its
+ * job at the stage scale alone, at the side of a band laid out for two robots. Two moves:
  *
  *   scale   a one-arm cell runs at the stage scale × SOLO_K for the viewport's height step (the same steps as the stage
  *           scale and the build-time runs, global.css / panel.css). Phones have room above and below the cell: ×2 (×1.8 on
- *           shorter phones); tall tablets ×1.3; desktops as much as the note-7 window allows while every vignette keeps
+ *           shorter phones); tall tablets ×1.3; desktops as much as the on-screen window allows while every vignette keeps
  *           ≈ 4 notches or more (the whole cell must stay on screen from its first device beat to its end, and a taller cell
- *           leaves less travel: qa/r3/node/pk.ts measured every step). Two-arm +C4 keeps the stage scale
+ *           leaves less travel: every step was measured). Two-arm +C4 keeps the stage scale
  *   centre  the cell is offset so the arm, its rack and the device sit centred on the page (SOLO_DU units × the scale):
  *           the free half of the band is not left empty any more
  *

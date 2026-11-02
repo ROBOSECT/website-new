@@ -1,7 +1,7 @@
 /**
- * The showpiece's robot QA (SHOWPIECE-SPEC §17 A–B), run at build time (robot/buildqa.ts assertShowpiece: the build fails
- * on any violation) and by qa/sp. The site's rules (robot/qa.ts), on this scene: the drawn, flexed shapes (draw.ts
- * armPieces) sampled at 120 Hz over the film (v2: the robots build the form, client note 17) and every RESET it offers:
+ * The showpiece's robot QA, run at build time (robot/buildqa.ts assertShowpiece: the build fails
+ * on any violation). The site's rules (robot/qa.ts), on this scene: the drawn, flexed shapes (draw.ts
+ * armPieces) sampled at 120 Hz over the film (the robots build the form) and every RESET it offers:
  *
  *   motion    commanded joint speed and acceleration (1 ms samples), roll speed, the tool centre point within SPEED.tcp;
  *             zero IK clamps; drawn joints within their limits; the drawn tool within 0.6 u of the commanded one
@@ -173,7 +173,7 @@ export interface SpQa {
 	changes: number;
 	clickClash: string[];
 	heroBeats: Record<string, number>;
-	/** RESET (client note 16): the film times it may start from (each passed this QA), how many were tried */
+	/** RESET: the film times it may start from (each passed this QA), how many were tried */
 	resets: { safe: number[]; tried: number; longestGap: number; worst: string[] };
 }
 

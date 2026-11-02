@@ -1,7 +1,7 @@
 /**
- * The panel controller (MOTION-SPEC v5 §3, §10, §11). One ticker, one smoothed scroll value Ŷ: every
+ * The panel controller. One ticker, one smoothed scroll value Ŷ: every
  * animation on the home page is a pure function of Ŷ (program time, the pen, the hero detach), while the
- * page itself follows the native scroll Y. Never pinned (client note 6): while a compartment's program
+ * page itself follows the native scroll Y. Never pinned: while a compartment's program
  * scrubs, the whole page slows (1× → r → 1×, C¹), so the compartment keeps rising and reaches the top as
  * its program completes. Every block of the page is drawn G(Y) − C lower than its layout position (G: the
  * extra scroll absorbed so far, C: the runs above the block), one scroll-driven CSS animation per block (C folded
@@ -10,7 +10,7 @@
  * cell's own travel (main-thread transforms would trail an async scroll). Contact's showpiece runs on its own clock
  * (showpiece/player.ts). Nothing here runs while the visitor does nothing.
  *
- * Robustness rules (scroll-engine pass):
+ * Robustness rules:
  * - the page is never moved against the visitor: a browser scroll-into-view is re-aimed only when its cause is known
  *   (keyboard focus, a hash, find-in-page = a jump while the page itself is not focused and no page input);
  *   scrollbar drags and programmatic scrolls are never touched;
@@ -23,7 +23,7 @@
  *
  * Debug / QA: ?panel-capture=1 (no rAF; window.__scroll.tick(ms) steps the smoothing deterministically),
  * ?panel-debug=1 (HUD), ?panel-sda=0 (as without scroll timelines; the head script reads it too).
- * window.__scroll and window.__panel (§11).
+ * window.__scroll and window.__panel.
  */
 import { H, PROF, PT, lap, lap0 } from './core';
 import { HeroView } from './hero';
@@ -35,7 +35,7 @@ import { StageView, docTop } from './stage';
 import { Sleeve } from './sleeve';
 import { ContactLead } from './showpiece/lead';
 
-/** the most a rewinding program may run ahead of the page (px of scroll; review 3, ENG-5) */
+/** the most a rewinding program may run ahead of the page (px of scroll) */
 const LAG_BACK = 8;
 
 declare global {
@@ -51,7 +51,7 @@ interface Saved {
 	w: number;
 	h: number;
 	sda: boolean;
-	/** the compartments latched complete (an anchor jump opened them): a reload or Back shows them open again (review 3) */
+	/** the compartments latched complete (an anchor jump opened them): a reload or Back shows them open again */
 	L?: number[];
 }
 type Anchor =
@@ -72,11 +72,11 @@ export function initPanel() {
 	const sections = Array.from(document.querySelectorAll<HTMLElement>('section.cmp[data-cmp]'));
 	if (!heroEl || !sections.length) return;
 	const stages = sections.map((s) => new StageView(s, PROGRAMS[Number(s.dataset.cmp)]));
-	// the wire-marker sleeves (client note 8), one per compartment; +C1's has a twin on the ink nameplate
+	// the wire-marker sleeves, one per compartment; +C1's has a twin on the ink nameplate
 	const sleeves = stages.map((s) => new Sleeve(s.sec));
 	sleeves[0]?.attachTwin(heroEl);
 	const byN = (n: number) => stages.find((s) => s.n === n)!;
-	// +C7 Contact is not a compartment program any more (the showpiece pass): its film runs on its own clock
+	// +C7 Contact is not a compartment program: its film runs on its own clock
 	// (showpiece/player.ts); here only the page's cable arriving into its stage and its sleeve
 	const contactSec = document.querySelector<HTMLElement>('section[data-contact]');
 	const clead = contactSec ? new ContactLead(contactSec) : null;
@@ -125,7 +125,7 @@ export function initPanel() {
 		sig = '',
 		section = '';
 	const perf = { frames: 0, ms: [] as number[], steps: [] as number[], sim: [] as number[], detail: [] as number[][] };
-	// the morph's own display time (art 4): this frame's dt, whether the visitor has stopped (the scroll settled, no input for
+	// the morph's own display time: this frame's dt, whether the visitor has stopped (the scroll settled, no input for
 	// 0.12 s), whether the scroll goes back; a morph still moving or waiting keeps the ticker running
 	let frameDt = 0,
 		frameIdle = false,
@@ -166,7 +166,7 @@ export function initPanel() {
 			const st = s.tr.stageTop(Y) - Y;
 			if (st <= line && st + s.stageH > line) return { k: 'stage', n: s.n, frac: (line - st) / Math.max(1, s.stageH), line };
 		}
-		// below the zones (review 3, ENG-3): Contact's card or the footer, by the point of it at the line (a rotation or a
+		// below the zones: Contact's card or the footer, by the point of it at the line (a rotation or a
 		// resize changes the layout above it; a visual offset would land somewhere else). From the last layout's numbers:
 		// at a resize event the DOM is already the new layout, the model is still the one the visitor saw
 		for (const b of belowEls) {
@@ -189,7 +189,7 @@ export function initPanel() {
 		}
 		return Vinv(a.V);
 	}
-	/** the field the visitor is writing in stays on screen across a re-layout (review 3, ENG-3: a rotation while typing) */
+	/** the field the visitor is writing in stays on screen across a re-layout (a rotation while typing) */
 	function keepFocusInView() {
 		const f = document.activeElement as HTMLElement | null;
 		if (!f || !f.matches?.('input, select, textarea') || !contactSec?.contains(f)) return;
@@ -234,7 +234,7 @@ export function initPanel() {
 		// each stage measures itself (offsets and relative rects: the glide's transforms do not matter) and plans its zone;
 		// writes and reads in separate passes (two layouts in all): clear the run overrides, measure, set the overrides
 		for (const s of stages) s.clearRun();
-		// (engine pass: the first boot yields here too, so the page's own start-up and the first program's compile are two
+		// (the first boot yields here too, so the page's own start-up and the first program's compile are two
 		// tasks, not one long one)
 		yield;
 		for (const s of stages) {
@@ -396,7 +396,7 @@ export function initPanel() {
 		renderedY = Y;
 		let steps = 0,
 			simMs = 0;
-		// the nav's logo shows only once the hero wordmark has gone under the nav (one brand on screen: home.ts, art 11)
+		// the nav's logo shows only once the hero wordmark has gone under the nav (one brand on screen: home.ts)
 		const G = glide.G(Y);
 		const th = performance.now();
 		if (Yh < hero.bottom + G + 60 || force) hero.render(Yh, hero.tip(Yh, penY, G), { done: false, g: G });
@@ -504,7 +504,7 @@ export function initPanel() {
 			cab1 += s.cableMs;
 		}
 		morphBusy = busy;
-		// the nav's connector glyph (vignettes v2; wordless since client note 17): one pin per compartment whose power-up the
+		// the nav's connector glyph (wordless): one pin per compartment whose power-up the
 		// scroll has passed (both ways), the seventh when the robots have built the Contact form
 		let x0 = 0;
 		if (formBuilt) x0 = 7;
@@ -536,7 +536,7 @@ export function initPanel() {
 				`Y ${Y.toFixed(0)}  Ŷ ${Yh.toFixed(1)}  v ${sm.v.toFixed(0)}\n` +
 				stages.map((s) => `+C${s.n} t ${s.t.toFixed(2)}/${s.tr.tEnd.toFixed(2)} ${s.phase}`).join('\n') +
 				`\nJS ${ms.toFixed(2)} ms  steps ${steps}`;
-		// (QA, review 3: a checker that reads the frame the visitor sees, after it is drawn, not the one before)
+		// (QA: a checker that reads the frame the visitor sees, after it is drawn, not the one before)
 		(window as Window & { __panelAfterFrame?: () => void }).__panelAfterFrame?.();
 	}
 
@@ -583,7 +583,7 @@ export function initPanel() {
 		prevY = Y;
 		const v0 = sm.y;
 		sm.step(dt, Y);
-		// (review 3, ENG-5/6) the program never trails the page by more than the plans allow for: forward by the lag the end
+		// the program never trails the page by more than the plans allow for: forward by the lag the end
 		// gap is planned with (LAG, a brisk wheel; at most 0.15·vh), backward by a few px (from its first device beat a
 		// device has only 12 px under it: a rewinding program that ran ahead of the page drew it under the screen's edge)
 		const capF = Math.min(LAG, 0.15 * vh);
@@ -669,7 +669,7 @@ export function initPanel() {
 			}
 	});
 	// in-page anchors land with the target (the compartment: its legend) under the nav, and the compartment
-	// latched complete (anchor jumps complete instantly, brief D); the latch lets go once the visitor leaves it
+	// latched complete (anchor jumps complete instantly); the latch lets go once the visitor leaves it
 	function hashY(id: string): number | null {
 		const target = document.getElementById(id);
 		if (!target) return null;
@@ -851,7 +851,7 @@ export function initPanel() {
 		if (restore && restore.w === document.documentElement.clientWidth && restore.h === window.innerHeight && restore.sda === SDA) window.scrollTo({ top: restore.Y, behavior: 'instant' });
 	}
 
-	/* ------------------------------------------------------------ QA hooks (§11) */
+	/* ------------------------------------------------------------ QA hooks */
 	const scrollApi = {
 		ready: false,
 		to(y: number, o?: { jump?: boolean }) {
@@ -949,7 +949,7 @@ export function initPanel() {
 				/** the first device beat or close-up (s): from then on device, arms and close-ups are whole on screen */
 				dev1: firstDeviceT(s.B),
 				spans: s.B.spans,
-				/** the narrative spans the scroll is spent by (pacing pass): kind, program time, weight */
+				/** the narrative spans the scroll is spent by: kind, program time, weight */
 				pace: s.tr.warp.spans,
 			})),
 		layout: () =>
@@ -1010,7 +1010,7 @@ export function initPanel() {
 			const b = perf.sim.slice().sort((x, y) => x - y),
 				qs = (p: number) => b[Math.min(b.length - 1, Math.floor(p * b.length))] || 0;
 			// the frames at or above the p95: what they spent (ms): hero, robots, the lead, simulation, stages drawn (robots and the
-			// lead are timed only with ?panel-prof=1, engine pass: their timers cost more than some of what they timed)
+			// lead are timed only with ?panel-prof=1: their timers cost more than some of what they timed)
 			const p95 = q(0.95);
 			const top = perf.detail.filter((d) => d[0] >= p95);
 			const avg = (i: number) => (top.length ? top.reduce((x, d) => x + d[i], 0) / top.length : 0);
@@ -1109,7 +1109,7 @@ export function initPanel() {
 		lastH = vh;
 		if (o?.V != null) goTo(Vinv(o.V));
 		else if (firstBoot && restore) {
-			// (review 3, ENG-4) what an anchor jump had opened is open again after a reload or Back
+			// what an anchor jump had opened is open again after a reload or Back
 			for (const s of stages) if (restore.L?.includes(s.n)) s.tr.latched = true;
 			goTo(restore.w === vw && restore.h === vh && restore.sda === SDA ? restore.Y : Vinv(restore.V));
 			// a fragment naming a compartment whose track the restored place lies in: its latch, as the jump had it
@@ -1136,7 +1136,7 @@ export function initPanel() {
 	addEventListener('resize', () => {
 		if (!motion || !built) return;
 		if (document.documentElement.clientWidth === lastW && Math.abs(window.innerHeight - lastH) < 120) return;
-		// (review 3, ENG-3: from the place last drawn: by the resize event the browser may already have clamped the scroll
+		// (from the place last drawn: by the resize event the browser may already have clamped the scroll
 		// position to the new, shorter page)
 		resizeA ??= anchorNow(renderedY ?? window.scrollY);
 		clearTimeout(resizeT);

@@ -1,9 +1,9 @@
 /*
- * The panel under test (MOTION-SPEC v4). The home page is a mounting plate (Nebbia) with slotted wire
+ * The panel under test. The home page is a mounting plate (Nebbia) with slotted wire
  * ducts; each section is a compartment: a legend engraved on the plate, an H duct, the robot cell and a
  * module that opens out of its device. Layout is pure CSS (the tracks' runs included), so the page has its
  * final height at first paint. html.motion (set before first paint, removed by reduced motion or by the
- * watchdog) turns on the slowed travel (client note 6: the stage never sticks, it rises slower while its
+ * watchdog) turns on the slowed travel (the stage never sticks, it rises slower while its
  * program scrubs) and the untested start state; without it the panel is static, tested, open.
  *
  * Layers inside a stage (one stacking context):
@@ -83,9 +83,8 @@
 .cmp {
 	position: relative;
 	z-index: 1;
-	/* the cell's offset from the centre: the one-arm cells are centred on the page (review 3: --cell-du units × the scale,
-	   scripts/panel/solo.ts); on desktop a compartment may also zig-zag (--cell-dx × the viewport width, pacing pass, art
-	   12). The script reads the device where CSS put it */
+	/* the cell's offset from the centre: the one-arm cells are centred on the page (--cell-du units × the scale,
+	   scripts/panel/solo.ts); on desktop a compartment may also zig-zag (--cell-dx × the viewport width). The script reads the device where CSS put it */
 	--off: calc(var(--cell-du, 0) * 1px * var(--s));
 }
 
@@ -95,7 +94,7 @@
 	}
 }
 
-/* the one-arm vignettes run at the stage scale × their step's multiplier (review 3, V1/S5: no zooms any more, so the job
+/* the one-arm vignettes run at the stage scale × their step's multiplier (no zooms, so the job
    itself is drawn larger where the screen has the room; scripts/panel/solo.ts holds the numbers, Compartment.astro writes
    them as --sk-<step>; the steps are the runs' own, below) */
 .cmp[data-solo] {
@@ -216,7 +215,7 @@
 	isolation: isolate;
 	/* contains the module's bottom margin: the track's run is exactly the CSS run length */
 	display: flow-root;
-	/* nothing of a cell reaches past the page's width (review 3: a centred one-arm cell's bench and parked pair run past
+	/* nothing of a cell reaches past the page's width (a centred one-arm cell's bench and parked pair run past
 	   the edge on a phone; a document wider than the screen makes a phone zoom the whole page out) */
 	overflow-x: clip;
 }
@@ -241,9 +240,9 @@ html:not(.motion) .stage {
 	padding-inline: var(--m);
 }
 
-/* the plate line: the compartment's name is on its wire-marker sleeve (client note 8) and there is no status line any
-   more (client note 17, story pass: the old coded strings are gone from the markup too). It stays as the legend's quiet top
-   margin, one 16 px line as it always was, so the scroll engine's plans and audits are unchanged */
+/* the plate line: the compartment's name is on its wire-marker sleeve and there is no status line
+   (no coded strings in the markup either). It stays as the legend's quiet top margin, one 16 px line, so the scroll
+   engine's plans and checks are unchanged */
 .plate {
 	position: relative;
 	height: 16px;
@@ -309,7 +308,7 @@ html:not(.motion) .stage {
 	}
 
 	/* R→L compartments (+C2, +C4, +C6: the lead comes down the right lane): the legend is mirrored, so the heading is on the
-	   cable side and the wire-marker sleeve with its bracket frames the heading, not the intro (client note 10, layout pass).
+	   cable side and the wire-marker sleeve with its bracket frames the heading, not the intro.
 	   The heading takes the right seven columns, set flush right against the bracket; the intro the left five; the status
 	   line moves over the intro. Phones and tablets keep one column (the sleeve beside the heading block already). */
 	.cmp[data-dir='rtl'] .legend__head {
@@ -328,7 +327,7 @@ html:not(.motion) .stage {
 	}
 }
 
-/* ---------------- wire-marker sleeves (client note 8)
+/* ---------------- wire-marker sleeves
    Each compartment's name is printed on a sleeve threaded on the test lead, as on a panel wire. It rides the descending
    tip down the lane and settles beside the heading, which a thin bracket then frames (scripts/panel/sleeve.ts, scrubbed by
    the scroll). Two copies: the static one where it settles (no JS, reduced motion: positioned by CSS, centred on the
@@ -349,7 +348,7 @@ html:not(.motion) .stage {
 }
 
 /* (the heading block's own width: on phones and tablets it is the legend's, on desktop R→L compartments it is the mirrored
-   heading column, whose end edge is the legend's end edge; layout pass) */
+   heading column, whose end edge is the legend's end edge) */
 .cmp[data-dir='rtl'] .legend__head {
 	--sl-x: calc(100% + var(--m) - var(--lane));
 }
@@ -367,7 +366,7 @@ html:not(.motion) .stage {
 	color: #0d1b2e;
 	box-shadow: inset 0 0 0 1px #c9d1dc;
 	border-radius: 1px;
-	font-family: var(--font-mono); /* taste-skill-ignore: the brand's wire-marker face */
+	font-family: var(--font-mono); /* the brand's wire-marker face */
 	font-size: 8.5px;
 	font-weight: 500;
 	line-height: 1;
@@ -607,7 +606,7 @@ html.motion .sleeve--static {
 	}
 }
 
-/* the blueprint (pacing pass, art 3): the module's reserved area is a drawing of the module it will become, measured
+/* the blueprint: the module's reserved area is a drawing of the module it will become, measured
    from its real layout (scripts/panel/stage.ts): a dashed outline, a frame per picture or card, a bar per line of text.
    It draws itself with the program and gives way, block by block, to the content coming in at the same place. Above the
    opening shell (its frames show on the module's ground as it grows), under the body. */
@@ -702,7 +701,7 @@ html.motion .mod__body.on-dark {
 	background: var(--blue);
 }
 
-/* +C5's wire marker (vignettes): a carta sleeve with a wordless print, 15 units above the insulation end */
+/* +C5's wire marker (its vignette): a carta sleeve with a wordless print, 15 units above the insulation end */
 .ld-mk {
 	--mkw: calc(var(--cw) + 1.4px * var(--s));
 	--mkl: calc((3.2 + 1.5 * var(--mk-n, 8)) * 1px * var(--s));
@@ -720,7 +719,7 @@ html.motion .mod__body.on-dark {
 	background: var(--paper);
 }
 
-/* its print: short ink strokes, like characters too small to read (client note 17: no wire numbers on screen) */
+/* its print: short ink strokes, like characters too small to read (no wire numbers on screen) */
 .ld-mk span {
 	width: calc(1.2px * var(--s));
 	height: 62%;
@@ -789,7 +788,7 @@ html.motion .mod__body.on-dark {
 	left: calc(-1 * (var(--duct) / 2 + var(--mgap)) - var(--cable-w) / 2);
 }
 
-/* ---------------- motion mode: slowed travel (client note 6), untested start state
+/* ---------------- motion mode: slowed travel, untested start state
    Nothing sticks. Each compartment's track is its stage plus a run: the extra scroll its slowdown needs.
    While a program scrubs, the whole page glides: every block (hero, ducts, compartments, footer) is drawn
    G(Y) − C below its layout position, G = the run absorbed so far, C = the runs above the block, so the runs
@@ -956,7 +955,7 @@ html.motion [data-b] {
 
 
 /* ------------------------------------------------------------------ device glyphs and the robot pair
-   Client note 9: no paint here. Every device and robot shape carries literal hex fill/stroke/stroke-width attributes
+   No paint here. Every device and robot shape carries literal hex fill/stroke/stroke-width attributes
    generated from the brand tokens (scripts/panel/paint.ts), so nothing depends on a CSS rule or a custom property
    resolving inside an SVG (a failed var() in a fill rule would override the attribute and paint the shape black). CSS
    only keeps strokes at their pixel width at every stage scale, and widens the robots' outlines on desktop. */
@@ -1112,7 +1111,7 @@ html.panel-capture *::after {
 		break-inside: auto;
 	}
 
-	/* (review 3, ENG-11) no pushbuttons on paper (the footer's print rules: SiteFooter.astro) */
+	/* no pushbuttons on paper (the footer's print rules: SiteFooter.astro) */
 	[data-station] {
 		display: none !important;
 	}

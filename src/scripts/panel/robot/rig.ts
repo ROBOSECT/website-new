@@ -10,7 +10,7 @@
  *          from the commanded one, and while the tool touches something (contact windows: seat to release, probe contact
  *          to retreat, screw engaged to backed off, docking to lift) the flex is held off: the tool stays on its target.
  *          The leads follow the actual (flexed) tool centre point.
- *   qa     robot/qa.ts: the drawn shapes of the drawn arms, the whole program (MOTION-SPEC §14)
+ *   qa     robot/qa.ts: the drawn shapes of the drawn arms, the whole program
  */
 import { H, f, prog, SPRINGS, clamp01 } from '../core';
 import type { Builder, GripPose, RobotRig } from '../program';

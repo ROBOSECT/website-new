@@ -28,7 +28,7 @@ export function compiled(S: Show, flex: FlexTable): Compiled {
 	return C;
 }
 
-/** a RESET in progress (client note 16): its branch, its clock, the wire's two ends as it found them */
+/** a RESET in progress: its branch, its clock, the wire's two ends as it found them */
 export interface Reset {
 	B: ResetBranch;
 	tau: number;
@@ -149,7 +149,7 @@ export function frameState(C: Compiled, tIn: number, reset: Reset | null = null)
 }
 const qa = [0, 0, 0, 0],
 	qb = [0, 0, 0, 0];
-/** a frame of the RESET (client note 16): the arms from the branch's flex, the racks filling, the devices letting go, the
+/** a frame of the RESET: the arms from the branch's flex, the racks filling, the devices letting go, the
  * wire's ends springing back to their curled hang */
 function resetState(C: Compiled, R: Reset): FS {
 	const S = C.S,

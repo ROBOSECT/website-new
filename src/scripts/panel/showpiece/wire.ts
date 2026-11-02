@@ -1,5 +1,5 @@
 /**
- * W07, the protagonist (SHOWPIECE-SPEC §5.12): an analytic constant-length model, a pure function of program time (seekable,
+ * W07, the protagonist: an analytic constant-length model, a pure function of program time (seekable,
  * cheap, checkable). A free drop hangs from its duct slot, its last Lc units curled (coil memory) under one damped swing;
  * a held span is a cubic from the slot (leaving down) to the jaws (arriving down) whose sideways bow is solved by bisection
  * so its length stays constant; the tail under the jaws hangs from them; a seated drop is the same cubic down to the mouth.
@@ -216,7 +216,7 @@ export function dropB(S: Show, t: number, J: Pt): Drop {
 	}
 	return finish(span(SB, SEAT.B, Ld, 1), true);
 }
-/* ------------------------------------------------------------------ RESET (client note 16) */
+/* ------------------------------------------------------------------ RESET */
 const BACK = { w: 9.5, z: 0.3 };
 const restCache: Partial<Record<'A' | 'B', Pt[]>> = {};
 const fromCache = new WeakMap<Pt[], Pt[]>();
@@ -294,7 +294,7 @@ export function sleeveAt(pts: Pt[], fromEnd: number) {
 export function w07Path(A: Drop, B: Drop) {
 	return [...A.pts.slice().reverse(), ...DUCT_W.slice(1, -1), ...B.pts];
 }
-/** the test current's route (§10): probe A on −F7:1 → through −F7's contacts → −F7:2 → W07 → −X0:7 → T7 */
+/** the test current's route: probe A on −F7:1 → through −F7's contacts → −F7:2 → W07 → −X0:7 → T7 */
 export function currentRoute(A: Drop, B: Drop): Pt[] {
 	const f1 = TP.f71;
 	const inF7: Pt[] = [

@@ -1,6 +1,6 @@
 /**
  * The panel under test: one illustrative 24 V DC connection list that runs through the whole home page. It is the robots'
- * internal model (which terminal each vignette's lead goes into, what the camera reads): since client note 17 none of these
+ * internal model (which terminal each vignette's lead goes into, what the camera reads): none of these
  * tags is ever printed on screen. Device tags follow IEC 81346 with one-letter classes (-X, -K, -A, -Q, -G, -F, -W). The
  * compartment programs (device, direction, seed, timeline) live in scripts/panel/programs.ts.
  */

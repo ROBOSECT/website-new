@@ -14,16 +14,16 @@ const other: Lang = lang === 'it' ? 'en' : 'it';
 // on a page that exists in one language only (blog, legal), the switch goes to the other homepage
 const langHref = homePath(other);
 const contactHref = sectionHref(lang, 'contact', isHome);
-// the panel's main connector in miniature, wordless (vignettes v2; client note 17 keeps it only as a visual): six ring pins,
+// the panel's main connector in miniature, wordless (a visual only): six ring pins,
 // one per compartment whose job the scroll has passed (scripts/panel), the centre pin when the robots have built the Contact
-// form. Literal paint (note 9)
+// form. Literal paint
 const x0Glyph = `<svg class="x0i" viewBox="-10 -10 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="0" cy="0" r="9.1" fill="none" stroke="#0D1B2E" stroke-width="1.1" stroke-opacity="0.6"/><circle cx="0.0" cy="-5.6" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="4.85" cy="-2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="4.85" cy="2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="0.0" cy="5.6" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="-4.85" cy="2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="-4.85" cy="-2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="0" cy="0" r="2" fill="none" stroke="#0D1B2E" stroke-width="1.1" stroke-opacity="0.6"/><circle class="x0i__on k1" cx="0.0" cy="-5.6" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k2" cx="4.85" cy="-2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k3" cx="4.85" cy="2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k4" cx="0.0" cy="5.6" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k5" cx="-4.85" cy="2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k6" cx="-4.85" cy="-2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k7" cx="0" cy="0" r="2.55" fill="#0D1B2E" stroke="none"/></svg>`;
 // the logotype inline (the logo kit's negativo «-stretto», on ink: same pixels as the file)
 const logo = logoRaw
 	.replace(/<title>[^<]*<\/title>/, '')
 	.replace(/\swidth="[^"]*"\sheight="[^"]*"/, ' width="145" height="22"')
 	.replace('role="img" aria-label="ROBOSECT"', 'aria-hidden="true" focusable="false" class="nav__logo"')
-	// every shape with literal paint (client note 9): the asset's paths have their fill; give them their stroke too
+	// every shape with literal paint: the asset's paths have their fill; give them their stroke too
 	.replaceAll('<path fill=', '<path stroke="none" fill=');
 ---
 
@@ -103,7 +103,7 @@ const logo = logoRaw
 		width: auto;
 	}
 
-	/* one brand on screen (art 11): on the home page the hero wordmark is the brand while any of it is in view below the
+	/* one brand on screen: on the home page the hero wordmark is the brand while any of it is in view below the
 	   bar; the bar's logo comes in only once it has gone under the bar (scripts/home.ts), on every screen size. Hidden also
 	   means out of the tab order (visibility), so keyboard focus never lands on it. */
 	:global(.js .is-home.hero-brand-visible) .nav__brand,
@@ -170,7 +170,7 @@ const logo = logoRaw
 		align-items: center;
 		padding: 3px 7px;
 		border: 1px solid var(--steel-light);
-		font-family: var(--font-mono); /* taste-skill-ignore: brand wire-marker face */
+		font-family: var(--font-mono); /* brand wire-marker face */
 		font-size: 13px;
 		letter-spacing: 0.06em;
 		line-height: 1.2;
@@ -194,7 +194,7 @@ const logo = logoRaw
 		gap: 8px;
 	}
 
-	/* Contact is the section on screen (scripts/home.ts, layout pass): the call to action is marked like a current link,
+	/* Contact is the section on screen (scripts/home.ts): the call to action is marked like a current link,
 	   with the bar's own Carta underline, just under the button */
 	.nav__cta::after {
 		content: '';
@@ -214,8 +214,8 @@ const logo = logoRaw
 		transform: scaleX(1);
 	}
 
-	/* the -X0 indicator (vignettes v2): a pin lights as each compartment's continuity test passes. Paint is literal on the
-	   shapes (note 9); CSS only sets the lit discs' opacity. No JS / reduced motion: the tested panel, 6/7 (the seventh
+	/* the -X0 indicator: a pin lights as each compartment's continuity test passes. Paint is literal on the
+	   shapes; CSS only sets the lit discs' opacity. No JS / reduced motion: the tested panel, 6/7 (the seventh
 	   connection is the visitor's request) */
 	.nav__cta :global(.x0i) {
 		flex: none;
@@ -240,7 +240,7 @@ const logo = logoRaw
 
 	.nav__toggle {
 		display: none;
-		/* (never squeezed by the bar's other items: on a narrow phone it was 0–11 px wide, review 3) */
+		/* (never squeezed by the bar's other items: on a narrow phone it could shrink to 0–11 px) */
 		flex: none;
 		align-items: center;
 		justify-content: center;
@@ -326,7 +326,7 @@ const logo = logoRaw
 		}
 
 		/* without JS the menu cannot open and close: it is a compact row of links in a header that scrolls away with the
-		   page (brief 7: a sticky header holding the expanded menu covered half the phone screen on every page) */
+		   page (a sticky header holding the expanded menu would cover half the phone screen on every page) */
 		:global(html:not(.js)) .nav {
 			position: relative;
 		}
@@ -394,7 +394,7 @@ const logo = logoRaw
 		}
 	}
 
-	/* narrow phones (review 3): logo, call to action and menu button all fit the bar, the menu button at its full 44 px
+	/* narrow phones: logo, call to action and menu button all fit the bar, the menu button at its full 44 px
 	   (390 × 844 IT: it was squeezed to 24 px, 360 × 740 IT to 0) */
 	@media (max-width: 419px) {
 		.nav__bar {
@@ -422,7 +422,7 @@ const logo = logoRaw
 		}
 	}
 
-	/* (never under the logo's smallest size on screen: 103 px wide, logo kit D3) */
+	/* (never under the logo's smallest size on screen: 103 px wide, the logo kit) */
 	@media (max-width: 339px) {
 		.nav__brand :global(.nav__logo) {
 			height: 15.7px;

@@ -1,6 +1,5 @@
 /**
- * Panel maths (MOTION-SPEC v4 §6), shared by the build (Node, pin lengths) and the browser.
- * Port of spec/v2/physics.js and the helpers of spec/v3/engine.js: same formulas and constants.
+ * Panel maths, shared by the build (Node, pin lengths) and the browser.
  *
  *   springs   closed-form damped oscillator (unit mass) + semi-implicit Euler for driven springs
  *   carrot    trapezoidal motion profile (the copper front the lead follows along a route)
@@ -15,7 +14,7 @@ export const H = 1 / 120;
 
 export const f = (v: number) => Math.round(v * 100) / 100;
 /**
- * String(f(v)) without the double → string conversion (engine pass, the frame budget: a path of 21 cubics formats 126
+ * String(f(v)) without the double → string conversion (the frame budget: a path of 21 cubics formats 126
  * numbers; an integer comes from V8's number cache, a fraction from the slower shortest-double algorithm). The same text
  * as String(f(v)) for every finite |v| < 2·10⁷ (checked on 200 000 random values), NaN and larger values fall back to it.
  */
@@ -298,7 +297,7 @@ export function crPath(x: ArrayLike<number>, n: number, cmd: 'M' | 'L' = 'M'): s
 	if (n < 2) return '';
 	let d = cmd + fs(x[0]) + ' ' + fs(x[1]);
 	// a lead fed straight out of the duct (its nodes on one vertical or horizontal line, in order: the feed and the presented
-	// out-lead are placed so): the curve through them is that straight line, one segment (engine pass: no 21 cubics to build
+	// out-lead are placed so): the curve through them is that straight line, one segment (no 21 cubics to build
 	// and parse every frame of a feed; the same line on screen)
 	let vx = true,
 		vy = true,
@@ -384,7 +383,7 @@ interface Key {
 	v: number;
 	d: number;
 	e: Ease;
-	/** its spring, resolved once (engine pass: at() used to slice the ease's name on every call); null: an eased key */
+	/** its spring, resolved once (at() does not slice the ease's name on every call); null: an eased key */
 	sp: Spring | null;
 }
 /** keyframed scalar: each key eases (or springs) from the value at its start to v */

@@ -1,5 +1,5 @@
 /**
- * The Contact showpiece (client notes 14, 16, 17; finale/SHOWPIECE-V2.md): the film, one deterministic program in the
+ * The Contact showpiece: the film, one deterministic program in the
  * site's own motion code: robot/kin.ts (analytic IK, speed and acceleration limits) and robot/arm.ts (ArmTrack: quintic ptp,
  * lin, linVia and via, the effector channels, contact windows, kicks). Every duration is what ArmTrack computes from the
  * limits; the choreography only decides WHEN a move starts, so that its hit lands on the 0.3 s grid (by waiting, never by
@@ -128,7 +128,7 @@ export class Show {
 	/** the two probes' contact: the test current leaves probe A and runs the wire end to end (the Send part's job) */
 	tEnergize = 0;
 	changes: { id: Id; from: Tool; to: Tool; t0: number; click: number; t1: number }[] = [];
-	/** 00: each arm couples its first tool from the full rack (client note 16: the cell starts, and is RESET to, bare arms
+	/** 00: each arm couples its first tool from the full rack (the cell starts, and is RESET to, bare arms
 	 * parked and every tool in its rack) */
 	couples: { id: Id; to: Tool; t0: number; click: number; t1: number }[] = [];
 	constructor() {
@@ -358,7 +358,7 @@ function touch(a: Arm, tp: Pt, o: { at: number; until?: number }) {
 	return tc;
 }
 
-/* ------------------------------------------------------------------ the choreography (§4) */
+/* ------------------------------------------------------------------ the choreography */
 /** the film, authored in steps (one per chapter): the browser compiles it in idle slices */
 export function* buildSteps(): Generator<void, Show> {
 	const S = new Show();
@@ -731,7 +731,7 @@ export function flexAt(F: FlexTable, id: Id, t: number, out: number[] = [0, 0, 0
 	return out;
 }
 
-/* ------------------------------------------------------------------ the form's parts (client note 17) */
+/* ------------------------------------------------------------------ the form's parts */
 /** the Contact form's parts, top to bottom, as the page names them ([data-part] in Contact.astro) */
 export const PARTS = ['name', 'company', 'email', 'part', 'volumes', 'process', 'message', 'consent', 'send'] as const;
 export type PartId = (typeof PARTS)[number];
@@ -742,11 +742,11 @@ export interface Part {
 	/** the film time the job lands (the pulse leaves the work then) */
 	t: number;
 	src: PartSrc;
-	/** the job, for the screen reader's list and the build notes */
+	/** the job that lands it (a label) */
 	job: string;
 }
 /**
- * Each job's hit builds one part (SHOWPIECE-V2 §2, v2b rhythm): the camera's two findings, the hand taking the curled end
+ * Each job's hit builds one part: the camera's two findings, the hand taking the curled end
  * (the comb), the insert into the screw clamp, the screw's torque settle, the pull test, the hand finding end B, the cage
  * snapping shut on it (the checkbox snaps in), the two-probe test (Send, once the test current has run the wire end to end).
  * The breaker ON builds no part: it powers what is built (form.ts: the surge through the laid harness, every terminal blinks)
@@ -770,7 +770,7 @@ export function formParts(S: Show): Part[] {
 	];
 }
 
-/* ------------------------------------------------------------------ RESET (client note 16): the cell back to rest */
+/* ------------------------------------------------------------------ RESET: the cell back to rest */
 /** the cell's state where a RESET starts (commanded joints, effectors, devices, W07's ends, the racks) */
 export interface ResetSrc {
 	/** the film time the devices, racks and wire come from */
@@ -829,7 +829,7 @@ export function filmSrc(S: Show, t: number): ResetSrc {
 	};
 }
 /**
- * The RESET (client note 16: a real control that resets the environment, visibly and physically, then the job runs again):
+ * The RESET (a real control that resets the environment, visibly and physically, then the job runs again):
  * the breaker trips OFF (its spring), the work light dims; −F7:2's screw backs out and the cage opens: W07's ends spring
  * free and swing back to their curled hang; each gripper lets go of what it holds; each arm lifts its tool up its own axis
  * clear of the work, turns to its rack, docks the tool in its own slot (the site's tool change, first half) and waits, bare,
@@ -1029,7 +1029,7 @@ export function toolSt(S: Show, id: Id, t: number, q: ArrayLike<number>): ToolSt
 		hold: id === 'L' && holding(S, t) ? 1 : 0,
 	};
 }
-/* ------------------------------------------------------------------ rests (pause lands on one, §8) */
+/* ------------------------------------------------------------------ rests (pause lands on one) */
 /** times where no micro-mechanism channel changes within ±0.12 s and no hit lies within ±0.15 s (a 0.05 s grid) */
 export function rests(S: Show) {
 	const chans = [S.f7scr, S.f7jaw, S.f7tgl, S.x0cage, S.x0jaw, S.L.tr.grip, S.L.tr.lock, S.L.tr.spin, S.R.tr.grip, S.R.tr.lock, S.R.tr.spin];

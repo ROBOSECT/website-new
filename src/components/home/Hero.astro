@@ -118,7 +118,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		display: none;
 	}
 
-	/* phones: the wordmark on the text edge (art 11: one left edge, clear of the screen edge); the lead leaves the R's
+	/* phones: the wordmark on the text edge (one left edge, clear of the screen edge); the lead leaves the R's
 	   stem foot and bends into the gutter lane right under the R, then runs down to the cabinet */
 	@media (max-width: 699px) {
 		.hero__brand {
@@ -247,7 +247,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			min-height: min(calc(100svh - var(--nav-h)), 900px);
 		}
 
-		/* the wordmark sits low enough that its copper lets go before the R reaches the nav (MOTION-SPEC §3.9; taller
+		/* the wordmark sits low enough that its copper lets go before the R reaches the nav (taller
 		   desktops below) */
 		.hero__text {
 			display: flex;
@@ -256,9 +256,8 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			padding: clamp(96px, 15svh, 140px) 56px 64px var(--m);
 		}
 
-		/* (logo D3: the wordmark is 16 px taller than the B2 one, the stroke being the page cable, and the descriptor 5 px
-		   further from it, out of the logo's clear space; the headline starts 12 px closer, so the descriptor stays the
-		   logo's line and the action stays above the fold) */
+		/* (the wordmark is tall, its stroke being the page cable, and the descriptor sits out of the logo's clear space, so
+		   the headline starts 12 px closer: the −12px in the calc keeps the descriptor the logo's line and the action above the fold) */
 		.hero__title {
 			margin-top: clamp(24px, calc(4.2vw - 12px), 48px);
 		}
@@ -269,7 +268,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		}
 	}
 
-	/* desktops at least 860 px tall (client note 10, layout pass): the wordmark sits lower, so the copper's detach lasts
+	/* desktops at least 860 px tall: the wordmark sits lower, so the copper's detach lasts
 	   2–3 wheel notches and ends before the R reaches the bar (scripts/panel/hero.ts: D ≤ R top − bar − 8). The room comes
 	   from the facts, which move up into the nameplate's head as one mono plate line (as each compartment opens on its
 	   plate line); the words and the primary action stay above the fold, EN and IT (the padding is fitted to the longest
@@ -287,7 +286,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			right: 56px;
 			margin-top: 0;
 			gap: 8px 22px;
-			font-family: var(--font-mono); /* taste-skill-ignore: the nameplate's plate line, the brand's tag face */
+			font-family: var(--font-mono); /* the nameplate's plate line, the brand's tag face */
 			font-size: 12px;
 			font-weight: 500;
 			line-height: 1.5;

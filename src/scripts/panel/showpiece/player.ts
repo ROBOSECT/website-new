@@ -1,5 +1,5 @@
 /**
- * The showpiece's player (client notes 14, 16, 17; finale/SHOWPIECE-V2.md): a live machine, not a video, and the robots
+ * The showpiece's player: a live machine, not a video, and the robots
  * build the Contact form. No timeline, no chapters, no time code, no captions, no codes, no zooms: the cell has its own
  * operator station with two real pushbuttons (HTML <button>s, keyboard-focusable, named in EN and IT):
  *
@@ -14,14 +14,14 @@
  *
  *   autoplay once ≥ 50 % of the stage (or 30 % of the form) is in view, the tab visible, no reduced motion, no latched STOP;
  *            off screen or hidden it holds in place and resumes in place. The nav's Let's talk only takes the visitor here:
- *            the film plays and the robots build the form in front of them (review 3: it is not an intent)
+ *            the film plays and the robots build the form in front of them (it is not an intent)
  *   intent   any sign the visitor wants to use the form (focus, Tab, typing, autofill, a press, or the pointer MOVED onto it
  *            and resting there 0.3 s: a pointer the page scrolls under is not an intent) builds every part at once
  *            (form.ts complete) and the cell settles to its end frame (the job done, the robots parked, the breaker on) in
- *            one short cross-fade, in step with the form's snap: the film never runs on beside a built form (review 3).
+ *            one short cross-fade, in step with the form's snap: the film never runs on beside a built form.
  *            RESET glows; it is the only thing that replays. Nothing reacts per keystroke
  *   Send     just sends (contact.ts): no climax here
- *   reduced motion: the end frame, the form built, RESET and STOP inert and unlit (client note 17: RESET does nothing heavy)
+ *   reduced motion: the end frame, the form built, RESET and STOP inert and unlit (RESET does nothing heavy)
  *
  * Frames only when they matter: rAF runs while the film or a reset moves, never while held, stopped, off-screen, hidden or in
  * standby. QA: window.__show (state, seek, play, stop, reset, complete, form, perf, tick); ?panel-capture=1 steps the clock
@@ -45,10 +45,10 @@ interface Cfg {
 type State = 'poster' | 'playing' | 'stopped' | 'offscreen' | 'ready' | 'resetting';
 /** the cell's settle to its end frame on an intent: one cross-fade (ms), in step with the form's 0.3 s snap */
 const SETTLE_MS = 420;
-/** film seconds per second of real time (review 3, SP-06/S12: the untouched build within note 17's ≈ 15–25 s: Send built at
+/** film seconds per second of real time (the untouched build within ≈ 15–25 s: Send built at
  * film 28.8 s, 24 s of real time; the film's own times, its QA and capture mode's steps are unchanged) */
 const FILM_RATE = 1.2;
-/** a RESET's reverse runs faster still (review 3, SP-07; note 16 asked for 1–2 s): × 7/6 on top of the film's rate, 1.4 */
+/** a RESET's reverse runs faster still (aimed at 1–2 s): × 7/6 on top of the film's rate, 1.4 */
 const RESET_BOOST = 7 / 6;
 export interface ShowHooks {
 	/** every part of the form is built (true) or not any more (a RESET: false) */
@@ -154,7 +154,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		return stageEl.clientWidth < 520 ? 'phone' : 'desk';
 	}
 	/**
-	 * The live stage, in three steps (engine pass, boot blocking time: the first mount is three short tasks in idle time, not
+	 * The live stage, in three steps (boot blocking time: the first mount is three short tasks in idle time, not
 	 * one long one): the scene's nodes are built off the page (the poster stays on screen meanwhile), then the form's build
 	 * is set up and measured, then the nodes take the poster's place and the first frame is drawn. A re-mount (a resize that
 	 * changes the composition) runs them in one go.
@@ -316,7 +316,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		if (was !== 'stop' && clk.mode === 'stop') onClockStopped();
 	}
 
-	/* ------------------------------------------------------------ RESET (client note 16): the cell and the form */
+	/* ------------------------------------------------------------ RESET: the cell and the form */
 	function beginReset(src: ResetSrc) {
 		if (!C) return;
 		const B = resetBranch(C.S, src);
@@ -342,7 +342,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		else run();
 	}
 	function resetPress() {
-		// reduced motion: RESET does nothing heavy (client note 17): the end frame stays, the button is inert and unlit
+		// reduced motion: RESET does nothing heavy: the end frame stays, the button is inert and unlit
 		if (!C || !live || !motion()) return;
 		if (rs) {
 			// a reset already running: RESET releases a latched STOP
@@ -374,7 +374,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		paint();
 	}
 
-	/* ------------------------------------------------------------ STOP (client note 16, WCAG 2.2.2): a latching protective stop */
+	/* ------------------------------------------------------------ STOP (WCAG 2.2.2): a latching protective stop */
 	function stopPress() {
 		if (!live || !motion()) return;
 		if (stopLatched) return release();
@@ -500,7 +500,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		syncFollow();
 	}
 
-	/* ------------------------------------------------------------ tall phones: the cell follows the build (review 3, S4) */
+	/* ------------------------------------------------------------ tall phones: the cell follows the build */
 	// the fields run far below the cell on a phone: while the robots build them the cell stays in view under the bar (CSS
 	// sticky inside the cell-and-form box: native scrolling, released at the form's end), so the job and the box it builds
 	// share the screen wherever the visitor reads. An intent (the form complete, the robots parked), STOP, the end frame or
@@ -585,7 +585,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		run();
 	}
 	/** the visitor wants to use the form: every part built at once (the form's 0.3 s snap) and the cell settles to its end
-	 * frame with it (review 3: the robots never run on beside a built form, nor beside the confirmation) */
+	 * frame with it (the robots never run on beside a built form, nor beside the confirmation) */
 	function complete(reason: string) {
 		if (fb) {
 			if (!fb.still) fb.complete(t, !!rs);
@@ -654,7 +654,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		typing = on;
 	}
 
-	/* ------------------------------------------------------------ intent (client note 17: usability is sacred) */
+	/* ------------------------------------------------------------ intent (usability first) */
 	if (form) {
 		const go = (why: string) => complete(why);
 		form.addEventListener('focusin', () => go('focus'));
@@ -680,7 +680,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 			if (tap && p.pointerType === 'touch' && Math.hypot(p.clientX - tap.x, p.clientY - tap.y) < 10 && performance.now() - tap.t < 600) go('tap');
 			tap = null;
 		});
-		// the pointer brought onto the form and resting there 0.3 s (review 3, SP-01/ENG-1): only a trusted move of the pointer
+		// the pointer brought onto the form and resting there 0.3 s: only a trusted move of the pointer
 		// itself (≥ 3 px from where it last was) starts the dwell, never the page scrolling under a resting pointer (the
 		// browser then fires pointerover/enter at the same spot); a wheel, a scroll or the pointer leaving cancels it
 		let dwell = 0;
@@ -714,7 +714,7 @@ export function initShowpiece(fig: HTMLElement, hooks: ShowHooks = {}) {
 		);
 		zone.addEventListener('pointerleave', cancel);
 	}
-	// (the nav's Let's talk only takes the visitor here: the film plays and builds the form in front of them; review 3)
+	// (the nav's Let's talk only takes the visitor here: the film plays and builds the form in front of them)
 
 	/* ------------------------------------------------------------ the world: visibility, tab, reduced motion */
 	const onVis = () => {

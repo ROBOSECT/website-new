@@ -1,6 +1,6 @@
 ---
 /**
- * Contact: the robots build the form (client note 17, finale/SHOWPIECE-V2.md; the showpiece of notes 14 and 16).
+ * Contact: the robots build the form (the page's showpiece).
  *
  * Next to the form, the two robots do one real job with every tool (camera, gripper, screwdriver, spring-cage opener, breaker
  * toggle, two probes): a live animation on its own clock (scripts/panel/showpiece), not scroll-driven and not a video, no
@@ -17,7 +17,7 @@
  * info@robosect.it in the visitor's own mail client (scripts/contact.ts); without script, the browser posts the fields as
  * plain text to the same mailto: address. Before launch: point `action` to a real endpoint (or a form service), keep the
  * mailto as fallback, and have ROBOSECT approve the privacy policy's paragraph on this form (the restore after an iOS reload
- * stays off until then: data-restore="off"). (Markup comments are never emitted: review 3, S9.)
+ * stays off until then: data-restore="off"). (Markup comments are never emitted.)
  */
 import Rich from '../ui/Rich.astro';
 import { copy, type Lang } from '../../i18n/copy';
@@ -209,7 +209,7 @@ const cfg = {
 						{c.direct.linkedin}<span class="visually-hidden"> {copy[lang].a11y.opensInNewTab}</span>
 					</a>
 				</div>
-				{/* client note 17: the form's wire, the pulses and the outlines (drawn by the script from the layout) */}
+				{/* the form's wire, the pulses and the outlines (drawn by the script from the layout) */}
 				<svg class="build-wire" data-build-wire aria-hidden="true" focusable="false"></svg>
 				<p class="visually-hidden" aria-live="polite" data-live></p>
 			</div>
@@ -223,7 +223,7 @@ const cfg = {
 <style>
 	.cmp--contact {
 		--card-pad: 16px;
-		/* the form's gutter: on two columns the form's wire runs down its middle (client note 17) */
+		/* the form's gutter: on two columns the form's wire runs down its middle */
 		--gut: 30px;
 		position: relative;
 		z-index: 1;
@@ -246,7 +246,7 @@ const cfg = {
 		--tbd-ink: var(--paper);
 	}
 
-	/* the heading block the wire-marker sleeve frames (client note 8) */
+	/* the heading block the wire-marker sleeve frames */
 	.card__head {
 		--sl-x: calc(-1 * (var(--duct) / 2 + var(--mgap) + var(--card-pad)));
 		--br-gap: min(16px, calc(var(--card-pad) - 6px));
@@ -275,8 +275,8 @@ const cfg = {
 		order: 1;
 	}
 
-	/* short screens (phones on their side, 1024 × 600): the cell and its station must fit under the bar with the heading
-	   (note 7), so the invitation follows the cell there */
+	/* short screens (phones on their side, 1024 × 600): the cell and its station must fit under the bar with the heading,
+	   so the invitation follows the cell there */
 	@media (max-width: 699px) and (max-height: 520px), (min-width: 700px) and (max-width: 1099px) and (max-height: 800px) {
 		.card__intro {
 			margin-top: 18px;
@@ -298,7 +298,7 @@ const cfg = {
 	}
 
 	/* ---------------- the cell and the form: one box for the sticky cell on tall phones, no box elsewhere (its children are
-	   the card's grid items, review 3) */
+	   the card's grid items) */
 	.work {
 		display: contents;
 	}
@@ -307,7 +307,7 @@ const cfg = {
 		display: none;
 	}
 
-	/* tall phones (review 3, S4): the cell and its station stay in view under the bar while the robots build the boxes below
+	/* tall phones: the cell and its station stay in view under the bar while the robots build the boxes below
 	   them (time-based, never scroll-jacking: native sticky inside this box, released at the form's end). The player turns it
 	   on only while the build runs (data-follow) and paints the cell's own ground once it is stuck (data-stuck); an intent,
 	   STOP, the robots parked or Send release it (a short fade if it is stuck) */
@@ -371,14 +371,14 @@ const cfg = {
 		aspect-ratio: 2;
 	}
 
-	/* phones: the whole cell, as wide as the card (its padding too): no camera, no zoom (client note 17) */
+	/* phones: the whole cell, as wide as the card (its padding too): no camera, no zoom */
 	@media (max-width: 699px) {
 		.show__stage {
 			margin-inline: calc(-1 * var(--card-pad) + 2px);
 		}
 	}
 
-	/* phones on their side (≤ 520 px tall): the cell and its station fit under the bar together (note 7), so the cell is as
+	/* phones on their side (≤ 520 px tall): the cell and its station fit under the bar together, so the cell is as
 	   wide as twice the height left for it, centred, its station under its right end */
 	@media (max-width: 699px) and (max-height: 520px) {
 		.show {
@@ -413,7 +413,7 @@ const cfg = {
 	}
 
 	/* the page's cable −W0 enters the cell at its own width (non-scaling stroke, a width: never a paint; literal px, the
-	   page cable's widths of global.css: no var() inside SVG, note 9) */
+	   page cable's widths of global.css: no var() inside SVG) */
 	.show__svg :global([data-w0]) {
 		stroke-width: 5px;
 	}
@@ -430,7 +430,7 @@ const cfg = {
 		}
 	}
 
-	/* the settle to the end frame on an intent (review 3): a copy of the drawing over the live one, fading out (the player) */
+	/* the settle to the end frame on an intent: a copy of the drawing over the live one, fading out (the player) */
 	.show__ghost {
 		position: absolute;
 		left: 0;
@@ -541,7 +541,7 @@ const cfg = {
 		transform: scale(0.93);
 	}
 
-	/* RESET pressed mid-job (review 3, SP-07): the robots finish the move they are in first; the cap holds pressed and its
+	/* RESET pressed mid-job: the robots finish the move they are in first; the cap holds pressed and its
 	   lamp blinks until the reset starts */
 	.show[data-held] .pb--reset .pb__cap {
 		transform: scale(0.93);
@@ -557,7 +557,7 @@ const cfg = {
 		}
 	}
 
-	/* reduced motion (client note 17: RESET does nothing heavy): the station is inert, its buttons unlit and flat */
+	/* reduced motion (RESET does nothing heavy): the station is inert, its buttons unlit and flat */
 	.show[data-inert] .pb {
 		cursor: default;
 	}
@@ -725,7 +725,7 @@ const cfg = {
 		}
 	}
 
-	/* (review 3, S6) the chosen option never runs under the chevron */
+	/* the chosen option never runs under the chevron */
 	.form .select select {
 		padding-right: 40px;
 		text-overflow: ellipsis;
@@ -817,7 +817,7 @@ const cfg = {
 		color: var(--mist);
 	}
 	/* without JS the form posts to mailto: directly; its <noscript> line says what happens, so the scripted line goes
-	   (verifier pass: both said the same thing twice) */
+	   (both would say the same thing twice) */
 	:global(html:not(.js)) .form__helper--js {
 		display: none;
 	}
@@ -840,7 +840,7 @@ const cfg = {
 		margin-top: 0;
 	}
 
-	/* ---------------- client note 17: the robots build the form (form.ts; only with JS, in motion, under data-build) */
+	/* ---------------- the robots build the form (form.ts; only with JS, in motion, under data-build) */
 	.form[data-build] [data-part] {
 		--slot-a: 0.26;
 		--dl: calc(var(--bd, 0ms) + var(--ud, 0ms));
@@ -1207,7 +1207,7 @@ const cfg = {
 		display: none;
 	}
 
-	/* the Contact sleeve rides over the arriving cable like every other sleeve (review 3, S2: the lead painted over its print) */
+	/* the Contact sleeve rides over the arriving cable like every other sleeve (else the lead paints over its print) */
 	.cmp--contact > .sleeve--live {
 		z-index: 4;
 	}
@@ -1265,7 +1265,7 @@ const cfg = {
 			height: 31px;
 		}
 
-		/* (review 3, S10) the form's wire crosses midway between the cell and the first labels */
+		/* the form's wire crosses midway between the cell and the first labels */
 		.formcell {
 			margin-top: 52px;
 		}
@@ -1456,7 +1456,7 @@ const cfg = {
 			margin-top: 12px;
 		}
 
-		/* (review 3, S10: room above the first labels for the form's wire, ≥ 30 px from them) */
+		/* (room above the first labels for the form's wire, ≥ 30 px from them) */
 		.formcell {
 			margin-top: 18px;
 		}
@@ -1510,7 +1510,7 @@ const cfg = {
 			grid-row: 1;
 		}
 
-		/* (review 3, SP-05) the invitation under the cell, beside the form's end: the cell and its station stay whole under
+		/* the invitation under the cell, beside the form's end: the cell and its station stay whole under
 		   the bar with the heading */
 		.card__intro {
 			grid-column: 1;

@@ -17,7 +17,7 @@ const toolAlt = {
 	en: 'A red custom probe end-effector mounted on the wrist of a collaborative robot, with its probe tip pointing down',
 	it: 'Un end-effector rosso a puntale, progettato su misura, montato sul polso di un robot collaborativo, con il puntale rivolto in basso',
 }[lang];
-// the legend must fit above the robot cell (MOTION-SPEC v4 §1.5): the body splits at a sentence boundary,
+// the legend must fit above the robot cell: the body splits at a sentence boundary,
 // the first two sentences stay in the legend and the rest opens the module (copy unchanged)
 const sentences = t.body.split(/(?<=\.)\s+/);
 const legendIntro = sentences.slice(0, 2).join(' ');
@@ -56,7 +56,7 @@ const bodyRest = sentences.slice(2).join(' ');
 			<video class="tvid__el" width="1920" height="1080" controls muted playsinline preload="none" poster={poster.src} aria-describedby="video-desc">
 				<source src={videoSrc} type="video/mp4" />
 			</video>
-			{/* print: the poster in the video's place (review 3, ENG-11: a video prints as an empty box) */}
+			{/* print: the poster in the video's place (a video prints as an empty box) */}
 			<img class="tvid__print" src={poster.src} width="1280" height="720" alt="" aria-hidden="true" loading="lazy" decoding="async" />
 			<figcaption class="tvid__cap"><Rich text={t.video.caption} /></figcaption>
 		</figure>

@@ -1,14 +1,14 @@
 /**
- * Markup kept as persistent nodes (engine pass, client notes 10 and 14: the frame budget). A device's moving parts (screw
+ * Markup kept as persistent nodes (the frame budget). A device's moving parts (screw
  * heads, cage actuators, LEDs, jaws, the face's lamps) and the cell's effects are described as markup (devices.ts, shared
- * with the build's static drawing, and stage.ts fx). Writing them with innerHTML whenever one changed re-parsed the string,
- * re-created the nodes (a style pass for each new node) and re-ran the paint resolver over the string, every frame a screw
- * turned or a ring grew.
+ * with the build's static drawing, and stage.ts fx). Writing them with innerHTML whenever one changed would re-parse the string,
+ * re-create the nodes (a style pass for each new node) and re-run the paint resolver over the string, every frame a screw
+ * turns or a ring grows.
  *
  * A Patch keeps the nodes: the new markup is tokenised; when it has the same shape as what is drawn (the same elements,
  * classes and attribute names, in the same order and nesting) only the attribute values that differ are written. Otherwise
  * (an LED's lamp appearing, an effect starting or ending) it is drawn once with innerHTML, painted (paint.ts: literal hex on
- * every shape, client note 9), and becomes the new shape. Paint attributes come from the class, so a value write never
+ * every shape), and becomes the new shape. Paint attributes come from the class, so a value write never
  * touches them. The drawn result is the same DOM the innerHTML of the same markup would give.
  */
 import { PROF } from './core';

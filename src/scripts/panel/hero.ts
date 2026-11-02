@@ -1,5 +1,5 @@
 /**
- * The hero: the R lets go of its copper on the first scroll (MOTION-SPEC v4 §3.9; logo D3: the copper is the ferrule),
+ * The hero: the R lets go of its copper on the first scroll (the logo's copper is the ferrule),
  * scrubbed by Ŷ over [0, D]: anticipate (the ferrule is pressed onto the cable), pop (out, spark), unseat (it slides off the
  * cable's end and is gone), the bead glides through the R to the stem foot, hand-off. Then the tip drops out of the stem foot:
  * y = foot + softmin(3·(Ŷ − 0.92·D), Ŷ + penY − foot): faster than the page, then merged onto the pen.
@@ -87,10 +87,10 @@ export class HeroView {
 		this.cuL = o.cuL;
 		this.cuW = o.cuW;
 		this.phone = o.phone;
-		// the detach is a readable beat: 2–3 wheel notches at 1440 × 900 and on phones (client note 10, layout pass; the pacing
-		// pass had ≈ 1.7), and it ends before the R reaches the (opaque) nav bar: the whole R is in view while the bead runs
+		// the detach is a readable beat: 2–3 wheel notches at 1440 × 900 and on phones (≈ 1.7 is too quick to read), and it
+		// ends before the R reaches the (opaque) nav bar: the whole R is in view while the bead runs
 		// through it (the hero's layout puts the wordmark low enough: Hero.astro). Where a short desktop's fold cannot afford
-		// the wordmark that low (≈ 860 px tall and less) the pacing pass's rule stays: it may run until the R's bowl is half
+		// the wordmark that low (≈ 860 px tall and less) a looser rule applies: it may run until the R's bowl is half
 		// under the bar (the ferrule, the stem and its foot, where the bead ends, stay in view), so the beat is not shorter there.
 		const wmTop = r.top + scrollY;
 		const strict = wmTop - o.navH - 8,

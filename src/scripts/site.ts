@@ -55,7 +55,7 @@ function initReveal() {
 	groups.forEach((g) => io.observe(g));
 }
 
-/** one brand on screen (note 10; review 3, S13): on the pages without the hero, the bar's logo leaves while the footer's big
+/** one brand on screen: on the pages without the hero, the bar's logo leaves while the footer's big
  * wordmark is in view (the home page does the same with its hero: scripts/home.ts) */
 function initFooterBrand() {
 	if (document.body.classList.contains('is-home') || !('IntersectionObserver' in window)) return;
@@ -67,7 +67,7 @@ function initFooterBrand() {
 	}).observe(foot);
 }
 
-/** print (review 3, ENG-11): pictures still waiting for their lazy load are fetched now, so the paper is not left with
+/** print: pictures still waiting for their lazy load are fetched now, so the paper is not left with
  * empty boxes where a browser prints before scrolling them into view */
 function initPrint() {
 	addEventListener('beforeprint', () => document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = 'eager')));

@@ -1,5 +1,5 @@
 /**
- * Drawing the robot pair (MOTION-SPEC §5.1, §10.3). One geometry, three uses:
+ * Drawing the robot pair. One geometry, three uses:
  *
  *   markup   SVG strings in UNITS, cell-centred (x = 0 at the device centre, y = 0 on the bench): the static parked pair
  *            generated at build time (no-JS, reduced motion, first paint, 404), and the initial DOM of the live renderer
@@ -17,7 +17,7 @@
  *
  * Joint angles are scale-free, so the renderer runs its own unit-size robots (same kinematics) on the joint vector the
  * simulation hands it. Every shape carries explicit hex paint attributes (paint.ts RB tables, per ground: plate | blue),
- * added where the markup leaves this module (static cells, the live cell, its effects): no paint comes from CSS (note 9).
+ * added where the markup leaves this module (static cells, the live cell, its effects): no paint comes from CSS.
  */
 import { f } from '../core';
 import { RB, glowMarkup, paintAttrs, paintSvg, type RbTheme } from '../paint';
@@ -342,7 +342,7 @@ const toolTfStr = (k: FK, m: number) => {
 const notchY = (lock: number) => f(-3 + 6 * (lock - 0.5)) + '';
 
 /**
- * The ROBOSECT logo printed on every arm (client note 16), on the forearm between the elbow's housing and the wrist band:
+ * The ROBOSECT logo printed on every arm, on the forearm between the elbow's housing and the wrist band:
  * the link that faces the viewer and runs across the scene (toward the work, or toward the rack), so the print reads upright
  * whatever the arm does: it is printed on both sides of the link, and the side we see is the one facing us (the base yaw's
  * sign says which: when the arm turns past edge-on the forearm's projected length is ~0, so the change never shows).
@@ -613,7 +613,7 @@ export interface RackFrame {
 
 /* ------------------------------------------------------------------ live writes through the SVG DOM */
 /**
- * Engine pass (the frame budget): the arm's transforms and lengths are written through the SVG DOM (SVGTransform.setTranslate /
+ * The frame budget: the arm's transforms and lengths are written through the SVG DOM (SVGTransform.setTranslate /
  * setRotate / setScale / setMatrix, SVGLength.value) instead of attribute strings: no number → string conversion and no
  * string parse per write (≈ 2.7× cheaper per transform, 4.5× per length in Chromium at 4× CPU). The values are rounded
  * exactly as the markup rounds them (f(), toFixed), so the drawing is the same; the static markup (armMarkup) still carries

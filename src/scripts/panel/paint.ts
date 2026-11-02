@@ -1,5 +1,5 @@
 /**
- * Explicit paint for every drawn shape (client note 9: nothing may ever fall back to the default black fill).
+ * Explicit paint for every drawn shape (nothing may ever fall back to the default black fill).
  *
  * The robots and devices are generated as SVG markup with semantic classes (rb-*, dv shapes). Their paint used to come
  * from CSS rules resolving custom properties (`.rb .rb-lk { fill: var(--rb-link) }`): wherever a rule or a var() did not
@@ -174,7 +174,7 @@ const DV_TOK: Record<DvTheme, DvTok> = {
 		ledOn: PAL.cu,
 		cuin: PAL.cu,
 	},
-	/* the ink devices (note 9.2): a raised ink-2 body with a steel rim (the moulding catches the light on its top edge:
+	/* the ink devices: a raised ink-2 body with a steel rim (the moulding catches the light on its top edge:
 	   devices.ts draws that highlight), carta-steel details at full contrast, LED rings that read as lamps when off */
 	dark: {
 		fill: PAL.ink2,
@@ -249,7 +249,7 @@ function dvTable(T: DvTok): Table {
 	};
 }
 export const DV: Record<DvTheme, Table> = { light: dvTable(DV_TOK.light), dark: dvTable(DV_TOK.dark), blue: dvTable(DV_TOK.blue) };
-/** the head tab and its terminals: a light insulating terminal strip on every device (note 9.2: on the ink devices the mouths,
+/** the head tab and its terminals: a light insulating terminal strip on every device (on the ink devices the mouths,
  * screws and cage actuators read as parts, not as dark holes; the robots work on it) */
 export const TAB_THEME: DvTheme = 'light';
 

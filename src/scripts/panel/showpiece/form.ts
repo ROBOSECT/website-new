@@ -1,5 +1,5 @@
 /**
- * The robots build the form (client note 17, finale/SHOWPIECE-V2.md §1–§5). The page's side of the showpiece:
+ * The robots build the form. The page's side of the showpiece:
  *
  *   slots    when Contact comes into view the form is not built yet: every box is a faint dashed outline, one dashed wire
  *            runs from the cell's duct to every box's terminal (the mounting plate). It comes on with the cell's work light
@@ -111,7 +111,7 @@ export class FormBuild {
 	private drain = new Map<PartId, number>();
 	/** no animation for the instant build (capture mode, reduced motion): everything at once */
 	snapInstant = false;
-	/** the breaker ON (client note 17, v2b): it builds no part, it powers what is built. A surge leaves the toggle's clamp, runs
+	/** the breaker ON: it builds no part, it powers what is built. A surge leaves the toggle's clamp, runs
 	 * up drop A, out of the cell and down the laid harness to the last part built; every terminal blinks as it passes */
 	private surge: {
 		t: number;
@@ -228,7 +228,7 @@ export class FormBuild {
 		const yEnd = this.mode === 'center' ? send.r.y0 : (send.r.y0 + send.r.y1) / 2;
 		if (this.mode === 'center') {
 			xs = Math.round((name.r.x1 + company.r.x0) / 2);
-			// review 3 (SP-10/S10): the wire never hugs a label. Beside the cell (desktops) the jog rises in the open middle of
+			// the wire never hugs a label. Beside the cell (desktops) the jog rises in the open middle of
 			// the gap between the heading’s words and the form, the run crosses the card’s top padding ≥ 30 px above the first
 			// labels; under the cell (tablets) the run crosses midway between the cell and the first labels
 			let yTop = Math.round(fieldsTop - 12);
@@ -613,7 +613,7 @@ export class FormBuild {
 	}
 
 	/* ------------------------------------------------------------ the visitor */
-	/** an intent to use the form: every part built at once (client note 17: "everything snaps into place", ≈ 300 ms): one
+	/** an intent to use the form: every part built at once (everything snaps into place, ≈ 300 ms): one
 	 * light runs down the form's wire from the cell and each box snaps in as it passes its tap; the box the visitor is in
 	 * is built at once. No pulses afterwards (until a RESET) */
 	complete(t: number, resetting = false) {

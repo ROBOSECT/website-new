@@ -1,8 +1,8 @@
 /**
- * The Contact showpiece (finale/SHOWPIECE-V2.md): the scene's geometry, constants only.
+ * The Contact showpiece: the scene's geometry, constants only.
  *
  * Units are the robot grid (1 u = 1 px × the stage scale), x right, y down, the bench and the device tabs' foot at y = 0,
- * the tab tops at y = −12. The stage viewBox is FIXED on every screen (no camera moves, client note 17): x −184…184,
+ * the tab tops at y = −12. The stage viewBox is FIXED on every screen (no camera moves): x −184…184,
  * y −116…68; everything the film draws stays inside it (QA).
  *
  * The cell: L at x = −84 (camera · gripper · probe), R at x = +84 (driver · opener · probe), three-slot racks behind them;
@@ -39,9 +39,9 @@ export const G = {
 	seatGap: 1,
 };
 /**
- * −F7, the breaker with screw clamps (stage x = x0 + device x). Mouths ±15 and screws ±25 from its centre, the toggle between
- * them, the screws at ±27 (the build pass widened the spec's 56-unit body to 62: at ±12 the gripper that switches it ON could not reach the knob
- * without touching the wire in −F7:2, and the driver kept 2 u from the hand that holds end A: robot QA). It sits at the plate's left edge so drop A hangs 40 units left of drop B:
+ * −F7, the breaker with screw clamps (stage x = x0 + device x). Mouths ±15 and screws ±27 from its centre, the toggle between
+ * them (the body is 62 units wide rather than 56: at ±12 the gripper that switches it ON could not reach the knob
+ * without touching the wire in −F7:2, and the driver kept only 2 u from the hand that holds end A: robot QA). It sits at the plate's left edge so drop A hangs 40 units left of drop B:
  * the hand that grips end B keeps its wrist clear of drop A
  */
 export const F7 = { x0: -68, w: 62, h: 60, c: -37, m1: -52, m2: -22, s1: -64, s2: -10, piv: -37, mouth: 15, port: 27 };

@@ -1,5 +1,5 @@
 /**
- * Robot QA (MOTION-SPEC §14, robotics review 6): the real simulation (the drawn, flexed joints, 120 Hz) stepped over the
+ * Robot QA: the real simulation (the drawn, flexed joints, 120 Hz) stepped over the
  * whole program (Contact: through its finale), and the drawn shapes tested, as convex polygons from the same geometry the
  * renderer draws (draw.ts armPieces):
  *
@@ -328,7 +328,7 @@ export function runQa(B: Compiled, tEnd: number, o: { strict?: boolean; maxViola
 			})()
 		: [];
 	void x4Pieces;
-	// the feeder rule (vignettes v2 §0.5): the lead's front never moves more than 10 units per 1/60 s of program time
+	// the feeder rule: the lead's front never moves more than 10 units per 1/60 s of program time
 	const fh: number[] = [];
 	for (let i = 0; i < nSteps; i++) {
 		if (i > 0) sim.step();

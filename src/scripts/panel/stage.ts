@@ -1,6 +1,6 @@
 /**
  * One compartment on the page: DOM reads (rebuild), the compiled program, its scroll track (the slowed
- * travel, client note 6), and the renderer (MOTION-SPEC v5 §3, §4, §10.3). Persistent nodes only: per frame it writes transforms,
+ * travel), and the renderer. Persistent nodes only: per frame it writes transforms,
  * opacities, clip-path insets and the `d` of the lead's paths; the device face is re-drawn only when its
  * state changes (screw angle, LEDs, relay blade…), effects only while one is active.
  */
@@ -16,7 +16,7 @@ import type { Sample } from './sim';
 const NS = 'http://www.w3.org/2000/svg';
 /** StageView.qd's slots, 9 per part */
 const Q = { door: 0, jaws: 9, face: 18, ports: 27, led: 36, edge: 45, recoil: 54 };
-/** the blueprint's contrast (× its v8 opacity): vignettes v2 */
+/** the blueprint's contrast: a factor on its drawn opacity */
 const BP_CONTRAST = 0.6;
 const COL = { ins: '#173C78', insDark: '#F4F1EC', cu: '#C9632C', cul: '#EC8A52', det: '#173C78', detDark: '#9AA6B5', tool: '#5A6676', toolDark: '#9AA6B5' };
 
@@ -36,11 +36,11 @@ const el = <K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, 
 
 /** persistent SVG nodes keyed by name, written by attribute only when a value changes (the camera's in-place marks, the field of
  * view): a frame `put`s what it shows between begin() and end(); what it did not put is hidden, never rebuilt (no markup
- * per frame, the vignettes spec §14) */
+ * per frame) */
 class Pool {
 	g: SVGGElement;
 	private m = new Map<string, { el: SVGElement; a: Record<string, string>; on: boolean; seen: number; txt: string | null }>();
-	/** the nodes shown (engine pass: end() walks these, not every node the pool ever made) */
+	/** the nodes shown (end() walks these, not every node the pool ever made) */
 	private shown = new Set<{ el: SVGElement; on: boolean; seen: number }>();
 	private frame = 0;
 	constructor(g: SVGGElement) {
@@ -166,7 +166,7 @@ export class StageView {
 		doorL?: SVGGElement;
 		doorR?: SVGGElement;
 		face?: SVGGElement;
-		/** the right door's own copy of the face (no <use>: a <use> shadow tree is where engines differ on styling, note 9) */
+		/** the right door's own copy of the face (no <use>: a <use> shadow tree is where engines differ on styling) */
 		faceR?: SVGGElement;
 		led?: SVGGElement;
 		ports?: SVGGElement;
@@ -183,7 +183,7 @@ export class StageView {
 	/** the markup-drawn parts as persistent nodes (svgpatch.ts): face (and the right door's copy), ports, LED, jaws, effects */
 	private P: { face: Patch; faceR: Patch; ports: Patch; led: Patch; jaws: Patch } | null = null;
 	private last: Record<string, string> = {};
-	/** what each part was last drawn from, quantised below what shows (engine pass: numbers compared, no key string built
+	/** what each part was last drawn from, quantised below what shows (numbers compared, no key string built
 	 * per frame); NaN: not drawn yet */
 	private qv = new Float64Array(72).fill(NaN);
 	/** whether the values from slot on differ from what was drawn (and remember them); a part owns 9 slots (Q.*) */
@@ -219,10 +219,10 @@ export class StageView {
 	private laidRef: Laid | null = null;
 	private laidD = '';
 	private rigView: { frame(t: number, view: unknown): void; remove?(): void } | null = null;
-	/** vignettes: the camera's job drawn where it happens, on the work itself (client note 17: no loupe, no viewfinder) */
+	/** vignettes: the camera's job drawn where it happens, on the work itself (no loupe, no viewfinder) */
 	private visPool: Pool | null = null;
 	/** the effects (seat ring, probe touch, brackets, the taught point, the plan, the miss, the continuity test): persistent
-	 * nodes written by attribute (engine pass: no markup per frame); created at build in the program's order, so they stack
+	 * nodes written by attribute (no markup per frame); created at build in the program's order, so they stack
 	 * as the markup did */
 	private fxPool: Pool | null = null;
 	private mkr: SVGGElement[] = [];
@@ -312,7 +312,7 @@ export class StageView {
 		const T = tokens(W);
 		T.lane = ctx.lane; // measured from the side duct (CSS uses 100vw, the stage excludes the scrollbar)
 		// the stage scale is CSS's (--s): one source of truth, and a compartment may override it (Contact)
-		// (review 3: a one-arm compartment's --s is the page's × its step's multiplier, a calc() CSS resolves: read its parts)
+		// (a one-arm compartment's --s is the page's × its step's multiplier, a calc() CSS resolves: read its parts)
 		const cs = getComputedStyle(this.sec);
 		const sRaw = cs.getPropertyValue('--s');
 		const kSolo = parseFloat(cs.getPropertyValue('--k-solo'));
@@ -334,13 +334,13 @@ export class StageView {
 		} else {
 			const band = this.sec.querySelector<HTMLElement>('.band')!;
 			T.band = band.offsetHeight;
-			// the cell's centre where CSS put it (desktop cells are offset from the centre, art 12)
+			// the cell's centre where CSS put it (desktop cells are offset from the centre)
 			const dr = this.devSvg.getBoundingClientRect();
 			if (dr.width > 0) {
 				const cx = dr.left - sr.left + dr.width / 2;
 				if (Math.abs(cx - W / 2) > 0.5) T.cx = Math.round(cx * 100) / 100;
 			}
-			// a one-arm cell centred on the page (review 3: --cell-du units × the scale): from CSS's own numbers, whatever
+			// a one-arm cell centred on the page (--cell-du units × the scale): from CSS's own numbers, whatever
 			// transform the device carries mid-morph
 			const du = parseFloat(cs.getPropertyValue('--cell-du'));
 			if (Number.isFinite(du) && du !== 0) T.cx = Math.round((W / 2 + du * T.sc) * 100) / 100;
@@ -418,9 +418,9 @@ export class StageView {
 			const above = this.floor - this.G.y0;
 			const vis = ctx.vh - this.G.devH - 12;
 			// short viewports: as soon as -X0 is fully on screen (lowest), the program's lag then still leaves the cell below the nav
-			// (vignettes pass: the lag allowance 150 → 210 px, i.e. the program's trail behind a brisk wheel at 1× (≈ 200 px at the
-			// audit's wheel); at 1024 × 600 READY latched with the cell 13 px under the nav one wheel phase in two. It changes
-			// only heights where 0.62·vh was the smaller term: 1024 × 600 +47 px, 1280 × 720 +31, 1366 × 768 +1)
+			// (the lag allowance: 210 px, the program's trail behind a brisk wheel at 1× (≈ 200 px measured); with 150 px, at
+			// 1024 × 600 READY latched with the cell 13 px under the nav one wheel phase in two. 210 changes only heights where
+			// 0.62·vh was the smaller term: 1024 × 600 +47 px, 1280 × 720 +31, 1366 × 768 +1)
 			const benchAt = ctx.vh < 520 ? vis : Math.min(vis, Math.max(0.62 * ctx.vh, ctx.nav + above + Math.min(0.35 * ctx.vh, 210)));
 			this.tr.placeFree({ pinTop: top, startY: this.startY, penY: ctx.penY, floor: this.floor, vh: ctx.vh, benchAt, maxY: ctx.maxY }, glide);
 		}
@@ -520,7 +520,7 @@ export class StageView {
 		}
 		// jaws, over the copper (device units)
 		N.jaws = el('g', { class: `dv dv--${D.module}`, transform: `translate(${f(G.devX)} ${f(G.floor)}) scale(${sc})` }, wv);
-		// vignettes (+C5): the wire marker printed with the lead's address, riding the lead 15 units above its insulation end
+		// the +C5 vignette: the wire marker printed with the lead's address, riding the lead 15 units above its insulation end
 		this.mkr = [];
 		const mkTxt = this.B.vf.find((v) => v.kind === 'read')?.txt.mark;
 		if (mkTxt) this.mkr.push(this.markerNode(wv, mkTxt));
@@ -555,7 +555,7 @@ export class StageView {
 		void mk;
 	}
 
-	/** the robots' live nodes are mounted (engine pass: a mount is its own short task, not part of the stage's build) */
+	/** the robots' live nodes are mounted (a mount is its own short task, not part of the stage's build) */
 	get rigMounted() {
 		return !!this.rigView || !this.B.rig?.mount;
 	}
@@ -630,7 +630,7 @@ export class StageView {
 	}
 
 	/* ------------------------------------------------------------------ vignettes: the wire marker, the camera's job in place */
-	/** a wire-marker sleeve (units, centred, long axis along x) with a wordless print (client note 17: no wire numbers on
+	/** a wire-marker sleeve (units, centred, long axis along x) with a wordless print (no wire numbers on
 	 * screen; the camera reads it, the visitor sees a printed sleeve) */
 	private markerNode(parent: Element, txt: string) {
 		const G = this.G;
@@ -677,12 +677,12 @@ export class StageView {
 		}
 	}
 	/**
-	 * The camera's job where it happens (client notes 12 and 17: the camera still works twice, but never in a zoomed inset and
+	 * The camera's job where it happens (the camera still works twice, but never in a zoomed inset and
 	 * never with words): while its scan cone points there, brackets lock on the target in place and the result shows on the
 	 * work itself. +C2 (register): brackets on the two mouths, the drawing's dashed outline of the tab snapping onto the real
 	 * one, the planned path into the mouth, the tip tracked in copper, the bracket copper when the lead is seated. +C5 (read):
 	 * a bracket on the wire marker (copper once matched), then one on the module's input LED (copper when it lights).
-	 * Literal paint (note 9), persistent nodes (Pool).
+	 * Literal paint, persistent nodes (Pool).
 	 */
 	private visionAt(t: number, S: Sample) {
 		const P = this.visPool;
@@ -730,7 +730,7 @@ export class StageView {
 					brk('bOut', G.outX, yM, hw, hh, q, '#5A6676');
 				}
 				// the drawing (dashed): the tab's top face across the two mouths, where the EPLAN drawing puts it, held clearly off
-				// the real tab (review 3, V3: most of a mouth's pitch aside, a little high and turned 5°) until the camera's match,
+				// the real tab (most of a mouth's pitch aside, a little high and turned 5°) until the camera's match,
 				// then it snaps onto the real one with one damped settle
 				if (t >= K.lock + 0.08 && t < K.seat + 0.4) {
 					const dt = t - K.snap;
@@ -765,7 +765,7 @@ export class StageView {
 			} else {
 				// READ: the marker bracketed (copper once matched); CONFIRM: the input LED bracketed, copper when it lights
 				const mk = e.at[0];
-				// (review 3, V1: never narrower than 4 units a side, so it reads on a phone)
+				// (never narrower than 4 units a side, so it reads on a phone)
 				const mw = Math.max((G.T.cable / sc + 3) * sc * 0.55, 4 * sc),
 					mh = (3.2 + 5 * 1.5 + 2) * sc * 0.55;
 				if (t >= K.lock && t < K.pan + 0.15) brk('bMk', mk.x, mk.y, mw, mh, prog(t - K.lock, SPRINGS.actuate), t >= K.match ? ok : det);
@@ -816,7 +816,7 @@ export class StageView {
 		this.builtKey = '';
 	}
 
-	/* ------------------------------------------------------------------ the morph (pacing pass: staged) */
+	/* ------------------------------------------------------------------ the morph (staged) */
 	/*
 	 * The component becomes its compartment in three overlapping stages over MORPH_DUR of program time (τ = t − T_m):
 	 *   doors (τ 0 → 0.16)   the face splits and its halves slide apart: the inside of the device is the module's ground
@@ -824,7 +824,7 @@ export class StageView {
 	 *                        edges as they go and fading into the rim; from MY0 its bottom edge drops (morphY) to just under
 	 *                        the viewport, onto the blueprint drawn there
 	 *   content              each block comes in, in place (opacity, a 10-unit rise), once the shell is fully wide and holds
-	 *                        all of the block that is on screen: no frame shows text cut by a moving edge (art 4, brief 10)
+	 *                        all of the block that is on screen: no frame shows text cut by a moving edge
 	 * The controller may show this a little ahead of the scrolled program time when the visitor stops inside it (index.ts:
 	 * the morph finishes on its own rather than resting half-open), so its inputs are the morph's own display time.
 	 */
@@ -833,7 +833,7 @@ export class StageView {
 	/** the morph's display time after T_m (s): the scrolled one, or ahead of it while it finishes on its own */
 	md = 0;
 	/**
-	 * art 4: a visitor who stops the wheel inside the morph never leaves it resting half-open. The display time follows the
+	 * A visitor who stops the wheel inside the morph never leaves it resting half-open. The display time follows the
 	 * scrolled program time; once the scroll has settled (idle) inside the morph it runs on by itself to the open module
 	 * (≈ 0.6 s, easing out); scrolling back rewinds it just behind the scroll (τ 0.12 s); forward it waits for the scroll to
 	 * catch up. dt = 0 (a jump, a forced render): the scrolled time. Returns true while it moves (the ticker keeps running).
@@ -967,15 +967,15 @@ export class StageView {
 		if (this.topB?.of !== this.blocks) this.topB = { of: this.blocks, top: this.blocks.filter((b) => !b.nested) };
 		return this.topB.top;
 	}
-	/* ------------------------------------------------------------------ the blueprint (pacing pass: the dead plate, art 3) */
+	/* ------------------------------------------------------------------ the blueprint (no empty plate before the morph) */
 	/*
 	 * Before the morph the module's reserved area is a drawing of the module it will become, not an empty slab: its outline
 	 * (dashed), a dashed slot for every picture and card, a hairline for every line of text, measured from the real layout.
 	 * The same grammar as Contact's unbuilt form (a dashed slot is a part the robots' work is about to make): no wireframe
-	 * diagonals, no skeleton-loader pills (story pass: a calm drawing, not a page that failed to load). It draws itself as
+	 * diagonals, no skeleton-loader pills (a calm drawing, not a page that failed to load). It draws itself as
 	 * the program runs (block by block, in reading order, from the lead's arrival to the power-up), lights up at the
 	 * power-up, and in the morph each block's drawing gives way to the block itself as it comes in, in the same place.
-	 * Literal hex paint on every shape (client note 9).
+	 * Literal hex paint on every shape.
 	 */
 	private bpShapes: { k: number; svg: string }[] = [];
 	private bpKey = '';
@@ -1029,7 +1029,7 @@ export class StageView {
 				y = r.top - mr.top - shiftOf(e);
 			const cs = getComputedStyle(e);
 			const rr = Math.min(18, parseFloat(cs.borderTopLeftRadius) || parseFloat(cs.borderBottomLeftRadius) || 2);
-			// a picture's place: a dashed slot with a faint tone (story pass: no diagonals, the wireframe's placeholder sign)
+			// a picture's place: a dashed slot with a faint tone (no diagonals, the wireframe's placeholder sign)
 			push(
 				groupOf(e),
 				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" rx="${f(rr)}" fill="${C.fill}" fill-opacity="${dark ? 0.05 : 0.12}" stroke="${C.line}" stroke-width="1" stroke-dasharray="4 4"/>`,
@@ -1062,7 +1062,7 @@ export class StageView {
 				lines.set(key, row);
 			}
 		}
-		// (story pass: a hairline on the line's x-height, 1.5 px for headings: a drawing's text line, not a loader's pill)
+		// (a hairline on the line's x-height, 1.5 px for headings: a drawing's text line, not a loader's pill)
 		for (const L of Array.from(lines.values()).flat()) {
 			const sw = L.h > 30 ? 1.5 : 1;
 			const x0 = Math.max(4, L.x0),
@@ -1108,12 +1108,12 @@ export class StageView {
 		const n = this.bpGroups.length;
 		const t0 = 0.12,
 			t1 = Math.max(t0 + 0.3, pw - 0.12);
-		// between the drawing's last block drawn in and the power-up, before the morph, nothing in it changes (engine pass)
+		// between the drawing's last block drawn in and the power-up, before the morph, nothing in it changes (no writes)
 		const flat = t >= Math.max(0.3, t1 + 0.29) && t <= pw && (mt <= 0 || t < mt) && pX <= 0.55;
 		if (flat && this.bpFlat) return;
 		this.bpFlat = flat;
 		const done = mt > 0 && t >= mt && top.every((b) => b.o >= 1);
-		// (vignettes v2: at 60 % of its v8 contrast, so the drawing never reads as a placeholder: the morph lands within 0.6 s of
+		// (at 60 % contrast, so the drawing never reads as a placeholder: the morph lands within 0.6 s of
 		// the power-up and the module, not its drawing, is what the visitor reads)
 		const rootOp = done ? '0' : (BP_CONTRAST * (0.62 + 0.38 * smooth((t - pw) / 0.18))).toFixed(3);
 		if (this.last.bpRoot !== rootOp) {
@@ -1144,7 +1144,7 @@ export class StageView {
 	}
 
 	/* ------------------------------------------------------------------ device state at t */
-	/** the device's state, one object filled each frame (engine pass: no garbage per frame) */
+	/** the device's state, one object filled each frame (no garbage per frame) */
 	private dst: DevState | null = null;
 	devState(t: number): DevState {
 		const d = this.B.dev;
@@ -1212,7 +1212,7 @@ export class StageView {
 		const st = this.devState(t);
 		lap('devState');
 		// ---- doors, housing, face, LED: the face splits and its halves slide apart (the inside is the module's ground), then
-		// they ride the shell's edges out as it widens, fading into the rim (art 5: the device halves become the module's sides)
+		// they ride the shell's edges out as it widens, fading into the rim (the device halves become the module's sides)
 		const tau = this.B.morphT > 0 ? tm - this.B.morphT : -1;
 		const doorP = tau > 0 ? smooth(tau / 0.16) : 0,
 			doorOp = 1 - smooth((m.pX - 0.04) / 0.3),
@@ -1259,7 +1259,7 @@ export class StageView {
 			this.P!.led.write(tabLedLive(this.cfg.dev, st));
 		}
 		// a status LED on the device's face (y > 0: -X1, -K1, -A2, -Q1) belongs to the face: it leaves with the doors, so it
-		// never stays behind over the opened module's text (verifier: -Q1's LED sat on the Team copy after the morph)
+		// never stays behind over the opened module's text (else -Q1's LED sits on the Team copy after the morph)
 		if (D.led[1] > 0) {
 			const lo = doorOp.toFixed(3);
 			if (this.last.ledOp !== lo) {
@@ -1360,7 +1360,7 @@ export class StageView {
 		this.cableLead(t, S, c);
 		this.cableMs += performance.now() - c0;
 	}
-	/** the in-lead and the out-lead as last drawn, and what they were drawn from (engine pass: a frame where only the pen
+	/** the in-lead and the out-lead as last drawn, and what they were drawn from (a frame where only the pen
 	 * moved, or only the other lead changed, builds no path string) */
 	private inMemo = { t: NaN, sF: NaN, top: NaN, rv: -1, path: '', cu: '', leadLen: 0 };
 	private outMemo = { t: NaN, sP: NaN, w: NaN, pen: false, rv: -1, path: '', cu: '' };
@@ -1446,7 +1446,7 @@ export class StageView {
 		this.set(N.ins, 'd', path, 'ins');
 		this.set(N.cu, 'd', M.cu, 'cu');
 		lap('lead.in.set');
-		// test-current pulses down the lead into the terminal (v3)
+		// test-current pulses down the lead into the terminal
 		let pulse = false;
 		for (const e of B.fx) {
 			if (e.k !== 'pulse' || !path || !leadLen) continue;
@@ -1468,7 +1468,7 @@ export class StageView {
 			this.set(N.pg, 'stroke-dasharray', '0 100000', 'pga');
 			this.set(N.pc, 'stroke-dasharray', '0 100000', 'pca');
 		}
-		// out-lead (art 9): presented by the out-mouth and carried up by the gripper arm (a rope: S.opts), let go into the
+		// out-lead: presented by the out-mouth and carried up by the gripper arm (a rope: S.opts), let go into the
 		// duct slot; from there the laid route out of the out-mouth, up the duct, across, down the exit lane. Its tip is the
 		// max of the program carrot (program time) and the pen (scroll): monotone in scroll, continuous
 		lap('lead.pulse');
@@ -1575,7 +1575,7 @@ export class StageView {
 			if (!e.small && !this.cfg.finale) this.glowPut(P, k + 'g', fs(e.x!), fs(e.y!), 7 * sc, fs(0.85 * (1 - smooth(dt / 0.3))));
 		}
 		if (e.k === 'touch' && !this.cfg.finale && dt >= 0 && dt < 0.3) {
-			// a probe bottoming (vignettes, +C4): a ring and a glow at the tip, no sparks
+			// a probe bottoming (the +C4 vignette): a ring and a glow at the tip, no sparks
 			const q = prog(dt, SPRINGS.ring);
 			P.put(k + 'r', 'circle', { cx: fs(e.x!), cy: fs(e.y!), r: fs((3 + 9 * q) * sc), fill: 'none', stroke: COL.cul, 'stroke-width': 1.25, opacity: fs(0.85 * (1 - q)) });
 			this.glowPut(P, k + 'g', fs(e.x!), fs(e.y!), 7 * sc, fs(0.9 * (1 - smooth(dt / 0.3))));
@@ -1605,7 +1605,7 @@ export class StageView {
 			P.put(k + 'b', 'path', { d: `M${fs(x0)} ${fs(y0 + c)}V${fs(y0)}H${fs(x0 + c)} M${fs(x1 - c)} ${fs(y0)}H${fs(x1)}V${fs(y0 + c)} M${fs(x1)} ${fs(y1 - c)}V${fs(y1)}H${fs(x1 - c)} M${fs(x0 + c)} ${fs(y1)}H${fs(x0)}V${fs(y1 - c)}`, fill: 'none', stroke: this.dark ? COL.detDark : COL.det, 'stroke-width': 1.5, opacity: fs(op) });
 		}
 		if (e.k === 'ghost' && dt >= 0 && t < e.t1! + 0.15) {
-			// the taught point: a dashed mouth where the program believes the terminal is (no label: brief C)
+			// the taught point: a dashed mouth where the program believes the terminal is (no label)
 			const op = Math.min(1, dt / 0.15) * (1 - clamp01((t - e.t1!) / 0.15));
 			const mw = 8 * sc,
 				md = 7 * sc,
@@ -1613,12 +1613,12 @@ export class StageView {
 			P.put(k + 'm', 'rect', { x: fs(e.x! - mw / 2), y: fs(e.y!), width: fs(mw), height: fs(md), rx: '1.5', fill: 'none', stroke: col, 'stroke-width': 1, 'stroke-dasharray': '2 2', opacity: fs(op * 0.9) });
 		}
 		if (e.k === 'ghostScrew' && dt >= 0 && t < e.t1! + 0.15) {
-			// the taught point (vignette +C1): a dashed screw head and pocket where the program was taught
+			// the taught point (the +C1 vignette): a dashed screw head and pocket where the program was taught
 			const op = Math.min(1, dt / 0.12) * (1 - clamp01((t - e.t1!) / 0.15));
 			const col = this.dark ? COL.toolDark : COL.tool;
-			// (literal paint on every shape, never inherited from the group: note 9)
+			// (literal paint on every shape, never inherited from the group)
 			const pt = { fill: 'none', stroke: col, 'stroke-width': '1.25', 'stroke-dasharray': '2.5 2' };
-			// (review 3, V1: a teach-pendant waypoint of its own, clear of the real screw: a dashed head no wider than the bare
+			// (a teach-pendant waypoint of its own, clear of the real screw: a dashed head no wider than the bare
 			// tab it lands on, the approach line from above, a small target ring on it; nothing shared with the real screw)
 			const ring = { fill: 'none', stroke: col, 'stroke-width': '1.25', 'stroke-dasharray': '1.5 2' };
 			const g = k + 'g';
@@ -1629,8 +1629,8 @@ export class StageView {
 			P.put(g + 3, 'circle', { cx: fs(e.x!), cy: fs(e.y! - 5 * sc), r: fs(2.2 * sc), ...ring }, undefined, g);
 		}
 		if (e.k === 'continuity' && dt >= 0 && t < e.t1! + 0.24 && this.B.x4) {
-			// the continuity test (vignette +C4): the conductor between the two needles lights up inside its insulation, once.
-			// Story pass: the insulation stays blue (no copper wash over it: copper at 35 % on the blue read as a muddy brown
+			// the continuity test (the +C4 vignette): the conductor between the two needles lights up inside its insulation, once.
+			// The insulation stays blue (no copper wash over it: copper at 35 % on the blue read as a muddy brown
 			// while it faded); the core is lit copper and a soft halo hugs the cable's two edges outside it; at the end the
 			// core narrows back into the conductor (the showpiece's test current does the same) and the halo fades
 			const on = smooth(dt / 0.06),
@@ -1676,7 +1676,7 @@ export class StageView {
 		}
 		if (e.k === 'miss' && dt >= 0 && dt < (e.d ?? 0.5)) {
 			const op = Math.min(1, dt / 0.05) * (1 - clamp01((dt - (e.d ?? 0.5) + 0.25) / 0.25));
-			// (review 3, V1: larger and darker, it reads at 1× on a phone)
+			// (larger and darker, it reads at 1× on a phone)
 			const r = 5.5 * sc;
 			// a steel ✕ (a protective stop, not an alarm: nothing broke, the program was wrong)
 			const ln = { stroke: this.dark ? '#9AA6B5' : '#172A44', 'stroke-width': sc < 1.2 ? '2' : '2.5', 'stroke-linecap': 'round', fill: 'none' };

@@ -1,14 +1,14 @@
 /**
- * The showpiece's renderer (SHOWPIECE-SPEC §3, §15): ONE description of the stage as a tree of nodes, used two ways:
+ * The showpiece's renderer: ONE description of the stage as a tree of nodes, used two ways:
  *
  *   live    persistent SVG nodes built once; per frame only attributes are written, and only those that changed (no markup
  *           per frame: the arms through draw.ts's ArmNodes, everything else through this tree's dynamic attributes).
  *   string  the same tree serialised at one frame: the build-time poster (no-JS, reduced motion, first paint).
  *
- * Client note 17: no zooms (no loupe, no camera moves on phones: one fixed framing everywhere) and no codes (no device tags,
+ * No zooms (no loupe, no camera moves on phones: one fixed framing everywhere) and no codes (no device tags,
  * no wire numbers: the wire's marker sleeves carry a wordless print).
  *
- * Every shape carries literal hex paint (paint.ts tables or the palette below; client note 9): no var(), no <use>, no mask,
+ * Every shape carries literal hex paint (paint.ts tables or the palette below): no var(), no <use>, no mask,
  * gradient, filter or blend; transforms are SVG attributes; ids are unique per instance (`sp-…`).
  */
 import { clamp01, f, fs } from '../core';
@@ -84,7 +84,7 @@ const raw = (html: string, a: A = {}): N => ({ tag: 'g', a, html });
 
 /* ------------------------------------------------------------------ the static set */
 /**
- * No theatre, no frame (client note 16: a live machine embedded in the page, not a framed video): the scene stands on the
+ * No theatre, no frame (a live machine embedded in the page, not a framed video): the scene stands on the
  * Contact card's own blue. The robots' floor either side of the plate (rounded ends), the work plate (the one bright object)
  * with its fixing holes, the DIN rail behind the devices.
  */
@@ -279,7 +279,7 @@ function dropNodes(which: 'A' | 'B'): N[] {
 	return [
 		{ tag: 'path', a: { fill: 'none', stroke: C.w07, 'stroke-width': G.wire, 'stroke-linejoin': 'round', 'stroke-linecap': 'butt' }, d: (r) => ({ d: which === 'A' ? r.dA : r.dB }) },
 		{ tag: 'path', a: { fill: 'none', stroke: C.cu, 'stroke-width': 1.8, 'stroke-linecap': 'butt' }, d: (r) => (D(r).seated ? null : { d: which === 'A' ? r.cuA : r.cuB }) },
-		// the wire-marker sleeve: carta, steel rim, a wordless print (client note 17: no wire numbers), turning with the wire
+		// the wire-marker sleeve: carta, steel rim, a wordless print (no wire numbers), turning with the wire
 		{
 			tag: 'g',
 			d: (r) => ({ transform: which === 'A' ? r.slA : r.slB }),
@@ -356,7 +356,7 @@ function scene(C2: Compiled, o: { arms: boolean; current: boolean; mount: boolea
 
 /* ------------------------------------------------------------------ what the camera sees, drawn on the scene (wordless) */
 /**
- * Client notes 16 and 17: no HUD text, no inset feed, no zoom. The camera's job is drawn where it happens, on the work itself,
+ * No HUD text, no inset feed, no zoom. The camera's job is drawn where it happens, on the work itself,
  * while its cone points there: the TRACE runs a dashed line along the wire from end A to end B (a copper head), a bracket
  * snaps on each end (two ends, one wire), then the drawing's straight drop appears dashed beside the real end A, curled away
  * from it (the plan changes, the comb follows). Blue on the light plate; copper only for the head.
@@ -459,7 +459,7 @@ export interface StageOpt {
 	/** the station's mount (the live desktop stage: the station's buttons are HTML over it; the no-JS poster has none) */
 	mount?: boolean;
 }
-/** the root: the scene (one fixed viewBox on every screen: no camera moves, client note 17), the effects, what the camera
+/** the root: the scene (one fixed viewBox on every screen: no camera moves), the effects, what the camera
  * sees */
 export function stageTree(C2: Compiled, o: StageOpt): N[] {
 	const fx: N[] = [
@@ -549,7 +549,7 @@ interface Item {
 	n: N;
 	end: number;
 	last: Record<string, string>;
-	/** the values as the node's function gave them (engine pass: an unchanged number is not turned into a string again) */
+	/** the values as the node's function gave them (an unchanged number is not turned into a string again) */
 	raw: Record<string, string | number>;
 	on: boolean;
 	txt: string | null;

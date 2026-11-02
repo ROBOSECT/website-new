@@ -1,5 +1,5 @@
 /**
- * The rope settles after the wheel stops (engine pass; client notes 3 and 10, brief 9: follow-through, no freeze).
+ * The rope settles after the wheel stops (follow-through, no freeze).
  *
  * Every animation of a compartment is a pure function of its program time, and the program time follows the scroll: when
  * the visitor stops, everything stops where it is, the lead included, even mid-swing or bowed behind a hand that was moving.
