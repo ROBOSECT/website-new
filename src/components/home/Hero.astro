@@ -1,0 +1,315 @@
+---
+import { Image } from 'astro:assets';
+import setup from '../../assets/images/setup.jpeg';
+import HeroWordmark from './HeroWordmark.astro';
+import { copy, type Lang } from '../../i18n/copy';
+import { R_GEOMETRY as G } from '../../lib/cable-geometry';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const h = copy[lang].hero;
+const brand = copy[lang].brand;
+// the logo's measures in cable widths, from the geometry (HeroWordmark's box starts 0.5 above G.top): the stem foot below the
+// box top, the O's left edge, the clear space
+const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:${+(G.oLeft / G.w).toFixed(4)};--wm-clear:${+(G.clear / G.w).toFixed(4)}`;
+---
+
+<section class="hero on-dark" data-hero aria-labelledby="hero-title">
+	{/* the test lead leaves the R's stem foot and runs down the lane (scripts/panel/hero.ts) */}
+	<svg class="hero__wires" aria-hidden="true" focusable="false" data-hero-wires></svg>
+	<div class="hero__text">
+		<p class="hero__brand" data-hero-brand style={wm}>
+			<HeroWordmark />
+			{/* phones (no JS, reduced motion): the lead bends out of the stem foot into the gutter lane (scripts/panel/hero.ts
+			     draws the same S-jog in motion) */}
+			<svg class="hero__jog" viewBox="0 0 28 15" width="28" height="15" aria-hidden="true" focusable="false"
+				><path d="M24.5 0V0.5A6 6 0 0 1 18.5 6.5H9A6 6 0 0 0 3 12.5V15" fill="none" stroke="#F4F1EC" stroke-width="5" stroke-linecap="butt"></path></svg
+			>
+			<span class="hero__descriptor">{brand.descriptor}</span>
+		</p>
+		<h1 id="hero-title" class="hero__title">{h.headline}</h1>
+		<p class="hero__sub">{h.subheadline}</p>
+		<div class="hero__actions">
+			<a class="btn" href={h.primaryCta.href}>
+				{h.primaryCta.label}
+				<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+					><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+				>
+			</a>
+			<a class="text-link hero__video-link" href={h.secondaryCta.href}>
+				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5v11l9-5.5z" fill="currentColor" stroke="none"></path></svg>
+				{h.secondaryCta.label}
+			</a>
+		</div>
+		<ul class="hero__facts">
+			{h.proofChips.map((c) => <li>{c}</li>)}
+		</ul>
+	</div>
+	<figure class="hero__media">
+		<Image
+			src={setup}
+			alt={h.imageAlt}
+			widths={[640, 960, 1280, 1600, 2000]}
+			sizes="(min-width: 1100px) 45vw, 100vw"
+			loading="eager"
+			fetchpriority="high"
+			class="hero__img"
+			data-hero-img
+		/>
+	</figure>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		background: var(--ink);
+		overflow: hidden;
+	}
+
+	.hero__wires {
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 3;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.hero__text {
+		position: relative;
+		z-index: 2;
+		padding: 36px var(--m) 64px;
+	}
+
+	.hero__brand {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		/* the descriptor stays out of the logo's clear space (its line box carries ≈ 6 px above the letters) */
+		gap: max(14px, calc(var(--cable-w) * var(--wm-clear) - 6px));
+		/* the R's stem sits on the cable lane: wordmark left = lane − stem half-width */
+		margin-left: calc(var(--lane) - var(--m) - var(--cable-w) / 2);
+	}
+
+	/* the laid lead out of the stem foot without JS / with reduced motion (Carta on the ink nameplate) */
+	.hero__brand::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: calc(var(--cable-w) * var(--wm-foot));
+		width: var(--cable-w);
+		height: 4000px;
+		background: var(--paper);
+		pointer-events: none;
+	}
+
+	:global(html.motion) .hero__brand::after,
+	:global(html.motion) .hero__jog {
+		display: none;
+	}
+
+	.hero__jog {
+		display: none;
+	}
+
+	/* phones: the wordmark on the text edge (art 11: one left edge, clear of the screen edge); the lead leaves the R's
+	   stem foot and bends into the gutter lane right under the R, then runs down to the cabinet */
+	@media (max-width: 699px) {
+		.hero__brand {
+			margin-left: 0;
+		}
+
+		.hero__jog {
+			display: block;
+			position: absolute;
+			left: calc(var(--lane) - var(--m) - 3px);
+			top: calc(var(--cable-w) * var(--wm-foot));
+			width: 28px;
+			height: 15px;
+			pointer-events: none;
+		}
+
+		.hero__brand::after {
+			left: calc(var(--lane) - var(--m) - var(--cable-w) / 2);
+			top: calc(var(--cable-w) * var(--wm-foot) + 14px);
+		}
+	}
+
+	/* phones: under the O (the wordmark is on the text edge); from 700 px the R hangs in the gutter on the lane, so the
+	   descriptor goes back to the text margin with the headline: one edge for the words */
+	.hero__descriptor {
+		margin-left: calc(var(--cable-w) * var(--wm-o));
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--steel-light);
+	}
+
+	@media (min-width: 700px) {
+		.hero__descriptor {
+			margin-left: calc(var(--m) - var(--lane) + var(--cable-w) / 2);
+		}
+	}
+
+	.hero__brand :global(.hero-wordmark) {
+		position: relative;
+		z-index: 2;
+	}
+
+	.hero__title {
+		margin-top: clamp(36px, 5vw, 72px);
+		max-width: 12em;
+	}
+
+	.hero__sub {
+		margin-top: 24px;
+		max-width: 34em;
+		font-size: var(--t-lead);
+		line-height: 1.55;
+		color: var(--paper);
+	}
+
+	.hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px 28px;
+		margin-top: 36px;
+	}
+
+	.hero__video-link {
+		color: var(--paper);
+	}
+
+	.hero__facts {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 28px;
+		margin-top: 44px;
+		font-size: 15px;
+		color: var(--steel-light);
+	}
+
+	.hero__facts li {
+		position: relative;
+		padding-left: 22px;
+	}
+
+	.hero__facts li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.72em;
+		width: 12px;
+		height: 3px;
+		background: var(--steel-light);
+	}
+
+	.hero__media {
+		position: relative;
+		margin: 0;
+		overflow: hidden;
+	}
+
+	.hero__img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 56% 50%;
+		transform-origin: 50% 30%;
+	}
+
+	@media (max-width: 699px) {
+		.hero__actions .btn {
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 1099px) {
+		/* the picture first on narrow screens, then the brand and the words */
+		.hero__media {
+			order: -1;
+			height: min(42svh, 64vw);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr) 44%;
+			min-height: min(calc(100svh - var(--nav-h)), 900px);
+		}
+
+		/* the wordmark sits low enough that its copper lets go before the R reaches the nav (MOTION-SPEC §3.9; taller
+		   desktops below) */
+		.hero__text {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			padding: clamp(96px, 15svh, 140px) 56px 64px var(--m);
+		}
+
+		/* (logo D3: the wordmark is 16 px taller than the B2 one, the stroke being the page cable, and the descriptor 5 px
+		   further from it, out of the logo's clear space; the headline starts 12 px closer, so the descriptor stays the
+		   logo's line and the action stays above the fold) */
+		.hero__title {
+			margin-top: clamp(24px, calc(4.2vw - 12px), 48px);
+		}
+
+		.hero__media {
+			min-height: 100%;
+			border-radius: 0 0 0 var(--bend);
+		}
+	}
+
+	/* desktops at least 860 px tall (client note 10, layout pass): the wordmark sits lower, so the copper's detach lasts
+	   2–3 wheel notches and ends before the R reaches the bar (scripts/panel/hero.ts: D ≤ R top − bar − 8). The room comes
+	   from the facts, which move up into the nameplate's head as one mono plate line (as each compartment opens on its
+	   plate line); the words and the primary action stay above the fold, EN and IT (the padding is fitted to the longest
+	   Italian lead: its action ends ≥ 24 px above the fold at 1536 × 864 and 1440 × 900). Shorter desktops keep the layout
+	   above (the facts under the actions). */
+	@media (min-width: 1100px) and (min-height: 860px) {
+		.hero__text {
+			padding-top: clamp(168px, calc(108svh - 750px), 300px);
+		}
+
+		.hero__facts {
+			position: absolute;
+			top: var(--pad-top);
+			left: var(--m);
+			right: 56px;
+			margin-top: 0;
+			gap: 8px 22px;
+			font-family: var(--font-mono); /* taste-skill-ignore: the nameplate's plate line, the brand's tag face */
+			font-size: 12px;
+			font-weight: 500;
+			line-height: 1.5;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+		}
+
+		.hero__facts li {
+			padding-left: 18px;
+		}
+
+		.hero__facts li::before {
+			top: 0.62em;
+			width: 10px;
+			height: 2px;
+		}
+
+		/* on wide, not so tall screens (1536 × 864, 1920 × 900) the headline does not grow past its 900 px-tall size, so
+		   the action stays clear of the fold */
+		.hero__title {
+			margin-top: 32px;
+			font-size: clamp(2.5rem, min(4.4vw, 7.05svh), 4.25rem);
+		}
+	}
+</style>

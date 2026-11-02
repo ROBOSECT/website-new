@@ -1,0 +1,174 @@
+---
+import { Image } from 'astro:assets';
+import imgSwitchboard from '../../assets/images/home/app-switchboard.jpg';
+import imgDresspack from '../../assets/images/home/problem-dresspack.jpg';
+import imgCustom from '../../assets/images/home/app-custom.jpg';
+import Rich from '../ui/Rich.astro';
+import Compartment from '../panel/Compartment.astro';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const a = copy[lang].applications;
+
+const L = {
+	en: {
+		alts: [
+			'Two collaborative robots with red probe end-effectors working over an electrical switchboard',
+			'',
+			'The upper arm of a collaborative robot with black and green cables strapped along it',
+			'A robot gripper holding a cable above a switchboard, from the prototype video',
+		],
+		harness: 'Drawing of a wiring harness: one trunk that branches into four connectors',
+		project: 'Project',
+	},
+	it: {
+		alts: [
+			'Due robot collaborativi con end-effector rossi a puntale al lavoro su un quadro elettrico',
+			'',
+			'Il braccio di un robot collaborativo con cavi neri e verdi fascettati lungo il braccio',
+			'La pinza di un robot che tiene un cavo sopra un quadro, dal video del prototipo',
+		],
+		harness: 'Disegno di un cablaggio: un tronco che si dirama in quattro connettori',
+		project: 'Progetto',
+	},
+}[lang];
+const pictures = [imgSwitchboard, null, imgDresspack, imgCustom];
+---
+
+<Compartment n={3} lang={lang} id={a.id} name={a.eyebrow} title={a.title} intro={a.intro} ground="dark">
+	<div class="apps">
+		{
+			a.items.map((it, i) => (
+				<article class="app" id={it.id} data-b>
+					<figure class="app__pic">
+						{pictures[i] ? (
+							<Image src={pictures[i]!} alt={L.alts[i]} widths={[480, 720, 960]} sizes="(min-width: 1100px) 600px, 100vw" loading="lazy" />
+						) : (
+							<svg class="harness" viewBox="0 0 680 383" role="img" aria-label={L.harness}>
+								<g>
+									<path class="harness__w" fill="none" stroke="#F4F1EC" stroke-width="12" stroke-linecap="butt" d="M 0 214 L 560 214 A 36 36 0 0 0 596 178 L 596 96" />
+									<path class="harness__w" fill="none" stroke="#F4F1EC" stroke-width="12" stroke-linecap="butt" d="M 168 214 A 36 36 0 0 0 204 178 L 204 72" />
+									<path class="harness__w" fill="none" stroke="#F4F1EC" stroke-width="12" stroke-linecap="butt" d="M 300 214 A 36 36 0 0 1 336 250 L 336 318" />
+									<path class="harness__w" fill="none" stroke="#F4F1EC" stroke-width="12" stroke-linecap="butt" d="M 424 214 A 36 36 0 0 0 460 178 L 460 118" />
+								</g>
+								<g class="harness__tape">
+									<rect x="100" y="203" width="12" height="22" fill="#9AA6B5" stroke="none" />
+									<rect x="240" y="203" width="12" height="22" fill="#9AA6B5" stroke="none" />
+									<rect x="380" y="203" width="12" height="22" fill="#9AA6B5" stroke="none" />
+									<rect x="508" y="203" width="12" height="22" fill="#9AA6B5" stroke="none" />
+								</g>
+								<g class="harness__conn">
+									<rect x="176" y="32" width="56" height="44" fill="#24508F" stroke="none" />
+									<rect x="308" y="314" width="56" height="44" fill="#24508F" stroke="none" />
+									<rect x="432" y="78" width="56" height="44" fill="#24508F" stroke="none" />
+									<rect x="568" y="56" width="56" height="44" fill="#24508F" stroke="none" />
+								</g>
+							</svg>
+						)}
+					</figure>
+					<h3 class="app__title">{it.title}</h3>
+					<p class="app__status">
+						<span class="visually-hidden">{a.statusLabel}: </span>
+						{it.status}
+					</p>
+					<p class="app__body">{it.body}</p>
+					{it.project && (
+						<p class="app__project">
+							{L.project}: <Rich text={it.project} />
+						</p>
+					)}
+				</article>
+			))
+		}
+	</div>
+	<p class="apps__cta" data-b>
+		<a class="btn" href="#contact">
+			{a.cta}
+			<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+				><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+			>
+		</a>
+	</p>
+</Compartment>
+
+<style>
+	.apps {
+		display: grid;
+		gap: 44px;
+	}
+
+	.app__pic {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--ink-2);
+		margin-bottom: 20px;
+	}
+
+	.app__pic :global(img),
+	.harness {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+
+	.app__title {
+		font-size: 22px;
+		line-height: 1.2;
+		color: var(--paper);
+	}
+
+	.app__status {
+		margin-top: 6px;
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--steel-light);
+	}
+
+	.app__body {
+		margin-top: 12px;
+		font-size: 16px;
+		line-height: 1.55;
+		max-width: 40em;
+		color: var(--paper);
+	}
+
+	.app__project {
+		margin-top: 12px;
+		font-size: 15px;
+		color: var(--steel-light);
+	}
+
+	.apps__cta {
+		margin-top: 48px;
+	}
+
+	@media (min-width: 700px) {
+		.apps {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 56px var(--gap);
+		}
+
+		.app__title {
+			font-size: 24px;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.apps {
+			gap: 72px var(--gap);
+		}
+
+		.app__body {
+			font-size: 17px;
+		}
+
+		.apps__cta {
+			margin-top: 64px;
+		}
+	}
+</style>

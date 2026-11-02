@@ -1,0 +1,144 @@
+---
+/**
+ * Header band for inner pages (news, posts, legal). A short run of the cable enters from the top,
+ * bends with the brand radius and stops with its copper conductor at the title, like the page lead's tip.
+ * Pure CSS: two borders with a round outer corner give a concentric bend.
+ */
+interface Props {
+	title: string;
+	back?: { href: string; label: string };
+	meta?: string;
+	/** when the meta line is a date, its machine-readable value (rendered as <time>) */
+	metaDatetime?: string;
+	intro?: string;
+}
+const { title, back, meta, metaDatetime, intro } = Astro.props;
+---
+
+<header class="page-head on-dark" data-ground="dark">
+	<div class="wrap page-head__inner">
+		{
+			back && (
+				<a class="page-head__back" href={back.href}>
+					<svg viewBox="0 0 18 18" aria-hidden="true">
+						<path d="M16 9H4M8.5 4.5 4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" />
+					</svg>
+					{back.label}
+				</a>
+			)
+		}
+		<h1 class="page-head__title">
+			<span class="page-cable" aria-hidden="true"></span>
+			{title}
+		</h1>
+		{meta && <p class="page-head__meta">{metaDatetime ? <time datetime={metaDatetime}>{meta}</time> : meta}</p>}
+		{intro && <p class="page-head__intro">{intro}</p>}
+		<slot />
+	</div>
+</header>
+
+<style>
+	.page-head {
+		position: relative;
+		overflow: hidden;
+		background: var(--ink);
+	}
+
+	.page-head__inner {
+		padding-block: clamp(48px, 7vw, 96px) clamp(56px, 7vw, 104px);
+	}
+
+	.page-head__back {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 44px;
+		color: var(--paper);
+		font-size: var(--t-small);
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.page-head__back:hover {
+		text-decoration: underline;
+	}
+
+	.page-head__back svg {
+		width: 18px;
+		height: 18px;
+		transition: transform 0.2s ease;
+	}
+
+	.page-head__back:hover svg {
+		transform: translateX(-3px);
+	}
+
+	.page-head__meta {
+		margin-top: 20px;
+		font-size: var(--t-small);
+		color: var(--steel-light);
+	}
+
+	.page-head__title {
+		position: relative;
+		margin-top: 16px;
+		max-width: 18em;
+		font-size: var(--t-display);
+	}
+
+	.page-head__back + .page-head__title {
+		margin-top: 40px;
+	}
+
+	/* the cable: down the lane from above the band, a round bend, a flat cut, the conductor */
+	.page-cable {
+		position: absolute;
+		top: -640px;
+		bottom: calc(100% - 0.55em - var(--cable-w) / 2);
+		left: calc(var(--lane) - var(--m) - var(--cable-w) / 2);
+		width: calc(var(--m) - var(--lane) - var(--cable-w) * 1.4 - 6px);
+		border-left: var(--cable-w) solid var(--paper);
+		border-bottom: var(--cable-w) solid var(--paper);
+		border-bottom-left-radius: var(--bend);
+	}
+
+	.page-cable::after {
+		content: '';
+		position: absolute;
+		right: calc(var(--cable-w) * -1.4);
+		bottom: calc(var(--cable-w) * -0.715);
+		width: calc(var(--cable-w) * 1.4 + 1px);
+		height: calc(var(--cable-w) * 0.43);
+		background: var(--cu-light);
+	}
+
+	.page-head__intro {
+		margin-top: 24px;
+		max-width: 52ch;
+		font-size: var(--t-lead);
+		color: var(--paper);
+	}
+
+	@media (max-width: 699px) {
+		.page-cable {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.page-cable {
+			animation: page-cable-in 1s 0.1s both cubic-bezier(0.2, 0.7, 0.2, 1);
+		}
+
+		@keyframes page-cable-in {
+			from {
+				transform: translateY(-60px);
+				opacity: 0;
+			}
+			to {
+				transform: none;
+				opacity: 1;
+			}
+		}
+	}
+</style>

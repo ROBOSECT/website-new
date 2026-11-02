@@ -1,0 +1,431 @@
+---
+import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
+import { copy, type Lang } from '../../i18n/copy';
+import { homePath, sectionHref } from '../../lib/i18n';
+
+interface Props {
+	lang: Lang;
+	isHome?: boolean;
+}
+
+const { lang, isHome = false } = Astro.props;
+const t = copy[lang];
+const other: Lang = lang === 'it' ? 'en' : 'it';
+// on a page that exists in one language only (blog, legal), the switch goes to the other homepage
+const langHref = homePath(other);
+const contactHref = sectionHref(lang, 'contact', isHome);
+// the panel's main connector in miniature, wordless (vignettes v2; client note 17 keeps it only as a visual): six ring pins,
+// one per compartment whose job the scroll has passed (scripts/panel), the centre pin when the robots have built the Contact
+// form. Literal paint (note 9)
+const x0Glyph = `<svg class="x0i" viewBox="-10 -10 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="0" cy="0" r="9.1" fill="none" stroke="#0D1B2E" stroke-width="1.1" stroke-opacity="0.6"/><circle cx="0.0" cy="-5.6" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="4.85" cy="-2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="4.85" cy="2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="0.0" cy="5.6" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="-4.85" cy="2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="-4.85" cy="-2.8" r="1.55" fill="none" stroke="#0D1B2E" stroke-width="1" stroke-opacity="0.5"/><circle cx="0" cy="0" r="2" fill="none" stroke="#0D1B2E" stroke-width="1.1" stroke-opacity="0.6"/><circle class="x0i__on k1" cx="0.0" cy="-5.6" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k2" cx="4.85" cy="-2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k3" cx="4.85" cy="2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k4" cx="0.0" cy="5.6" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k5" cx="-4.85" cy="2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k6" cx="-4.85" cy="-2.8" r="2.05" fill="#0D1B2E" stroke="none"/><circle class="x0i__on k7" cx="0" cy="0" r="2.55" fill="#0D1B2E" stroke="none"/></svg>`;
+// the logotype inline (the logo kit's negativo «-stretto», on ink: same pixels as the file)
+const logo = logoRaw
+	.replace(/<title>[^<]*<\/title>/, '')
+	.replace(/\swidth="[^"]*"\sheight="[^"]*"/, ' width="145" height="22"')
+	.replace('role="img" aria-label="ROBOSECT"', 'aria-hidden="true" focusable="false" class="nav__logo"')
+	// every shape with literal paint (client note 9): the asset's paths have their fill; give them their stroke too
+	.replaceAll('<path fill=', '<path stroke="none" fill=');
+---
+
+<header class="nav on-dark" data-nav data-x0={isHome ? undefined : '7'}>
+	<div class="nav__bar wrap">
+		<a class="nav__brand" href={homePath(lang)} aria-label={t.a11y.homeLink}>
+			<Fragment set:html={logo} />
+		</a>
+
+		<nav class="nav__menu" id="site-menu" aria-label={lang === 'it' ? 'Principale' : 'Main'}>
+			<ul class="nav__links">
+				{
+					t.nav.links.map((l) => (
+						<li>
+							<a href={sectionHref(lang, l.id, isHome)} data-nav-link={l.id}>
+								{l.label}
+							</a>
+						</li>
+					))
+				}
+				<li>
+					<a href="/blog">{t.nav.blog}</a>
+				</li>
+			</ul>
+			<a class="nav__lang" href={langHref} hreflang={other} lang={other} aria-label={t.nav.langSwitch.ariaLabel}>
+				<span class="nav__lang-long">{t.nav.langSwitch.label}</span>
+				<span class="nav__lang-short" aria-hidden="true">{t.nav.langSwitch.short}</span>
+			</a>
+		</nav>
+
+		<a class="btn btn--sm nav__cta" href={contactHref} data-nav-cta><Fragment set:html={x0Glyph} />{t.nav.cta}</a>
+
+		<button
+			class="nav__toggle"
+			type="button"
+			aria-expanded="false"
+			aria-controls="site-menu"
+			data-open-label={t.a11y.openMenu}
+			data-close-label={t.a11y.closeMenu}
+		>
+			<span class="visually-hidden" data-toggle-label>{t.a11y.openMenu}</span>
+			<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+				<path class="nav__toggle-a" d="M3 8h18" fill="none" stroke="currentColor" stroke-width="2" />
+				<path class="nav__toggle-b" d="M3 16h18" fill="none" stroke="currentColor" stroke-width="2" />
+			</svg>
+		</button>
+	</div>
+</header>
+
+<style>
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: var(--ink);
+	}
+
+	.nav__bar {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		height: var(--nav-h);
+	}
+
+	.nav__brand {
+		display: flex;
+		align-items: center;
+		flex: none;
+		padding-block: 8px;
+		transition:
+			opacity 0.3s ease,
+			visibility 0s linear 0s;
+	}
+
+	.nav__brand :global(.nav__logo) {
+		height: 22px;
+		width: auto;
+	}
+
+	/* one brand on screen (art 11): on the home page the hero wordmark is the brand while any of it is in view below the
+	   bar; the bar's logo comes in only once it has gone under the bar (scripts/home.ts), on every screen size. Hidden also
+	   means out of the tab order (visibility), so keyboard focus never lands on it. */
+	:global(.js .is-home.hero-brand-visible) .nav__brand,
+	:global(.js .footer-brand-visible) .nav__brand {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transition:
+			opacity 0.3s ease,
+			visibility 0s linear 0.3s;
+	}
+
+	.nav__menu {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		margin-left: auto;
+	}
+
+	.nav__links {
+		list-style: none;
+		display: flex;
+		align-items: center;
+		gap: 26px;
+	}
+
+	.nav__links a,
+	.nav__lang {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		color: var(--paper);
+		font-size: 15px;
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.nav__links a::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 8px;
+		height: 2px;
+		background: var(--paper);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+	}
+
+	.nav__links a:hover::after,
+	.nav__links a[aria-current]::after {
+		transform: scaleX(1);
+	}
+
+	.nav__lang {
+		color: var(--paper);
+	}
+
+	/* the language switch reads as a control, not as a disabled link: a small sleeve, like a wire marker */
+	.nav__lang-short {
+		display: inline-flex;
+		align-items: center;
+		padding: 3px 7px;
+		border: 1px solid var(--steel-light);
+		font-family: var(--font-mono); /* taste-skill-ignore: brand wire-marker face */
+		font-size: 13px;
+		letter-spacing: 0.06em;
+		line-height: 1.2;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease;
+	}
+
+	.nav__lang:hover .nav__lang-short {
+		border-color: var(--paper);
+		background: var(--ink-2);
+	}
+
+	.nav__lang-long {
+		display: none;
+	}
+
+	.nav__cta {
+		position: relative;
+		flex: none;
+		gap: 8px;
+	}
+
+	/* Contact is the section on screen (scripts/home.ts, layout pass): the call to action is marked like a current link,
+	   with the bar's own Carta underline, just under the button */
+	.nav__cta::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -6px;
+		height: 2px;
+		background: var(--paper);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s ease;
+		pointer-events: none;
+	}
+
+	.nav__cta[aria-current]::after {
+		transform: scaleX(1);
+	}
+
+	/* the -X0 indicator (vignettes v2): a pin lights as each compartment's continuity test passes. Paint is literal on the
+	   shapes (note 9); CSS only sets the lit discs' opacity. No JS / reduced motion: the tested panel, 6/7 (the seventh
+	   connection is the visitor's request) */
+	.nav__cta :global(.x0i) {
+		flex: none;
+		display: block;
+	}
+
+	.nav__cta :global(.x0i__on) {
+		opacity: 0;
+		transition: opacity 0.22s var(--ease-out);
+	}
+
+	:global(html:not(.motion)) .nav__cta :global(.x0i__on:not(.k7)),
+	.nav[data-x0='1'] :global(.x0i__on.k1),
+	.nav[data-x0='2'] :global(.x0i__on:is(.k1, .k2)),
+	.nav[data-x0='3'] :global(.x0i__on:is(.k1, .k2, .k3)),
+	.nav[data-x0='4'] :global(.x0i__on:is(.k1, .k2, .k3, .k4)),
+	.nav[data-x0='5'] :global(.x0i__on:is(.k1, .k2, .k3, .k4, .k5)),
+	.nav[data-x0='6'] :global(.x0i__on:is(.k1, .k2, .k3, .k4, .k5, .k6)),
+	.nav[data-x0='7'] :global(.x0i__on) {
+		opacity: 1;
+	}
+
+	.nav__toggle {
+		display: none;
+		/* (never squeezed by the bar's other items: on a narrow phone it was 0–11 px wide, review 3) */
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		margin-right: -10px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--paper);
+		cursor: pointer;
+	}
+
+	/* CSS transforms on SVG children: an explicit reference box and origin (WebKit and Firefox agree only then) */
+	.nav__toggle path {
+		transition: transform 0.25s ease;
+		transform-box: view-box;
+		transform-origin: 12px 12px;
+	}
+
+	.nav__toggle[aria-expanded='true'] .nav__toggle-a {
+		transform: translateY(4px) rotate(45deg);
+	}
+
+	.nav__toggle[aria-expanded='true'] .nav__toggle-b {
+		transform: translateY(-4px) rotate(-45deg);
+	}
+
+	@media (max-width: 1099px) {
+		.nav__bar {
+			gap: 16px;
+		}
+
+		.nav__cta {
+			margin-left: auto;
+		}
+
+		.nav__cta::after {
+			bottom: -4px;
+		}
+
+		.nav__toggle {
+			display: inline-flex;
+		}
+
+		.nav__menu {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0;
+			margin: 0;
+			padding: 8px var(--m) 28px;
+			background: var(--ink);
+			display: none;
+			/* the open menu covers the screen: the page under it (also Ink) must not read as more menu */
+			min-height: calc(100svh - var(--nav-h));
+			max-height: calc(100svh - var(--nav-h));
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			border-top: 1px solid var(--ink-2);
+		}
+
+		.nav__menu.is-open,
+		:global(html:not(.js)) .nav__menu {
+			display: flex;
+		}
+
+		:global(html:not(.js)) .nav__menu {
+			position: static;
+			min-height: 0;
+			max-height: none;
+			overflow: visible;
+			padding: 4px 0 12px;
+		}
+
+		:global(html:not(.js)) .nav__bar {
+			flex-wrap: wrap;
+			height: auto;
+			min-height: var(--nav-h);
+		}
+
+		/* without JS the menu cannot open and close: it is a compact row of links in a header that scrolls away with the
+		   page (brief 7: a sticky header holding the expanded menu covered half the phone screen on every page) */
+		:global(html:not(.js)) .nav {
+			position: relative;
+		}
+
+		:global(html:not(.js)) .nav__links {
+			flex-direction: row;
+			flex-wrap: wrap;
+			column-gap: 20px;
+		}
+
+		:global(html:not(.js)) .nav__links a,
+		:global(html:not(.js)) .nav__lang {
+			min-height: 44px;
+			width: auto;
+			font-size: 16px;
+		}
+
+		:global(html:not(.js)) .nav__lang {
+			margin-top: 0;
+		}
+
+		/* the bar first (logo and the CTA), the links below it */
+		:global(html:not(.js)) .nav__menu {
+			order: 3;
+			flex-basis: 100%;
+		}
+
+		/* the home page opens on the big wordmark right under this bar (which scrolls away without JS): one brand */
+		:global(html:not(.js) .is-home) .nav__brand {
+			display: none;
+		}
+
+		:global(html:not(.js)) .nav__toggle {
+			display: none;
+		}
+
+		.nav__links {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0;
+		}
+
+		.nav__links a,
+		.nav__lang {
+			min-height: 52px;
+			font-size: 22px;
+			width: 100%;
+		}
+
+		.nav__links a::after {
+			display: none;
+		}
+
+		.nav__lang {
+			margin-top: 12px;
+			font-size: 17px;
+		}
+
+		.nav__lang-long {
+			display: inline;
+		}
+
+		.nav__lang-short {
+			display: none;
+		}
+	}
+
+	/* narrow phones (review 3): logo, call to action and menu button all fit the bar, the menu button at its full 44 px
+	   (390 × 844 IT: it was squeezed to 24 px, 360 × 740 IT to 0) */
+	@media (max-width: 419px) {
+		.nav__bar {
+			gap: 10px;
+		}
+
+		.nav__brand :global(.nav__logo) {
+			height: 19px;
+		}
+
+		.nav__cta {
+			gap: 6px;
+			padding-inline: 12px;
+		}
+	}
+
+	/* (under 380 px the call to action drops its pin glyph, the words stay) */
+	@media (max-width: 379px) {
+		.nav__brand :global(.nav__logo) {
+			height: 17px;
+		}
+
+		.nav__cta :global(.x0i) {
+			display: none;
+		}
+	}
+
+	/* (never under the logo's smallest size on screen: 103 px wide, logo kit D3) */
+	@media (max-width: 339px) {
+		.nav__brand :global(.nav__logo) {
+			height: 15.7px;
+		}
+	}
+</style>

@@ -1,0 +1,266 @@
+---
+import { Image } from 'astro:assets';
+import imgPerceive from '../../assets/images/home/stage-perceive.jpg';
+import imgPlan from '../../assets/images/home/stage-plan.jpg';
+import imgExecute from '../../assets/images/home/stage-execute.jpg';
+import Compartment from '../panel/Compartment.astro';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const p = copy[lang].process;
+
+const L = {
+	en: {
+		perceiveAlt: 'Close view of a switchboard: PLC modules, relays and terminal blocks wired in blue between grey ducts',
+		planAlt: 'Two collaborative robots bringing their probe end-effectors close together above the same switchboard',
+		executeAlt: 'Two probe tips touching the terminal blocks on the top row of a switchboard',
+		listCaption: 'Connection list from EPLAN (illustrative rows)',
+		// (review 3, S1: two columns, every cell may wrap: the list fits its picture slot at every width, nothing is clipped)
+		cols: ['Connection', 'Wire'],
+		to: 'to',
+		// client note 17: no device codes on screen; the rows say what each end is
+		rows: [
+			['Terminal block', 'Relay coil', '0.75 mm²', 'Dark blue'],
+			['Relay contact', 'Spring terminal', '0.75 mm²', 'Dark blue'],
+			['Spring terminal', 'Controller supply', '0.75 mm²', 'Dark blue'],
+			['Controller output', 'Input module', '0.5 mm²', 'Dark blue'],
+			['Input module', 'Power supply 0 V', '0.75 mm²', 'Dark blue'],
+			['Power supply 24 V', 'Main connector', '0.75 mm²', 'Dark blue'],
+			['Terminal block', 'Earth bar', '2.5 mm²', 'Green-yellow'],
+		],
+	},
+	it: {
+		perceiveAlt: 'Vista ravvicinata di un quadro: moduli PLC, relè e morsettiere cablati in blu tra canaline grigie',
+		planAlt: 'Due robot collaborativi avvicinano i loro end-effector a puntale sopra lo stesso quadro',
+		executeAlt: 'Due puntali a contatto con le morsettiere della fila superiore di un quadro',
+		listCaption: 'Lista collegamenti da EPLAN (righe illustrative)',
+		cols: ['Collegamento', 'Filo'],
+		to: 'a',
+		rows: [
+			['Morsettiera', 'Bobina relè', '0,75 mm²', 'Blu scuro'],
+			['Contatto relè', 'Morsetto a molla', '0,75 mm²', 'Blu scuro'],
+			['Morsetto a molla', 'Alimentazione controllore', '0,75 mm²', 'Blu scuro'],
+			['Uscita controllore', 'Modulo ingressi', '0,5 mm²', 'Blu scuro'],
+			['Modulo ingressi', 'Alimentatore 0 V', '0,75 mm²', 'Blu scuro'],
+			['Alimentatore 24 V', 'Connettore principale', '0,75 mm²', 'Blu scuro'],
+			['Morsettiera', 'Barra di terra', '2,5 mm²', 'Giallo-verde'],
+		],
+	},
+}[lang];
+
+// the same wires the page's panel tests, compartment by compartment (src/data/panel.ts), plus the earth row, in words
+const rows = L.rows;
+const pictures = [{ src: imgPerceive, alt: L.perceiveAlt }, null, { src: imgPlan, alt: L.planAlt }, { src: imgExecute, alt: L.executeAlt }];
+---
+
+<Compartment n={2} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
+	<ol class="steps">
+		{
+			p.steps.map((s, i) => (
+				<li class="step" data-b>
+					{pictures[i] ? (
+						<figure class="step__pic">
+							<Image src={pictures[i]!.src} alt={pictures[i]!.alt} widths={[400, 640, 800]} sizes="(min-width: 1100px) 300px, (min-width: 700px) 45vw, 100vw" loading="lazy" />
+						</figure>
+					) : (
+						<figure class="step__pic step__pic--data" data-ui>
+							<table class="clist">
+								<caption>{L.listCaption}</caption>
+								<thead>
+									<tr>
+										{L.cols.map((c) => (
+											<th scope="col">{c}</th>
+										))}
+									</tr>
+								</thead>
+								<tbody>
+									{rows.map((r) => (
+										<tr>
+											<td>
+												<span class="clist__end">{r[0]}</span>
+												<span class="clist__to" aria-hidden="true">→</span>
+												<span class="visually-hidden"> {L.to} </span>
+												<span class="clist__end">{r[1]}</span>
+											</td>
+											<td>
+												<span class="clist__w">{r[2]}</span>
+												<span class="clist__c">{r[3]}</span>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</figure>
+					)}
+					<h3 class="step__k">{s.kicker}</h3>
+					<p class="step__title">{s.title}</p>
+					<p class="step__body">{s.body}</p>
+				</li>
+			))
+		}
+	</ol>
+</Compartment>
+
+<style>
+	.steps {
+		list-style: none;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 40px;
+	}
+
+	/* (review 3, ENG-2: the steps never grow past the card on a narrow phone) */
+	.step {
+		min-width: 0;
+	}
+
+	.step__pic {
+		aspect-ratio: 3 / 2;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--mist);
+		margin-bottom: 18px;
+	}
+
+	.step__pic :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* the one data fragment on the page: a connection list, as panel builders know it */
+	.step__pic--data {
+		display: flex;
+		align-items: center;
+		padding: 14px 16px;
+		background: var(--white);
+		aspect-ratio: auto;
+		min-height: 0;
+		/* (review 3, S1) a list of words is never clipped: it is as tall as its rows */
+		overflow: visible;
+	}
+
+	.clist {
+		width: 100%;
+		border-collapse: collapse;
+		/* (client note 17) the rows in words, not device codes: the text face */
+		font-size: 12.5px;
+		line-height: 1.3;
+		font-variant-numeric: tabular-nums;
+		color: var(--ink);
+	}
+
+	.clist caption {
+		caption-side: bottom;
+		text-align: left;
+		padding-top: 10px;
+		font-family: var(--font-text);
+		font-size: 13px;
+		line-height: 1.4;
+		color: var(--steel);
+	}
+
+	.clist th {
+		text-align: left;
+		font-family: var(--font-text);
+		font-weight: 600;
+		font-size: 13px;
+		color: var(--steel);
+		padding: 0 6px 5px 0;
+		border-bottom: 2px solid var(--blue);
+	}
+
+	.clist td {
+		padding: 3px 10px 3px 0;
+		border-bottom: 1px solid var(--mist);
+		vertical-align: top;
+	}
+
+	.clist td:last-child {
+		padding-right: 0;
+	}
+
+	.clist__to {
+		margin-inline: 0.3em;
+		color: var(--steel);
+	}
+
+	/* each end of a connection stays whole on its line where it fits: a narrow column breaks at the arrow, not inside a name */
+	.clist__end {
+		display: inline-block;
+	}
+
+	/* the conductor: its size on one line, its colour under it */
+	.clist__w {
+		display: block;
+		white-space: nowrap;
+	}
+
+	.clist__c {
+		display: block;
+		color: var(--steel);
+	}
+
+	.clist tr:first-child td {
+		color: var(--cu-deep);
+	}
+
+	.step__k {
+		font-size: 20px;
+		line-height: 1.2;
+		color: var(--blue);
+	}
+
+	.step__title {
+		margin-top: 6px;
+		font-size: 17px;
+		font-weight: 600;
+		line-height: 1.3;
+		letter-spacing: -0.012em;
+	}
+
+	.step__body {
+		margin-top: 8px;
+		font-size: 16px;
+		line-height: 1.55;
+	}
+
+	@media (min-width: 700px) {
+		.steps {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 48px var(--gap);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		/* four columns on one subgrid: the pictures share a row, so the connection list sets its height */
+		.steps {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-rows: auto auto auto 1fr;
+			row-gap: 0;
+		}
+
+		.step {
+			display: grid;
+			grid-row: span 4;
+			grid-template-rows: subgrid;
+			align-content: start;
+		}
+
+		.step__pic {
+			aspect-ratio: auto;
+			min-height: 188px;
+		}
+
+		.step__pic--data {
+			padding: 12px 14px;
+		}
+
+		.step__body {
+			font-size: 17px;
+		}
+	}
+</style>

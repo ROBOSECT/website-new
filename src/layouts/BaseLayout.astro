@@ -1,114 +1,163 @@
 ---
 import { getImage } from 'astro:assets';
-import SiteFooter from '../components/landing/SiteFooter.astro';
-import NavBar from '../components/landing/NavBar.astro';
-import iconaV2 from '../assets/images/icona_v2.png';
-import defaultOgSource from '../assets/images/about_robosect.png';
-import '@fontsource/space-grotesk/500.css';
-import '@fontsource/space-grotesk/600.css';
-import '@fontsource/space-grotesk/700.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/jetbrains-mono/500.css';
-import '@fontsource/jetbrains-mono/600.css';
+import NavBar from '../components/site/NavBar.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import { copy, type Lang } from '../i18n/copy';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import inter600 from '@fontsource/inter/files/inter-latin-600-normal.woff2?url';
 import '../styles/global.css';
+import '../styles/panel.css';
 
 interface Props {
-  title?: string;
-  description?: string;
-  image?: { src: ImageMetadata; alt: string };
-  type?: 'website' | 'article';
-  noindex?: boolean;
+	title?: string;
+	description?: string;
+	lang?: Lang;
+	/** Overrides the default og-logo image (e.g. a blog cover) */
+	image?: { src: ImageMetadata; alt: string };
+	type?: 'website' | 'article';
+	noindex?: boolean;
+	/** hreflang alternates, e.g. { en: '/', it: '/it/' }; only for pages that exist in both languages */
+	alternates?: Partial<Record<Lang, string>>;
+	/** true on the two homepages: the nav links point in-page and the hero carries the big wordmark */
+	isHome?: boolean;
 }
 
 const SITE_NAME = 'ROBOSECT';
-
 const {
-  title = 'ROBOSECT',
-  description = 'ROBOSECT builds AI robots with computer vision and motion planning to automate manipulation, assembly, inspection and testing of cables and wiring harnesses.',
-  image,
-  type = 'website',
-  noindex = false,
+	title,
+	description,
+	lang = 'en',
+	image,
+	type = 'website',
+	noindex = false,
+	alternates,
+	isHome = false,
 } = Astro.props;
+const t = copy[lang];
 
-const pageTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
-
-const favicon32 = await getImage({ src: iconaV2, width: 32, height: 32, format: 'png' });
-const favicon180 = await getImage({ src: iconaV2, width: 180, height: 180, format: 'png' });
-
-const ogSource = image?.src ?? defaultOgSource;
-const ogAlt = image?.alt ?? 'ROBOSECT robotic system for cable and wiring harness automation';
-const ogImage = await getImage({
-  src: ogSource,
-  width: 1200,
-  height: 630,
-  fit: 'cover',
-  format: 'jpg',
-});
+const pageTitle = !title ? t.meta.title : title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
+const pageDescription = description ?? t.meta.description;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL(ogImage.src, Astro.site);
+
+let ogImageURL: URL;
+let ogAlt: string;
+if (image) {
+	const og = await getImage({ src: image.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+	ogImageURL = new URL(og.src, Astro.site);
+	ogAlt = image.alt;
+} else {
+	ogImageURL = new URL(lang === 'it' ? '/og-logo-it.png' : '/og-logo.png', Astro.site);
+	ogAlt = `ROBOSECT. ${t.brand.descriptor}. ${t.brand.tagline}`;
+}
+const ogTitle = isHome ? t.meta.ogTitle : pageTitle;
+const ogDescription = isHome ? t.meta.ogDescription : pageDescription;
+const otherLocale = lang === 'it' ? copy.en.meta.ogLocale : copy.it.meta.ogLocale;
 
 const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'ROBOSECT SRL',
-  alternateName: 'ROBOSECT',
-  url: 'https://www.robosect.it',
-  logo: new URL(favicon180.src, Astro.site).toString(),
-  description:
-    'ROBOSECT develops AI-powered robotic systems combining computer vision and motion planning to automate the manipulation, assembly, inspection and testing of cables, wiring harnesses and other deformable industrial products.',
-  email: 'info@robosect.it',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Via Lazio 2',
-    addressLocality: 'Bologna',
-    postalCode: '40139',
-    addressCountry: 'IT',
-  },
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: 'ROBOSECT SRL',
+	alternateName: 'ROBOSECT',
+	url: 'https://www.robosect.it',
+	logo: new URL('/avatar-400.png', Astro.site).toString(),
+	slogan: t.brand.tagline,
+	description: t.meta.ogDescription,
+	email: 'info@robosect.it',
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: 'Via Lazio 2',
+		addressLocality: 'Bologna',
+		postalCode: '40139',
+		addressCountry: 'IT',
+	},
+	sameAs: ['https://www.linkedin.com/company/robosect'],
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={t.meta.htmlLang} data-panel-home={isHome ? '' : undefined}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="description" content={description} />
+		<script is:inline>
+			// progressive enhancement switch; if the page scripts never report in, fall back to the static page.
+			// "motion": the panel plays its tests (set before first paint, so untested compartments start idle).
+			// "sda": the browser runs scroll-driven animations (the slowed travel glides on the compositor; without them the
+			// page has no slow zones: no runs, nothing moved by script). On the home page in motion the panel keeps the
+			// visitor's place itself on reload/back (the browser would restore the layout position, not the visual one).
+			(function (d) {
+				d.classList.add('js');
+				if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+				try {
+					if (CSS.supports('animation-timeline: scroll()') && CSS.supports('animation-range: 0px 100px') && !/[?&]panel-sda=0/.test(location.search)) d.classList.add('sda');
+				} catch (e) {}
+				if (d.hasAttribute('data-panel-home') && d.classList.contains('motion') && 'scrollRestoration' in history) history.scrollRestoration = 'manual';
+				setTimeout(function () {
+					if (!window.__robosectReady) {
+						d.classList.remove('js', 'motion');
+						if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
+					}
+				}, 3500);
+			})(document.documentElement);
+		</script>
+		<link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
+		<title>{pageTitle}</title>
+		<meta name="description" content={pageDescription} />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<meta name="theme-color" content="#0D1B2E" />
 		<link rel="canonical" href={canonicalURL} />
-		<link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
-		<link rel="apple-touch-icon" href={favicon180.src} />
-		<title>{pageTitle}</title>
+		{
+			alternates &&
+				Object.entries(alternates).map(([l, path]) => (
+					<link rel="alternate" hreflang={l} href={new URL(path, Astro.site)} />
+				))
+		}
+		{alternates?.en && <link rel="alternate" hreflang="x-default" href={new URL(alternates.en, Astro.site)} />}
 
-		<!-- Open Graph -->
+		{/* the logo kit's site icons (05-kit/03-icone/head.html): favicon.ico carries 16, 32 and 48 px; no favicon.svg */}
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+
+		{/* Open Graph */}
 		<meta property="og:type" content={type} />
 		<meta property="og:site_name" content={SITE_NAME} />
-		<meta property="og:title" content={pageTitle} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={ogTitle} />
+		<meta property="og:description" content={ogDescription} />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:image" content={ogImageURL} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content={ogAlt} />
-		<meta property="og:locale" content="en_US" />
+		<meta property="og:locale" content={t.meta.ogLocale} />
+		{alternates && <meta property="og:locale:alternate" content={otherLocale} />}
 
-		<!-- Twitter Card -->
+		{/* Twitter Card */}
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={pageTitle} />
-		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={ogTitle} />
+		<meta name="twitter:description" content={ogDescription} />
 		<meta name="twitter:image" content={ogImageURL} />
 		<meta name="twitter:image:alt" content={ogAlt} />
 
 		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} is:inline />
-
 		<slot name="head" />
 	</head>
-	<body>
-		<NavBar />
-		<slot />
-		<SiteFooter />
+	<body class:list={[isHome && 'is-home', isHome && 'hero-brand-visible']}>
+		<a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
+		<NavBar lang={lang} isHome={isHome} />
+		<main id="main" tabindex="-1">
+			<slot />
+		</main>
+		<SiteFooter lang={lang} isHome={isHome} />
+		<script>
+			import '../scripts/site';
+		</script>
 	</body>
 </html>

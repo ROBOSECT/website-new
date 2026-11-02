@@ -1,0 +1,29 @@
+---
+/**
+ * One stylized device (approved v2 board + v3 terminal points), drawn at build time from the same code the
+ * panel script uses (scripts/panel/devices.ts). Used on its own (404: the blown -F1) and as reference.
+ */
+import { DEV, staticDevice, type DevKind } from '../../scripts/panel/devices';
+
+interface Props {
+	kind: DevKind;
+	dir?: 'ltr' | 'rtl';
+	tested?: boolean;
+	class?: string;
+	label?: string;
+}
+const { kind, dir = 'ltr', tested = false, class: cls, label } = Astro.props;
+const D = DEV[kind];
+const inner = staticDevice(kind, dir, { tested, open: false, leads: [tested, tested] });
+---
+
+<svg
+	class:list={['dv', `dv--${D.module}`, cls]}
+	viewBox={`-2 -14 ${D.w + 4} ${D.h + 16}`}
+	width={D.w + 4}
+	height={D.h + 16}
+	role={label ? 'img' : undefined}
+	aria-label={label}
+	aria-hidden={label ? undefined : 'true'}
+	focusable="false"><Fragment set:html={inner} /></svg
+>

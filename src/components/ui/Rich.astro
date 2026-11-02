@@ -1,0 +1,13 @@
+---
+/**
+ * Renders a copy string and turns every "[TBD: …]" into a visible placeholder.
+ * Placeholders must never reach production: search the build for "[TBD:" before launch.
+ */
+interface Props {
+	text: string;
+}
+const { text } = Astro.props;
+const parts = text.split(/(\[TBD:[^\]]*\])/g).filter((p) => p.length > 0);
+---
+
+{parts.map((p) => (p.startsWith('[TBD:') ? <span class="tbd">{p}</span> : p))}

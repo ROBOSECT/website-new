@@ -1,0 +1,277 @@
+---
+import { Image } from 'astro:assets';
+import logotype from '../../assets/brand/robosect-logotipo-negativo-stretto.svg';
+import logoUnibo from '../../assets/images/logo_unibo.png';
+import logoSpinoff from '../../assets/images/logo_spinoff_unibo.png';
+import logoCobo from '../../assets/images/logo_cobo.png';
+import logoEit from '../../assets/images/logo_EIT.png';
+import { copy, type Lang } from '../../i18n/copy';
+import { sectionHref } from '../../lib/i18n';
+import { R_GEOMETRY as G } from '../../lib/cable-geometry';
+
+interface Props {
+	lang: Lang;
+	isHome?: boolean;
+}
+
+const { lang, isHome = false } = Astro.props;
+const t = copy[lang];
+const f = t.footer;
+const partners = [
+	{ src: logoUnibo, alt: f.partnerAlts.unibo, h: 64 },
+	{ src: logoSpinoff, alt: f.partnerAlts.spinoff, h: 48, mono: true },
+	{ src: logoEit, alt: f.partnerAlts.eit, h: 52 },
+	{ src: logoCobo, alt: f.partnerAlts.cobo, h: 30 },
+];
+---
+
+<footer class="footer on-dark" data-ground="dark">
+	<div class="wrap">
+		<div class="footer__top">
+			<p class="footer__tagline">{f.tagline}</p>
+
+			<nav class="footer__cols" aria-label={lang === 'it' ? 'Piè di pagina' : 'Footer'}>
+				<div>
+					<h2 class="footer__h">{f.columns.site}</h2>
+					<ul>
+						<li><a href="/blog">{f.links.blog}</a></li>
+						<li><a href={sectionHref(lang, 'contact', isHome)}>{f.links.contact}</a></li>
+						<li>
+							<a href="https://www.linkedin.com/company/robosect" target="_blank" rel="noopener noreferrer"
+								>{f.links.linkedin}<span class="visually-hidden"> {t.a11y.opensInNewTab}</span></a
+							>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<h2 class="footer__h">{f.columns.legal}</h2>
+					<ul>
+						<li><a href="/legal-notes" hreflang="en">{f.links.legalNotes}</a></li>
+						<li><a href="/privacy-policy" hreflang="en">{f.links.privacy}</a></li>
+						<li><a href="/cookie-policy" hreflang="en">{f.links.cookies}</a></li>
+						<li><a href="/gender-equality-diversity-policy" hreflang="en">{f.links.genderPolicy}</a></li>
+					</ul>
+					{f.legalLanguageNote && <p class="footer__note">{f.legalLanguageNote}</p>}
+				</div>
+				<div>
+					<h2 class="footer__h">{f.columns.contact}</h2>
+					<ul>
+						<li><a href="mailto:info@robosect.it">info@robosect.it</a></li>
+						<li class="footer__addr">{t.contact.direct.address}</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+		<div class="footer__eco">
+			<h2 class="footer__h">{f.ecosystemTitle}</h2>
+			<ul class="footer__logos">
+				{
+					partners.map((p) => (
+						<li>
+							<Image
+								src={p.src}
+								alt={p.alt}
+								height={p.h * 2}
+								style={`height:${p.h}px;width:auto`}
+								class:list={[p.mono && 'footer__logo--mono']}
+							/>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<a class="footer__mark" href={lang === 'it' ? '/it/' : '/'} aria-label={t.a11y.homeLink}>
+			<img src={logotype.src} width={logotype.width} height={logotype.height} alt="" loading="lazy" />
+		</a>
+		<p class="footer__descriptor" style={`margin-top:${+((G.clear / G.W) * 100).toFixed(3)}%`}>{t.brand.descriptor}</p>
+
+		<div class="footer__legal">
+			<p>{f.legal}</p>
+			<p>{f.rights}</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		background: var(--ink);
+		padding-block: clamp(80px, 9vw, 128px) 40px;
+	}
+
+	.footer__top {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--gap);
+		row-gap: 48px;
+	}
+
+	.footer__tagline {
+		grid-column: 1 / span 5;
+		font-family: var(--font-display);
+		font-size: var(--t-h2);
+		font-weight: 500;
+		line-height: 1.08;
+		letter-spacing: -0.022em;
+		color: var(--paper);
+		max-width: 12em;
+	}
+
+	.footer__cols {
+		grid-column: 7 / -1;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: var(--gap);
+	}
+
+	.footer__h {
+		font-family: var(--font-text);
+		font-size: var(--t-small);
+		font-weight: 500;
+		letter-spacing: 0;
+		color: var(--steel-light);
+		margin-bottom: 14px;
+	}
+
+	.footer ul {
+		list-style: none;
+		display: grid;
+		gap: 6px;
+	}
+
+	.footer a {
+		color: var(--paper);
+		text-decoration: none;
+		font-size: var(--t-small);
+		display: inline-block;
+		padding-block: 4px;
+	}
+
+	.footer a:hover {
+		text-decoration: underline;
+	}
+
+	.footer__addr {
+		font-size: var(--t-small);
+		color: var(--paper);
+		padding-block: 4px;
+	}
+
+	.footer__note {
+		margin-top: 12px;
+		font-size: var(--t-small);
+		color: var(--steel-light);
+	}
+
+	.footer__eco {
+		margin-top: 72px;
+	}
+
+	.footer__logos {
+		display: flex !important;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px !important;
+	}
+
+	/* one tile colour for every partner: the row reads as a set, not as a checkerboard */
+	.footer__logos li {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 104px;
+		padding: 0 32px;
+		background: var(--paper);
+	}
+
+	/* the spin-off mark exists only in white: shown in its one-colour dark version on the light tile */
+	.footer__logos :global(.footer__logo--mono) {
+		filter: brightness(0) saturate(100%);
+		opacity: 0.88;
+	}
+
+	.footer .footer__mark {
+		display: block;
+		margin-top: clamp(72px, 9vw, 128px);
+		padding: 0;
+	}
+
+	.footer .footer__mark img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	/* the descriptor under the logotype, past its clear space (set above: the ferrule's length as a share of the logotype's
+	   width, which a percentage margin is), in the size the old lockup gave it */
+	.footer__descriptor {
+		font-size: clamp(var(--t-small), 3.2vw, 2.875rem);
+		font-weight: 500;
+		line-height: 1.15;
+		letter-spacing: -0.01em;
+		color: var(--steel-light);
+	}
+
+	.footer__legal {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 8px 32px;
+		margin-top: 40px;
+		font-size: var(--t-small);
+		color: var(--steel-light);
+	}
+
+	@media (max-width: 899px) {
+		.footer__tagline,
+		.footer__cols {
+			grid-column: 1 / -1;
+		}
+
+		.footer__cols {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			row-gap: 36px;
+		}
+	}
+
+	@media (max-width: 699px) {
+		.footer__logos li {
+			height: 84px;
+			padding: 0 20px;
+			flex: 1 1 calc(50% - 4px);
+		}
+
+		.footer__logos img {
+			max-width: 100%;
+			height: auto !important;
+			max-height: 44px;
+		}
+	}
+
+	/* print (review 3, ENG-11): the footer whole and compact after the last section, not a page of ink of its own; the
+	   giant wordmark stays on screen only (the brand opens the first page) */
+	@media print {
+		.footer {
+			break-inside: avoid;
+			padding-block: 28px 18px;
+		}
+
+		.footer__top {
+			row-gap: 24px;
+		}
+
+		.footer__eco {
+			margin-top: 24px;
+		}
+
+		.footer .footer__mark,
+		.footer__descriptor {
+			display: none;
+		}
+
+		.footer__legal {
+			margin-top: 20px;
+		}
+	}
+</style>

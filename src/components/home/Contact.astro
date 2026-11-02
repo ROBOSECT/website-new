@@ -1,0 +1,1574 @@
+---
+/**
+ * Contact: the robots build the form (client note 17, finale/SHOWPIECE-V2.md; the showpiece of notes 14 and 16).
+ *
+ * Next to the form, the two robots do one real job with every tool (camera, gripper, screwdriver, spring-cage opener, breaker
+ * toggle, two probes): a live animation on its own clock (scripts/panel/showpiece), not scroll-driven and not a video, no
+ * player chrome, no words on the stage, no codes, no zooms. Each job sends a pulse along the form's wire and builds one part
+ * of the form (form.ts), top to bottom, Send last; then the robots park. The scene stands on the card's own blue; its
+ * operator station carries the only controls, as real pushbuttons: RESET (blue, lit when the job has finished) resets the
+ * cell physically and runs the job (and the build) again; STOP (red, latching) halts the robots.
+ *
+ * Usability first: the real form is in the markup from the start and is a plain, built form without JS and with reduced
+ * motion. The script unbuilds it only while it is off screen, and any intent to use it builds everything at once. Send just
+ * sends: the mail handoff and a clean confirmation.
+ *
+ * TODO(backend): this site is static and has no form endpoint yet. With script, the form composes an email to
+ * info@robosect.it in the visitor's own mail client (scripts/contact.ts); without script, the browser posts the fields as
+ * plain text to the same mailto: address. Before launch: point `action` to a real endpoint (or a form service), keep the
+ * mailto as fallback, and have ROBOSECT approve the privacy policy's paragraph on this form (the restore after an iOS reload
+ * stays off until then: data-restore="off"). (Markup comments are never emitted: review 3, S9.)
+ */
+import Rich from '../ui/Rich.astro';
+import { copy, type Lang } from '../../i18n/copy';
+import { compileNow, facts } from '../../scripts/panel/showpiece/compile';
+import { frameState } from '../../scripts/panel/showpiece/state';
+import { armsOf, derive, stageTree, toString } from '../../scripts/panel/showpiece/render';
+import { VB } from '../../scripts/panel/showpiece/scene';
+import { assertShowpiece } from '../../scripts/panel/robot/buildqa';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const c = copy[lang].contact;
+const f = c.form;
+const sh = c.show;
+const st = sh.station;
+const ho = c.handoff;
+const privacyHref = '/privacy-policy';
+// the title is two sentences: the question is the heading, the answer follows as its own line
+const qIdx = c.title.indexOf('? ');
+const titleQ = qIdx > 0 ? c.title.slice(0, qIdx + 1) : c.title;
+const titleA = qIdx > 0 ? c.title.slice(qIdx + 2) : '';
+const labels = {
+	name: f.name.label,
+	company: f.company.label,
+	email: f.email.label,
+	part: f.partType.label,
+	volumes: f.volumes.label,
+	process: f.currentProcess.label,
+	message: f.message.label,
+};
+
+// the film, compiled once per build (both pages), its robot QA (fails the build; it also proves which film times a RESET
+// may start from), and the end-frame poster (the robots parked, the circuit tested)
+const qa = assertShowpiece();
+const C = compileNow();
+const F = facts(C);
+const secs = String(Math.round(F.ready));
+const posterRf = derive(C, frameState(C, F.hold + 4));
+const A = armsOf(C);
+const poster = toString(stageTree(C, { mode: 'desk', uid: 'spp', mount: false }), posterRf, (id) => A.markup(id, posterRf));
+const vb = `${VB.x} ${VB.y} ${VB.w} ${VB.h}`;
+const label = sh.figureLabel.replace('{s}', secs);
+// what the script needs (one JSON blob; the strings stay in the markup where they show)
+const cfg = {
+	lang,
+	ready: F.ready,
+	hold: F.hold,
+	resets: qa.resets.safe,
+	live: ho.live,
+	handoff: { subject: ho.subject, consentLine: ho.consentLine, shortened: ho.shortened, copied: ho.copied, selectCopy: ho.selectCopy, nothingOpened: ho.nothingOpened, restored: ho.restored, previewTo: ho.previewTo, previewSubject: ho.previewSubject },
+	fieldLabels: labels,
+};
+---
+
+<section id={c.id} class="cmp cmp--contact" data-contact data-dir="ltr" aria-labelledby="contact-title">
+	<div class="stage stage--free" data-contact-stage>
+		<div class="contact__wrap">
+			<div class="card on-dark" data-card>
+				<div class="legend__head card__head" data-legend-head>
+					<h2 id="contact-title" class="card__title">{titleQ}</h2>
+					<span class="sleeve sleeve--static" aria-hidden="true"><span class="sleeve__t">{c.eyebrow}</span></span>
+					<i class="sleeve-br" aria-hidden="true" data-sleeve-br></i>
+					{titleA && <p class="card__answer">{titleA}</p>}
+				</div>
+				<div class="card__intro">
+					<p class="card__body">{c.body}</p>
+					<p class="card__time"><Rich text={c.responseTime} /></p>
+				</div>
+
+				{/* the cell and the form: on tall phones the cell stays in view (sticky) while the robots build the fields below it */}
+				<div class="work" data-work>
+				{/* the showpiece: the live cell (the end-frame poster until the film is compiled) and its operator station */}
+				<i class="show-anchor" aria-hidden="true" data-show-anchor></i>
+				<figure class="show" data-show aria-label={label} data-state="poster" data-cfg={JSON.stringify(cfg)}>
+					<div class="show__stage" data-show-stage>
+						<svg class="show__svg" data-show-svg viewBox={vb} preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"><Fragment set:html={poster} /></svg>
+					</div>
+					<div class="station" data-station role="group" aria-label={st.group}>
+						<button type="button" class="pb pb--reset" data-reset aria-label={st.resetLabel}>
+							<span class="pb__ring" aria-hidden="true"><span class="pb__cap"></span></span>
+							<span class="pb__leg" aria-hidden="true">{st.reset}</span>
+						</button>
+						<button type="button" class="pb pb--stop" data-stop aria-pressed="false" aria-label={st.stopLabel}>
+							<span class="pb__ring" aria-hidden="true"><span class="pb__cap"></span></span>
+							<span class="pb__leg" aria-hidden="true">{st.stop}</span>
+						</button>
+					</div>
+					<div class="visually-hidden">
+						<ol>{sh.details.map((d) => <li>{d}</li>)}</ol>
+					</div>
+				</figure>
+
+				<div class="formcell" data-formcell>
+					{/* every part: [data-part] (its state, data-fb, is the script's: absent = built, the default) and [data-box] (the
+					     box the robots' pulse outlines) */}
+					<form class="form" action="mailto:info@robosect.it" method="post" enctype="text/plain" data-contact-form data-restore="off">
+						<div class="form__fields">
+							<div class="form__row">
+								<div class="field" data-part="name">
+									<label for="cf-name">{f.name.label} <span class="req">({f.required})</span></label>
+									<div class="box"><input id="cf-name" name="name" type="text" autocomplete="name" required data-box /><i class="caret" aria-hidden="true"></i></div>
+								</div>
+								<div class="field" data-part="company">
+									<label for="cf-company">{f.company.label} <span class="req">({f.required})</span></label>
+									<div class="box"><input id="cf-company" name="company" type="text" autocomplete="organization" required data-box /><i class="caret" aria-hidden="true"></i></div>
+								</div>
+							</div>
+							<div class="form__row">
+								<div class="field" data-part="email">
+									<label for="cf-email">{f.email.label} <span class="req">({f.required})</span></label>
+									<div class="box"><input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder={f.email.placeholder} required data-box /><i class="caret" aria-hidden="true"></i></div>
+								</div>
+								<div class="field" data-part="part">
+									<label for="cf-part">{f.partType.label} <span class="req">({f.required})</span></label>
+									<div class="box select">
+										<select id="cf-part" name="part" required data-box>
+											<option value="">{f.partType.placeholder}</option>
+											{f.partType.options.map((o) => <option>{o}</option>)}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form__row">
+								<div class="field" data-part="volumes">
+									<label for="cf-volumes">{f.volumes.label} <span class="opt">({f.optional})</span></label>
+									<div class="box select">
+										<select id="cf-volumes" name="volumes" aria-describedby="cf-volumes-hint" data-box>
+											<option value="">{f.volumes.placeholder}</option>
+											{f.volumes.options.map((o) => <option>{o}</option>)}
+										</select>
+									</div>
+									<p class="hint" id="cf-volumes-hint">{f.volumes.hint}</p>
+								</div>
+								<div class="field" data-part="process">
+									<label for="cf-process">{f.currentProcess.label} <span class="opt">({f.optional})</span></label>
+									<div class="box"><input id="cf-process" name="process" type="text" placeholder={f.currentProcess.placeholder} data-box /><i class="caret" aria-hidden="true"></i></div>
+								</div>
+							</div>
+							<div class="form__row form__row--end">
+								<div class="field" data-part="message">
+									<label for="cf-message">{f.message.label} <span class="opt">({f.optional})</span></label>
+									<div class="box"><textarea id="cf-message" name="message" rows="3" placeholder={f.message.placeholder} data-box></textarea><i class="caret caret--top" aria-hidden="true"></i></div>
+								</div>
+								<div class="consent" data-part="consent">
+									<span class="consent__box"><input id="cf-consent" name="consent" type="checkbox" required data-box /></span>
+									<label for="cf-consent">
+										{f.consent.prefix}{' '}
+										<a href={privacyHref} hreflang="en">{f.consent.linkLabel}</a>{' '}
+										{f.consent.suffix}
+									</label>
+								</div>
+							</div>
+							<div class="submit-row" data-part="send">
+								<button class="btn form__submit" type="submit" data-box><span>{f.submit}</span></button>
+							</div>
+						</div>
+						<p class="form__helper form__helper--js">{ho.helper}</p>
+						<noscript><p class="form__helper">{ho.noscript}</p></noscript>
+					</form>
+					<div class="receipt" data-receipt hidden>
+						<h3 class="receipt__h" tabindex="-1" data-receipt-h>{ho.receiptHeading}</h3>
+						{/* one sentence; if no mail app took over within 1.8 s, its other version (laid out in the same cell: no shift) */}
+						<p class="receipt__lead" data-receipt-lead>
+							<span class="receipt__say" data-say="ready">{ho.lead}</span>
+							<span class="receipt__say" data-say="nothing">{ho.nothingOpened}</span>
+						</p>
+						<div class="receipt__acts">
+							<a class="btn receipt__open" data-mail-again href="mailto:info@robosect.it">{ho.openAgain}</a>
+							<button type="button" class="receipt__ghost" data-copy="message">{ho.copyMessage}</button>
+						</div>
+						<pre class="receipt__preview" data-preview hidden></pre>
+						<details class="receipt__more">
+							<summary>{ho.noApp}</summary>
+							<p>{ho.noAppText}</p>
+							<button type="button" class="receipt__ghost" data-copy="address">{ho.copyAddress}</button>
+						</details>
+						<p class="receipt__fine"><Rich text={ho.reply} /></p>
+						<button type="button" class="receipt__change" data-change>{ho.change}</button>
+					</div>
+				</div>
+				</div>
+				<div class="direct">
+					<p class="direct__label">{c.direct.label}</p>
+					<a class="direct__email" href={`mailto:${c.direct.email}`}>{c.direct.email}</a>
+					<p class="direct__addr">{c.direct.address}</p>
+					<a class="direct__li" href="https://www.linkedin.com/company/robosect" target="_blank" rel="noopener noreferrer">
+						{c.direct.linkedin}<span class="visually-hidden"> {copy[lang].a11y.opensInNewTab}</span>
+					</a>
+				</div>
+				{/* client note 17: the form's wire, the pulses and the outlines (drawn by the script from the layout) */}
+				<svg class="build-wire" data-build-wire aria-hidden="true" focusable="false"></svg>
+				<p class="visually-hidden" aria-live="polite" data-live></p>
+			</div>
+		</div>
+	</div>
+	{/* the page's cable arriving: down the lane, through the card's edge into the stage's gland (drawn by the panel) */}
+	<svg class="contact-lead" data-contact-lead aria-hidden="true" focusable="false"><path data-cl-ins d="M0 0" fill="none" stroke="#173C78" stroke-linejoin="round" stroke-linecap="butt"></path><path data-cl-card d="M0 0" fill="none" stroke="#F4F1EC" stroke-linejoin="round" stroke-linecap="butt"></path><path data-cl-cu d="M0 0" fill="none" stroke="#C9632C" stroke-linecap="butt"></path></svg>
+	<span class="sleeve sleeve--live" aria-hidden="true" data-sleeve><span class="sleeve__t">{c.eyebrow}</span></span>
+</section>
+
+<style>
+	.cmp--contact {
+		--card-pad: 16px;
+		/* the form's gutter: on two columns the form's wire runs down its middle (client note 17) */
+		--gut: 30px;
+		position: relative;
+		z-index: 1;
+		padding-top: var(--section-pad);
+	}
+
+	.contact__wrap {
+		padding-inline: calc(var(--lane) + var(--duct) / 2 + var(--mgap));
+	}
+
+	.card {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		padding: 28px var(--card-pad) 32px;
+		background: var(--blue);
+		border-radius: var(--r-mod);
+		--focus: var(--cu-light);
+		--tbd-ink: var(--paper);
+	}
+
+	/* the heading block the wire-marker sleeve frames (client note 8) */
+	.card__head {
+		--sl-x: calc(-1 * (var(--duct) / 2 + var(--mgap) + var(--card-pad)));
+		--br-gap: min(16px, calc(var(--card-pad) - 6px));
+	}
+
+	.card__title {
+		max-width: 20em;
+		font-size: 29px;
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.card__answer {
+		margin-top: 8px;
+		font-size: 19px;
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: -0.015em;
+		color: var(--paper);
+	}
+
+	/* phones and tablets: heading, the invitation, the cell and its station, then the form right under them (the robots and
+	   the first boxes they build share one view) */
+	.card__intro {
+		margin-top: 14px;
+		order: 1;
+	}
+
+	/* short screens (phones on their side, 1024 × 600): the cell and its station must fit under the bar with the heading
+	   (note 7), so the invitation follows the cell there */
+	@media (max-width: 699px) and (max-height: 520px), (min-width: 700px) and (max-width: 1099px) and (max-height: 800px) {
+		.card__intro {
+			margin-top: 18px;
+			order: 4;
+		}
+	}
+
+	.card__body {
+		font-size: 16px;
+		line-height: 1.55;
+		max-width: 44ch;
+		color: var(--mist);
+	}
+
+	.card__time {
+		margin-top: 8px;
+		font-size: 15px;
+		color: var(--mist);
+	}
+
+	/* ---------------- the cell and the form: one box for the sticky cell on tall phones, no box elsewhere (its children are
+	   the card's grid items, review 3) */
+	.work {
+		display: contents;
+	}
+
+	.show-anchor {
+		display: none;
+	}
+
+	/* tall phones (review 3, S4): the cell and its station stay in view under the bar while the robots build the boxes below
+	   them (time-based, never scroll-jacking: native sticky inside this box, released at the form's end). The player turns it
+	   on only while the build runs (data-follow) and paints the cell's own ground once it is stuck (data-stuck); an intent,
+	   STOP, the robots parked or Send release it (a short fade if it is stuck) */
+	@media (max-width: 699px) and (min-height: 640px) {
+		.work {
+			display: block;
+			order: 2;
+		}
+
+		.show-anchor {
+			display: block;
+			height: 0;
+		}
+
+		.show[data-follow] {
+			position: sticky;
+			top: calc(var(--nav-h) + 6px);
+		}
+
+		.show[data-stuck] {
+			z-index: 3;
+		}
+
+		.show[data-stuck]::before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			inset: -12px calc(-1 * var(--card-pad)) 0;
+			background: #173c78;
+		}
+
+		.show[data-stuck]::after {
+			content: '';
+			position: absolute;
+			left: calc(-1 * var(--card-pad));
+			right: calc(-1 * var(--card-pad));
+			top: 100%;
+			height: 18px;
+			background: linear-gradient(#173c78, rgb(23 60 120 / 0));
+			pointer-events: none;
+		}
+
+		.show[data-unstick] {
+			opacity: 0;
+			transition: opacity 0.24s ease;
+		}
+	}
+
+	/* ---------------- the showpiece: a live cell on the card's blue (no frame, no player chrome, no camera moves) */
+	.show {
+		position: relative;
+		margin: 18px 0 0;
+		order: 2;
+		/* (the station's conduit is sized on the cell's width: container units) */
+		container-type: inline-size;
+	}
+
+	.show__stage {
+		position: relative;
+		line-height: 0;
+		aspect-ratio: 2;
+	}
+
+	/* phones: the whole cell, as wide as the card (its padding too): no camera, no zoom (client note 17) */
+	@media (max-width: 699px) {
+		.show__stage {
+			margin-inline: calc(-1 * var(--card-pad) + 2px);
+		}
+	}
+
+	/* phones on their side (≤ 520 px tall): the cell and its station fit under the bar together (note 7), so the cell is as
+	   wide as twice the height left for it, centred, its station under its right end */
+	@media (max-width: 699px) and (max-height: 520px) {
+		.show {
+			width: min(100%, calc((100svh - 165px) * 2));
+			margin-inline: auto;
+		}
+
+		.show__stage {
+			margin-inline: 0;
+		}
+
+		.station::before {
+			height: calc(18.48cqw + 10px);
+		}
+	}
+
+	/* short tablets and small laptops (700–1099 px wide, 521–800 px tall: 1024 × 600): the cell under the heading and the
+	   intro still ends above the fold, so it is at most twice the height left under them, centred */
+	@media (min-width: 700px) and (max-width: 1099px) and (min-height: 521px) and (max-height: 800px) {
+		.show {
+			width: min(100%, calc((100svh - 250px) * 2));
+			margin-inline: auto;
+		}
+	}
+
+	.show__svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		transition: opacity 0.3s ease;
+	}
+
+	/* the page's cable −W0 enters the cell at its own width (non-scaling stroke, a width: never a paint; literal px, the
+	   page cable's widths of global.css: no var() inside SVG, note 9) */
+	.show__svg :global([data-w0]) {
+		stroke-width: 5px;
+	}
+
+	@media (min-width: 700px) {
+		.show__svg :global([data-w0]) {
+			stroke-width: 7px;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.show__svg :global([data-w0]) {
+			stroke-width: 10px;
+		}
+	}
+
+	/* the settle to the end frame on an intent (review 3): a copy of the drawing over the live one, fading out (the player) */
+	.show__ghost {
+		position: absolute;
+		left: 0;
+		top: 0;
+		pointer-events: none;
+	}
+
+	/* ---------------- the operator station: two real pushbuttons (IEC 60073: blue = reset, red = stop); no tag, no code */
+	.station {
+		position: relative;
+		display: flex;
+		align-items: flex-end;
+		gap: 8px;
+		width: max-content;
+		margin: 10px 0 0 auto;
+		padding: 8px 8px 5px;
+		background: #0d1b2e;
+		border: 1px solid #46546a;
+		border-radius: 6px;
+		line-height: 1;
+	}
+
+	html:not(.js) .station {
+		display: none;
+	}
+
+	/* its conduit up to the bench's floor (phones: the station hangs under the stage box; the floor is 18.48 % of the stage's
+	   width above the stage's bottom, the stage being the cell plus the card's padding less 2 px each side, then the station's
+	   10 px margin): one line from the floor into the station, never a loose stub */
+	.station::before {
+		content: '';
+		position: absolute;
+		right: 28px;
+		bottom: 100%;
+		width: 3px;
+		height: 10px;
+		height: calc(18.48cqw + 0.1848 * (2 * var(--card-pad) - 4px) + 10px);
+		background: #5a6676;
+	}
+
+	.pb {
+		display: grid;
+		justify-items: center;
+		gap: 4px;
+		min-width: 44px;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: #e2e6eb;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.pb__ring {
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		background: #2b3a52;
+		box-shadow: inset 0 0 0 2px #9aa6b5, inset 0 0 0 4px #1b2940;
+		transition: box-shadow 0.25s ease;
+	}
+
+	.pb__cap {
+		display: block;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		transition:
+			transform 0.12s ease,
+			background 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+
+	/* RESET: a flush blue cap; lit (the job has finished, or the robots are stopped): it glows, inviting the press */
+	.pb--reset .pb__cap {
+		background: radial-gradient(circle at 42% 36%, #3c64a6, #24508f 62%, #1c4280);
+		box-shadow: inset 0 0 0 1.5px #2e5a9e;
+	}
+
+	.show[data-lamp] .pb--reset .pb__cap {
+		background: radial-gradient(circle at 42% 36%, #c4d8f6, #7ea6e6 48%, #4f7fd0);
+		box-shadow:
+			inset 0 0 0 1.5px #a9c4ee,
+			0 0 0 3px rgb(126 166 230 / 0.22),
+			0 0 16px rgb(126 166 230 / 0.6);
+	}
+
+	/* STOP: a red mushroom; latched it stays pushed in */
+	.pb--stop .pb__cap {
+		width: 34px;
+		height: 34px;
+		background: radial-gradient(circle at 40% 34%, #e8776c, #c23b31 56%, #8f241d);
+		box-shadow:
+			0 2px 0 #5e1813,
+			inset 0 0 0 1px #d9564b;
+	}
+
+	.pb--stop[aria-pressed='true'] .pb__cap {
+		transform: scale(0.9) translateY(1px);
+		background: radial-gradient(circle at 40% 34%, #c95a50, #a3302a 56%, #7a1f19);
+		box-shadow: inset 0 1px 2px #5e1813;
+	}
+
+	.pb:active .pb__cap,
+	.pb[data-press] .pb__cap {
+		transform: scale(0.93);
+	}
+
+	/* RESET pressed mid-job (review 3, SP-07): the robots finish the move they are in first; the cap holds pressed and its
+	   lamp blinks until the reset starts */
+	.show[data-held] .pb--reset .pb__cap {
+		transform: scale(0.93);
+		animation: pb-held 0.5s steps(1, end) infinite;
+	}
+
+	@keyframes pb-held {
+		0% {
+			background: radial-gradient(circle at 42% 36%, #c4d8f6, #7ea6e6 48%, #4f7fd0);
+		}
+		50% {
+			background: radial-gradient(circle at 42% 36%, #3c64a6, #24508f 62%, #1c4280);
+		}
+	}
+
+	/* reduced motion (client note 17: RESET does nothing heavy): the station is inert, its buttons unlit and flat */
+	.show[data-inert] .pb {
+		cursor: default;
+	}
+
+	.show[data-inert] .pb__cap {
+		opacity: 0.55;
+	}
+
+	.show[data-inert] .pb:hover .pb__ring {
+		box-shadow: inset 0 0 0 2px #9aa6b5, inset 0 0 0 4px #1b2940;
+	}
+
+	.pb:hover .pb__ring {
+		box-shadow: inset 0 0 0 2px #e2e6eb, inset 0 0 0 4px #1b2940;
+	}
+
+	.pb:focus-visible {
+		outline: none;
+	}
+
+	.pb:focus-visible .pb__ring {
+		outline: 3px solid var(--cu-light);
+		outline-offset: 3px;
+	}
+
+	.pb__leg {
+		font-size: 9.5px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		color: #e2e6eb;
+	}
+
+	/* ---------------- direct contact */
+	.direct {
+		order: 6;
+		margin-top: 28px;
+		display: grid;
+		gap: 4px;
+		justify-items: start;
+	}
+
+	.direct__label,
+	.direct__addr,
+	.direct__li {
+		font-size: 15px;
+		color: var(--mist);
+	}
+
+	.direct__li {
+		color: var(--paper);
+	}
+
+	.direct__email {
+		font-size: 21px;
+		font-weight: 500;
+		color: var(--paper);
+		text-underline-offset: 0.18em;
+	}
+
+	/* ---------------- the form and the confirmation share one grid cell (no layout shift when one replaces the other) */
+	.formcell {
+		order: 5;
+		display: grid;
+		margin-top: 24px;
+	}
+
+	.formcell > * {
+		grid-area: 1 / 1;
+		min-width: 0;
+	}
+
+	.form__fields {
+		display: grid;
+		gap: 18px;
+	}
+
+	.form__row {
+		display: grid;
+		gap: 18px;
+	}
+
+	.field {
+		position: relative;
+		display: grid;
+		gap: 7px;
+		align-content: start;
+	}
+
+	.field label,
+	.consent label {
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--paper);
+	}
+
+	.req,
+	.opt {
+		font-weight: 400;
+		color: var(--mist);
+	}
+
+	.box {
+		position: relative;
+	}
+
+	.form input[type='text'],
+	.form input[type='email'],
+	.form select,
+	.form textarea {
+		display: block;
+		width: 100%;
+		min-height: 48px;
+		padding: 11px 14px;
+		border: 0;
+		border-bottom: 2px solid var(--steel-light);
+		border-radius: 0;
+		background: var(--blue-2);
+		color: var(--paper);
+		font: 400 16px / 1.4 var(--font-text);
+		appearance: none;
+	}
+
+	.form textarea {
+		resize: vertical;
+		min-height: 84px;
+	}
+
+	.form ::placeholder {
+		color: var(--mist);
+		opacity: 0.85;
+	}
+
+	/* a long placeholder in a narrow box ends on an ellipsis, never on half a letter */
+	.form input {
+		text-overflow: ellipsis;
+	}
+
+	.form input:focus-visible,
+	.form select:focus-visible,
+	.form textarea:focus-visible {
+		outline: 3px solid var(--cu-light);
+		outline-offset: 0;
+		border-bottom-color: var(--paper);
+	}
+
+	.form input:hover,
+	.form select:hover,
+	.form textarea:hover {
+		border-bottom-color: var(--paper);
+	}
+
+	/* a valid required box: its rule turns copper (success) */
+	[data-valid] :is(input, select, textarea) {
+		border-bottom-color: var(--cu-light);
+	}
+
+	/* autofill is an intent (the player listens for this animation's start) */
+	.form :is(input, select, textarea):-webkit-autofill {
+		animation: cf-autofill 1ms;
+	}
+
+	@keyframes cf-autofill {
+		from {
+			outline-color: inherit;
+		}
+	}
+
+	/* (review 3, S6) the chosen option never runs under the chevron */
+	.form .select select {
+		padding-right: 40px;
+		text-overflow: ellipsis;
+	}
+
+	.select::after {
+		content: '';
+		position: absolute;
+		right: 16px;
+		top: 50%;
+		width: 8px;
+		height: 8px;
+		border-right: 2px solid var(--paper);
+		border-bottom: 2px solid var(--paper);
+		transform: translateY(-70%) rotate(45deg);
+		pointer-events: none;
+	}
+
+	.form select option {
+		color: var(--ink);
+		background: var(--paper);
+	}
+
+	.hint {
+		font-size: 13.5px;
+		line-height: 1.4;
+		color: var(--mist);
+	}
+
+	.consent {
+		position: relative;
+		display: grid;
+		grid-template-columns: 22px minmax(0, 1fr);
+		gap: 12px;
+		align-items: start;
+	}
+
+	.consent__box {
+		display: block;
+		width: 22px;
+		height: 22px;
+		margin-top: 1px;
+	}
+
+	.consent input {
+		display: block;
+		width: 22px;
+		height: 22px;
+		margin: 0;
+		accent-color: var(--cu-light);
+	}
+
+	.consent label {
+		font-weight: 400;
+		line-height: 1.45;
+		font-size: 14.5px;
+	}
+
+	.consent a {
+		color: var(--paper);
+	}
+
+	.submit-row {
+		display: grid;
+		margin-top: 4px;
+	}
+
+	.form__submit {
+		position: relative;
+		width: 100%;
+		min-height: 56px;
+		font-size: 17px;
+		isolation: isolate;
+	}
+
+	/* the request complete: Send's ready ring */
+	.submit-row[data-armed] .form__submit {
+		box-shadow: 0 0 0 3px var(--blue), 0 0 0 5px var(--cu-light);
+	}
+
+	.form__submit[data-press] {
+		transform: scale(0.985);
+	}
+
+	.form__helper {
+		margin-top: 10px;
+		font-size: 13.5px;
+		line-height: 1.45;
+		color: var(--mist);
+	}
+	/* without JS the form posts to mailto: directly; its <noscript> line says what happens, so the scripted line goes
+	   (verifier pass: both said the same thing twice) */
+	:global(html:not(.js)) .form__helper--js {
+		display: none;
+	}
+
+	/* the caret a built text box shows twice (laid out always, shown only by the power-up) */
+	.caret {
+		position: absolute;
+		left: 15px;
+		top: 50%;
+		width: 1.5px;
+		height: 20px;
+		margin-top: -10px;
+		background: var(--paper);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.caret--top {
+		top: 13px;
+		margin-top: 0;
+	}
+
+	/* ---------------- client note 17: the robots build the form (form.ts; only with JS, in motion, under data-build) */
+	.form[data-build] [data-part] {
+		--slot-a: 0.26;
+		--dl: calc(var(--bd, 0ms) + var(--ud, 0ms));
+	}
+
+	.form[data-build][data-plate] [data-part] {
+		--slot-a: 0.5;
+	}
+
+	.form[data-build] [data-part] :is(label, .hint, .caret) {
+		transition:
+			opacity 0.32s ease var(--dl),
+			transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) var(--dl);
+	}
+
+	.form[data-build] [data-part] :is(input, select, textarea) {
+		transition:
+			background-color 0.3s ease var(--dl),
+			border-color 0.3s ease var(--dl),
+			outline-color 0.3s ease var(--dl),
+			color 0.25s ease var(--dl);
+	}
+
+	.form[data-build] [data-part] ::placeholder {
+		transition: color 0.4s ease calc(var(--dl) + 0.1s);
+	}
+
+	.form[data-build] .select::after,
+	.form[data-build] .consent__box input {
+		transition: opacity 0.3s ease var(--dl);
+	}
+
+	/* the slot: the box a faint dashed outline (brighter once the cell's work light is on), nothing else */
+	.form[data-build] [data-fb] :is(label, .hint) {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	.form[data-build] [data-fb] :is(input:not([type='checkbox']), select, textarea) {
+		background-color: transparent;
+		border-bottom-color: transparent;
+		outline: 1px dashed rgb(226 230 235 / var(--slot-a));
+		outline-offset: -1px;
+		color: transparent;
+	}
+
+	.form[data-build] [data-fb] ::placeholder {
+		color: transparent;
+	}
+
+	.form[data-build] [data-fb] textarea {
+		resize: none;
+	}
+
+	.form[data-build] [data-fb] .select::after,
+	.form[data-build] [data-fb] .consent__box input {
+		opacity: 0;
+	}
+
+	.form[data-build] [data-fb] .consent__box {
+		outline: 1px dashed rgb(226 230 235 / var(--slot-a));
+		outline-offset: -1px;
+	}
+
+	/* the pulse has arrived: the drawn outline takes over from the dashed one */
+	.form[data-build] [data-fb='1'] :is(input:not([type='checkbox']), select, textarea),
+	.form[data-build] [data-fb='1'] .consent__box {
+		outline-color: transparent;
+	}
+
+	/* Send: a dashed slot; built, its copper fills from the centre outward, then its label */
+	.form[data-build] [data-part='send'] .form__submit {
+		transition:
+			background-color 0.2s ease calc(var(--dl) + 0.3s),
+			color 0.25s ease calc(var(--dl) + 0.18s),
+			outline-color 0.3s ease var(--dl);
+	}
+
+	.form[data-build] [data-part='send'] .form__submit::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--cu-light);
+		transform: scaleX(1);
+		transition: transform 0.36s cubic-bezier(0.2, 0.7, 0.2, 1) var(--dl);
+	}
+
+	.form[data-build] [data-part='send'][data-fb] .form__submit {
+		background-color: transparent;
+		color: transparent;
+		outline: 1px dashed rgb(226 230 235 / var(--slot-a));
+		outline-offset: -1px;
+		/* powering down (a RESET): the copper collapses to the centre (its ::before), never a muddy cross-fade over the blue */
+		transition:
+			background-color 0s linear,
+			color 0.12s ease,
+			outline-color 0.3s ease 0.2s;
+	}
+
+	.form[data-build] [data-part='send'][data-fb='1'] .form__submit {
+		outline-color: transparent;
+	}
+
+	.form[data-build] [data-part='send'][data-fb] .form__submit::before {
+		transform: scaleX(0);
+		transition: transform 0.26s cubic-bezier(0.55, 0, 0.8, 0.2);
+	}
+
+	.form[data-build] .form__helper {
+		transition: opacity 0.4s ease;
+	}
+
+	.form[data-build]:has([data-part='send'][data-fb]) .form__helper {
+		opacity: 0;
+	}
+
+	/* the power-up's one-off accents (never after an intent: the visitor is typing) */
+	[data-pw] .caret {
+		animation: cf-caret 1.1s steps(1, end) 0.18s both;
+	}
+
+	@keyframes cf-caret {
+		0%,
+		50% {
+			opacity: 1;
+		}
+		25%,
+		75%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	[data-pw] .select::after {
+		animation: cf-lever 0.62s cubic-bezier(0.3, 1.5, 0.5, 1) 0.06s both;
+	}
+
+	@keyframes cf-lever {
+		from {
+			transform: translateY(-30%) rotate(225deg);
+		}
+		to {
+			transform: translateY(-70%) rotate(45deg);
+		}
+	}
+
+	[data-pw] .consent__box input {
+		animation: cf-snap 0.38s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+	}
+
+	@keyframes cf-snap {
+		from {
+			transform: scale(0.55);
+		}
+		to {
+			transform: scale(1);
+		}
+	}
+
+	[data-pw][data-part='send'] .form__submit {
+		animation: cf-glow 0.9s ease-out 0.35s both;
+	}
+
+	@keyframes cf-glow {
+		0% {
+			box-shadow: 0 0 0 0 rgb(236 138 82 / 0.55);
+		}
+		100% {
+			box-shadow: 0 0 0 14px rgb(236 138 82 / 0);
+		}
+	}
+
+	/* ---------------- the confirmation replaces the form in the same cell, bottom-aligned where Send was */
+	.form[data-sent] {
+		visibility: hidden;
+	}
+
+	.receipt {
+		align-self: end;
+		padding: 24px 22px;
+		background: var(--ink);
+		border: 1px solid #24508f;
+		border-radius: 10px;
+	}
+
+	.receipt[hidden] {
+		display: none;
+	}
+
+	html.motion .receipt[data-appear] {
+		animation: receipt-in 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+	}
+
+	@keyframes receipt-in {
+		from {
+			clip-path: inset(100% 0 0 0 round 10px);
+		}
+		to {
+			clip-path: inset(0 0 0 0 round 10px);
+		}
+	}
+
+	.receipt__h {
+		font-size: 24px;
+		line-height: 1.18;
+		letter-spacing: -0.015em;
+	}
+
+	.receipt__h:focus {
+		outline: none;
+	}
+
+	/* one sentence; "Nothing opened?" is its other version in the same grid cell, shown only if no mail app took over within
+	   1.8 s (no layout shift) */
+	.receipt__lead {
+		display: grid;
+		margin: 10px 0 16px;
+		font-size: 15px;
+		line-height: 1.5;
+		color: var(--paper);
+	}
+
+	.receipt__say {
+		grid-area: 1 / 1;
+	}
+
+	.receipt__lead:not([data-on]) [data-say='nothing'],
+	.receipt__lead[data-on] [data-say='ready'] {
+		visibility: hidden;
+	}
+
+	.receipt__more {
+		margin-bottom: 12px;
+		font-size: 14px;
+		line-height: 1.5;
+		color: var(--mist);
+	}
+
+	.receipt__more summary {
+		cursor: pointer;
+		color: var(--paper);
+		font-weight: 500;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.receipt__more p {
+		margin: 6px 0 8px;
+	}
+
+	.receipt__acts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-bottom: 12px;
+	}
+
+	.receipt__open {
+		min-height: 44px;
+		padding: 10px 16px;
+		font-size: 15px;
+	}
+
+	.receipt__ghost {
+		min-height: 44px;
+		padding: 9px 14px;
+		border: 1.5px solid var(--mist);
+		background: transparent;
+		color: var(--paper);
+		font: 500 14.5px var(--font-text);
+		cursor: pointer;
+	}
+
+	.receipt__preview {
+		margin-bottom: 12px;
+		padding: 10px;
+		max-height: 160px;
+		overflow: auto;
+		font: 12px/1.5 var(--font-mono);
+		white-space: pre-wrap;
+		color: var(--paper);
+		background: #172a44;
+		user-select: all;
+	}
+
+	.receipt__fine {
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--mist);
+	}
+
+	.receipt__change {
+		margin-top: 10px;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--paper);
+		font: 500 14px var(--font-text);
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+		cursor: pointer;
+	}
+
+	/* the form's wire (an overlay over the card: never under the pointer, never in the layout; the script draws it) */
+	.build-wire {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	html:not(.js) .build-wire {
+		display: none;
+	}
+
+	/* print: the form as the visitor would fill it (built), no wire */
+	@media print {
+		.build-wire {
+			display: none;
+		}
+
+		.form[data-build] [data-fb] :is(label, .hint, .consent__box input),
+		.form[data-build] [data-fb] .select::after {
+			opacity: 1 !important;
+		}
+
+		.form[data-build] [data-fb] :is(label, .hint) {
+			transform: none !important;
+		}
+
+		.form[data-build] [data-fb] :is(input:not([type='checkbox']), select, textarea, .form__submit) {
+			outline: none !important;
+			color: inherit !important;
+			background-color: var(--blue-2) !important;
+		}
+
+		.form[data-build] .form__helper {
+			opacity: 1 !important;
+		}
+	}
+
+	/* the confirmation replaces the form: its wire goes with it (display, not visibility: the terminals' dots set their own
+	   visibility and would show through a hidden parent) */
+	.card[data-sent] .build-wire,
+	.card:has(.form[data-sent]) .build-wire {
+		display: none;
+	}
+
+	/* the page's cable arriving (motion only; the static page draws the lane up to the card edge) */
+	.contact-lead {
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: visible;
+		pointer-events: none;
+		z-index: 3;
+	}
+
+	html:not(.motion) .contact-lead {
+		display: none;
+	}
+
+	/* the Contact sleeve rides over the arriving cable like every other sleeve (review 3, S2: the lead painted over its print) */
+	.cmp--contact > .sleeve--live {
+		z-index: 4;
+	}
+
+	/* ---------------- tablets */
+	@media (min-width: 700px) {
+		.cmp--contact {
+			--card-pad: 32px;
+		}
+
+		.card {
+			padding: 40px var(--card-pad) 44px;
+		}
+
+		.card__title {
+			font-size: 40px;
+			line-height: 1.05;
+		}
+
+		.card__answer {
+			font-size: 22px;
+		}
+
+		/* the station hangs under the bench at the cell's lower left (render.ts STATION: its conduit comes down from the
+		   floor into its top), its buttons over that spot */
+		.station::before {
+			display: none;
+		}
+
+		.station {
+			position: absolute;
+			left: 0.4%;
+			bottom: 2.2%;
+			margin: 0;
+			gap: 7px;
+			padding: 7px 7px 5px;
+		}
+
+		.pb {
+			min-width: 40px;
+		}
+
+		.pb__ring {
+			width: 40px;
+			height: 40px;
+		}
+
+		.pb__cap {
+			width: 27px;
+			height: 27px;
+		}
+
+		.pb--stop .pb__cap {
+			width: 31px;
+			height: 31px;
+		}
+
+		/* (review 3, S10) the form's wire crosses midway between the cell and the first labels */
+		.formcell {
+			margin-top: 52px;
+		}
+
+		/* two columns throughout: the form's wire runs down the gutter between them; the boxes of a row share their line
+		   (labels of one or two lines: subgrid) */
+		.form__fields {
+			row-gap: 16px;
+		}
+
+		.form__row {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: auto auto auto;
+			column-gap: var(--gut);
+			row-gap: 0;
+		}
+
+		.form__row > .field {
+			grid-row: span 3;
+			grid-template-rows: subgrid;
+			gap: 0;
+		}
+
+		.form__row > :first-child {
+			grid-column: 1;
+		}
+
+		.form__row > :last-child {
+			grid-column: 2;
+		}
+
+		.form__row > .field > label {
+			align-self: end;
+			margin-bottom: 7px;
+		}
+
+		.form__row > .field > .hint {
+			margin-top: 6px;
+		}
+
+		.form__row > .consent {
+			grid-row: 2;
+			align-self: start;
+		}
+
+		.form__row > .consent .consent__box {
+			margin-top: 2px;
+		}
+	}
+
+	/* ---------------- desktops: the cell next to the form (12 columns: the cell 1–7, the form 8–12) */
+	@media (min-width: 1100px) {
+		.cmp--contact {
+			--card-pad: 48px;
+		}
+
+		.card {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: 28px;
+			padding: 36px var(--card-pad) 44px;
+		}
+
+		/* one composition: the heading, the cell right under it, the invitation and the direct contact on the left; the form
+		   beside them from the card's top, as tall as they are. The cell's feed leaves the duct near the form's top, rises in
+		   the gap and enters the form over its first row (a short, calm trunk) */
+		.card {
+			grid-template-rows: auto auto auto 1fr;
+		}
+
+		.card__head {
+			grid-column: 1 / span 7;
+			grid-row: 1;
+		}
+
+		.card__title {
+			font-size: 44px;
+			line-height: 1.04;
+			letter-spacing: -0.035em;
+		}
+
+		.card__answer {
+			font-size: 24px;
+		}
+
+		.show {
+			grid-column: 1 / span 7;
+			grid-row: 2;
+			align-self: start;
+			margin-top: 22px;
+		}
+
+		.card__intro {
+			grid-column: 1 / span 7;
+			grid-row: 3;
+			margin-top: 20px;
+		}
+
+		.card__body {
+			max-width: 56ch;
+		}
+
+		.direct {
+			grid-column: 1 / span 7;
+			grid-row: 4;
+			align-self: end;
+			margin-top: 18px;
+			grid-template-columns: auto auto;
+			justify-content: start;
+			column-gap: 18px;
+			align-items: baseline;
+		}
+
+		.direct__email {
+			font-size: 18px;
+		}
+
+		.formcell {
+			grid-column: 8 / -1;
+			grid-row: 1 / span 4;
+			margin-top: 10px;
+			align-self: start;
+		}
+
+		.form__fields {
+			row-gap: 13px;
+		}
+
+		.form input[type='text'],
+		.form input[type='email'],
+		.form select,
+		.form textarea {
+			min-height: 44px;
+			padding: 9px 13px;
+			font-size: 15.5px;
+		}
+
+		.form textarea {
+			min-height: 78px;
+		}
+
+		.caret {
+			left: 14px;
+		}
+
+		.field label,
+		.consent label {
+			font-size: 14.5px;
+		}
+
+		.consent label {
+			font-size: 13.5px;
+		}
+
+		.hint {
+			font-size: 12.5px;
+		}
+
+		.form__submit {
+			min-height: 52px;
+		}
+	}
+
+	/* compact desktops (1280 × 720, 1366 × 768, 1536 × 864): the form starts at the card's top beside the heading; the cell,
+	   the form and Send share one viewport with the card's top under the nav */
+	@media (min-width: 1100px) and (max-height: 880px) {
+		.card {
+			padding-top: 26px;
+			padding-bottom: 30px;
+		}
+
+		.card__title {
+			font-size: 36px;
+		}
+
+		.card__answer {
+			font-size: 20px;
+		}
+
+		.card__body {
+			font-size: 14.5px;
+		}
+
+		.show {
+			margin-top: 12px;
+		}
+
+		.card__intro {
+			margin-top: 12px;
+		}
+
+		/* (review 3, S10: room above the first labels for the form's wire, ≥ 30 px from them) */
+		.formcell {
+			margin-top: 18px;
+		}
+
+		.form input[type='text'],
+		.form input[type='email'],
+		.form select,
+		.form textarea {
+			min-height: 38px;
+			padding: 7px 12px;
+			font-size: 14.5px;
+		}
+
+		.form textarea {
+			min-height: 62px;
+		}
+
+		.hint {
+			display: none;
+		}
+
+		.form__fields {
+			row-gap: 10px;
+		}
+
+		.form__submit {
+			min-height: 48px;
+		}
+
+		.caret {
+			height: 17px;
+			margin-top: -8.5px;
+		}
+
+		.caret--top {
+			top: 10px;
+			margin-top: 0;
+		}
+	}
+
+	/* landscape phones and short tablets: two columns, the cell at the left, its station under it; the form at the right in
+	   one column (its wire runs down the gap between them) */
+	@media (min-width: 700px) and (max-width: 1099px) and (max-height: 520px) {
+		.card {
+			grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+			column-gap: 32px;
+		}
+
+		.card__head {
+			grid-column: 1 / -1;
+			grid-row: 1;
+		}
+
+		/* (review 3, SP-05) the invitation under the cell, beside the form's end: the cell and its station stay whole under
+		   the bar with the heading */
+		.card__intro {
+			grid-column: 1;
+			grid-row: 5;
+		}
+
+		.show {
+			grid-column: 1;
+			grid-row: 2 / span 3;
+			align-self: start;
+		}
+
+		.station {
+			position: relative;
+			left: auto;
+			bottom: auto;
+			margin: 10px 0 0 auto;
+		}
+
+		.station::before {
+			display: block;
+			height: calc(18.48cqw + 10px);
+		}
+
+		.formcell {
+			grid-column: 2;
+			grid-row: 2 / span 4;
+			margin-top: 18px;
+		}
+
+		.direct {
+			grid-column: 1 / -1;
+			grid-row: 6;
+		}
+
+		.form__row {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: none;
+			row-gap: 16px;
+		}
+
+		.form__row > .field {
+			grid-row: auto;
+			grid-template-rows: none;
+			gap: 7px;
+		}
+
+		.form__row > .field > label {
+			margin-bottom: 0;
+		}
+
+		.form__row > .consent {
+			grid-row: auto;
+		}
+
+		.form__row > :first-child,
+		.form__row > :last-child {
+			grid-column: auto;
+		}
+	}
+</style>

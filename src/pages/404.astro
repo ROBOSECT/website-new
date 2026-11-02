@@ -1,0 +1,165 @@
+---
+/**
+ * 404 = a blown fuse (MOTION-SPEC v4 §7). Static: the lead comes down out of the duct into a fuse whose element is broken
+ * and whose LED is off. The robot pair stands parked beside it in the cell. No device tag on screen (client note 17): the
+ * status code is the only number.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Device from '../components/panel/Device.astro';
+import { copy } from '../i18n/copy';
+import { CELL_BOX, parkedMarkup } from '../scripts/panel/robot/draw';
+
+const en = copy.en.notFound;
+const it = copy.it.notFound;
+// the robot pair stands parked beside the blown fuse: L with its gripper, R with its probe (LED off)
+const pair = parkedMarkup({ tool: { L: 'gripper', R: 'probe' }, rack: { L: [null, null], R: [null, null] } }, 3.8, false);
+---
+
+<BaseLayout title={en.metaTitle} lang="en" noindex>
+	<section class="nf" aria-labelledby="nf-title">
+		<div class="nf__text">
+			<p class="nf__tag">404</p>
+			<h1 id="nf-title">{en.title}</h1>
+			<p class="nf__line">{en.line}</p>
+			<p class="nf__line nf__line--it" lang="it">{it.title} {it.line}</p>
+			<p class="nf__actions">
+				<a class="btn on-dark" href="/">{en.back}</a>
+				<a class="text-link" href="/it/" lang="it" hreflang="it">{it.back}</a>
+			</p>
+		</div>
+		<div class="nf__cell" aria-hidden="true">
+			<div class="nf__duct"></div>
+			<i class="nf__lead"></i>
+			<div class="nf__bench"></div>
+			<Device kind="F1" class="nf__dev" />
+			<svg class="nf__robots rb rb--plate" viewBox={`${CELL_BOX.x} ${CELL_BOX.y} ${CELL_BOX.w} ${CELL_BOX.h}`} focusable="false"><Fragment set:html={pair} /></svg>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.nf {
+		--s: 2.6;
+		display: grid;
+		gap: 56px;
+		align-items: center;
+		min-height: calc(100svh - var(--nav-h));
+		padding: 64px var(--m) 96px;
+		background: var(--plate);
+		color: var(--ink);
+		/* the robots' svg box (the full cell box, racks included) is wider than a phone; what it draws is not */
+		overflow-x: clip;
+	}
+
+	.nf__tag {
+		font-family: var(--font-mono); /* taste-skill-ignore: the status code, the one mono line on the page */
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		color: var(--steel);
+	}
+
+	.nf h1 {
+		margin-top: 16px;
+		font-size: clamp(44px, 7vw, 88px);
+		line-height: 1;
+		letter-spacing: -0.04em;
+	}
+
+	.nf__line {
+		margin-top: 20px;
+		max-width: 26em;
+		font-size: 20px;
+		line-height: 1.45;
+	}
+
+	.nf__line--it {
+		margin-top: 8px;
+		font-size: 16px;
+		color: var(--steel);
+	}
+
+	.nf__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px 28px;
+		margin-top: 36px;
+	}
+
+	.nf__cell {
+		position: relative;
+		justify-self: center;
+		width: calc(200px * var(--s));
+		max-width: 100%;
+		height: calc(24px + 112px * var(--s) + 96px * var(--s));
+	}
+
+	.nf__duct {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 24px;
+		background: var(--duct-h) 0 0 / auto 24px repeat-x;
+	}
+
+	/* the lead: out of the duct, straight down into the fuse's in-mouth; nothing comes out */
+	.nf__lead {
+		position: absolute;
+		left: calc(50% - 12px * var(--s) - 5px);
+		top: 12px;
+		width: 10px;
+		height: calc(112px * var(--s) + 12px - 12px * var(--s));
+		background: var(--blue);
+	}
+
+	.nf__bench {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(24px + 112px * var(--s) - 1.5px);
+		height: 3px;
+		border-radius: 1.5px;
+		background: var(--bench-c);
+	}
+
+	.nf__cell :global(.nf__dev) {
+		position: absolute;
+		left: calc(50% - 18px * var(--s));
+		top: calc(24px + 112px * var(--s) - 14px * var(--s));
+		width: calc(36px * var(--s));
+		height: calc(112px * var(--s));
+	}
+
+	/* the parked pair (units, cell-centred: x = 0 at the fuse, y = 0 on the bench) */
+	.nf__robots {
+		position: absolute;
+		z-index: 2;
+		left: calc(50% - 164px * var(--s));
+		top: calc(24px + 112px * var(--s) - 116px * var(--s));
+		width: calc(328px * var(--s));
+		height: calc(124px * var(--s));
+		max-width: none;
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	@media (max-width: 1099px) {
+		.nf {
+			--s: 2;
+		}
+	}
+
+	@media (max-width: 699px) {
+		.nf {
+			--s: 1.5;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.nf {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+	}
+</style>

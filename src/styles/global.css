@@ -1,124 +1,574 @@
-/* Design tokens carried over from the original robosect.it (HTML5 UP "Landed" template) */
+/*
+ * ROBOSECT, direction B2 "Il Cavo" — the panel under test.
+ * One motif: the cable. Bends are round, cuts are flat, copper is only the conductor (and success).
+ * Colours come from the logo system (logo D3 «Capocorda», robosect-brand/logo-D3); type from direction C (Inter + JetBrains Mono).
+ * Every colour below is a token. The panel itself (ducts, devices, plates, report) lives in panel.css.
+ */
 :root {
-  --color-bg: #1c1d26;
-  --color-bg-transparent: rgba(23, 24, 32, 0.95);
-  --color-panel: #272833;
-  --color-panel-transparent: rgba(39, 40, 51, 0.965);
+	/* palette */
+	--ink: #0d1b2e; /* Inchiostro: text, dark grounds */
+	--ink-2: #172a44; /* Inchiostro 2: raised dark surfaces */
+	--blue: #173c78; /* Blu cavo: brand, cable on light, links */
+	--blue-2: #24508f; /* lighter step of Blu cavo, used only as a surface under Carta text (7.1:1) */
+	--cu: #c9632c; /* Rame: the conductor, graphics only */
+	--cu-deep: #a04a1b; /* Rame scuro: copper text and fills on light (AA) */
+	--cu-light: #ec8a52; /* Rame chiaro: conductor and copper fills on dark (AA with Ink) */
+	--paper: #f4f1ec; /* Carta: light ground, cable on dark */
+	--white: #ffffff;
+	--mist: #e2e6eb; /* Nebbia: fills, never text on light */
+	--steel: #5a6676; /* Acciaio: secondary text on light */
+	--steel-light: #9aa6b5; /* Acciaio chiaro: secondary text on dark */
 
-  --color-fg-bold: #ffffff;
-  --color-fg: rgba(255, 255, 255, 0.75);
-  --color-fg-light: rgba(255, 255, 255, 0.5);
-  --color-fg-lighter: rgba(255, 255, 255, 0.15);
+	/* roles (light ground by default) */
+	--ground: var(--paper);
+	--text: var(--ink);
+	--text-soft: var(--steel);
+	--heading: var(--ink);
+	--link: var(--blue);
+	--focus: var(--cu-deep);
+	/* placeholders are steel, never copper (copper is the conductor, success and the primary action only: art 16) */
+	--tbd-ink: var(--steel);
 
-  --color-border: rgba(255, 255, 255, 0.3);
-  --color-border-bg: rgba(255, 255, 255, 0.075);
+	/* type: direction C's faces (Inter for everything read, JetBrains Mono for tags and readouts) */
+	--font-text: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-display: var(--font-text);
+	/* taste-skill-ignore: JetBrains Mono is the brand face for device tags, terminals and test readouts */
+	--font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace; /* taste-skill-ignore */
+	--t-display: clamp(34px, 9.4vw, 40px); /* hero h1 */
+	--t-display-2: 32px; /* team, the one large h2 */
+	--t-h2: clamp(28px, 7.6vw, 32px);
+	--t-h3: 20px;
+	--t-statement: 20px;
+	--t-lead: 18px;
+	--t-body: 17px;
+	--t-small: 15px;
+	--t-mono: 11px;
+	--t-readout: 11px;
 
-  --color-accent-red: #e44c65;
-  --color-accent-blue: #5480f1;
-  --color-accent-green: #39c088;
+	/* the cable: its width sets the hero wordmark size (stroke = 12 units of a 96-unit cap: logo D3, lib/cable-geometry.ts) */
+	--cable-w: 5px;
+	--cu-l: 6.75px; /* copper conductor length (tip) */
+	--bend: 18px;
+	/* page frame: content margin, and the lane the cable runs in (side duct centre, from the viewport edge) */
+	--m: 28px;
+	--lane: 9px;
+	/* the panel (MOTION-SPEC v4 §1.3; scripts/panel/program.ts tokens() mirrors these: keep in sync) */
+	--duct: 10px;
+	--slot-pitch: 8px;
+	--slot-w: 3px;
+	--jr: 5px;
+	--s: 0.88; /* stage scale: robots, racks, bench, devices */
+	--band: calc(112px * var(--s)); /* the robot cell between the H duct and the bench */
+	/* the page's stage scale under another name: a one-arm compartment multiplies it (panel.css .cmp[data-solo]) */
+	--s-g: var(--s);
+	--mgap: 2px; /* module ↔ side duct */
+	--r-mod: 12px; /* module radius */
+	--bench: 70svh; /* the pen line: the travelling copper tip rides it between compartments */
+	--pad-top: 36px; /* stage top → legend */
+	--gap-min: 28px; /* legend ↔ H duct, at least */
+	--bot-pad: 40px; /* module bottom → stage bottom */
+	--section-pad: 88px;
+	--nav-h: 52px;
+	--gap: 24px;
 
-  --font-family: 'Inter', system-ui, Helvetica, sans-serif;
-  --font-family-heading: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-  --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
-  --font-weight: 400;
-  --font-weight-bold: 600;
+	/* motion language */
+	--ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--ease-click: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ease-led: cubic-bezier(0.2, 0, 0, 1);
+}
 
-  --container-width: 70em;
-  --text-align-body: justify;
-  --border-radius: 4px;
+@media (min-width: 700px) {
+	:root {
+		--cable-w: 7px;
+		--cu-l: 9.5px;
+		--bend: 28px;
+		--m: 56px;
+		--lane: calc(var(--m) - 5.054 * var(--cable-w));
+		--duct: 16px;
+		--slot-pitch: 12px;
+		--slot-w: 4px;
+		--jr: 8px;
+		/* tablets (layout pass, client note 10): 1.15 kept the cell at the desktop's share of the width, so on a tall portrait
+		   plate it read as icons (and the viewfinder's words overflowed its bars). 1.8 at 760 px tall and more (768 × 1024:
+		   the cell ≈ 77 % of the width, as on phones; 1024 × 768 ≈ 58 %, as the 1366 × 768 desktop); shorter tablets keep 1.15
+		   (below): a larger cell there leaves too little travel for its program (1024 × 600: 2.3–3.5 notches at 1.5, 3.8–5.5
+		   at 1.15) */
+		--s: 1.8;
+		--mgap: 4px;
+		--r-mod: 16px;
+		--pad-top: 48px;
+		--gap-min: 36px;
+		--bot-pad: 56px;
+		--section-pad: 112px;
+		--t-display: clamp(2.5rem, 4.4vw, 4.25rem);
+		--t-display-2: clamp(2.25rem, 4.2vw, 4rem);
+		--t-h2: clamp(1.875rem, 3.62vw, 3.25rem);
+		--t-h3: clamp(1.25rem, 1.55vw, 1.5rem);
+		--t-statement: clamp(1.375rem, 2vw, 1.875rem);
+		--t-lead: clamp(1.125rem, 1.4vw, 1.3125rem);
+		--t-body: 1.0625rem;
+		--t-mono: 12px;
+		--t-readout: 13px;
+		--nav-h: 64px;
+		--gap: 32px;
+	}
+}
+
+@media (min-width: 700px) and (max-width: 1099px) and (max-height: 759px) {
+	:root {
+		--s: 1.15;
+	}
+}
+
+@media (min-width: 1100px) {
+	:root {
+		--cable-w: 10px;
+		--cu-l: 13.5px;
+		--bend: 40px;
+		--m: max(96px, calc((100vw - 1264px) / 2));
+		--lane: calc(var(--m) - 5.054 * var(--cable-w));
+		--duct: 24px;
+		--jr: 12px;
+		--s: 2.4; /* ≥ 1060 px tall (notes 4–5: the focal group ≈ 52 % of the width at 1440; shorter viewports step down, below) */
+		--mgap: 8px;
+		--r-mod: 20px;
+		--pad-top: 56px;
+		--gap-min: 40px;
+		--bot-pad: 64px;
+		--section-pad: 128px;
+		--nav-h: 64px;
+		--gap: 40px;
+	}
+}
+
+/* client note 7: on shorter desktop viewports the stage scale steps down, so the whole cell (robots, device) stays on screen
+   from the first device beat to the end of its program while the page carries it to the top (MOTION-SPEC §3.4) */
+@media (min-width: 1100px) and (max-height: 1059px) {
+	:root {
+		--s: 2.3;
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 939px) {
+	:root {
+		--s: 2.15; /* 1440 × 900: the focal group ≈ 49 % of the width (notes 4–5: 45–55 %; brief 3: ≥ 48 %) */
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 839px) {
+	:root {
+		--s: 1.85;
+	}
+}
+
+/* (pacing pass, art 17: 1.5 read as icons at 1280 × 720; the narrative pacing spends that screen's shorter travel on the
+   beats instead) */
+@media (min-width: 1100px) and (max-height: 759px) {
+	:root {
+		--s: 1.7;
+	}
+}
+
+/* short viewports (landscape phones, short tablets and windows): the phone scale, so the cell (robots, device) fits with
+   room to travel while its program runs (the page keeps moving, nothing clipped; scroll-engine pass, eng 3) */
+@media (max-height: 520px) {
+	:root {
+		--s: 0.88;
+	}
+
+	/* without scroll-driven animations there is no slowed travel: the cell has only its own 1× rise to run its program
+	   in, so it is smaller still (no JS: the same static page, a little smaller) */
+	:root:not(.sda) {
+		--s: 0.72;
+	}
+}
+
+/* the ROBOSECT print on every robot's forearm (client note 16; robot/draw.ts): the wordmark where the stage scale draws it
+   ≥ 1.7 px per unit (desktops, tall tablets), the small-cut R mark on phones, short screens and short tablets. A
+   display rule (never a paint). Stages that know their own scale say so with data-logo="w" | "r" (the showpiece) */
+.rb-lgw {
+	display: none;
+}
+
+@media (min-width: 700px) and (min-height: 760px), (min-width: 1100px) and (min-height: 521px) {
+	.rb-lgw {
+		display: inline;
+	}
+
+	.rb-lgr {
+		display: none;
+	}
+}
+
+[data-logo='w'] .rb-lgw {
+	display: inline;
+}
+
+[data-logo='w'] .rb-lgr {
+	display: none;
+}
+
+[data-logo='r'] .rb-lgw {
+	display: none;
+}
+
+[data-logo='r'] .rb-lgr {
+	display: inline;
+}
+
+/* dark grounds swap the roles */
+.on-dark {
+	--ground: var(--ink);
+	--text: var(--paper);
+	--text-soft: var(--steel-light);
+	--heading: var(--paper);
+	--link: var(--paper);
+	--focus: var(--cu-light);
+	--tbd-ink: var(--steel-light);
+	color: var(--text);
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html {
-  background: var(--color-bg);
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--nav-h) + 16px);
+	background: var(--ink);
 }
 
 body {
-  margin: 0;
-  font-family: var(--font-family);
-  font-weight: var(--font-weight);
-  color: var(--color-fg);
-  background: var(--color-bg);
-  line-height: 1.65;
+	position: relative;
+	margin: 0;
+	min-height: 100svh;
+	font-family: var(--font-text);
+	font-size: var(--t-body);
+	line-height: 1.6;
+	font-weight: 400;
+	font-feature-settings:
+		'ss01' 0,
+		'cv11' 1;
+	color: var(--text);
+	background: var(--paper);
+	overflow-x: clip;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.01em;
-  color: var(--color-fg-bold);
-  margin: 0 0 0.5em 0;
+	font-family: var(--font-text);
+	font-weight: 600;
+	color: var(--heading);
+	margin: 0;
+	text-wrap: balance;
 }
 
 h1 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
+	font-size: var(--t-display);
+	line-height: 1.02;
+	letter-spacing: -0.035em;
 }
 
 h2 {
-  font-size: 2.2em;
+	font-size: var(--t-h2);
+	line-height: 1.05;
+	letter-spacing: -0.03em;
+}
+
+h3 {
+	font-size: var(--t-h3);
+	line-height: 1.2;
+	letter-spacing: -0.015em;
 }
 
 p {
-  margin: 0 0 1em 0;
+	margin: 0;
+	text-wrap: pretty;
+}
+
+ul,
+ol {
+	margin: 0;
+	padding: 0;
+}
+
+img,
+video,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+img,
+video {
+	height: auto;
+}
+
+figure {
+	margin: 0;
 }
 
 a {
-  color: var(--color-accent-blue);
-  text-decoration: none;
+	color: var(--link);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
 }
 
 a:hover {
-  text-decoration: underline;
+	text-decoration-thickness: 2px;
 }
 
-.container {
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 2em;
+strong {
+	font-weight: 600;
 }
 
-section {
-  padding: 6em 0;
-  border-bottom: 1px solid var(--color-border-bg);
+:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 3px;
 }
 
-section.alt {
-  background: var(--color-panel);
+::selection {
+	background: var(--blue);
+	color: var(--paper);
 }
 
-.text-center {
-  text-align: center;
+main:focus {
+	outline: none;
 }
 
-.eyebrow {
-  display: block;
-  text-align: center;
-  font-family: var(--font-family-mono);
-  font-size: 1.05em;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-accent-blue);
-  margin-bottom: 0.7em;
+.visually-hidden {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
 }
 
-/* Justified text leaves wide word gaps on narrow screens. */
-@media (max-width: 780px) {
-  :root {
-    --text-align-body: left;
-  }
+.skip-link {
+	position: absolute;
+	left: var(--m);
+	top: 8px;
+	z-index: 100;
+	padding: 12px 18px;
+	background: var(--paper);
+	color: var(--ink);
+	font-weight: 600;
+	transform: translateY(-160%);
+	transition: transform 0.2s var(--ease-out);
 }
 
-img {
-  max-width: 100%;
-  display: block;
+.skip-link:focus {
+	transform: translateY(0);
+}
+
+/* frame: one pair of margins on every page */
+.wrap {
+	padding-inline: var(--m);
+}
+
+.section {
+	position: relative;
+	padding-block: var(--section-pad);
+}
+
+/* a 12-column grid inside the frame */
+.grid-12 {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	column-gap: var(--gap);
+}
+
+/* running text */
+.lead {
+	font-size: var(--t-lead);
+	line-height: 1.5;
+	letter-spacing: -0.005em;
+	max-width: 58ch;
+}
+
+/* a sentence set large: Inter 500, the statement size */
+.statement {
+	font-family: var(--font-text);
+	font-size: var(--t-statement);
+	font-weight: 500;
+	line-height: 1.25;
+	letter-spacing: -0.02em;
+}
+
+.soft {
+	color: var(--text-soft);
+}
+
+/* ---- buttons: flat cuts, square corners (rule 2 of the logo) ---- */
+.btn {
+	--btn-bg: var(--cu-deep);
+	--btn-fg: var(--paper);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	min-height: 52px;
+	padding: 14px 24px;
+	border: 0;
+	border-radius: 0;
+	background: var(--btn-bg);
+	color: var(--btn-fg);
+	font-family: var(--font-text);
+	font-size: 17px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: -0.005em;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color 0.18s var(--ease-out),
+		transform 0.18s var(--ease-click);
+}
+
+.btn:hover {
+	--btn-bg: #8a3e14;
+	text-decoration: none;
+}
+
+.btn:active {
+	transform: translateY(1px);
+}
+
+.on-dark .btn,
+.btn.on-dark {
+	--btn-bg: var(--cu-light);
+	--btn-fg: var(--ink);
+}
+
+.on-dark .btn:hover,
+.btn.on-dark:hover {
+	--btn-bg: #f3a170;
+}
+
+.btn--sm {
+	min-height: 40px;
+	padding: 9px 16px;
+	font-size: 15px;
+}
+
+.btn .btn__arrow {
+	width: 18px;
+	height: 18px;
+	flex: none;
+	transition: transform 0.18s var(--ease-out);
+}
+
+.btn:hover .btn__arrow {
+	transform: translateX(3px);
+}
+
+/* the quiet link that goes with a button */
+.text-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 44px;
+	font-family: var(--font-text);
+	font-weight: 500;
+	font-size: 17px;
+	line-height: 1.3;
+	color: var(--link);
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.28em;
+}
+
+@media (min-width: 700px) {
+	.text-link {
+		font-size: 17px;
+	}
+}
+
+.text-link:hover {
+	text-decoration-thickness: 2px;
+}
+
+.text-link svg {
+	width: 18px;
+	height: 18px;
+	flex: none;
+	transition: transform 0.18s var(--ease-out);
+}
+
+.text-link:hover svg {
+	transform: translateX(3px);
+}
+
+/* list bullet: a short cable end at text size */
+.cable-list {
+	list-style: none;
+	display: grid;
+	gap: 10px;
+}
+
+.cable-list li {
+	position: relative;
+	padding-left: 26px;
+}
+
+.cable-list li::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0.78em;
+	width: 14px;
+	height: 3px;
+	background: currentColor;
+	opacity: 0.55;
+}
+
+/* ---- visible placeholders: everything that still needs a real value ---- */
+.tbd {
+	display: inline;
+	padding: 0.05em 0.35em;
+	font-family: var(--font-mono); /* taste-skill-ignore: placeholder, removed before launch */
+	font-size: max(13px, 0.82em);
+	font-weight: 500;
+	letter-spacing: 0;
+	color: var(--tbd-ink);
+	background: color-mix(in srgb, var(--tbd-ink) 9%, transparent);
+	outline: 1px dashed var(--tbd-ink);
+	outline-offset: -1px;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* ---- images take the cable's bend on one corner; every other corner is a flat cut ---- */
+.bend {
+	border-radius: 0 0 0 var(--bend);
+	overflow: hidden;
+}
+
+/* ---- entrance: present without script, staggered with it ---- */
+@media (prefers-reduced-motion: no-preference) {
+	.js [data-reveal] > * {
+		opacity: 0;
+		transform: translateY(24px);
+		transition:
+			opacity 0.7s var(--ease-out),
+			transform 0.7s var(--ease-out);
+		transition-delay: calc(var(--i, 0) * 80ms);
+	}
+
+	.js [data-reveal].is-in > * {
+		opacity: 1;
+		transform: none;
+	}
 }

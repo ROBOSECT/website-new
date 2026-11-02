@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import PageHeader from '../components/site/PageHeader.astro';
 
 interface Props {
 	title: string;
@@ -10,60 +11,58 @@ interface Props {
 const { title, description, lastUpdated } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
-	<article class="legal">
-		<div class="container">
-			<a href="/" class="back-link">&larr; Back to home</a>
-			<header>
-				<h1>{title}</h1>
-				<time>Last updated: {lastUpdated}</time>
-			</header>
-			<div class="prose">
-				<slot />
-			</div>
+<BaseLayout title={title} description={description} lang="en">
+	<PageHeader title={title} back={{ href: '/', label: 'Back to home' }} meta={`Last updated: ${lastUpdated}`} />
+	<article class="legal wrap">
+		<div class="prose">
+			<slot />
 		</div>
 	</article>
 </BaseLayout>
 
 <style>
 	.legal {
-		padding-top: 4em;
-		padding-bottom: 4em;
-	}
-
-	.back-link {
-		display: inline-block;
-		margin-bottom: 2em;
-		color: var(--color-fg-light);
-	}
-
-	header {
-		margin-bottom: 2em;
-	}
-
-	time {
-		display: block;
-		font-size: 0.85em;
-		color: var(--color-fg-light);
-		margin-top: 0.5em;
+		padding-block: clamp(56px, 7vw, 104px) clamp(96px, 10vw, 152px);
+		background: var(--paper);
 	}
 
 	.prose {
-		max-width: 42em;
-		text-align: var(--text-align-body);
+		max-width: 68ch;
+		font-size: var(--t-body);
+		line-height: 1.7;
 	}
 
 	.prose :global(h2) {
-		font-size: 1.4em;
-		margin-top: 1.8em;
+		margin: 2.2em 0 0.6em;
+		font-size: clamp(22px, 2vw, 28px);
+		line-height: 1.2;
+	}
+
+	.prose :global(h2:first-child) {
+		margin-top: 0;
+	}
+
+	.prose :global(p),
+	.prose :global(ul) {
+		margin: 0 0 1.1em;
 	}
 
 	.prose :global(ul) {
-		padding-left: 1.2em;
-		margin: 0 0 1em 0;
+		padding-left: 1.3em;
 	}
 
 	.prose :global(li) {
 		margin-bottom: 0.4em;
+	}
+
+	.prose :global(li::marker) {
+		color: var(--blue);
+	}
+
+	.prose :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		padding: 0.1em 0.3em;
+		background: var(--mist);
 	}
 </style>

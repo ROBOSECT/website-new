@@ -1,0 +1,1119 @@
+/*
+ * The panel under test (MOTION-SPEC v4). The home page is a mounting plate (Nebbia) with slotted wire
+ * ducts; each section is a compartment: a legend engraved on the plate, an H duct, the robot cell and a
+ * module that opens out of its device. Layout is pure CSS (the tracks' runs included), so the page has its
+ * final height at first paint. html.motion (set before first paint, removed by reduced motion or by the
+ * watchdog) turns on the slowed travel (client note 6: the stage never sticks, it rises slower while its
+ * program scrubs) and the untested start state; without it the panel is static, tested, open.
+ *
+ * Layers inside a stage (one stacking context):
+ *   1 module · 2 blueprint · 3 legend · 4 device · 5 the lead (+ jaws) · 6 robots · 7 effects
+ */
+
+:root {
+	--plate: #e2e6eb;
+	--duct-fill: #f7f8fa;
+	--duct-edge: #b9c3cf;
+	--rim: #bac4d0;
+	--bench-c: #b9c3cf;
+	--ok-text: var(--cu-deep);
+	/* duct tiles: one slot pitch of a slotted duct (fill, comb slots in the plate colour, edges, comb lines) */
+	--duct-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8'%3E%3Crect width='10' height='8' fill='%23F7F8FA'/%3E%3Crect y='2' width='2.5' height='3' fill='%23E2E6EB'/%3E%3Crect x='7.5' y='2' width='2.5' height='3' fill='%23E2E6EB'/%3E%3Crect width='1' height='8' fill='%23B9C3CF'/%3E%3Crect x='9' width='1' height='8' fill='%23B9C3CF'/%3E%3C/svg%3E");
+	--duct-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='10'%3E%3Crect width='8' height='10' fill='%2321498A'/%3E%3Crect x='2.5' width='3' height='2.5' fill='%23173C78'/%3E%3Crect x='2.5' y='7.5' width='3' height='2.5' fill='%23173C78'/%3E%3Crect width='8' height='1' fill='%232E5A9E'/%3E%3Crect y='9' width='8' height='1' fill='%232E5A9E'/%3E%3C/svg%3E");
+	--duct-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='10'%3E%3Crect width='8' height='10' fill='%23F7F8FA'/%3E%3Crect x='2' width='3' height='2.5' fill='%23E2E6EB'/%3E%3Crect x='2' y='7.5' width='3' height='2.5' fill='%23E2E6EB'/%3E%3Crect width='8' height='1' fill='%23B9C3CF'/%3E%3Crect y='9' width='8' height='1' fill='%23B9C3CF'/%3E%3C/svg%3E");
+}
+
+@media (min-width: 700px) {
+	:root {
+		--duct-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='12'%3E%3Crect width='16' height='12' fill='%23F7F8FA'/%3E%3Crect y='4' width='4' height='4' fill='%23E2E6EB'/%3E%3Crect x='12' y='4' width='4' height='4' fill='%23E2E6EB'/%3E%3Crect x='4' width='.75' height='12' fill='%23D3D9E0'/%3E%3Crect x='11.25' width='.75' height='12' fill='%23D3D9E0'/%3E%3Crect width='1' height='12' fill='%23B9C3CF'/%3E%3Crect x='15' width='1' height='12' fill='%23B9C3CF'/%3E%3C/svg%3E");
+		--duct-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16'%3E%3Crect width='12' height='16' fill='%2321498A'/%3E%3Crect x='4' width='4' height='4' fill='%23173C78'/%3E%3Crect x='4' y='12' width='4' height='4' fill='%23173C78'/%3E%3Crect width='12' height='1' fill='%232E5A9E'/%3E%3Crect y='15' width='12' height='1' fill='%232E5A9E'/%3E%3C/svg%3E");
+		--duct-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16'%3E%3Crect width='12' height='16' fill='%23F7F8FA'/%3E%3Crect x='4' width='4' height='4' fill='%23E2E6EB'/%3E%3Crect x='4' y='12' width='4' height='4' fill='%23E2E6EB'/%3E%3Crect y='4' width='12' height='.75' fill='%23D3D9E0'/%3E%3Crect y='11.25' width='12' height='.75' fill='%23D3D9E0'/%3E%3Crect width='12' height='1' fill='%23B9C3CF'/%3E%3Crect y='15' width='12' height='1' fill='%23B9C3CF'/%3E%3C/svg%3E");
+	}
+}
+
+@media (min-width: 1100px) {
+	:root {
+		--duct-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Crect width='24' height='12' fill='%23F7F8FA'/%3E%3Crect y='4' width='6' height='4' fill='%23E2E6EB'/%3E%3Crect x='18' y='4' width='6' height='4' fill='%23E2E6EB'/%3E%3Crect x='6' width='.75' height='12' fill='%23D3D9E0'/%3E%3Crect x='17.25' width='.75' height='12' fill='%23D3D9E0'/%3E%3Crect width='1' height='12' fill='%23B9C3CF'/%3E%3Crect x='23' width='1' height='12' fill='%23B9C3CF'/%3E%3C/svg%3E");
+		--duct-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24'%3E%3Crect width='12' height='24' fill='%2321498A'/%3E%3Crect x='4' width='4' height='6' fill='%23173C78'/%3E%3Crect x='4' y='18' width='4' height='6' fill='%23173C78'/%3E%3Crect width='12' height='1' fill='%232E5A9E'/%3E%3Crect y='23' width='12' height='1' fill='%232E5A9E'/%3E%3C/svg%3E");
+		--duct-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24'%3E%3Crect width='12' height='24' fill='%23F7F8FA'/%3E%3Crect x='4' width='4' height='6' fill='%23E2E6EB'/%3E%3Crect x='4' y='18' width='4' height='6' fill='%23E2E6EB'/%3E%3Crect y='6' width='12' height='.75' fill='%23D3D9E0'/%3E%3Crect y='17.25' width='12' height='.75' fill='%23D3D9E0'/%3E%3Crect width='12' height='1' fill='%23B9C3CF'/%3E%3Crect y='23' width='12' height='1' fill='%23B9C3CF'/%3E%3C/svg%3E");
+	}
+}
+
+/* ------------------------------------------------------------------ the cabinet (mounting plate) */
+.cab {
+	position: relative;
+	background: var(--plate);
+	color: var(--ink);
+}
+
+/* side ducts: full cabinet height, in both gutters; they scroll natively (also beside a slowed stage) */
+.sduct {
+	position: absolute;
+	top: 0;
+	bottom: 48px; /* they end in the closing duct */
+	left: calc(var(--lane) - var(--duct) / 2);
+	width: var(--duct);
+	background: var(--duct-v) 0 0 / var(--duct) auto repeat-y;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.sduct--r {
+	left: auto;
+	right: calc(var(--lane) - var(--duct) / 2);
+}
+
+/* the closing duct under Contact: the ladder's last rung */
+.cab__close {
+	position: relative;
+	height: calc(var(--duct) + 72px);
+}
+
+.cab__close::before {
+	content: '';
+	position: absolute;
+	left: calc(var(--lane) - var(--duct) / 2);
+	right: calc(var(--lane) - var(--duct) / 2);
+	bottom: 48px;
+	height: var(--duct);
+	background: var(--duct-h) 0 0 / auto var(--duct) repeat-x;
+}
+
+/* ------------------------------------------------------------------ compartments */
+.cmp {
+	position: relative;
+	z-index: 1;
+	/* the cell's offset from the centre: the one-arm cells are centred on the page (review 3: --cell-du units × the scale,
+	   scripts/panel/solo.ts); on desktop a compartment may also zig-zag (--cell-dx × the viewport width, pacing pass, art
+	   12). The script reads the device where CSS put it */
+	--off: calc(var(--cell-du, 0) * 1px * var(--s));
+}
+
+@media (min-width: 1100px) {
+	.cmp {
+		--off: calc(var(--cell-dx, 0) * 100vw + var(--cell-du, 0) * 1px * var(--s));
+	}
+}
+
+/* the one-arm vignettes run at the stage scale × their step's multiplier (review 3, V1/S5: no zooms any more, so the job
+   itself is drawn larger where the screen has the room; scripts/panel/solo.ts holds the numbers, Compartment.astro writes
+   them as --sk-<step>; the steps are the runs' own, below) */
+.cmp[data-solo] {
+	--k-solo: var(--sk-p);
+	--s: calc(var(--s-g) * var(--k-solo));
+	/* (the root's --band was computed with the root's scale: again here, with this one) */
+	--band: calc(112px * var(--s));
+}
+
+@media (max-height: 779px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-p2);
+	}
+}
+
+@media (min-width: 700px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-t);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 1099px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-t2);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 959px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-t2b);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 839px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-t3);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 759px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-t4);
+	}
+}
+
+@media (min-width: 1100px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1399px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d0);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1299px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d1);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1199px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d1b);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1059px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d2);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 939px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d3);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 839px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d4);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 759px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-d5);
+	}
+}
+
+@media (max-height: 520px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-ps);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 520px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-ts);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 520px) {
+	.cmp[data-solo] {
+		--k-solo: var(--sk-ds);
+	}
+}
+
+.pin {
+	position: relative;
+}
+
+.stage {
+	position: relative;
+	isolation: isolate;
+	/* contains the module's bottom margin: the track's run is exactly the CSS run length */
+	display: flow-root;
+	/* nothing of a cell reaches past the page's width (review 3: a centred one-arm cell's bench and parked pair run past
+	   the edge on a phone; a document wider than the screen makes a phone zoom the whole page out) */
+	overflow-x: clip;
+}
+
+/* static panel: the laid lead starts at the top of the stage (the previous one ends at its bottom) */
+html:not(.motion) .stage {
+	overflow-y: clip;
+}
+
+.stage-head {
+	position: relative;
+	display: grid;
+	grid-template-rows: auto minmax(var(--gap-min), 1fr) auto auto;
+	padding-top: var(--pad-top);
+}
+
+/* ---------------- legend: plate line, heading, intro (engraved on the plate above the cell) */
+.legend {
+	position: relative;
+	/* above the laid lead (.leads, 3): the static wire-marker sleeve is threaded over it */
+	z-index: 4;
+	padding-inline: var(--m);
+}
+
+/* the plate line: the compartment's name is on its wire-marker sleeve (client note 8) and there is no status line any
+   more (client note 17, story pass: the old coded strings are gone from the markup too). It stays as the legend's quiet top
+   margin, one 16 px line as it always was, so the scroll engine's plans and audits are unchanged */
+.plate {
+	position: relative;
+	height: 16px;
+	margin: 0;
+}
+
+.legend__title {
+	font-size: 28px;
+	line-height: 1.07;
+	letter-spacing: -0.03em;
+	color: var(--ink);
+	max-width: 15em;
+}
+
+.legend__intro {
+	margin-top: 14px;
+	font-size: 16px;
+	line-height: 1.55;
+	color: var(--ink);
+	max-width: 38em;
+}
+
+@media (min-width: 700px) {
+
+	.legend__title {
+		font-size: 42px;
+		line-height: 1.05;
+		letter-spacing: -0.033em;
+	}
+
+	.legend__intro {
+		margin-top: 20px;
+		font-size: 18px;
+	}
+}
+
+@media (min-width: 1100px) {
+	.legend {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--gap);
+		align-items: start;
+	}
+
+	.plate {
+		grid-column: 1 / -1;
+	}
+
+	.legend__head {
+		grid-column: 1 / span 7;
+	}
+
+	.legend__title {
+		font-size: 52px;
+		line-height: 1.04;
+		letter-spacing: -0.035em;
+	}
+
+	.legend__intro {
+		grid-column: 8 / -1;
+		margin-top: 30px;
+		font-size: 20px;
+	}
+
+	/* R→L compartments (+C2, +C4, +C6: the lead comes down the right lane): the legend is mirrored, so the heading is on the
+	   cable side and the wire-marker sleeve with its bracket frames the heading, not the intro (client note 10, layout pass).
+	   The heading takes the right seven columns, set flush right against the bracket; the intro the left five; the status
+	   line moves over the intro. Phones and tablets keep one column (the sleeve beside the heading block already). */
+	.cmp[data-dir='rtl'] .legend__head {
+		grid-column: 6 / -1;
+		grid-row: 2;
+	}
+
+	.cmp[data-dir='rtl'] .legend__title {
+		margin-left: auto;
+		text-align: right;
+	}
+
+	.cmp[data-dir='rtl'] .legend__intro {
+		grid-column: 1 / span 5;
+		grid-row: 2;
+	}
+}
+
+/* ---------------- wire-marker sleeves (client note 8)
+   Each compartment's name is printed on a sleeve threaded on the test lead, as on a panel wire. It rides the descending
+   tip down the lane and settles beside the heading, which a thin bracket then frames (scripts/panel/sleeve.ts, scrubbed by
+   the scroll). Two copies: the static one where it settles (no JS, reduced motion: positioned by CSS, centred on the
+   heading), the live one in motion mode (outside the track's clip, so it can ride in from above the stage). Paper sleeve,
+   ink print on the plate's blue lead; the inverse (ink sleeve, paper print) on ink grounds. */
+.legend {
+	/* the right lane's offset from the heading is the legend's width away (container units) */
+	container-type: inline-size;
+}
+
+.legend__head {
+	position: relative;
+	margin-top: 14px;
+	/* the sleeve's centre (the lane) and the bracket's gap, from the heading's start edge */
+	--sl-x: calc(var(--lane) - var(--m));
+	--br-gap: 5px;
+	--br-w: 4px;
+}
+
+/* (the heading block's own width: on phones and tablets it is the legend's, on desktop R→L compartments it is the mirrored
+   heading column, whose end edge is the legend's end edge; layout pass) */
+.cmp[data-dir='rtl'] .legend__head {
+	--sl-x: calc(100% + var(--m) - var(--lane));
+}
+
+.sleeve {
+	position: absolute;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: calc(var(--cable-w) + 6px);
+	padding: 7px 0;
+	background: #ffffff;
+	color: #0d1b2e;
+	box-shadow: inset 0 0 0 1px #c9d1dc;
+	border-radius: 1px;
+	font-family: var(--font-mono); /* taste-skill-ignore: the brand's wire-marker face */
+	font-size: 8.5px;
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	pointer-events: none;
+	user-select: none;
+}
+
+.sleeve__t {
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+}
+
+/* inverse, on ink grounds */
+.sleeve--ink {
+	background: #0d1b2e;
+	color: #f4f1ec;
+	box-shadow: inset 0 0 0 1px #46546a;
+}
+
+.sleeve--static {
+	z-index: 5;
+	top: 50%;
+	left: var(--sl-x);
+	transform: translate(-50%, -50%);
+}
+
+.sleeve--live {
+	display: none;
+	top: 0;
+	left: var(--lane);
+	transform: translate(-50%, -50%);
+	opacity: 0;
+}
+
+.cmp[data-dir='rtl'] > .sleeve--live {
+	left: calc(100% - var(--lane));
+}
+
+html.motion .sleeve--live {
+	display: flex;
+}
+
+html.motion .sleeve--static {
+	display: none;
+}
+
+/* +C1's twin on the ink nameplate (the hero paints above the cabinet): over the hero's lead */
+.sleeve--twin {
+	z-index: 4;
+}
+
+/* the bracket that frames the heading: a hairline "[" between the lane and the text ("]" on the right lane) */
+.sleeve-br {
+	position: absolute;
+	top: 0.18em;
+	bottom: 0.12em;
+	left: calc(-1 * var(--br-gap) - var(--br-w));
+	width: var(--br-w);
+	border: 1px solid rgb(90 102 118 / 0.6);
+	border-right: 0;
+	transform-origin: 50% 50%;
+	pointer-events: none;
+}
+
+.cmp[data-dir='rtl'] .sleeve-br {
+	left: calc(100% + var(--br-gap));
+	border-right: 1px solid rgb(90 102 118 / 0.6);
+	border-left: 0;
+}
+
+.on-dark .sleeve-br {
+	border-color: rgb(154 166 181 / 0.7);
+}
+
+@media (min-width: 700px) {
+	.legend__head {
+		margin-top: 18px;
+		--br-gap: 9px;
+		--br-w: 6px;
+	}
+
+	.sleeve {
+		width: calc(var(--cable-w) + 8px);
+		padding: 10px 0;
+		font-size: 10.5px;
+		letter-spacing: 0.07em;
+	}
+}
+
+@media (min-width: 1100px) {
+	.legend__head {
+		margin-top: 22px;
+		--br-gap: 12px;
+		--br-w: 7px;
+	}
+
+	.sleeve {
+		width: calc(var(--cable-w) + 10px);
+		padding: 12px 0;
+		font-size: 12px;
+		letter-spacing: 0.08em;
+	}
+}
+
+/* ---------------- H duct and the cell band */
+.hduct {
+	position: relative;
+	z-index: 1;
+	height: var(--duct);
+	margin-inline: calc(var(--lane) + var(--duct) / 2);
+	background: var(--duct-h) 0 0 / auto var(--duct) repeat-x;
+}
+
+.band {
+	position: relative;
+	height: var(--band);
+	/* (the stage's own clip, at the band: the band is as wide as the stage, so the clip edge is the same; the bench and the
+	   parked pair's drawing are then clipped inside the band and the stage never measures wider than the page) */
+	overflow-x: clip;
+}
+
+/* the cell's mounting rail on the module's top edge, rack to rack, with a gap for the head tab */
+.bench {
+	position: absolute;
+	z-index: 4;
+	left: calc(50% + var(--off) - 160px * var(--s));
+	width: calc(320px * var(--s));
+	bottom: -1.5px;
+	height: 3px;
+	pointer-events: none;
+}
+
+.bench::before,
+.bench::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: calc(140px * var(--s));
+	border-radius: 1.5px;
+	background: var(--bench-c);
+}
+
+.bench::before {
+	left: 0;
+}
+
+.bench::after {
+	right: 0;
+}
+
+/* the device: its y = 0 sits on the bench; the head tab rises 12 units above it */
+.cell-dev {
+	position: absolute;
+	z-index: 4;
+	left: calc(50% + var(--off) - var(--dev-w) * var(--s) * 0.5px);
+	top: calc(100% - 12px * var(--s));
+	width: calc(var(--dev-w) * var(--s) * 1px);
+	height: calc((var(--dev-h) + 12) * var(--s) * 1px);
+	overflow: visible;
+	pointer-events: none;
+}
+
+/* stage-local layers drawn by the panel script (sized in JS) */
+.layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	overflow: visible;
+	pointer-events: none;
+}
+
+.layer--wires {
+	z-index: 5;
+}
+
+.layer--robots {
+	z-index: 6;
+}
+
+.layer--over {
+	z-index: 7;
+}
+
+/* ---------------- the module (the section body that opens out of the device) */
+.mod {
+	position: relative;
+	z-index: 1;
+	margin-inline: calc(var(--lane) + var(--duct) / 2 + var(--mgap));
+	margin-bottom: var(--bot-pad);
+}
+
+.mod__rim,
+.mod__shell {
+	position: absolute;
+	inset: 0;
+	border-radius: var(--r-mod);
+}
+
+.mod__rim {
+	inset: -1.5px;
+	border-radius: calc(var(--r-mod) + 1.5px);
+	background: var(--rim);
+}
+
+.mod__shell {
+	background: var(--paper);
+}
+
+.cmp--dark .mod__rim,
+.cmp--dark .mod__shell {
+	background: var(--ink);
+}
+
+.mod__body {
+	position: relative;
+	z-index: 1;
+	/* the body's text aligns with the page margin, not with the module edge */
+	padding: 40px calc(var(--m) - var(--lane) - var(--duct) / 2 - var(--mgap)) 56px;
+	color: var(--ink);
+}
+
+.mod__body.on-dark {
+	color: var(--paper);
+	/* the ink module's ground on the body as well (same box and clip as the shell): its text always sits on ink */
+	background: var(--ink);
+	border-radius: var(--r-mod);
+}
+
+@media (min-width: 1100px) {
+	.mod__body {
+		padding-top: 56px;
+		padding-bottom: 88px;
+	}
+}
+
+/* the blueprint (pacing pass, art 3): the module's reserved area is a drawing of the module it will become, measured
+   from its real layout (scripts/panel/stage.ts): a dashed outline, a frame per picture or card, a bar per line of text.
+   It draws itself with the program and gives way, block by block, to the content coming in at the same place. Above the
+   opening shell (its frames show on the module's ground as it grows), under the body. */
+.mod-bp {
+	position: absolute;
+	z-index: 0;
+	inset: 0;
+	pointer-events: none;
+	display: none;
+}
+
+.mod-bp > svg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	overflow: visible;
+}
+
+/* in motion the ink module's ground is the shell's (same clip): the body is transparent, so the blueprint's frames show
+   on the growing shell until the content comes in over them */
+html.motion .mod__body.on-dark {
+	background: none;
+}
+
+/* ---------------- the laid lead without JS / with reduced motion (CSS, mirrored for R→L) */
+.leads {
+	position: absolute;
+	z-index: 3;
+	inset: 0;
+	pointer-events: none;
+	--cw: var(--cable-w);
+	--io: calc(var(--dev-mouth, 12) * 1px * var(--s)); /* the device's mouth offset from the centre (devices.ts DEV.mouth) */
+	--dy: calc(var(--duct) / 2); /* duct centre above the band */
+	--my: calc(12px * var(--s)); /* the mouth sits 12 units above the bench */
+	--lo: var(--off); /* the cell's offset, in the leads' own (mirrored for R→L) frame */
+}
+
+.cmp[data-dir='rtl'] .leads {
+	transform: scaleX(-1);
+	--lo: calc(-1 * var(--off));
+}
+
+.ld {
+	position: absolute;
+	display: block;
+	box-sizing: border-box;
+	border: 0 solid var(--blue);
+}
+
+/* entry: down the lane from the top of the stage, into the duct, along, down into the in-mouth */
+.ld--v1 {
+	left: calc(var(--lane) - var(--cw) / 2);
+	width: var(--cw);
+	bottom: calc(100% + var(--dy) + var(--jr));
+	height: 4000px;
+	background: var(--blue);
+}
+
+.ld--c1 {
+	left: calc(var(--lane) - var(--cw) / 2);
+	top: calc(-1 * var(--dy) - var(--jr));
+	width: calc(var(--jr) + var(--cw) / 2);
+	height: calc(var(--jr) + var(--cw) / 2);
+	border-left-width: var(--cw);
+	border-bottom-width: var(--cw);
+	border-bottom-left-radius: calc(var(--jr) + var(--cw) / 2);
+}
+
+.ld--h1 {
+	left: calc(var(--lane) + var(--jr));
+	right: calc(50% - var(--lo) + var(--io) + var(--jr));
+	top: calc(-1 * var(--dy) - var(--cw) / 2);
+	height: var(--cw);
+	background: var(--blue);
+}
+
+.ld--c2 {
+	left: calc(50% + var(--lo) - var(--io) - var(--jr));
+	top: calc(-1 * var(--dy) - var(--cw) / 2);
+	width: calc(var(--jr) + var(--cw) / 2);
+	height: calc(var(--jr) + var(--cw) / 2);
+	border-top-width: var(--cw);
+	border-right-width: var(--cw);
+	border-top-right-radius: calc(var(--jr) + var(--cw) / 2);
+}
+
+.ld--v2 {
+	left: calc(50% + var(--lo) - var(--io) - var(--cw) / 2);
+	width: var(--cw);
+	top: calc(-1 * var(--dy) + var(--jr));
+	bottom: var(--my);
+	background: var(--blue);
+}
+
+/* +C5's wire marker (vignettes): a carta sleeve with a wordless print, 15 units above the insulation end */
+.ld-mk {
+	--mkw: calc(var(--cw) + 1.4px * var(--s));
+	--mkl: calc((3.2 + 1.5 * var(--mk-n, 8)) * 1px * var(--s));
+	position: absolute;
+	left: calc(50% + var(--lo) - var(--io) - var(--mkw) / 2);
+	bottom: calc(var(--my) + 15px * var(--s) - var(--mkl) / 2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: var(--mkw);
+	height: var(--mkl);
+	border: max(1px, 0.35px * var(--s)) solid var(--steel-light);
+	border-radius: calc(0.8px * var(--s));
+	background: var(--paper);
+}
+
+/* its print: short ink strokes, like characters too small to read (client note 17: no wire numbers on screen) */
+.ld-mk span {
+	width: calc(1.2px * var(--s));
+	height: 62%;
+	background: repeating-linear-gradient(to bottom, var(--steel) 0 calc(0.45px * var(--s)), transparent 0 calc(1.5px * var(--s)));
+}
+
+/* exit: out of the out-mouth, up into the duct, along, down the exit lane */
+.ld--v3 {
+	left: calc(50% + var(--lo) + var(--io) - var(--cw) / 2);
+	width: var(--cw);
+	top: calc(-1 * var(--dy) + var(--jr));
+	bottom: var(--my);
+	background: var(--blue);
+}
+
+.ld--c3 {
+	left: calc(50% + var(--lo) + var(--io) - var(--cw) / 2);
+	top: calc(-1 * var(--dy) - var(--cw) / 2);
+	width: calc(var(--jr) + var(--cw) / 2);
+	height: calc(var(--jr) + var(--cw) / 2);
+	border-left-width: var(--cw);
+	border-top-width: var(--cw);
+	border-top-left-radius: calc(var(--jr) + var(--cw) / 2);
+}
+
+.ld--h2 {
+	left: calc(50% + var(--lo) + var(--io) + var(--jr));
+	right: calc(var(--lane) + var(--jr));
+	top: calc(-1 * var(--dy) - var(--cw) / 2);
+	height: var(--cw);
+	background: var(--blue);
+}
+
+.ld--c4 {
+	right: calc(var(--lane) - var(--cw) / 2);
+	top: calc(-1 * var(--dy) - var(--cw) / 2);
+	width: calc(var(--jr) + var(--cw) / 2);
+	height: calc(var(--jr) + var(--cw) / 2);
+	border-top-width: var(--cw);
+	border-right-width: var(--cw);
+	border-top-right-radius: calc(var(--jr) + var(--cw) / 2);
+}
+
+.ld--v4 {
+	right: calc(var(--lane) - var(--cw) / 2);
+	width: var(--cw);
+	top: calc(-1 * var(--dy) + var(--jr));
+	bottom: 0;
+	background: var(--blue);
+}
+
+/* the exit lane continues beside the module down to the stage bottom */
+.mod::after {
+	content: '';
+	position: absolute;
+	top: -1px;
+	bottom: calc(-1 * var(--bot-pad));
+	right: calc(-1 * (var(--duct) / 2 + var(--mgap)) - var(--cable-w) / 2);
+	width: var(--cable-w);
+	background: var(--blue);
+	pointer-events: none;
+}
+
+.cmp[data-dir='rtl'] .mod::after {
+	right: auto;
+	left: calc(-1 * (var(--duct) / 2 + var(--mgap)) - var(--cable-w) / 2);
+}
+
+/* ---------------- motion mode: slowed travel (client note 6), untested start state
+   Nothing sticks. Each compartment's track is its stage plus a run: the extra scroll its slowdown needs.
+   While a program scrubs, the whole page glides: every block (hero, ducts, compartments, footer) is drawn
+   G(Y) − C below its layout position, G = the run absorbed so far, C = the runs above the block, so the runs
+   never show and everything on screen keeps rising at 1 − G'(Y) ∈ [r, 1] of the scroll speed. G(Y) is one
+   scroll-driven animation written by the panel script (it runs with the scroll on the compositor); browsers
+   without scroll timelines get the same transform from the script. */
+html.motion .pin {
+	--pin: var(--pin-p);
+	/* clips the entry leg (drawn upward from the top of the track) to the track */
+	clip-path: inset(0 -50vw);
+}
+
+/* phones and tablets: two height ranges each (the runs are lines in the height, fitted per range) */
+@media (max-height: 779px) {
+	html.motion .pin {
+		--pin: var(--pin-p2);
+	}
+}
+
+/* the runs exist only where the page can glide on the compositor (html.sda: scroll-driven animations); elsewhere
+   there is no slow zone and nothing to absorb */
+html.motion.sda .pin__run {
+	height: var(--pin);
+}
+
+/* the panel keeps the visitor's place itself across re-layouts (the glide moves what the browser would anchor to) */
+html.motion {
+	overflow-anchor: none;
+}
+
+/* the hero glides into the cabinet's top (by G): above the cabinet's plate */
+html.motion [data-hero] {
+	z-index: 2;
+}
+
+/* tablets: the stage scale's height steps (global.css: 1.8, 1.15 under 760 px tall), each with its own runs */
+@media (min-width: 700px) {
+	html.motion .pin {
+		--pin: var(--pin-t);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 1099px) {
+	html.motion .pin {
+		--pin: var(--pin-t2);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 959px) {
+	html.motion .pin {
+		--pin: var(--pin-t2b);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 839px) {
+	html.motion .pin {
+		--pin: var(--pin-t3);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 759px) {
+	html.motion .pin {
+		--pin: var(--pin-t4);
+	}
+}
+
+@media (min-width: 1100px) {
+	html.motion .pin {
+		--pin: var(--pin-d);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1399px) {
+	html.motion .pin {
+		--pin: var(--pin-d0);
+	}
+}
+
+/* the desktop height steps of the stage scale (global.css) have their own runs (2.4 has two) */
+@media (min-width: 1100px) and (max-height: 1299px) {
+	html.motion .pin {
+		--pin: var(--pin-d1);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1199px) {
+	html.motion .pin {
+		--pin: var(--pin-d1b);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 1059px) {
+	html.motion .pin {
+		--pin: var(--pin-d2);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 939px) {
+	html.motion .pin {
+		--pin: var(--pin-d3);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 839px) {
+	html.motion .pin {
+		--pin: var(--pin-d4);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 759px) {
+	html.motion .pin {
+		--pin: var(--pin-d5);
+	}
+}
+
+/* short viewports (landscape phones, short tablets and windows): the phone stage scale (global.css) and their own runs,
+   planned so the page never nearly stops and the cell fits (the script re-plans any viewport these do not fit) */
+@media (max-height: 520px) {
+	html.motion .pin {
+		--pin: var(--pin-ps);
+	}
+}
+
+@media (min-width: 700px) and (max-height: 520px) {
+	html.motion .pin {
+		--pin: var(--pin-ts);
+	}
+}
+
+@media (min-width: 1100px) and (max-height: 520px) {
+	html.motion .pin {
+		--pin: var(--pin-ds);
+	}
+}
+
+html.motion .leads,
+html.motion .mod::after {
+	display: none;
+}
+
+html.motion .mod-bp {
+	display: block;
+}
+
+/* dormant: the module is clipped to its device (the shell IS the housing); the script takes over from here */
+html.motion .mod__shell,
+html.motion .mod__body {
+	clip-path: inset(
+		0 calc(50% - var(--off) - var(--dev-w) * var(--s) * 0.5px) calc(100% - var(--dev-h) * var(--s) * 1px)
+			calc(50% + var(--off) - var(--dev-w) * var(--s) * 0.5px) round calc(12px * var(--s))
+	);
+}
+
+html.motion .mod__rim {
+	clip-path: inset(
+		0 calc(50% - var(--off) - var(--dev-w) * var(--s) * 0.5px - 1.5px) calc(100% - var(--dev-h) * var(--s) * 1px - 3px)
+			calc(50% + var(--off) - var(--dev-w) * var(--s) * 0.5px - 1.5px) round calc(12px * var(--s) + 1.5px)
+	);
+}
+
+html.motion [data-b] {
+	opacity: 0;
+}
+
+
+/* ------------------------------------------------------------------ device glyphs and the robot pair
+   Client note 9: no paint here. Every device and robot shape carries literal hex fill/stroke/stroke-width attributes
+   generated from the brand tokens (scripts/panel/paint.ts), so nothing depends on a CSS rule or a custom property
+   resolving inside an SVG (a failed var() in a fill rule would override the attribute and paint the shape black). CSS
+   only keeps strokes at their pixel width at every stage scale, and widens the robots' outlines on desktop. */
+.dv * {
+	vector-effect: non-scaling-stroke;
+}
+
+@media (min-width: 1100px) {
+	.rb .rb-lk,
+	.rb .rb-pd,
+	.rb .rb-x4 {
+		stroke-width: 1.5px;
+	}
+}
+
+/* the static parked pair in the band (no-JS, reduced motion, first paint); the live renderer replaces it */
+.cell-rob {
+	position: absolute;
+	z-index: 6;
+	left: calc(50% + var(--off) - 164px * var(--s));
+	bottom: calc(-8px * var(--s));
+	width: calc(328px * var(--s));
+	height: calc(124px * var(--s));
+	max-width: none;
+	overflow: visible;
+	pointer-events: none;
+}
+
+html.motion .cell-rob .rb-end,
+html:not(.motion) .cell-rob .rb-start,
+[data-rig] .cell-rob {
+	display: none;
+}
+
+/* effect labels (the TAUGHT POINT) */
+.fx-label {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+}
+
+/* ------------------------------------------------------------------ module bodies: shared pieces */
+.mbody-cta {
+	margin-top: 40px;
+}
+
+/* placeholder text for values that are not measured yet */
+.mod__body .tbd {
+	white-space: normal;
+}
+
+/* ------------------------------------------------------------------ debug HUD (?panel-debug=1) */
+.panel-hud {
+	position: fixed;
+	right: 8px;
+	bottom: 8px;
+	z-index: 90;
+	padding: 8px 10px;
+	border-radius: 8px;
+	background: rgb(13 27 46 / 0.9);
+	color: #e2e6eb;
+	font: 500 11px/1.45 var(--font-mono);
+	white-space: pre;
+	pointer-events: none;
+}
+
+/* deterministic captures (?panel-capture=1): no CSS transitions, every frame is a pure function of the scroll */
+html.panel-capture *,
+html.panel-capture *::before,
+html.panel-capture *::after {
+	transition: none !important;
+}
+
+/* ------------------------------------------------------------------ print / save as PDF
+   The static, tested, open panel: the script switches to it on beforeprint (and back after); these rules hold even
+   where the print event never fires (a headless PDF): no runs, no glide, every module open, no live layers. */
+@media print {
+	html.motion .pin__run {
+		height: 0 !important;
+	}
+
+	[data-glide] {
+		animation: none !important;
+		translate: none !important;
+		transform: none !important;
+	}
+
+	.sduct {
+		bottom: 48px !important;
+	}
+
+	html.motion .mod__shell,
+	html.motion .mod__body,
+	html.motion .mod__rim {
+		clip-path: none !important;
+	}
+
+	html.motion [data-b] {
+		opacity: 1 !important;
+		transform: none !important;
+	}
+
+	html.motion .mod-bp,
+	.layer,
+	.panel-hud {
+		display: none !important;
+	}
+
+	html.motion .leads,
+	html.motion .mod::after {
+		display: block !important;
+	}
+
+	/* the live device (drawn at its program time) gives way to nothing; the parked pair in its end pose */
+	html.motion [data-rig] .cell-dev {
+		visibility: hidden !important;
+	}
+
+	[data-rig] .cell-rob,
+	html.motion .x0cell__leads {
+		display: block !important;
+	}
+
+	html.motion .cell-rob .rb-end {
+		display: inline !important;
+	}
+
+	html.motion .cell-rob .rb-start {
+		display: none !important;
+	}
+
+	[data-nav] {
+		position: static !important;
+	}
+
+	html.motion .sleeve--static {
+		display: flex !important;
+	}
+
+	.sleeve--live {
+		display: none !important;
+	}
+
+	.sleeve-br {
+		transform: none !important;
+		opacity: 1 !important;
+	}
+
+	.cmp,
+	.stage,
+	.mod {
+		break-inside: auto;
+	}
+
+	/* (review 3, ENG-11) no pushbuttons on paper (the footer's print rules: SiteFooter.astro) */
+	[data-station] {
+		display: none !important;
+	}
+}

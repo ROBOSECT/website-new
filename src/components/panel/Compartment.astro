@@ -1,0 +1,200 @@
+---
+/**
+ * One compartment of the panel (MOTION-SPEC v5 §3.1, client note 6): a scroll track (.pin) holding the stage
+ * and a run. Nothing sticks: while the compartment's program scrubs, the whole page glides (slows to r, never
+ * 0), so the stage keeps rising and reaches the top as its program completes. The run is the extra scroll the
+ * slowdown needs; the page is drawn G(Y) − C lower than its layout (scripts/panel: one scroll-driven CSS
+ * animation, a JS transform where unsupported), so the runs never show.
+ *
+ *   section.cmp, then .pin, then the .stage holding:
+ *     .stage-head   legend (plate line · h2 · intro) · gap · H duct · band (the robot cell)
+ *     .mod          rim · shell · body: the section's body, what opens out of the device in the morph
+ *     .mod-bp       the dashed blueprint of the module before the morph
+ *   and .pin__run: P = (1 − r)·(S − rd/2) px of extra scroll
+ *
+ * The whole layout is CSS: the run length is a build-time linear function of the viewport height per
+ * breakpoint, computed here from the same program code the browser runs (scripts/panel), so the page has
+ * its final height at first paint.
+ * Without JS (and with reduced motion) there is no run and no glide: the panel is shown tested and open, with the
+ * laid leads drawn in CSS (.leads) and the device reduced to its head tab on the module's top edge.
+ * The robot pair: a static parked SVG in the band (.cell-rob, from the same drawing code) until the live
+ * renderer mounts in the stage's robot layer ([data-robot-layer]).
+ */
+import type { Lang } from '../../i18n/copy';
+import { PROGRAMS } from '../../scripts/panel/programs';
+import { compile, tokens, type Bp } from '../../scripts/panel/program';
+import { runPx } from '../../scripts/panel/scroll';
+import { DEV, staticDevice } from '../../scripts/panel/devices';
+import { CELL_BOX, staticCell } from '../../scripts/panel/robot/draw';
+import type { Rig } from '../../scripts/panel/robot/rig';
+import { assertRobots } from '../../scripts/panel/robot/buildqa';
+import { SOLO_K, soloDu, soloK } from '../../scripts/panel/solo';
+
+interface Props {
+	n: number;
+	lang: Lang;
+	id: string;
+	name: string;
+	title: string;
+	intro: string;
+	ground: 'light' | 'dark';
+	titleClass?: string;
+}
+const { n, lang, id, name, title, intro, ground, titleClass } = Astro.props;
+const cfg = PROGRAMS[n];
+const D = DEV[cfg.dev];
+// the robots' simulation QA: the build fails on a collision, a joint over its limits, a lead through a tool… (robot/qa.ts)
+assertRobots(n);
+const titleId = `${id}-title`;
+
+// build-time run lengths at the reference viewports, as Apx + B·svh (the slowed-travel plan depends on the height);
+// desktop in five height steps, each with its own stage scale (global.css; client note 7)
+const REF: Record<Bp, [number, number]> = { phone: [390, 844], tablet: [900, 1024], desktop: [1440, 900] };
+const DESK: { key: string; s: number; h: [number, number] }[] = [
+	// (review 3, V6: 1300–1600 in two lines, so the CSS run follows the plan at 1440 px tall: ≤ 8 notches)
+	{ key: 'd', s: 2.4, h: [1400, 1600] },
+	{ key: 'd0', s: 2.4, h: [1300, 1399] },
+	// (vignettes: 2.4 has two runs here, the notch cap bends the plan at ≈ 1200 px: one line over both would be ≈ 70 px long)
+	{ key: 'd1', s: 2.4, h: [1200, 1299] },
+	{ key: 'd1b', s: 2.4, h: [1060, 1199] },
+	{ key: 'd2', s: 2.3, h: [940, 1059] },
+	{ key: 'd3', s: 2.15, h: [840, 939] },
+	{ key: 'd4', s: 1.85, h: [760, 839] },
+	{ key: 'd5', s: 1.7, h: [600, 759] },
+];
+// a one-arm cell at its step's multiplier and centring offset (review 3: scripts/panel/solo.ts)
+const du = soloDu(cfg);
+const compileAt = (bp: Bp, sc: number | undefined, key: string) => {
+	const T = tokens(REF[bp][0], bp);
+	const s = (sc ?? T.sc) * soloK(cfg, key);
+	T.sc = s;
+	T.band = 112 * s;
+	T.y0 = 400;
+	// the cell's offset: the desktop zig-zag (CSS --cell-dx × the viewport width) and the one-arm centring (--cell-du × the
+	// scale): the arrival and out-lead routes are as on the page
+	T.cx = T.W / 2 + (bp === 'desktop' && cfg.dx ? cfg.dx * T.W : 0) + du * s;
+	return compile(T, cfg);
+};
+// the run as a line in the viewport height over a range of heights, never below the plan at any height in it (a longer run
+// only means more scroll before the first device beat: the device is then on screen sooner, client note 7)
+const runCss = (B: ReturnType<typeof compile>, h0: number, h1: number) => {
+	const P0 = runPx(B, h0).P,
+		slope = (runPx(B, h1).P - P0) / (h1 - h0);
+	let lift = 0;
+	for (let h = h0; h <= h1; h += 8) lift = Math.max(lift, runPx(B, h).P - (P0 + slope * (h - h0)));
+	return `calc(${(P0 + lift - slope * h0).toFixed(1)}px + ${(slope * 100).toFixed(3)}svh)`;
+};
+// phones and tablets in two height ranges each (vignettes: one line over the whole range lengthened the runs of the middle
+// heights by 75–220 px, i.e. a hold ratio well under the compartment's own)
+// (layout pass: tablets in four, at their own stage scales: global.css 1.8 from 760 px tall, 1.15 under; review 3: the tall
+// tablets' 840–1099 in two, V6)
+const pins: Record<string, string> = {
+	p: runCss(compileAt('phone', 0.88, 'p'), 780, 1000),
+	p2: runCss(compileAt('phone', 0.88, 'p2'), 560, 779),
+	t: runCss(compileAt('tablet', 1.8, 't'), 1100, 1400),
+	t2: runCss(compileAt('tablet', 1.8, 't2'), 960, 1099),
+	t2b: runCss(compileAt('tablet', 1.8, 't2b'), 840, 959),
+	t3: runCss(compileAt('tablet', 1.8, 't3'), 760, 839),
+	t4: runCss(compileAt('tablet', 1.15, 't4'), 600, 759),
+};
+for (const d of DESK) pins[d.key] = runCss(compileAt('desktop', d.s, d.key), d.h[0], d.h[1]);
+// short viewports (≤ 520 px tall: landscape phones, short tablets and windows) run at the phone scale (global.css)
+for (const bp of Object.keys(REF) as Bp[]) pins[`${bp[0]}s`] = runCss(compileAt(bp, 0.88, `${bp[0]}s`), 320, 520);
+// the robot pair, parked: as it stands before its program (motion, first paint) and after it (no-JS, reduced motion)
+const B = compileAt('desktop', undefined, 'd');
+const rig = B.rig as Rig | null;
+const robStatic = rig ? staticCell(rig.cellState(0), rig.cellState(B.tEnd)) : '';
+
+// the wire marker printed on the sleeve: the compartment's plain name (client note 8; note 17: no codes on screen)
+const marker = name;
+// the camera's vision job (stage.ts visionAt draws it in place: no viewfinder, no words)
+const vfJob = B.vf[0];
+const style = [
+	...Object.entries(pins).map(([k, v]) => `--pin-${k}:${v}`),
+	// a one-arm cell: its scale multiplier per step and its centring offset (units; panel.css)
+	...(cfg.solo ? [...Object.keys(SOLO_K).map((k) => `--sk-${k}:${SOLO_K[k]}`), `--cell-du:${du}`] : []),
+	`--dev-w:${D.w}`,
+	`--dev-mouth:${D.mouth}`,
+	`--cell-dx:${cfg.dx ?? 0}`,
+	`--dev-h:${D.h}`,
+].join(';');
+// the static (tested, open) device: only its head tab remains on the module's top edge, copper in both mouths
+const devStatic = staticDevice(cfg.dev, cfg.dir, { tested: true, open: true, cuw: 4.3 });
+---
+
+<section
+	id={id}
+	class:list={['cmp', `cmp--${ground}`]}
+	data-cmp={n}
+	data-solo={cfg.solo}
+	data-dir={cfg.dir}
+	data-dev={cfg.dev}
+	aria-labelledby={titleId}
+	style={style}
+>
+	<div class="pin">
+		<div class="stage">
+			<div class="stage-head">
+				<header class="legend">
+					<p class="plate">
+						{/* the compartment's name is printed on its wire-marker sleeve (client note 8); screen readers read it here. No
+						     status line, no counter, no code (client note 17): the plate line is the legend's quiet top margin */}
+						<span class="plate__tag visually-hidden">{marker}</span>
+					</p>
+					<div class="legend__head" data-legend-head>
+						<h2 id={titleId} class:list={['legend__title', titleClass]}>{title}</h2>
+						{/* the sleeve where it settles (no JS, reduced motion) and the bracket that frames the heading; in motion mode the
+						     live sleeve below rides the lead down to here */}
+						<span class="sleeve sleeve--static" aria-hidden="true"><span class="sleeve__t">{marker}</span></span>
+						<i class="sleeve-br" aria-hidden="true" data-sleeve-br></i>
+					</div>
+					<p class="legend__intro">{intro}</p>
+				</header>
+				<div class="stage-gap" aria-hidden="true"></div>
+				<div class="hduct" aria-hidden="true"></div>
+				<div class="band" aria-hidden="true">
+					<div class="leads">
+						<i class="ld ld--v1"></i><i class="ld ld--c1"></i><i class="ld ld--h1"></i><i class="ld ld--c2"></i><i class="ld ld--v2"></i>
+						<i class="ld ld--v3"></i><i class="ld ld--c3"></i><i class="ld ld--h2"></i><i class="ld ld--c4"></i><i class="ld ld--v4"></i>
+						{/* +C5: the wire marker the camera reads is part of the wiring: seated on the static lead too */}
+						{vfJob?.kind === 'read' && vfJob.txt.mark && <i class="ld-mk" style={`--mk-n:${vfJob.txt.mark.length}`}><span></span></i>}
+					</div>
+					<div class="bench"></div>
+					<svg
+						class={`cell-dev dv dv--${D.module}`}
+						viewBox={`0 -12 ${D.w} ${D.h + 12}`}
+						preserveAspectRatio="xMidYMin meet"
+						data-cell-dev
+						focusable="false"><Fragment set:html={devStatic} /></svg
+					>
+					{
+						robStatic && (
+							<svg class="cell-rob rb rb--plate" viewBox={`${CELL_BOX.x} ${CELL_BOX.y} ${CELL_BOX.w} ${CELL_BOX.h}`} aria-hidden="true" focusable="false">
+								<Fragment set:html={robStatic} />
+							</svg>
+						)
+					}
+				</div>
+			</div>
+			<div class="mod" data-mod>
+				<div class="mod__rim"></div>
+				<div class="mod__shell"></div>
+				<div class:list={['mod__body', ground === 'dark' && 'on-dark']} data-body>
+					<slot />
+				</div>
+				<div class="mod-bp" aria-hidden="true" data-bp></div>
+			</div>
+			{/* stage-local layers drawn by scripts/panel (empty without JS): the lead, effects, the robots */}
+			<svg class="layer layer--wires" aria-hidden="true" focusable="false" data-layer="wires"></svg>
+			<svg class="layer layer--over" aria-hidden="true" focusable="false" data-layer="over"></svg>
+			<svg class="layer layer--robots" aria-hidden="true" focusable="false" data-robot-layer>
+				<g data-robot-slot="L"></g><g data-robot-slot="R"></g>
+			</svg>
+		</div>
+		{/* the run: extra scroll for the slowdown; the page glides over it, so it never shows */}
+		<div class="pin__run" aria-hidden="true"></div>
+	</div>
+	{/* the wire marker threaded on the lead (client note 8), motion mode: outside the track's clip, so it can ride the
+	     descending tip down the lane from above the stage before it settles beside the heading (scripts/panel/sleeve.ts) */}
+	<span class="sleeve sleeve--live" aria-hidden="true" data-sleeve><span class="sleeve__t">{marker}</span></span>
+</section>

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from './Hero.astro';
+import Problem from './Problem.astro';
+import Process from './Process.astro';
+import Applications from './Applications.astro';
+import Technology from './Technology.astro';
+import Proof from './Proof.astro';
+import Team from './Team.astro';
+import Contact from './Contact.astro';
+import { type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+// The home page is an electrical panel under test (MOTION-SPEC v4): every section is a compartment
+// (+C1…+C7) on one mounting plate, and the copper of the R leads the test cable through all of them.
+// The visitor's scroll drives everything (scripts/panel).
+---
+
+<BaseLayout lang={lang} isHome alternates={{ en: '/', it: '/it/' }}>
+	<Hero lang={lang} />
+	<div class="cab" data-cab>
+		<div class="sduct sduct--l" aria-hidden="true"></div>
+		<div class="sduct sduct--r" aria-hidden="true"></div>
+		<Problem lang={lang} />
+		<Process lang={lang} />
+		<Applications lang={lang} />
+		<Technology lang={lang} />
+		<Proof lang={lang} />
+		<Team lang={lang} />
+		<Contact lang={lang} />
+		<div class="cab__close" aria-hidden="true"></div>
+	</div>
+</BaseLayout>
+
+<script>
+	import '../../scripts/home';
+</script>
+

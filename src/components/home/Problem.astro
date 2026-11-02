@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import imgWire from '../../assets/images/home/problem-wire.jpg';
+import imgTerminals from '../../assets/images/home/problem-terminals.jpg';
+import imgSag from '../../assets/images/home/problem-sag.jpg';
+import imgVariant from '../../assets/images/home/problem-variant.jpg';
+import Compartment from '../panel/Compartment.astro';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const p = copy[lang].problem;
+
+const alts = {
+	en: [
+		'A single blue wire arcing loosely between a robot gripper and a terminal block',
+		'Terminal blocks and relays packed between grey wiring ducts, with blue and orange wires',
+		'A black cable hanging loose from the shoulder of a collaborative robot',
+		'A different switchboard layout, photographed from the side on a slotted table',
+	],
+	it: [
+		'Un singolo filo blu che descrive un arco libero tra la pinza di un robot e una morsettiera',
+		'Morsetti e relè fitti tra canaline grigie, con fili blu e arancioni',
+		'Un cavo nero che pende libero dalla spalla di un robot collaborativo',
+		'Un quadro con una disposizione diversa, fotografato di lato su un banco a doghe',
+	],
+}[lang];
+const images = [imgWire, imgTerminals, imgSag, imgVariant];
+---
+
+<Compartment n={1} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
+	<ul class="pts">
+		{
+			p.points.map((pt, i) => (
+				<li class="pt" data-b>
+					<figure class="pt__img">
+						<Image src={images[i]} alt={alts[i]} widths={[240, 400, 640]} sizes="(min-width: 1100px) 300px, (min-width: 700px) 45vw, 104px" loading="lazy" />
+					</figure>
+					<div class="pt__text">
+						<h3>{pt.title}</h3>
+						<p>{pt.body}</p>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+	<p class="closing" data-b>{p.closing}</p>
+</Compartment>
+
+<style>
+	.pts {
+		list-style: none;
+		display: grid;
+		gap: 28px;
+	}
+
+	.pt {
+		display: grid;
+		grid-template-columns: 104px minmax(0, 1fr);
+		gap: 16px;
+		align-items: start;
+	}
+
+	.pt__img {
+		aspect-ratio: 1;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--mist);
+	}
+
+	.pt__img :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.pt h3 {
+		font-size: 18px;
+		line-height: 1.25;
+	}
+
+	.pt p {
+		margin-top: 6px;
+		font-size: 16px;
+		line-height: 1.55;
+	}
+
+	.closing {
+		margin-top: 40px;
+		max-width: 22em;
+		font-size: 22px;
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		color: var(--blue);
+	}
+
+	@media (min-width: 700px) {
+		.pts {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 40px var(--gap);
+		}
+
+		.pt {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 18px;
+		}
+
+		.pt__img {
+			aspect-ratio: 4 / 3;
+		}
+
+		.pt h3 {
+			font-size: 20px;
+		}
+
+		.closing {
+			margin-top: 56px;
+			font-size: 28px;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.pts {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		.pt p {
+			font-size: 17px;
+		}
+
+		.closing {
+			margin-top: 64px;
+			font-size: 32px;
+			max-width: 24em;
+		}
+	}
+</style>
