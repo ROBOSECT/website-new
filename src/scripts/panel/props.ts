@@ -568,15 +568,17 @@ export class Coil implements Prop {
 		let s = '';
 		for (let i = 0; i < 4; i++) {
 			// loose: each loop its own size and offset; neat: the loops on one another
-			const jx = (1 - neat) * [-3.2, 2.4, -1.4, 3.6][i],
-				jy = (1 - neat) * [0.6, -0.4, 0.3, -0.2][i],
-				jr = 1 + (1 - neat) * [0.14, -0.1, 0.22, -0.06][i];
+			const jx = (1 - neat) * [-4.6, 3.4, -2.2, 5][i],
+				jy = (1 - neat) * [0.8, -0.6, 0.4, -0.3][i],
+				jr = 1 + (1 - neat) * [0.24, -0.18, 0.32, -0.1][i];
 			const rr = r * jr * (1 - 0.06 * i * neat);
 			s += `<ellipse cx="${f(cx + jx + i * 0.5 * neat)}" cy="${f(cy + jy)}" rx="${f(rr)}" ry="${f(ry * jr)}" fill="none" stroke="${C.blue}" stroke-width="1.5"/>`;
 		}
 		// the two ends: one leaves the coil down to the bench, the other is tucked in (neat) or trails (loose)
 		const ex = cx + r * 0.9;
-		s += `<path d="M${f(ex)} ${f(cy + 0.4 * ry)}q${f(3 + 5 * (1 - neat))} ${f(1 + 2 * (1 - neat))} ${f(5 + 6 * (1 - neat))} ${f(Math.max(0, -cy - 1.2))}" fill="none" stroke="${C.blue}" stroke-width="1.5" stroke-linecap="round"/>`;
+		// (it ends on the bench, never below it)
+		const ey0 = cy + 0.4 * ry;
+		s += `<path d="M${f(ex)} ${f(ey0)}q${f(3 + 5 * (1 - neat))} ${f(Math.max(0, -0.8 - ey0) * 0.3)} ${f(5 + 6 * (1 - neat))} ${f(Math.max(0, -0.8 - ey0))}" fill="none" stroke="${C.blue}" stroke-width="1.5" stroke-linecap="round"/>`;
 		// a tie (neat): a short copper-free band around the loops
 		s += `<rect x="${f(cx - r - 1)}" y="${f(cy - 1.1)}" width="2.2" height="2.2" rx="0.5" fill="${C.ink2}" opacity="${op(neat >= 1 ? 1 : 0)}"/>`;
 		s += `<rect x="${f(cx + r - 1.2)}" y="${f(cy - 1.1)}" width="2.2" height="2.2" rx="0.5" fill="${C.ink2}" opacity="${op(neat >= 1 ? 1 : 0)}"/>`;
