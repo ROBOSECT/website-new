@@ -1,5 +1,5 @@
 /**
- * Homepage behaviour: the panel under test (scripts/panel), Contact's showpiece where the robots build the form
+ * Homepage behaviour: the panel under test (scripts/panel), Contact's showpiece where the robots make the logo's R
  * (scripts/panel/showpiece), the form (scripts/contact.ts: mailto until a backend exists), and the nav's current-section
  * state.
  */
@@ -21,7 +21,7 @@ function initShow() {
 	const fig = document.querySelector<HTMLElement>('section[data-contact] [data-show]');
 	let show: ReturnType<typeof initShowpiece> | null = null;
 	try {
-		// the robots build the form: when every part is built, the nav's indicator shows its seventh pin
+		// the form is complete from the start: the nav's indicator shows its seventh pin
 		if (fig) show = initShowpiece(fig, { onBuilt: (all) => panel?.setFormBuilt(all) });
 		// a form that is not unbuilt at load (reduced motion, or on screen at load) is built from the start: the nav's
 		// seventh pin at once, not only once the cell has drawn its first frame (else, with reduced motion on a phone,

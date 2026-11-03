@@ -484,14 +484,12 @@ export const copy = {
 			// Contact's showpiece: the robots build this form, one part per job;
 			// no codes and no words on the stage but the station's RESET and STOP
 			show: {
-				figureLabel: 'Animation, about {s} s: two robot arms build this contact form, one part per job, the Send button last. RESET runs it again, STOP stops the robots.',
+				figureLabel: 'Animation, about {s} s: two robot arms bend a straight cable, step by step, into the R of the ROBOSECT logo and crimp the copper ferrule on its end. RESET runs it again, STOP stops the robots.',
 				details: [
-					'The camera follows a wire from end to end: the Name box. It finds one end curled away from where the drawing puts it: Company.',
-					'The gripper combs that end straight: Work email. It grips it firmly: Phone. It inserts it in the breaker’s screw clamp: What switchboards do you build.',
-					'The screwdriver tightens the clamp: Switchboards per year. The gripper gives the wire a pull test: Do you use EPLAN.',
-					'The gripper takes the wire’s other end: How do you test them today. The opener holds a spring cage open, the end goes in and the cage snaps shut: the consent box.',
-					'The gripper switches the breaker on: the current runs through every box built so far.',
-					'Two probes test the circuit from end to end: Send the request. The robots park.',
+					'The cable comes up through the bench and lies straight along it.',
+					'The left arm takes it and lays it into the R’s stem, its top corner and its top.',
+					'The right arm takes it over and lays the bowl, the leg and the foot of the R.',
+					'The right arm slides the copper ferrule onto the free end and crimps it. The robots park: the cable is the R of the logo.',
 				],
 				station: {
 					group: 'Operator station',
@@ -1033,14 +1031,12 @@ export const copy = {
 				linkedin: 'Segui ROBOSECT su LinkedIn',
 			},
 			show: {
-				figureLabel: 'Animazione, circa {s} s: due bracci robotici costruiscono questo modulo di contatto, una parte per ogni operazione, per ultimo il pulsante Invia. RESET la riavvia, STOP ferma i robot.',
+				figureLabel: 'Animazione, circa {s} s: due bracci robotici piegano un cavo dritto, passo dopo passo, fino a farne la R del logo ROBOSECT, poi crimpano il puntale di rame sulla sua estremità. RESET la riavvia, STOP ferma i robot.',
 				details: [
-					'La telecamera segue un filo da un capo all’altro: la casella Nome. Trova un capo arricciato, non dove lo mette il disegno: Azienda.',
-					'La pinza raddrizza quel capo: Email aziendale. Lo afferra con decisione: Telefono. Lo inserisce nel morsetto a vite dell’interruttore: Che quadri costruisci.',
-					'L’avvitatore serra il morsetto: Quadri all’anno. La pinza fa la prova di trazione sul filo: Usi EPLAN.',
-					'La pinza prende l’altro capo del filo: Come collaudi oggi. La leva tiene aperto il morsetto a molla, il capo entra e la molla si richiude: la casella del consenso.',
-					'La pinza chiude l’interruttore: la corrente attraversa tutte le caselle già costruite.',
-					'Due puntali collaudano il circuito da un capo all’altro: Invia la richiesta. I robot tornano a riposo.',
+					'Il cavo esce dal banco e ci resta disteso, dritto.',
+					'Il braccio sinistro lo prende e lo posa nell’asta della R, nell’angolo in alto e nel tratto superiore.',
+					'Il braccio destro lo prende in consegna e posa l’occhiello, la gamba e il piede della R.',
+					'Il braccio destro infila il puntale di rame sull’estremità libera e lo crimpa. I robot tornano a riposo: il cavo è la R del logo.',
 				],
 				station: {
 					group: 'Pulsantiera di comando',

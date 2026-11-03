@@ -6,7 +6,7 @@
  */
 import { Route, f } from '../core';
 import { docTop } from '../stage';
-import { VB } from './scene';
+import { VB } from './rfilm';
 
 export class ContactLead {
 	sec: HTMLElement;

@@ -1,5 +1,5 @@
 /**
- * Contact: the form the robots build. Validity (batched: on change, on blur,
+ * Contact: the form beside the robots' finale. Validity (batched: on change, on blur,
  * or 400 ms after the last keystroke; nothing reacts per keystroke, no frame is ever scheduled by typing), the standby of the
  * cell while the visitor writes, the synchronous mail handoff, the length guard, the copy chain, the "nothing opened?"
  * detector and the confirmation. Sending just sends: no climax.

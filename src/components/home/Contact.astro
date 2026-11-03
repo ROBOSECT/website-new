@@ -1,17 +1,16 @@
 ---
 /**
- * Contact: the robots build the form (the page's showpiece).
+ * Contact: the robots make the R of the logo (the page's showpiece).
  *
- * Next to the form, the two robots do one real job with every tool (camera, gripper, screwdriver, spring-cage opener, breaker
- * toggle, two probes): a live animation on its own clock (scripts/panel/showpiece), not scroll-driven and not a video, no
- * player chrome, no words on the stage, no codes, no zooms. Each job sends a pulse along the form's wire and builds one part
- * of the form (form.ts), top to bottom, Send last; then the robots park. The scene stands on the card's own blue; its
- * operator station carries the only controls, as real pushbuttons: RESET (blue, lit when the job has finished) resets the
- * cell physically and runs the job (and the build) again; STOP (red, latching) halts the robots.
+ * Next to the form, the two robots take the page's cable, which comes up through the bench and lies straight along it, and
+ * lay it step by step into the R of the logo, then crimp the copper ferrule on its end: a live animation on its own clock
+ * (scripts/panel/showpiece), not scroll-driven and not a video, no player chrome, no words on the stage. The finished R is
+ * the logo kit's own geometry. The scene stands on the card's own blue; its operator station carries the only controls, as
+ * real pushbuttons: RESET (blue, lit when the R is finished) plays it again; STOP (red, latching) halts the robots.
  *
- * Usability first: the real form is in the markup from the start and is a plain, built form without JS and with reduced
- * motion. The script unbuilds it only while it is off screen, and any intent to use it builds everything at once. Send just
- * sends: the mail handoff and a clean confirmation.
+ * Usability first: the form is a plain, complete form from the start (with or without JS, with reduced motion); the
+ * animation never blocks typing or sending, and holds still while the visitor writes. Send just sends: the mail handoff
+ * and a clean confirmation.
  *
  * TODO(backend): this site is static and has no form endpoint yet. With script, the form composes an email to
  * info@robosect.it in the visitor's own mail client (scripts/contact.ts); without script, the browser posts the fields as
@@ -21,10 +20,8 @@
  */
 import Rich from '../ui/Rich.astro';
 import { copy, type Lang } from '../../i18n/copy';
-import { compileNow, facts } from '../../scripts/panel/showpiece/compile';
-import { frameState } from '../../scripts/panel/showpiece/state';
-import { armsOf, derive, stageTree, toString } from '../../scripts/panel/showpiece/render';
-import { VB } from '../../scripts/panel/showpiece/scene';
+import { VB, film } from '../../scripts/panel/showpiece/rfilm';
+import { frameMarkup } from '../../scripts/panel/showpiece/rview';
 import { assertShowpiece } from '../../scripts/panel/robot/buildqa';
 
 interface Props {
@@ -52,23 +49,16 @@ const labels = {
 	process: f.process.label,
 };
 
-// the film, compiled once per build (both pages), its robot QA (fails the build; it also proves which film times a RESET
-// may start from), and the end-frame poster (the robots parked, the circuit tested)
-const qa = assertShowpiece();
-const C = compileNow();
-const F = facts(C);
-const secs = String(Math.round(F.ready));
-const posterRf = derive(C, frameState(C, F.hold + 4));
-const A = armsOf(C);
-const poster = toString(stageTree(C, { mode: 'desk', uid: 'spp', mount: false }), posterRf, (id) => A.markup(id, posterRf));
+// the film (the robots make the logo's R out of a straight cable), its robot QA (fails the build), and its end frame, the
+// finished R: the poster (no-JS, reduced motion, first paint)
+assertShowpiece();
+const F = film();
+const poster = frameMarkup(F, F.tEnd);
 const vb = `${VB.x} ${VB.y} ${VB.w} ${VB.h}`;
-const label = sh.figureLabel.replace('{s}', secs);
+const label = sh.figureLabel.replace('{s}', String(Math.round(F.tEnd)));
 // what the script needs (one JSON blob; the strings stay in the markup where they show)
 const cfg = {
 	lang,
-	ready: F.ready,
-	hold: F.hold,
-	resets: qa.resets.safe,
 	live: ho.live,
 	handoff: { subject: ho.subject, consentLine: ho.consentLine, shortened: ho.shortened, copied: ho.copied, selectCopy: ho.selectCopy, nothingOpened: ho.nothingOpened, restored: ho.restored, previewTo: ho.previewTo, previewSubject: ho.previewSubject },
 	fieldLabels: labels,
@@ -422,7 +412,7 @@ const cfg = {
 		}
 
 		.station::before {
-			height: calc(18.48cqw + 10px);
+			height: calc(8cqw + 10px);
 		}
 	}
 
@@ -439,7 +429,8 @@ const cfg = {
 		display: block;
 		width: 100%;
 		height: 100%;
-		overflow: visible;
+		/* (the cable lying on the bench runs off the stage to the right: the stage is its frame) */
+		overflow: hidden;
 		transition: opacity 0.3s ease;
 	}
 
@@ -488,9 +479,9 @@ const cfg = {
 		display: none;
 	}
 
-	/* its conduit up to the bench's floor (phones: the station hangs under the stage box; the floor is 18.48 % of the stage's
-	   width above the stage's bottom, the stage being the cell plus the card's padding less 2 px each side, then the station's
-	   10 px margin): one line from the floor into the station, never a loose stub */
+	/* its conduit up to the bench's floor (phones: the station hangs under the stage box; the floor is 8 % of the stage’s
+	   width above the stage’s bottom (24 of the viewBox’s 300 units), the stage being the cell plus the card's padding less 2
+	   px each side, then the station's 10 px margin): one line from the floor into the station, never a loose stub */
 	.station::before {
 		content: '';
 		position: absolute;
@@ -498,7 +489,7 @@ const cfg = {
 		bottom: 100%;
 		width: 3px;
 		height: 10px;
-		height: calc(18.48cqw + 0.1848 * (2 * var(--card-pad) - 4px) + 10px);
+		height: calc(8cqw + 0.08 * (2 * var(--card-pad) - 4px) + 10px);
 		background: #5a6676;
 	}
 
@@ -1263,16 +1254,15 @@ const cfg = {
 			font-size: 22px;
 		}
 
-		/* the station hangs under the bench at the cell's lower left (render.ts STATION: its conduit comes down from the
-		   floor into its top), its buttons over that spot */
+		/* the station hangs under the bench at the cell's lower right (the page's cable runs in the duct at its lower left) */
 		.station::before {
 			display: none;
 		}
 
 		.station {
 			position: absolute;
-			left: 0.4%;
-			bottom: 2.2%;
+			right: 0.4%;
+			bottom: 1.5%;
 			margin: 0;
 			gap: 7px;
 			padding: 7px 7px 5px;
@@ -1569,7 +1559,7 @@ const cfg = {
 
 		.station::before {
 			display: block;
-			height: calc(18.48cqw + 10px);
+			height: calc(8cqw + 10px);
 		}
 
 		.formcell {

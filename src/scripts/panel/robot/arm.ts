@@ -66,7 +66,20 @@ interface SegLsum {
 	parts: { a: number; T: number; dx: number; dy: number; dphi: number }[];
 	tool: ToolName;
 }
-type Seg = SegHold | SegPtp | SegLin | SegSum | SegLsum;
+/** a Cartesian path given as a function of the segment's progress u ∈ [0, 1] (the finale: the gripper lays a cable along
+ * the logo's centreline), IK per sample */
+interface SegPath {
+	k: 'path';
+	t0: number;
+	t1: number;
+	f: (u: number) => { P: Pt; phi: number };
+	q0: Q;
+	q1: Q;
+	/** the solved joints at N + 1 even steps of u: each sample's IK takes the wrist branch of the nearest one */
+	qs: Q[];
+	tool: ToolName;
+}
+type Seg = SegHold | SegPtp | SegLin | SegSum | SegLsum | SegPath;
 
 export interface Kick {
 	t: number;
@@ -308,6 +321,41 @@ export class ArmTrack {
 		this.q = q1;
 		return this;
 	}
+	/**
+	 * follow a Cartesian path f(u), u = 0 … 1 over the segment (f should start where the tool is). Its duration is at least
+	 * T, stretched until every joint is within its speed and acceleration limits and the tool centre point within its lin
+	 * speed (sampled)
+	 */
+	follow(T: number, f: (u: number) => { P: Pt; phi: number }) {
+		const N = 400;
+		const qs: Q[] = [];
+		let prev: ArrayLike<number> = this.q;
+		let path = 0;
+		for (let i = 0; i <= N; i++) {
+			const g = f(i / N);
+			const q = this.r.ik(g.P, g.phi, this.tool, prev, this.q[3]).q;
+			if (i > 0) {
+				const a = f((i - 1) / N);
+				path = Math.max(path, Math.hypot(g.P.x - a.P.x, g.P.y - a.P.y) * N);
+			}
+			qs.push(q);
+			prev = q;
+		}
+		let D = Math.max(T, path / (SPEED.lin * this.r.sc * this.speed));
+		for (let j = 0; j < 3; j++) {
+			let d1 = 0,
+				d2 = 0;
+			for (let i = 1; i <= N; i++) d1 = Math.max(d1, Math.abs(qs[i][j] - qs[i - 1][j]) * N);
+			for (let i = 1; i < N; i++) d2 = Math.max(d2, Math.abs(qs[i + 1][j] - 2 * qs[i][j] + qs[i - 1][j]) * N * N);
+			D = Math.max(D, (1.1 * d1) / (SPEED.w[j] * this.speed), Math.sqrt((1.3 * d2) / (SPEED.a[j] * this.speed * this.speed)));
+		}
+		const end = f(1);
+		const q1 = this.solve(end.P, end.phi, 'follow', this.q[3], qs[N - 1]);
+		this.segs.push({ k: 'path', t0: this.t, t1: this.t + D, f, q0: this.q.slice() as Q, q1, qs, tool: this.tool });
+		this.t += D;
+		this.q = q1;
+		return this;
+	}
 	/** relative straight line, units (× scale) */
 	rel(dx: number, dy: number, o: { v?: number; T?: number } = {}) {
 		const p = this.pose(),
@@ -404,9 +452,14 @@ export class ArmTrack {
 			return q;
 		}
 		const tg = this.target(s, t)!;
+		if (s.k === 'path') {
+			const ref = s.qs[Math.round(((t - s.t0) / (s.t1 - s.t0)) * (s.qs.length - 1))];
+			return this.r.ik(tg.P, tg.phi, s.tool, ref, s.q0[3]).q;
+		}
 		return this.r.ik(tg.P, tg.phi, s.tool, s.q0, s.q0[3]).q;
 	}
-	private target(s: SegLin | SegLsum, t: number) {
+	private target(s: SegLin | SegLsum | SegPath, t: number) {
+		if (s.k === 'path') return s.f(Math.min(1, Math.max(0, (t - s.t0) / (s.t1 - s.t0))));
 		if (s.k === 'lin') {
 			const e = this.ease(s, (t - s.t0) / (s.t1 - s.t0));
 			return { P: { x: s.P0.x + (s.P1.x - s.P0.x) * e, y: s.P0.y + (s.P1.y - s.P0.y) * e }, phi: s.phi0 + (s.phi1 - s.phi0) * e };
@@ -425,7 +478,7 @@ export class ArmTrack {
 	/** the commanded Cartesian target of a Cartesian segment at t (QA: FK of the solved joints must reach it) */
 	linTarget(t: number): { P: Pt; phi: number; tool: ToolName } | null {
 		const s = this.seg(t);
-		if (!s || (s.k !== 'lin' && s.k !== 'lsum') || t >= s.t1) return null;
+		if (!s || (s.k !== 'lin' && s.k !== 'lsum' && s.k !== 'path') || t >= s.t1) return null;
 		return { ...this.target(s, t)!, tool: s.tool };
 	}
 	/** the contact window factor at t: 1 inside a contact, eased over 30 ms at both ends */

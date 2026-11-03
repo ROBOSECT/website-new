@@ -55,17 +55,13 @@ export function assertRobots(n: number) {
 	if (bad.length) throw new Error(`robot QA failed (robot/qa.ts):\n  ${bad.join('\n  ')}`);
 }
 
-/* ------------------------------------------------------------------ +C7 the showpiece */
-import { compileNow } from '../showpiece/compile';
-import { runShowQa, type SpQa } from '../showpiece/qa';
-let spDone: SpQa | null = null;
-/** throws (fails the build) if the showpiece's robots break a rule anywhere in the film, at any arming level or in any Send
- * branch (scale-free: one run covers every layout) */
+/* ------------------------------------------------------------------ +C7 the finale */
+import { qa as runFinaleQa, type RQa } from '../showpiece/rqa';
+let spDone: RQa | null = null;
+/** throws (fails the build) if the finale's robots break a rule anywhere in the film (scale-free: one run covers every
+ * layout) */
 export function assertShowpiece() {
-	if (!spDone) {
-		const C = compileNow();
-		spDone = runShowQa(C.S, { flex: C.flex, branches: true, maxViolations: 12 });
-	}
-	if (!spDone.ok) throw new Error(`showpiece robot QA failed (showpiece/qa.ts):\n  ${spDone.violations.join('\n  ')}`);
+	spDone ??= runFinaleQa();
+	if (!spDone.ok) throw new Error(`finale robot QA failed (showpiece/rqa.ts):\n  ${spDone.violations.join('\n  ')}`);
 	return spDone;
 }
