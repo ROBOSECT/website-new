@@ -17,7 +17,6 @@ const brand = copy[lang].brand;
 const cta = copy[lang].cta;
 const a11y = copy[lang].a11y;
 const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
-const play = `${h.secondaryCta.label} (${h.secondaryCta.duration})`;
 // the logo's measures in cable widths, from the geometry (HeroWordmark's box starts 0.5 above G.top): the stem foot below the
 // box top, the O's left edge, the clear space
 const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:${+(G.oLeft / G.w).toFixed(4)};--wm-clear:${+(G.clear / G.w).toFixed(4)}`;
@@ -45,11 +44,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 					><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
 				>
 			</a>
-			{/* without JS the link goes to the video in the Prototype section; with JS it opens the video here (scripts/home.ts) */}
-			<a class="text-link hero__video-link" href={h.secondaryCta.href} data-video-open>
-				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5v11l9-5.5z" fill="currentColor" stroke="none"></path></svg>
-				{play}
-			</a>
 		</div>
 		<p class="hero__promise">{cta.promise}</p>
 		<ul class="hero__facts">
@@ -67,6 +61,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			class="hero__img"
 			data-hero-img
 		/>
+		{/* without JS the badge goes to the video in the Prototype section; with JS it opens the video here (scripts/home.ts) */}
 		<a class="hero__play" href={h.secondaryCta.href} data-video-open>
 			<span class="hero__play-btn" aria-hidden="true"
 				><svg viewBox="0 0 18 18"><path d="M5.5 3.5v11l9-5.5z" fill="#F4F1EC" stroke="none"></path></svg></span
@@ -204,10 +199,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		align-items: center;
 		gap: 16px 28px;
 		margin-top: 36px;
-	}
-
-	.hero__video-link {
-		color: var(--paper);
 	}
 
 	.hero__promise {
