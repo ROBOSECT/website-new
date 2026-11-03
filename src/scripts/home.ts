@@ -126,6 +126,67 @@ function initBrandOnce() {
 	});
 }
 
+/** the prototype video from the first screen: a modal dialog; the file is fetched only when it opens (without JS the
+ * links go to the video in the Prototype section) */
+function initVideoDialog() {
+	const dlg = document.querySelector<HTMLDialogElement>('[data-video-dialog]');
+	const v = dlg?.querySelector<HTMLVideoElement>('video');
+	if (!dlg || !v || typeof dlg.showModal !== 'function') return;
+	let opener: HTMLElement | null = null;
+	document.querySelectorAll<HTMLElement>('[data-video-open]').forEach((a) =>
+		a.addEventListener('click', (e) => {
+			e.preventDefault();
+			opener = a;
+			if (!v.src && v.dataset.src) v.src = v.dataset.src;
+			dlg.showModal();
+			v.play().catch(() => {});
+		}),
+	);
+	dlg.querySelector('[data-video-close]')?.addEventListener('click', () => dlg.close());
+	// a click on the backdrop closes it
+	dlg.addEventListener('click', (e) => {
+		if (e.target === dlg) dlg.close();
+	});
+	dlg.addEventListener('close', () => {
+		v.pause();
+		opener?.focus({ preventScroll: true });
+	});
+}
+
+/** How it works: the drawing's run (test points light, the report fills) once it is on screen and its module is open
+ * (in motion the panel opens it after the robot's job: [data-b] reaches full opacity). With reduced motion it stays as
+ * drawn: finished. It runs again each time it comes back on screen. */
+function initDemo() {
+	const fig = document.querySelector<HTMLElement>('[data-sb]');
+	if (!fig || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	let poll = 0;
+	const opened = () => Number(getComputedStyle(fig).opacity) > 0.95;
+	const run = () => {
+		fig.removeAttribute('data-run');
+		void fig.offsetWidth;
+		fig.setAttribute('data-run', '');
+	};
+	new IntersectionObserver(
+		(es) => {
+			for (const e of es) {
+				clearInterval(poll);
+				if (!e.isIntersecting) continue;
+				if (opened()) run();
+				else
+					poll = window.setInterval(() => {
+						if (opened()) {
+							clearInterval(poll);
+							run();
+						}
+					}, 200);
+			}
+		},
+		{ threshold: 0.5 },
+	).observe(fig);
+}
+
 initShow();
 initNavState();
 initBrandOnce();
+initVideoDialog();
+initDemo();

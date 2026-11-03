@@ -1,8 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import imgWire from '../../assets/images/home/problem-wire.jpg';
-import imgTerminals from '../../assets/images/home/problem-terminals.jpg';
-import imgSag from '../../assets/images/home/problem-sag.jpg';
+import imgBoard from '../../assets/images/home/stage-perceive.jpg';
 import imgVariant from '../../assets/images/home/problem-variant.jpg';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
@@ -13,21 +11,25 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].problem;
 
-const alts = {
-	en: [
-		'A single blue wire arcing loosely between a robot gripper and a terminal block',
-		'Terminal blocks and relays packed between grey wiring ducts, with blue and orange wires',
-		'A black cable hanging loose from the shoulder of a collaborative robot',
-		'A different switchboard layout, photographed from the side on a slotted table',
-	],
-	it: [
-		'Un singolo filo blu che descrive un arco libero tra la pinza di un robot e una morsettiera',
-		'Morsetti e relè fitti tra canaline grigie, con fili blu e arancioni',
-		'Un cavo nero che pende libero dalla spalla di un robot collaborativo',
-		'Un quadro con una disposizione diversa, fotografato di lato su un banco a doghe',
-	],
+const L = {
+	en: {
+		alts: [
+			'Close view of a switchboard: controller modules, relays and terminal blocks wired in blue between grey ducts',
+			'A different switchboard layout, photographed from the side on a slotted table',
+		],
+		list: 'Drawing of a connection list ticked by hand: some rows have a tick, two are blank',
+	},
+	it: {
+		alts: [
+			'Vista ravvicinata di un quadro: moduli del controllore, relè e morsettiere cablati in blu tra canaline grigie',
+			'Un quadro con una disposizione diversa, fotografato di lato su un banco a doghe',
+		],
+		list: 'Disegno di una lista collegamenti spuntata a mano: alcune righe hanno il segno, due sono vuote',
+	},
 }[lang];
-const images = [imgWire, imgTerminals, imgSag, imgVariant];
+const images = [imgBoard, imgVariant];
+// the hand-ticked list: rows (y), ticked or left blank
+const rows = [0, 1, 2, 3, 4, 5].map((i) => ({ y: 58 + i * 34, tick: i !== 2 && i !== 4, w: [150, 120, 168, 136, 156, 112][i] }));
 ---
 
 <Compartment n={1} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
@@ -36,7 +38,26 @@ const images = [imgWire, imgTerminals, imgSag, imgVariant];
 			p.points.map((pt, i) => (
 				<li class="pt" data-b>
 					<figure class="pt__img">
-						<Image src={images[i]} alt={alts[i]} widths={[240, 400, 640]} sizes="(min-width: 1100px) 300px, (min-width: 700px) 45vw, 104px" loading="lazy" />
+						{images[i] ? (
+							<Image src={images[i]!} alt={L.alts[i]} widths={[320, 480, 720]} sizes="(min-width: 1100px) 400px, (min-width: 700px) 30vw, 104px" loading="lazy" />
+						) : (
+							<svg class="pt__list" viewBox="0 0 320 260" preserveAspectRatio="xMidYMid slice" role="img" aria-label={L.list}>
+								<rect x="0" y="0" width="320" height="260" fill="#E2E6EB" stroke="none" />
+								<rect x="48" y="24" width="224" height="236" fill="#FFFFFF" stroke="none" />
+								<rect x="72" y="34" width="96" height="6" fill="#5A6676" stroke="none" />
+								{rows.map((r) => (
+									<g>
+										<rect x="72" y={r.y} width="14" height="14" fill="none" stroke="#5A6676" stroke-width="2" />
+										<rect x="98" y={r.y + 5} width={r.w} height="4" fill="#9AA6B5" stroke="none" />
+										{r.tick ? (
+											<path d={`M74 ${r.y + 7} l4 5 l8 -11`} fill="none" stroke="#0D1B2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+										) : (
+											<rect x="66" y={r.y - 6} width="26" height="26" fill="none" stroke="#173C78" stroke-width="2" stroke-dasharray="4 3" />
+										)}
+									</g>
+								))}
+							</svg>
+						)}
 					</figure>
 					<div class="pt__text">
 						<h3>{pt.title}</h3>
@@ -70,7 +91,9 @@ const images = [imgWire, imgTerminals, imgSag, imgVariant];
 		background: var(--mist);
 	}
 
-	.pt__img :global(img) {
+	.pt__img :global(img),
+	.pt__list {
+		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -99,7 +122,7 @@ const images = [imgWire, imgTerminals, imgSag, imgVariant];
 
 	@media (min-width: 700px) {
 		.pts {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 			gap: 40px var(--gap);
 		}
 
@@ -124,7 +147,7 @@ const images = [imgWire, imgTerminals, imgSag, imgVariant];
 
 	@media (min-width: 1100px) {
 		.pts {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 
 		.pt p {

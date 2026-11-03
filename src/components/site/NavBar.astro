@@ -1,7 +1,7 @@
 ---
 import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
 import { copy, type Lang } from '../../i18n/copy';
-import { homePath, sectionHref } from '../../lib/i18n';
+import { homePath, sectionHref, techPath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -36,17 +36,20 @@ const logo = logoRaw
 		<nav class="nav__menu" id="site-menu" aria-label={lang === 'it' ? 'Principale' : 'Main'}>
 			<ul class="nav__links">
 				{
-					t.nav.links.map((l) => (
-						<li>
-							<a href={sectionHref(lang, l.id, isHome)} data-nav-link={l.id}>
-								{l.label}
-							</a>
-						</li>
-					))
+					t.nav.links.map((l) =>
+						l.page ? (
+							<li>
+								<a href={techPath(lang)}>{l.label}</a>
+							</li>
+						) : (
+							<li>
+								<a href={sectionHref(lang, l.id, isHome)} data-nav-link={l.id}>
+									{l.label}
+								</a>
+							</li>
+						),
+					)
 				}
-				<li>
-					<a href="/blog">{t.nav.blog}</a>
-				</li>
 			</ul>
 			<a class="nav__lang" href={langHref} hreflang={other} lang={other} aria-label={t.nav.langSwitch.ariaLabel}>
 				<span class="nav__lang-long">{t.nav.langSwitch.label}</span>
@@ -54,7 +57,9 @@ const logo = logoRaw
 			</a>
 		</nav>
 
-		<a class="btn btn--sm nav__cta" href={contactHref} data-nav-cta><Fragment set:html={x0Glyph} />{t.nav.cta}</a>
+		<a class="btn btn--sm nav__cta" href={contactHref} data-nav-cta
+			><Fragment set:html={x0Glyph} /><span class="nav__cta-long">{t.nav.cta}</span><span class="nav__cta-short">{t.nav.ctaShort}</span><span class="nav__cta-tiny">{t.nav.ctaTiny}</span></a
+		>
 
 		<button
 			class="nav__toggle"
@@ -411,10 +416,51 @@ const logo = logoRaw
 		}
 	}
 
+	/* the call to action keeps its words on every screen: the short form where the bar is narrow */
+	.nav__cta-short,
+	.nav__cta-tiny {
+		display: none;
+	}
+
+	@media (max-width: 479px) {
+		.nav__bar {
+			gap: 8px;
+		}
+
+		.nav__brand :global(.nav__logo) {
+			height: 16px;
+		}
+
+		.nav__cta {
+			padding-inline: 10px;
+			font-size: 14px;
+		}
+
+		.nav__cta :global(.x0i),
+		.nav__cta-long {
+			display: none;
+		}
+
+		.nav__cta-short {
+			display: inline;
+		}
+	}
+
+	@media (max-width: 379px) {
+		.nav__cta-short {
+			display: none;
+		}
+
+		.nav__cta-tiny {
+			display: inline;
+			font-size: 13.5px;
+		}
+	}
+
 	/* (under 380 px the call to action drops its pin glyph, the words stay) */
 	@media (max-width: 379px) {
 		.nav__brand :global(.nav__logo) {
-			height: 17px;
+			height: 16px;
 		}
 
 		.nav__cta :global(.x0i) {

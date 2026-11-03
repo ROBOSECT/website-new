@@ -1,0 +1,153 @@
+---
+/**
+ * What you get: four outcomes for a switchboard builder. The figures behind them are not measured yet: each one is a
+ * visible [TBD] placeholder, and the note says they will come with their test conditions.
+ * (+C3's vignette: the opener opens the spring cage, the lead goes in, four outputs light 1 → 4: the four outcomes.)
+ */
+import Rich from '../ui/Rich.astro';
+import Compartment from '../panel/Compartment.astro';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const b = copy[lang].benefits;
+const cta = copy[lang].cta;
+---
+
+<Compartment n={3} lang={lang} id={b.id} name={b.eyebrow} title={b.title} intro={b.intro} ground="dark">
+	<ul class="gets">
+		{
+			b.items.map((it, i) => (
+				<li class="get" data-b>
+					<p class="get__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+					<h3 class="get__title">{it.title}</h3>
+					<p class="get__body">{it.body}</p>
+					<p class="get__metric">
+						<span class="get__label">{it.valueLabel}</span>
+						<span class="get__value">
+							<Rich text={it.value} />
+						</span>
+					</p>
+				</li>
+			))
+		}
+	</ul>
+	<p class="gets__note" data-b><Rich text={b.note} /></p>
+	<p class="gets__cta" data-b>
+		<a class="btn" href="#contact">
+			{cta.label}
+			<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+				><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+			>
+		</a>
+		<span class="gets__promise">{cta.promise}</span>
+	</p>
+</Compartment>
+
+<style>
+	.gets {
+		list-style: none;
+		display: grid;
+		gap: 8px;
+	}
+
+	.get {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		padding: 20px;
+		background: var(--ink-2);
+	}
+
+	.get__n {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		color: var(--steel-light);
+	}
+
+	.get__title {
+		margin-top: 8px;
+		font-size: 21px;
+		line-height: 1.2;
+		color: var(--paper);
+	}
+
+	.get__body {
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.55;
+		color: var(--paper);
+	}
+
+	/* the measured figure: a label and its value, at the foot of the card */
+	.get__metric {
+		display: grid;
+		gap: 6px;
+		margin-top: auto;
+		padding-top: 20px;
+	}
+
+	.get__label {
+		padding-top: 12px;
+		border-top: 1px solid #2b3a52;
+		font-size: 13.5px;
+		line-height: 1.35;
+		color: var(--steel-light);
+	}
+
+	.gets__note {
+		margin-top: 16px;
+		font-size: 15px;
+		line-height: 1.5;
+		color: var(--steel-light);
+	}
+
+	.gets__cta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px 24px;
+		margin-top: 40px;
+	}
+
+	.gets__promise {
+		max-width: 30em;
+		font-size: 16px;
+		line-height: 1.45;
+		color: var(--paper);
+	}
+
+	@media (max-width: 699px) {
+		.gets__cta .btn {
+			width: 100%;
+		}
+	}
+
+	@media (min-width: 700px) {
+		.gets {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.get {
+			padding: 24px;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.gets {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		.get__title {
+			font-size: 22px;
+		}
+
+		.gets__cta {
+			margin-top: 56px;
+		}
+	}
+</style>

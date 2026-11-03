@@ -1,225 +1,155 @@
 ---
-import { Image } from 'astro:assets';
-import imgPerceive from '../../assets/images/home/stage-perceive.jpg';
-import imgPlan from '../../assets/images/home/stage-plan.jpg';
-import imgExecute from '../../assets/images/home/stage-execute.jpg';
+/**
+ * How it works: the three pillars applied to switchboard testing (sees the real board · starts from your EPLAN connection
+ * list · leaves the test report), then one drawing that shows it: a switchboard whose test points light up one by one
+ * while the test report fills in line by line beside it. The rows are illustrative, in words (no device codes on screen).
+ * The animation runs once when the drawing is on screen and open (scripts/home.ts sets data-run); without JS and with
+ * reduced motion the drawing is shown finished: every point tested, the report complete.
+ */
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
+import { techPath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
 }
 const { lang } = Astro.props;
 const p = copy[lang].process;
+const d = p.demo;
 
-const L = {
-	en: {
-		perceiveAlt: 'Close view of a switchboard: PLC modules, relays and terminal blocks wired in blue between grey ducts',
-		planAlt: 'Two collaborative robots bringing their probe end-effectors close together above the same switchboard',
-		executeAlt: 'Two probe tips touching the terminal blocks on the top row of a switchboard',
-		listCaption: 'Connection list from EPLAN (illustrative rows)',
-		// (two columns, every cell may wrap: the list fits its picture slot at every width, nothing is clipped)
-		cols: ['Connection', 'Wire'],
-		to: 'to',
-		// no device codes on screen; the rows say what each end is
-		rows: [
-			['Terminal block', 'Relay coil', '0.75 mm²', 'Dark blue'],
-			['Relay contact', 'Spring terminal', '0.75 mm²', 'Dark blue'],
-			['Spring terminal', 'Controller supply', '0.75 mm²', 'Dark blue'],
-			['Controller output', 'Input module', '0.5 mm²', 'Dark blue'],
-			['Input module', 'Power supply 0 V', '0.75 mm²', 'Dark blue'],
-			['Power supply 24 V', 'Main connector', '0.75 mm²', 'Dark blue'],
-			['Terminal block', 'Earth bar', '2.5 mm²', 'Green-yellow'],
-		],
-	},
-	it: {
-		perceiveAlt: 'Vista ravvicinata di un quadro: moduli PLC, relè e morsettiere cablati in blu tra canaline grigie',
-		planAlt: 'Due robot collaborativi avvicinano i loro end-effector a puntale sopra lo stesso quadro',
-		executeAlt: 'Due puntali a contatto con le morsettiere della fila superiore di un quadro',
-		listCaption: 'Lista collegamenti da EPLAN (righe illustrative)',
-		cols: ['Collegamento', 'Filo'],
-		to: 'a',
-		rows: [
-			['Morsettiera', 'Bobina relè', '0,75 mm²', 'Blu scuro'],
-			['Contatto relè', 'Morsetto a molla', '0,75 mm²', 'Blu scuro'],
-			['Morsetto a molla', 'Alimentazione controllore', '0,75 mm²', 'Blu scuro'],
-			['Uscita controllore', 'Modulo ingressi', '0,5 mm²', 'Blu scuro'],
-			['Modulo ingressi', 'Alimentatore 0 V', '0,75 mm²', 'Blu scuro'],
-			['Alimentatore 24 V', 'Connettore principale', '0,75 mm²', 'Blu scuro'],
-			['Morsettiera', 'Barra di terra', '2,5 mm²', 'Giallo-verde'],
-		],
-	},
-}[lang];
-
-// the same wires the page's panel tests, compartment by compartment (src/data/panel.ts), plus the earth row, in words
-const rows = L.rows;
-const pictures = [{ src: imgPerceive, alt: L.perceiveAlt }, null, { src: imgPlan, alt: L.planAlt }, { src: imgExecute, alt: L.executeAlt }];
+// the test points on the drawing, in the order of the report's rows (viewBox units)
+const PTS = [
+	{ x: 49, y: 205 },
+	{ x: 222, y: 84 },
+	{ x: 133, y: 205 },
+	{ x: 68, y: 84 },
+	{ x: 160, y: 84 },
+	{ x: 318, y: 84 },
+	{ x: 412, y: 205 },
+];
+// terminal blocks on the lower rail: x positions
+const TB = Array.from({ length: 16 }, (_, i) => 42 + i * 14);
+// wires from the terminals up into the middle duct (every other terminal)
+const WIRES = TB.filter((_, i) => i % 2 === 0);
 ---
 
 <Compartment n={2} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
 	<ol class="steps">
 		{
-			p.steps.map((s, i) => (
+			p.steps.map((s) => (
 				<li class="step" data-b>
-					{pictures[i] ? (
-						<figure class="step__pic">
-							<Image src={pictures[i]!.src} alt={pictures[i]!.alt} widths={[400, 640, 800]} sizes="(min-width: 1100px) 300px, (min-width: 700px) 45vw, 100vw" loading="lazy" />
-						</figure>
-					) : (
-						<figure class="step__pic step__pic--data" data-ui>
-							<table class="clist">
-								<caption>{L.listCaption}</caption>
-								<thead>
-									<tr>
-										{L.cols.map((c) => (
-											<th scope="col">{c}</th>
-										))}
-									</tr>
-								</thead>
-								<tbody>
-									{rows.map((r) => (
-										<tr>
-											<td>
-												<span class="clist__end">{r[0]}</span>
-												<span class="clist__to" aria-hidden="true">→</span>
-												<span class="visually-hidden"> {L.to} </span>
-												<span class="clist__end">{r[1]}</span>
-											</td>
-											<td>
-												<span class="clist__w">{r[2]}</span>
-												<span class="clist__c">{r[3]}</span>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</figure>
-					)}
-					<h3 class="step__k">{s.kicker}</h3>
-					<p class="step__title">{s.title}</p>
+					<p class="step__n" aria-hidden="true">{s.number}</p>
+					<h3 class="step__title">{s.title}</h3>
 					<p class="step__body">{s.body}</p>
 				</li>
 			))
 		}
 	</ol>
+
+	<figure class="demo" data-b data-sb aria-label={d.label}>
+		<div class="demo__board">
+			<svg class="sb" viewBox="0 0 480 330" aria-hidden="true" focusable="false">
+				{/* the enclosure and its mounting plate */}
+				<rect x="4" y="4" width="472" height="322" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="2" />
+				<rect x="18" y="18" width="444" height="294" fill="#E2E6EB" stroke="none" />
+				{/* wiring ducts: top, middle, bottom, and the two sides */}
+				<rect x="18" y="18" width="444" height="22" fill="#C3CBD5" stroke="none" />
+				<rect x="18" y="140" width="444" height="22" fill="#C3CBD5" stroke="none" />
+				<rect x="18" y="290" width="444" height="22" fill="#C3CBD5" stroke="none" />
+				<rect x="18" y="40" width="14" height="250" fill="#C3CBD5" stroke="none" />
+				<rect x="448" y="40" width="14" height="250" fill="#C3CBD5" stroke="none" />
+				{/* DIN rails */}
+				<rect x="32" y="94" width="416" height="8" fill="#9AA6B5" stroke="none" />
+				<rect x="32" y="232" width="416" height="8" fill="#9AA6B5" stroke="none" />
+				{/* upper rail: controller, input module, two relays, power supply, breaker */}
+				<rect x="44" y="64" width="92" height="66" fill="#172A44" stroke="none" />
+				<rect x="54" y="74" width="28" height="4" fill="#5A6676" stroke="none" />
+				<rect x="142" y="64" width="38" height="66" fill="#24508F" stroke="none" />
+				<rect x="206" y="68" width="30" height="58" fill="#5A6676" stroke="none" />
+				<rect x="240" y="68" width="30" height="58" fill="#5A6676" stroke="none" />
+				<rect x="290" y="60" width="68" height="74" fill="#9AA6B5" stroke="none" />
+				<rect x="300" y="110" width="48" height="14" fill="#E2E6EB" stroke="none" />
+				<rect x="378" y="66" width="22" height="62" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="1.5" />
+				<rect x="404" y="66" width="22" height="62" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="1.5" />
+				{/* wires up into the top duct */}
+				<path d="M68 64V40M90 64V40M160 64V40M222 68V40M254 68V40M318 60V40M389 66V40M415 66V40" fill="none" stroke="#173C78" stroke-width="2.5" />
+				{/* lower rail: terminal blocks and the earth bar */}
+				{TB.map((x) => <rect x={x} y="196" width="12" height="74" fill="#9AA6B5" stroke="none" />)}
+				{WIRES.map((x) => <path d={`M${x + 6} 196V162`} fill="none" stroke="#173C78" stroke-width="2.5" />)}
+				<rect x="380" y="196" width="64" height="20" fill="#9AA6B5" stroke="none" />
+				<path d="M398 196V162M426 196V162" fill="none" stroke="#5A6676" stroke-width="2.5" />
+				{/* the test points: grey until tested, copper once the connection is verified */}
+				{
+					PTS.map((q, i) => (
+						<g style={`--i:${i}`}>
+							<circle class="sb__ring" cx={q.x} cy={q.y} r="13" fill="none" stroke="#C9632C" stroke-width="2" />
+							<circle class="sb__pt" cx={q.x} cy={q.y} r="6" fill="#C9632C" stroke="#FFFFFF" stroke-width="2" />
+						</g>
+					))
+				}
+			</svg>
+		</div>
+		<div class="rep">
+			<p class="rep__title">{d.reportTitle}</p>
+			<p class="rep__sub">{d.reportSub}</p>
+			<ol class="rep__rows">
+				{
+					d.rows.map((r, i) => (
+						<li class="rep__row" style={`--i:${i}`}>
+							<span class="rep__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+							<span class="rep__c">
+								<span class="rep__end">{r[0]}</span>
+								<span class="rep__to" aria-hidden="true">→</span>
+								<span class="visually-hidden"> {d.to} </span>
+								<span class="rep__end">{r[1]}</span>
+							</span>
+							<span class="rep__ok">
+								<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="#A04A1B" stroke-width="2.2" /></svg>
+								{d.result}
+							</span>
+						</li>
+					))
+				}
+			</ol>
+			<p class="rep__sum" style={`--i:${d.rows.length}`}>{d.summary}</p>
+		</div>
+		<figcaption class="demo__cap">{d.caption}</figcaption>
+	</figure>
+
+	<p class="tech-line" data-b>
+		<span>{p.techLine.text}</span>
+		<a class="text-link" href={techPath(lang)}>
+			{p.techLine.link}
+			<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+		</a>
+	</p>
 </Compartment>
 
 <style>
 	.steps {
 		list-style: none;
 		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: 40px;
+		gap: 32px;
 	}
 
-	/* (the steps never grow past the card on a narrow phone) */
 	.step {
 		min-width: 0;
+		padding-top: 16px;
+		border-top: 4px solid var(--blue);
 	}
 
-	.step__pic {
-		aspect-ratio: 3 / 2;
-		overflow: hidden;
-		border-radius: 0 0 0 var(--bend);
-		background: var(--mist);
-		margin-bottom: 18px;
-	}
-
-	.step__pic :global(img) {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	/* the one data fragment on the page: a connection list, as panel builders know it */
-	.step__pic--data {
-		display: flex;
-		align-items: center;
-		padding: 14px 16px;
-		background: var(--white);
-		aspect-ratio: auto;
-		min-height: 0;
-		/* a list of words is never clipped: it is as tall as its rows */
-		overflow: visible;
-	}
-
-	.clist {
-		width: 100%;
-		border-collapse: collapse;
-		/* the rows in words, not device codes: the text face */
-		font-size: 12.5px;
-		line-height: 1.3;
-		font-variant-numeric: tabular-nums;
-		color: var(--ink);
-	}
-
-	.clist caption {
-		caption-side: bottom;
-		text-align: left;
-		padding-top: 10px;
-		font-family: var(--font-text);
+	.step__n {
+		font-family: var(--font-mono);
 		font-size: 13px;
-		line-height: 1.4;
+		font-weight: 500;
+		letter-spacing: 0.06em;
 		color: var(--steel);
-	}
-
-	.clist th {
-		text-align: left;
-		font-family: var(--font-text);
-		font-weight: 600;
-		font-size: 13px;
-		color: var(--steel);
-		padding: 0 6px 5px 0;
-		border-bottom: 2px solid var(--blue);
-	}
-
-	.clist td {
-		padding: 3px 10px 3px 0;
-		border-bottom: 1px solid var(--mist);
-		vertical-align: top;
-	}
-
-	.clist td:last-child {
-		padding-right: 0;
-	}
-
-	.clist__to {
-		margin-inline: 0.3em;
-		color: var(--steel);
-	}
-
-	/* each end of a connection stays whole on its line where it fits: a narrow column breaks at the arrow, not inside a name */
-	.clist__end {
-		display: inline-block;
-	}
-
-	/* the conductor: its size on one line, its colour under it */
-	.clist__w {
-		display: block;
-		white-space: nowrap;
-	}
-
-	.clist__c {
-		display: block;
-		color: var(--steel);
-	}
-
-	.clist tr:first-child td {
-		color: var(--cu-deep);
-	}
-
-	.step__k {
-		font-size: 20px;
-		line-height: 1.2;
-		color: var(--blue);
 	}
 
 	.step__title {
 		margin-top: 6px;
-		font-size: 17px;
-		font-weight: 600;
-		line-height: 1.3;
-		letter-spacing: -0.012em;
+		font-size: 20px;
+		line-height: 1.25;
 	}
 
 	.step__body {
@@ -228,39 +158,204 @@ const pictures = [{ src: imgPerceive, alt: L.perceiveAlt }, null, { src: imgPlan
 		line-height: 1.55;
 	}
 
+	/* ---------------- the drawing: the board and its report */
+	.demo {
+		display: grid;
+		gap: 16px;
+		margin-top: 48px;
+		padding: 16px;
+		background: var(--white);
+	}
+
+	.sb {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.rep {
+		min-width: 0;
+	}
+
+	.rep__title {
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	.rep__sub {
+		margin-top: 2px;
+		font-size: 14px;
+		line-height: 1.4;
+		color: var(--steel);
+	}
+
+	.rep__rows {
+		list-style: none;
+		margin-top: 12px;
+		border-top: 2px solid var(--blue);
+	}
+
+	.rep__row {
+		display: grid;
+		grid-template-columns: 26px minmax(0, 1fr) auto;
+		gap: 10px;
+		align-items: baseline;
+		padding: 6px 0;
+		border-bottom: 1px solid var(--mist);
+		font-size: 14px;
+		line-height: 1.35;
+	}
+
+	.rep__n {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--steel);
+	}
+
+	.rep__end {
+		display: inline-block;
+	}
+
+	.rep__to {
+		margin-inline: 0.35em;
+		color: var(--steel);
+	}
+
+	.rep__ok {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--cu-deep);
+	}
+
+	.rep__ok svg {
+		width: 13px;
+		height: 13px;
+	}
+
+	.rep__sum {
+		margin-top: 10px;
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.demo__cap {
+		font-size: 13.5px;
+		line-height: 1.4;
+		color: var(--steel);
+	}
+
+	/* the run (motion allowed, on screen, the module open): each test point lights, its ring pulses, its row is written */
+	.sb__ring {
+		opacity: 0;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* in motion, before its run: untested, the report empty (scripts/home.ts starts it) */
+		:global(html.motion) .demo:not([data-run]) .sb__pt {
+			fill: #9aa6b5;
+		}
+
+		:global(html.motion) .demo:not([data-run]) :is(.rep__row, .rep__sum) {
+			opacity: 0;
+		}
+
+		.demo[data-run] .sb__pt {
+			animation: sb-pt 0.3s calc(0.4s + var(--i) * 0.75s) both;
+		}
+
+		.demo[data-run] .sb__ring {
+			transform-box: fill-box;
+			transform-origin: center;
+			animation: sb-ring 0.7s calc(0.3s + var(--i) * 0.75s) both;
+		}
+
+		.demo[data-run] .rep__row,
+		.demo[data-run] .rep__sum {
+			animation: sb-row 0.35s calc(0.55s + var(--i) * 0.75s) both;
+		}
+	}
+
+	@keyframes sb-pt {
+		from {
+			fill: #9aa6b5;
+		}
+		to {
+			fill: #c9632c;
+		}
+	}
+
+	@keyframes sb-ring {
+		0% {
+			opacity: 0;
+			transform: scale(0.5);
+		}
+		40% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.5);
+		}
+	}
+
+	@keyframes sb-row {
+		from {
+			opacity: 0;
+			transform: translateY(4px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.tech-line {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px 20px;
+		margin-top: 40px;
+		font-size: 17px;
+		line-height: 1.5;
+	}
+
 	@media (min-width: 700px) {
 		.steps {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 48px var(--gap);
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 32px var(--gap);
+		}
+
+		.demo {
+			grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+			gap: 24px 28px;
+			padding: 24px;
+		}
+
+		.demo__cap {
+			grid-column: 1 / -1;
 		}
 	}
 
 	@media (min-width: 1100px) {
-		/* four columns on one subgrid: the pictures share a row, so the connection list sets its height */
-		.steps {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-			grid-template-rows: auto auto auto 1fr;
-			row-gap: 0;
-		}
-
-		.step {
-			display: grid;
-			grid-row: span 4;
-			grid-template-rows: subgrid;
-			align-content: start;
-		}
-
-		.step__pic {
-			aspect-ratio: auto;
-			min-height: 188px;
-		}
-
-		.step__pic--data {
-			padding: 12px 14px;
-		}
-
 		.step__body {
 			font-size: 17px;
+		}
+
+		.demo {
+			margin-top: 64px;
+			padding: 32px;
+			column-gap: 40px;
+		}
+
+		.rep__row {
+			font-size: 15px;
+			padding: 7px 0;
 		}
 	}
 </style>

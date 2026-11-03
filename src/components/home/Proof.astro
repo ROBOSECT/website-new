@@ -1,10 +1,17 @@
 ---
-import { Image } from 'astro:assets';
+/**
+ * Proof, before any claim: the prototype video first (#video, opened from the hero too), the probe end-effector, then the
+ * three verified facts (University of Bologna spin-off, AIRISE.eu funding, IEEE/ASME AIM 2026) and the latest news.
+ * Maturity is said plainly: a working prototype.
+ * (+C4's vignette: two arms, two probes on the two ends of one wire: the continuity test the prototype does.)
+ */
+import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import imgTool from '../../assets/images/home/tech-endeffector.jpg';
+import posterSrc from '../../assets/images/home/video-poster.jpg';
+import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import logoUnibo from '../../assets/images/logo_unibo.png';
 import logoAirise from '../../assets/images/home/logo-airise.png';
-import logoEit from '../../assets/images/logo_EIT.png';
-import logoCobo from '../../assets/images/logo_cobo.png';
 import Rich from '../ui/Rich.astro';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
@@ -15,65 +22,65 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].proof;
 const b = copy[lang].blog;
-
+const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
 const logos = [
 	{ src: logoUnibo, h: 52 },
 	{ src: logoAirise, h: 22 },
-	{ src: logoEit, h: 44 },
-	{ src: logoCobo, h: 28 },
+	null,
 ];
-
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((x, y) => y.data.date.valueOf() - x.data.date.valueOf()).slice(0, 2);
 const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Compartment n={5} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
-	<ul class="metrics">
-		{
-			p.metrics.map((m) => (
-				<li class="metric" data-b>
-					<p class="metric__label">{m.label}</p>
-					<p class="metric__value">
-						<Rich text={m.value} />
-					</p>
-				</li>
-			))
-		}
-	</ul>
-	<p class="metrics__note" data-b><Rich text={p.metricsNote} /></p>
+<Compartment n={4} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
+	<div id={p.video.id} class="tvid">
+		<div class="tvid__head" data-b>
+			<p class="tvid__status">{p.status}</p>
+			<h3 class="tvid__title">{p.video.title}</h3>
+			<p class="tvid__desc" id="video-desc">{p.video.description}</p>
+		</div>
+		<figure class="tvid__frame" data-b>
+			<video class="tvid__el" width="1920" height="1080" controls muted playsinline preload="none" poster={poster.src} aria-describedby="video-desc">
+				<source src={videoSrc} type="video/mp4" />
+			</video>
+			{/* print: the poster in the video's place (a video prints as an empty box) */}
+			<img class="tvid__print" src={poster.src} width="1280" height="720" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+			<figcaption class="tvid__cap"><Rich text={p.video.caption} /></figcaption>
+		</figure>
+	</div>
 
 	<div class="facts">
-		<div class="eco" data-b>
-			<h3>{p.programmesTitle}</h3>
-			<ul class="eco__list">
+		<figure class="tool" data-b>
+			<div class="tool__frame">
+				<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 640]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
+			</div>
+			<figcaption>{p.photo.caption}</figcaption>
+		</figure>
+		<div class="who" data-b>
+			<h3 class="who__h">{p.factsTitle}</h3>
+			<ul class="who__list">
 				{
-					p.programmes.map((g, i) => (
-						<li class="eco__row">
-							<div class="eco__logo">
-								<Image src={logos[i].src} alt={g.logoAlt} height={logos[i].h * 2} style={`height:${logos[i].h}px`} loading="lazy" />
+					p.facts.map((f, i) => (
+						<li class="who__row">
+							<div class="who__logo">
+								{logos[i] ? (
+									<Image src={logos[i]!.src} alt={f.logoAlt} height={logos[i]!.h * 2} style={`height:${logos[i]!.h}px`} loading="lazy" />
+								) : (
+									<span class="who__mark" aria-hidden="true">AIM 2026</span>
+								)}
 							</div>
-							<p>
-								<Rich text={g.role} />
-							</p>
+							<div>
+								<p class="who__name">{f.name}</p>
+								<p class="who__detail">
+									<Rich text={f.detail} />
+								</p>
+							</div>
 						</li>
 					))
 				}
 			</ul>
-		</div>
-		<div class="side">
-			<div class="events" data-b>
-				<h3>{p.eventsTitle}</h3>
-				{
-					p.events.map((e) => (
-						<p class="event">
-							<span class="event__name">{e.name}</span>
-							<span class="event__detail">{e.detail}</span>
-						</p>
-					))
-				}
-			</div>
-			<div class="news" data-b>
-				<h3>{b.homeTeaserTitle}</h3>
+			<div class="news">
+				<p class="news__h">{b.homeTeaserTitle}</p>
 				<ul class="news__list">
 					{
 						posts.map((post) => (
@@ -86,10 +93,6 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 						))
 					}
 				</ul>
-				<a class="text-link" href="/blog">
-					{b.viewAll}
-					<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-				</a>
 				{b.languageNote && <p class="news__note">{b.languageNote}</p>}
 			</div>
 		</div>
@@ -97,114 +100,162 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 </Compartment>
 
 <style>
-	.metrics {
-		list-style: none;
+	.tvid__print {
+		display: none;
+	}
+
+	@media print {
+		.tvid__el {
+			display: none !important;
+		}
+
+		.tvid__print {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.tvid {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 8px;
+		gap: 20px;
 	}
 
-	.metric {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		gap: 18px;
-		min-height: 150px;
-		padding: 18px 16px;
+	.tvid__status {
+		display: inline-block;
+		padding: 4px 10px;
 		background: var(--white);
-	}
-
-	.metric__label {
-		font-size: 15px;
+		border-left: 4px solid var(--blue);
+		font-family: var(--font-mono);
+		font-size: 12px;
 		font-weight: 500;
-		line-height: 1.35;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--blue);
 	}
 
-	.metric__value :global(.tbd) {
-		font-size: 13px;
-	}
-
-	.metrics__note {
+	.tvid__title {
 		margin-top: 14px;
+		font-size: 24px;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+	}
+
+	.tvid__desc {
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.5;
+		max-width: 46em;
+	}
+
+	.tvid__el {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		background: var(--ink);
+		border-radius: 0 0 0 var(--bend);
+	}
+
+	.tvid__cap,
+	.tool figcaption {
+		margin-top: 12px;
 		font-size: 15px;
+		line-height: 1.45;
 		color: var(--steel);
+		max-width: 80ch;
 	}
 
 	.facts {
 		display: grid;
-		gap: 48px;
+		gap: 40px;
 		margin-top: 56px;
 	}
 
-	.facts h3 {
+	.tool__frame {
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--mist);
+	}
+
+	.tool__frame :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 40%;
+	}
+
+	.who__h {
 		font-size: 24px;
 		line-height: 1.2;
 	}
 
-	.eco__list {
+	.who__list {
 		list-style: none;
 		display: grid;
 		gap: 4px;
 		margin-top: 20px;
 	}
 
-	.eco__row {
+	.who__row {
 		display: grid;
-		grid-template-columns: 112px minmax(0, 1fr);
-		gap: 20px;
-		align-items: center;
+		gap: 10px;
 		padding: 16px;
 		background: var(--white);
 	}
 
-	.eco__logo {
+	.who__logo {
 		display: flex;
 		align-items: center;
 	}
 
-	.eco__logo :global(img) {
+	.who__logo :global(img) {
 		width: auto;
 		max-width: 100%;
 		object-fit: contain;
 	}
 
-	.eco__row p {
+	.who__mark {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		color: var(--blue);
+	}
+
+	.who__name {
+		font-size: 17px;
+		font-weight: 600;
+		line-height: 1.3;
+	}
+
+	.who__detail {
+		margin-top: 4px;
 		font-size: 15px;
 		line-height: 1.45;
 	}
 
-	.side {
-		display: grid;
-		gap: 44px;
-		align-content: start;
+	.news {
+		margin-top: 32px;
 	}
 
-	.event {
-		display: grid;
-		gap: 2px;
-		margin-top: 16px;
-	}
-
-	.event__name {
-		font-size: 20px;
+	.news__h {
+		font-size: 15px;
 		font-weight: 600;
-	}
-
-	.event__detail {
-		font-size: 17px;
+		color: var(--steel);
 	}
 
 	.news__list {
 		list-style: none;
 		display: grid;
 		gap: 4px;
-		margin: 16px 0 12px;
+		margin-top: 10px;
 	}
 
 	.news__list a {
 		display: grid;
-		gap: 4px;
-		padding: 14px 16px;
+		gap: 2px;
+		padding: 12px 16px;
 		background: var(--white);
 		color: var(--ink);
 		text-decoration: none;
@@ -216,50 +267,66 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 	}
 
 	.news__date {
-		font-size: 15px;
+		font-size: 14px;
 		color: var(--steel);
 	}
 
 	.news__title {
-		font-size: 17px;
+		font-size: 16px;
 		font-weight: 600;
 		line-height: 1.3;
 	}
 
 	.news__note {
 		margin-top: 6px;
-		font-size: 15px;
+		font-size: 14px;
 		color: var(--steel);
 	}
 
 	@media (min-width: 700px) {
-		.metric {
-			min-height: 168px;
-			padding: 22px 20px;
+		.who__row {
+			grid-template-columns: 150px minmax(0, 1fr);
+			gap: 18px;
+			align-items: center;
 		}
 
-		.eco__row {
-			grid-template-columns: 150px minmax(0, 1fr);
+		.facts {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+			column-gap: var(--gap);
+			align-items: start;
 		}
 	}
 
 	@media (min-width: 1100px) {
-		.metrics {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+		.tvid {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: var(--gap);
+			align-items: start;
+		}
+
+		.tvid__head {
+			grid-column: 1 / span 4;
+		}
+
+		.tvid__title {
+			font-size: 32px;
+		}
+
+		.tvid__frame {
+			grid-column: 5 / -1;
 		}
 
 		.facts {
 			grid-template-columns: repeat(12, minmax(0, 1fr));
-			column-gap: var(--gap);
-			margin-top: 72px;
+			margin-top: 80px;
 		}
 
-		.eco {
-			grid-column: 1 / span 7;
+		.tool {
+			grid-column: 1 / span 4;
 		}
 
-		.side {
-			grid-column: 9 / -1;
+		.who {
+			grid-column: 6 / -1;
 		}
 	}
 </style>

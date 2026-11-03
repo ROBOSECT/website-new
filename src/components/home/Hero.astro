@@ -1,6 +1,9 @@
 ---
 import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import setup from '../../assets/images/setup.jpeg';
+import posterSrc from '../../assets/images/home/video-poster.jpg';
+import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import HeroWordmark from './HeroWordmark.astro';
 import { copy, type Lang } from '../../i18n/copy';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
@@ -11,6 +14,10 @@ interface Props {
 const { lang } = Astro.props;
 const h = copy[lang].hero;
 const brand = copy[lang].brand;
+const cta = copy[lang].cta;
+const a11y = copy[lang].a11y;
+const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
+const play = `${h.secondaryCta.label} (${h.secondaryCta.duration})`;
 // the logo's measures in cable widths, from the geometry (HeroWordmark's box starts 0.5 above G.top): the stem foot below the
 // box top, the O's left edge, the clear space
 const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:${+(G.oLeft / G.w).toFixed(4)};--wm-clear:${+(G.clear / G.w).toFixed(4)}`;
@@ -38,11 +45,13 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 					><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
 				>
 			</a>
-			<a class="text-link hero__video-link" href={h.secondaryCta.href}>
+			{/* without JS the link goes to the video in the Prototype section; with JS it opens the video here (scripts/home.ts) */}
+			<a class="text-link hero__video-link" href={h.secondaryCta.href} data-video-open>
 				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 3.5v11l9-5.5z" fill="currentColor" stroke="none"></path></svg>
-				{h.secondaryCta.label}
+				{play}
 			</a>
 		</div>
+		<p class="hero__promise">{cta.promise}</p>
 		<ul class="hero__facts">
 			{h.proofChips.map((c) => <li>{c}</li>)}
 		</ul>
@@ -58,7 +67,22 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			class="hero__img"
 			data-hero-img
 		/>
+		<a class="hero__play" href={h.secondaryCta.href} data-video-open>
+			<span class="hero__play-btn" aria-hidden="true"
+				><svg viewBox="0 0 18 18"><path d="M5.5 3.5v11l9-5.5z" fill="#F4F1EC" stroke="none"></path></svg></span
+			>
+			<span class="hero__play-txt">{h.secondaryCta.label}<span class="hero__play-dur">{h.secondaryCta.duration}</span></span>
+		</a>
 	</figure>
+	{/* the prototype video, opened from the first screen; nothing is downloaded until it plays (preload none, src set on open) */}
+	<dialog class="vdlg" data-video-dialog aria-label={h.videoTitle}>
+		<div class="vdlg__in">
+			<button type="button" class="vdlg__close" data-video-close aria-label={a11y.closeVideo}>
+				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3l12 12M15 3 3 15" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+			</button>
+			<video class="vdlg__v" width="1920" height="1080" controls muted playsinline preload="none" poster={poster.src} data-src={videoSrc}></video>
+		</div>
+	</dialog>
 </section>
 
 <style>
@@ -186,6 +210,115 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		color: var(--paper);
 	}
 
+	.hero__promise {
+		margin-top: 14px;
+		max-width: 34em;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--steel-light);
+	}
+
+	/* the prototype video on the first screen: a play badge on the photo of the prototype */
+	.hero__play {
+		position: absolute;
+		z-index: 2;
+		left: 16px;
+		bottom: 16px;
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		min-height: 48px;
+		padding: 6px 16px 6px 6px;
+		background: rgb(13 27 46 / 0.86);
+		color: var(--paper);
+		font-size: 15px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color 0.18s var(--ease-out);
+	}
+
+	.hero__play:hover {
+		background: #0d1b2e;
+	}
+
+	.hero__play:focus-visible {
+		outline: 3px solid var(--cu-light);
+		outline-offset: 2px;
+	}
+
+	.hero__play-btn {
+		display: grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		background: var(--blue);
+		border-radius: 50%;
+	}
+
+	.hero__play-btn svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	.hero__play-dur {
+		margin-left: 10px;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--steel-light);
+	}
+
+	.vdlg {
+		width: min(1200px, calc(100vw - 24px));
+		max-width: none;
+		max-height: calc(100svh - 24px);
+		padding: 0;
+		border: 0;
+		background: transparent;
+		overflow: visible;
+	}
+
+	.vdlg::backdrop {
+		background: rgb(13 27 46 / 0.9);
+	}
+
+	.vdlg__in {
+		position: relative;
+		display: grid;
+	}
+
+	.vdlg__v {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: calc(100svh - 84px);
+		aspect-ratio: 16 / 9;
+		background: #0d1b2e;
+	}
+
+	.vdlg__close {
+		justify-self: end;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		margin-bottom: 8px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--paper);
+		cursor: pointer;
+	}
+
+	.vdlg__close svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	.vdlg__close:focus-visible {
+		outline: 3px solid var(--cu-light);
+	}
+
 	.hero__facts {
 		list-style: none;
 		display: flex;
@@ -265,6 +398,13 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		.hero__media {
 			min-height: 100%;
 			border-radius: 0 0 0 var(--bend);
+		}
+
+		/* the play badge on the wall above the robots: in the first screen at any height */
+		.hero__play {
+			left: 24px;
+			top: 24px;
+			bottom: auto;
 		}
 	}
 

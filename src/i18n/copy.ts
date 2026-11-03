@@ -1,21 +1,24 @@
 /**
- * ROBOSECT — homepage copy, EN + IT.
+ * ROBOSECT — site copy, EN + IT.
  *
- * Source of truth for every string on the redesigned homepage, nav, footer and blog index.
+ * Source of truth for every string on the homepage, the technology page, nav, footer and blog index.
  * Both languages share the exact same key structure (and the same array lengths), so a
  * component can do `const t = copy[lang]` and never branch on language.
  *
  * Rules applied:
+ * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
+ *   harnesses and robot cells are secondary («Also for you»). One call to action everywhere: «Send us a switchboard» /
+ *   «Proponeteci un quadro».
  * - No invented metrics, clients, testimonials, certifications or people. Every missing
  *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
  *   going live; none of them should reach production.
- * - Facts used (all verified in the previous site, website-new `master` up to 42db8e8):
- *   University of Bologna spin-off (landing/Intro.astro + spin-off logo); AIRISE.eu funding for an
- *   AI-based robotic platform for control-panel quality control (blog post); EIT Manufacturing
- *   and CTE COBO logos (landing/SiteFooter.astro — relationship not stated, hence [TBD]); sponsor and
- *   exhibitor at IEEE/ASME AIM 2026, Genoa, 7–10 July 2026 (blog post); "Prototype Connection
- *   Testing Platform" video (landing/Technology.astro, robosect_v4.mp4, 90 s, no sound); Alessio Caporali, CEO & Co-Founder
- *   (gender-equality-diversity-policy.astro); legal line (landing/SiteFooter.astro).
+ * - Facts used: the brand story (ROBOSECT-Il-Cavo/01-Storia-e-strategia/racconto-del-marchio.md) and the previous site
+ *   (website-new `master` up to 42db8e8): University of Bologna spin-off; AIRISE.eu funding for an AI-based robotic platform
+ *   for switchboard quality control (visual inspection of assembly defects, cable-marker reading, continuity testing);
+ *   EIT Manufacturing and CTE COBO logos (relationship not stated, hence [TBD]); sponsor and exhibitor at IEEE/ASME AIM 2026,
+ *   Genoa, 7–10 July 2026; the prototype video (robosect_v4.mp4, 90 s, no sound); Alessio Caporali, CEO & Co-Founder; the
+ *   legal line. Reply within two working days: decided with the owner (November 2026).
+ * - The connection-list rows in the demo drawing are illustrative (no device codes on screen).
  * - Anchor ids (`id`, `href`) are language-neutral on purpose: /#contact and /it/#contact.
  * - Strings use the typographic apostrophe (’) so they never need escaping.
  * - Any string that is '' is meant to be rendered conditionally (render only if non-empty).
@@ -55,15 +58,17 @@ export const copy = {
 			opensInNewTab: '(opens in a new tab)',
 			playVideo: 'Play video',
 			pauseVideo: 'Pause video',
+			closeVideo: 'Close the video',
 		},
 
 		nav: {
+			// `page: true` links go to their own page (the technology page), the others to a homepage section
 			links: [
-				{ id: 'problem', label: 'Why cables' },
-				{ id: 'how-it-works', label: 'How it works' },
-				{ id: 'applications', label: 'Applications' },
-				{ id: 'technology', label: 'Technology' },
-				{ id: 'team', label: 'Team' },
+				{ id: 'how-it-works', label: 'How it works', page: false },
+				{ id: 'what-you-get', label: 'What you get', page: false },
+				{ id: 'proof', label: 'Prototype', page: false },
+				{ id: 'technology', label: 'Technology', page: true },
+				{ id: 'team', label: 'Team', page: false },
 			],
 			blog: 'News',
 			// Label and ariaLabel are in the TARGET language: render the link with lang="it" / lang="en".
@@ -72,7 +77,10 @@ export const copy = {
 				short: 'IT',
 				ariaLabel: 'Leggi il sito in italiano',
 			},
-			cta: 'Let’s talk',
+			cta: 'Send us a switchboard',
+			// narrow phones: the same action in fewer letters (the bar holds the logo, this button and the menu button)
+			ctaShort: 'Send a switchboard',
+			ctaTiny: 'Your switchboard',
 		},
 
 		cta: {
@@ -81,174 +89,185 @@ export const copy = {
 		},
 
 		hero: {
-			eyebrow: 'Robotics for cables, wiring harnesses and switchboards',
 			headline: 'Automation stops at the cable. Ours doesn’t.',
 			subheadline:
-				'ROBOSECT builds AI-driven robotic systems that see, plan around and work on cables, wiring harnesses and other deformable parts, starting from your EPLAN and CAD data.',
-			primaryCta: { label: 'Discuss your application', href: '#contact' },
-			secondaryCta: { label: 'Watch the prototype (1:30)', href: '#video' },
+				'Robots that test your switchboards starting from your EPLAN project. They check every connection, and every switchboard leaves with its test report.',
+			primaryCta: { label: 'Send us a switchboard', href: '#contact' },
+			secondaryCta: { label: 'Watch the prototype', duration: '1:30', href: '#video' },
 			proofChips: [
 				'University of Bologna spin-off',
 				'AIRISE.eu-funded project',
-				'Dual-arm prototype for switchboard testing',
+				'Working prototype on a real switchboard',
 			],
 			imageAlt:
 				'ROBOSECT prototype: two collaborative robots with red custom probe end-effectors working on an electrical switchboard',
+			videoTitle: 'The ROBOSECT prototype testing a switchboard',
 		},
 
 		problem: {
 			id: 'problem',
 			eyebrow: 'The problem',
-			title: 'Rigid parts got automated. Cables didn’t.',
+			title: 'Switchboard testing is still done by hand, wire by wire.',
 			intro:
-				'Robots excel when a part has the same shape, in the same place, every time. A cable never does. That is why wiring, testing and harness handling are still done by hand by skilled operators, even in plants that have automated almost everything else.',
+				'A skilled technician, a tester and the connection list: one point at a time, every board. It is the part of the job automation has never reached.',
 			points: [
 				{
-					title: 'Never in the same place twice',
-					body: 'A wire sags, twists and settles differently on every panel and every harness. Fixed coordinates and taught points break at the first variant.',
+					title: 'Hours of your best people',
+					body: 'Point-by-point testing ties up a skilled technician for hours. The very person you need on the next board.',
 				},
 				{
-					title: 'Crowded and half-hidden',
-					body: 'Terminals, labels and connectors sit between ducts and DIN rails, often covered by the very cables you need to reach. Conventional vision struggles to find them.',
+					title: 'Every board is a variant',
+					body: 'Built-to-order switchboards change every time. Nobody reprograms a robot for a board that is built once.',
 				},
 				{
-					title: 'The robot has cables too',
-					body: 'Dress packs and tool cables move with the arm. Most motion planners treat them as invisible, until they snag.',
-				},
-				{
-					title: 'Every product is a variant',
-					body: 'Switchboards are often built to order and harnesses come in many versions. Reprogramming a robot by hand for each one does not pay off.',
+					title: 'No record of what was tested',
+					body: 'At the end there is, at best, a list ticked by hand. Showing your customer which wire was tested, and how, is hard.',
 				},
 			],
-			closing: 'ROBOSECT works on exactly this part of the process: the part that bends.',
+			closing: 'This is where automation has always stopped. It is where we start.',
 		},
 
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'How it works',
-			title: 'From your design data to a robot that works on cables',
+			title: 'From your EPLAN project to the test report, in three steps',
 			intro:
-				'One pipeline, four steps. The same digital model of the product runs through all of them, so the robot knows what it should find before it starts looking.',
+				'Nobody programs the robot board by board. It starts from the data you already have and looks at the real switchboard.',
 			steps: [
 				{
 					number: '01',
-					kicker: 'Perceive',
-					title: 'See the real product',
-					body: 'Cameras and 3D sensors, paired with deep-learning models, find components, cables, connectors and labels on the actual part, and reconstruct where everything really is, not where the drawing says it should be.',
-					specs: [
-						'RGB, RGB-D and 3D sensing',
-						'Detection of components, cables, connectors and deformable linear objects',
-						'Compensation of manufacturing tolerances and positioning errors',
-						'Continuous monitoring during execution',
-					],
+					kicker: 'Sees',
+					title: 'It sees the real switchboard',
+					body: 'Cameras and 3D sensors, with deep-learning models, find components, terminals and markers where they really are, not where the drawing puts them.',
 				},
 				{
 					number: '02',
-					kicker: 'Integrate',
-					title: 'Start from your EPLAN and CAD data',
-					body: 'The system imports the engineering data you already have. A new product does not mean a new robot program.',
-					specs: [
-						'CAD models and electrical schematics (EPLAN)',
-						'Connection lists and component libraries',
-						'Production data from your management systems',
-						'New variants with minimal operator input',
-					],
+					kicker: 'Starts',
+					title: 'It starts from your EPLAN connection list',
+					body: 'The system imports the schematic and the connection list you already have and builds the test sequence from them. A new board is not a new robot program.',
 				},
 				{
 					number: '03',
-					kicker: 'Plan',
-					title: 'Plan around the cable',
-					body: 'A planning engine that combines AI reasoning, a digital twin and physics-based simulation generates collision-free trajectories that account for cables, harnesses and the robot’s own dress pack.',
-					specs: [
-						'Digital twin of cell and product',
-						'Physics-based simulation',
-						'Collision avoidance that includes cables and dress packs',
-						'Real-time trajectory generation',
-					],
+					kicker: 'Records',
+					title: 'It leaves the test report',
+					body: 'Two collaborative arms with custom probes check the continuity of each connection. Every test is logged: the board leaves with its report. The decisions stay with your tester.',
+				},
+			],
+			demo: {
+				label: 'Animated drawing: the terminals of a switchboard light up one by one while a test report fills in line by line beside it.',
+				reportTitle: 'Test report',
+				reportSub: 'Continuity test · from the EPLAN connection list',
+				to: 'to',
+				result: 'OK',
+				rows: [
+					['Terminal block', 'Relay coil'],
+					['Relay contact', 'Spring terminal'],
+					['Spring terminal', 'Controller supply'],
+					['Controller output', 'Input module'],
+					['Input module', 'Power supply 0 V'],
+					['Power supply 24 V', 'Main connector'],
+					['Terminal block', 'Earth bar'],
+				],
+				summary: '7 of 7 connections checked',
+				caption: 'Illustrative drawing: made-up board and rows, not a real report.',
+			},
+			techLine: {
+				text: 'Inside: perception, EPLAN and CAD integration, cable-aware planning with a digital twin.',
+				link: 'The technology',
+			},
+		},
+
+		benefits: {
+			id: 'what-you-get',
+			eyebrow: 'What you get',
+			title: 'What changes in your testing',
+			intro:
+				'The robot does the round of the test points. Your people check the results and decide. The figures below are published only once measured on the prototype.',
+			items: [
+				{
+					title: 'Fewer hours of manual testing',
+					body: 'The robot goes from point to point; the technician no longer spends the day with the probes in hand.',
+					value: '[TBD: minutes per switchboard]',
+					valueLabel: 'Test cycle per switchboard',
 				},
 				{
-					number: '04',
-					kicker: 'Execute',
-					title: 'Act, measure, document',
-					body: 'Collaborative robots with custom end-effectors, vision sensors and force-controlled tools carry out the task. Every operation is logged, so each product comes with its own digital record.',
-					specs: [
-						'Electrical continuity testing',
-						'Connector insertion and cable routing',
-						'Harness manipulation and precision assembly',
-						'Automatic digital reports and full traceability',
-					],
+					title: 'Every connection checked',
+					body: 'The sequence comes from the connection list: every wire on the list gets its test, none is skipped in a hurry.',
+					value: '[TBD: % of test points reached automatically]',
+					valueLabel: 'Test points reached automatically',
+				},
+				{
+					title: 'A report for your customer',
+					body: 'Every switchboard leaves with its digital test report, traceable. Ready to hand over with the board.',
+					value: '[TBD: anonymised sample report]',
+					valueLabel: 'Sample report',
+				},
+				{
+					title: 'Skilled people on the work that matters',
+					body: 'The robot takes the repetitive round of the test points. The decisions stay with the people who know the trade.',
+					value: '[TBD: technician hours freed per switchboard]',
+					valueLabel: 'Technician time freed',
+				},
+			],
+			note: 'Every figure will come with its test conditions: [TBD: switchboard type, number of test points, date of measurement].',
+		},
+
+		proof: {
+			id: 'proof',
+			eyebrow: 'Prototype',
+			title: 'A real prototype, on a real switchboard',
+			intro:
+				'Two collaborative arms with custom probes test the connections of an electrical switchboard. It is a prototype, and we call it that.',
+			status: 'Status: working prototype',
+			video: {
+				id: 'video',
+				title: 'The prototype at work',
+				caption:
+					'A camera on one arm locates the components of a switchboard, then two collaborative arms probe its wires. The corner of the frame shows when the footage is sped up or slowed down (×0.5 to ×8).',
+				description:
+					'Video, 90 seconds, no sound, English captions: a camera on one collaborative robot locates the 25 components of a switchboard, then two arms probe its wires one by one.',
+				posterAlt: 'Still frame from above: two collaborative robot arms over an open switchboard',
+			},
+			photo: {
+				alt: 'A red custom probe end-effector mounted on the wrist of a collaborative robot, with its probe tip pointing down',
+				caption: 'One of the two probe end-effectors, designed by ROBOSECT for continuity testing.',
+			},
+			factsTitle: 'Who stands behind it',
+			facts: [
+				{
+					name: 'University of Bologna spin-off',
+					detail: 'ROBOSECT SRL is a spin-off of the Alma Mater Studiorum – Università di Bologna, born from years of academic research and European innovation projects.',
+					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
+				},
+				{
+					name: 'AIRISE.eu-funded project',
+					detail: 'Funding to develop an AI-based robotic platform for switchboard quality control: visual inspection of assembly defects, cable-marker reading, continuity testing. [TBD: confirm project name, CONTENT or CONTEST]',
+					logoAlt: 'AIRISE.eu',
+				},
+				{
+					name: 'Sponsor and exhibitor at IEEE/ASME AIM 2026',
+					detail: 'Genoa, 7–10 July 2026.',
+					logoAlt: '',
 				},
 			],
 		},
 
-		applications: {
-			id: 'applications',
-			eyebrow: 'Applications',
-			title: 'Four applications, one common thread: the cable',
-			intro:
-				'From testing finished switchboards to planning robot motion around cables, every application runs on the same perception, planning and execution stack.',
+		alsoFor: {
+			id: 'also-for-you',
+			eyebrow: 'Also for you',
+			title: 'You don’t build switchboards? Cables are our job anyway.',
+			intro: 'The same base, perception, planning and execution, works on other parts that bend.',
 			statusLabel: 'Status',
 			items: [
 				{
-					id: 'switchboard-testing',
-					title: 'Automatic switchboard testing',
-					oneLiner:
-						'Continuity testing of electrical panels, generated from your wiring data and carried out by robots.',
-					body: 'The system recognises the components on the panel, builds the test sequence from the CAD/EPLAN connection list and has the robots check each connection with probes mounted on custom end-effectors. Results go straight into a digital report, so every panel has its own traceable test record.',
-					bullets: [
-						'AI recognition of panel components',
-						'Test sequence generated from CAD/EPLAN data',
-						'Automatic electrical continuity verification',
-						'Digital test report and full traceability',
-						'In development within the AIRISE.eu project: visual inspection of assembly defects and cable-marker reading',
-					],
-					status: 'Prototype',
-					project: 'funded by AIRISE.eu [TBD: confirm project name, CONTENT or CONTEST]',
-				},
-				{
-					id: 'wiring-harness',
-					title: 'Wiring harness automation',
-					oneLiner:
-						'Robotic handling, assembly and remanufacturing of automotive wiring harnesses.',
-					body: 'A harness is long, branched and floppy: the opposite of what a gripper likes. We combine multimodal perception, AI planning and collaborative robots to grasp, route and connect it, including in remanufacturing, where every harness comes back in a different condition.',
-					bullets: [
-						'Multimodal perception of cables, branches and connectors',
-						'Grasping and routing of flexible cables',
-						'Connector insertion',
-						'Assembly and remanufacturing workflows',
-					],
+					title: 'Wiring harness makers and remanufacturers',
+					body: 'Perception of cables, branches and connectors; grasping and routing of flexible cables. Built for variants and for remanufacturing, where every harness comes back in a different condition.',
 					status: 'Open to collaboration',
-					project: '',
 				},
 				{
-					id: 'motion-planning',
-					title: 'Cable-aware motion planning',
-					oneLiner:
-						'Collision-free trajectories that account for cables, dress packs and deformable objects.',
-					body: 'Standard planners model the robot as a chain of rigid links and ignore everything hanging off it. Ours plans in real time with cables, dress packs and deformable objects in the model, wherever a robot works in a cluttered cell or carries its own cables.',
-					bullets: [
-						'Real-time collision-free trajectory planning',
-						'Robot dress packs and tool cables included in the model',
-						'Deformable objects in the workspace',
-						'Digital twin and physics-based simulation',
-					],
+					title: 'Robot cells and integrators',
+					body: 'Collision-free trajectories that account for cables, including the robot’s own dress pack. We are looking for integrators to work with: partners, not only customers.',
 					status: 'Open to collaboration',
-					project: '',
-				},
-				{
-					id: 'custom-robotics',
-					title: 'Custom robotics for deformable parts',
-					oneLiner:
-						'Tailored robotic systems for processes with flexible parts, inspection tasks or high product variability.',
-					body: 'If your process involves something that bends, tangles or changes from piece to piece, we start from your parts and your current process, and design the robotic system around them: perception, end-effector, planning and integration.',
-					bullets: [
-						'Deformable object manipulation',
-						'Robotic inspection',
-						'Industrial AI and computer vision',
-						'Collaborative robotics, with the operator in control',
-					],
-					status: 'On request',
-					project: '',
 				},
 			],
 			cta: 'Tell us about your process',
@@ -358,75 +377,7 @@ export const copy = {
 					status: 'On request',
 				},
 			],
-			video: {
-				id: 'video',
-				eyebrow: 'Prototype',
-				title: 'Connection-testing platform in action',
-				caption:
-					'Prototype connection-testing platform: a camera on one arm locates the components of a switchboard, then two collaborative arms probe its wires. The corner of the frame shows when the footage is sped up or slowed down (×0.5 to ×8).',
-				description:
-					'Video, 90 seconds, no sound, English captions: a camera on one collaborative robot locates the 25 components of a switchboard, then two arms probe its wires one by one.',
-				posterAlt:
-					'Still frame from above: two collaborative robot arms over an open switchboard',
-			},
 			back: 'Back to home',
-		},
-
-		proof: {
-			id: 'proof',
-			eyebrow: 'Facts',
-			title: 'Where we stand today',
-			intro:
-				'A working prototype, a funded European project and a team rooted in university research. The figures below are published only once they have been measured.',
-			metrics: [
-				{
-					value: '[TBD: test points per hour]',
-					label: 'Test points checked per hour on the prototype',
-				},
-				{
-					value: '[TBD: minutes per panel]',
-					label: 'Test cycle time per switchboard',
-				},
-				{
-					value: '[TBD: %]',
-					label: 'Share of test points reached automatically',
-				},
-				{
-					value: '[TBD: %]',
-					label: 'Component recognition accuracy',
-				},
-			],
-			metricsNote: '[TBD: test conditions, e.g. panel type, number of test points, date of measurement]',
-			programmesTitle: 'Ecosystem and programmes',
-			programmes: [
-				{
-					name: 'University of Bologna',
-					role: 'ROBOSECT is a spin-off of the Alma Mater Studiorum – Università di Bologna.',
-					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
-				},
-				{
-					name: 'AIRISE.eu',
-					role: 'Funding to develop an AI-based robotic platform for control-panel quality control.',
-					logoAlt: 'AIRISE.eu',
-				},
-				{
-					name: 'EIT Manufacturing',
-					role: '[TBD: programme name and type of support]',
-					logoAlt: 'EIT Manufacturing, co-funded by the European Union',
-				},
-				{
-					name: 'CTE COBO',
-					role: '[TBD: programme name and type of support]',
-					logoAlt: 'CTE COBO',
-				},
-			],
-			eventsTitle: 'Events',
-			events: [
-				{
-					name: 'IEEE/ASME AIM 2026',
-					detail: 'Sponsor and exhibitor, Genoa, 7–10 July 2026',
-				},
-			],
 		},
 
 		team: {
@@ -434,7 +385,7 @@ export const copy = {
 			eyebrow: 'Team',
 			title: 'From the lab to the factory floor',
 			intro:
-				'ROBOSECT is a multidisciplinary team of robotics engineers, AI researchers and industrial automation specialists with roots at the University of Bologna. Four competences, one goal: robots that work on real products, not only in the lab.',
+				'ROBOSECT is a team of robotics engineers, AI researchers and industrial automation specialists with roots at the University of Bologna. One goal: robots that work on real products, not only in the lab.',
 			areas: [
 				{
 					title: 'Robotics & motion planning',
@@ -670,15 +621,16 @@ export const copy = {
 			opensInNewTab: '(si apre in una nuova scheda)',
 			playVideo: 'Avvia il video',
 			pauseVideo: 'Metti in pausa il video',
+			closeVideo: 'Chiudi il video',
 		},
 
 		nav: {
 			links: [
-				{ id: 'problem', label: 'Perché i cavi' },
-				{ id: 'how-it-works', label: 'Come funziona' },
-				{ id: 'applications', label: 'Applicazioni' },
-				{ id: 'technology', label: 'Tecnologia' },
-				{ id: 'team', label: 'Team' },
+				{ id: 'how-it-works', label: 'Come funziona', page: false },
+				{ id: 'what-you-get', label: 'Cosa ottenete', page: false },
+				{ id: 'proof', label: 'Prototipo', page: false },
+				{ id: 'technology', label: 'Tecnologia', page: true },
+				{ id: 'team', label: 'Team', page: false },
 			],
 			blog: 'News',
 			langSwitch: {
@@ -686,7 +638,9 @@ export const copy = {
 				short: 'EN',
 				ariaLabel: 'Read the site in English',
 			},
-			cta: 'Parliamone',
+			cta: 'Proponeteci un quadro',
+			ctaShort: 'Proponete un quadro',
+			ctaTiny: 'Il vostro quadro',
 		},
 
 		cta: {
@@ -695,174 +649,185 @@ export const copy = {
 		},
 
 		hero: {
-			eyebrow: 'Robotica per cavi, cablaggi e quadri elettrici',
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
-				'ROBOSECT sviluppa sistemi robotici con intelligenza artificiale che riconoscono i cavi, pianificano i movimenti tenendone conto e ci lavorano sopra: su cablaggi, quadri elettrici e altre parti deformabili, a partire dai vostri dati EPLAN e CAD.',
-			primaryCta: { label: 'Parliamo della vostra applicazione', href: '#contact' },
-			secondaryCta: { label: 'Il prototipo in azione (1:30)', href: '#video' },
+				'Robot che collaudano i vostri quadri elettrici partendo dal progetto EPLAN. Verificano ogni collegamento, e ogni quadro esce con il suo verbale di collaudo.',
+			primaryCta: { label: 'Proponeteci un quadro', href: '#contact' },
+			secondaryCta: { label: 'Guardate il prototipo', duration: '1:30', href: '#video' },
 			proofChips: [
 				'Spin-off dell’Università di Bologna',
 				'Progetto finanziato da AIRISE.eu',
-				'Prototipo a due bracci per il collaudo quadri',
+				'Prototipo funzionante su un quadro vero',
 			],
 			imageAlt:
 				'Prototipo ROBOSECT: due robot collaborativi con end-effector rossi a puntale, progettati su misura, al lavoro su un quadro elettrico',
+			videoTitle: 'Il prototipo ROBOSECT collauda un quadro',
 		},
 
 		problem: {
 			id: 'problem',
 			eyebrow: 'Il problema',
-			title: 'Le parti rigide sono automatizzate da anni. I cavi no.',
+			title: 'Il collaudo dei quadri si fa ancora a mano, filo per filo.',
 			intro:
-				'Un robot lavora bene quando il pezzo ha sempre la stessa forma e sta sempre nello stesso punto. Un cavo, mai. Per questo cablaggio, collaudo e gestione dei fasci cavi sono ancora affidati alle mani di operatori esperti, anche in stabilimenti che hanno automatizzato quasi tutto il resto.',
+				'Un tecnico esperto, un tester e la lista collegamenti: un punto alla volta, quadro dopo quadro. È la parte del lavoro dove l’automazione non è mai arrivata.',
 			points: [
 				{
-					title: 'Mai due volte nello stesso punto',
-					body: 'Un filo si flette, si torce e si assesta in modo diverso su ogni quadro e su ogni cablaggio. Coordinate fisse e punti appresi non reggono alla prima variante.',
+					title: 'Ore delle persone più esperte',
+					body: 'Il collaudo punto per punto tiene occupato per ore un tecnico esperto. Proprio la persona che servirebbe sul quadro successivo.',
 				},
 				{
-					title: 'Spazi stretti, punti nascosti',
-					body: 'Morsetti, siglature e connettori stanno tra canaline e guide DIN, spesso coperti proprio dai cavi da raggiungere. La visione artificiale tradizionale fatica a individuarli.',
+					title: 'Ogni quadro è una variante',
+					body: 'I quadri su commessa cambiano ogni volta. Nessuno riprogramma un robot per un quadro che si costruisce una volta sola.',
 				},
 				{
-					title: 'Anche il robot ha i suoi cavi',
-					body: 'Dress pack e cavi dell’utensile si muovono con il braccio. La maggior parte dei pianificatori di traiettoria li ignora, finché non si impigliano.',
-				},
-				{
-					title: 'Ogni prodotto è una variante',
-					body: 'I quadri sono spesso realizzati su commessa e i cablaggi esistono in molte versioni. Riprogrammare a mano il robot per ciascuno non conviene.',
+					title: 'Nessuna traccia di cosa è stato provato',
+					body: 'A fine collaudo resta, se va bene, una lista spuntata a mano. Dimostrare al cliente quale filo è stato provato, e come, è difficile.',
 				},
 			],
-			closing: 'ROBOSECT lavora proprio su questa parte del processo: quella che si piega.',
+			closing: 'Qui l’automazione si è sempre fermata. Noi partiamo da qui.',
 		},
 
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'Come funziona',
-			title: 'Dai vostri dati di progetto a un robot che lavora sui cavi',
+			title: 'Dal vostro progetto EPLAN al verbale di collaudo, in tre passi',
 			intro:
-				'Un unico flusso, quattro passaggi. Lo stesso modello digitale del prodotto li attraversa tutti: il robot sa già cosa deve trovare prima ancora di guardare.',
+				'Nessuno programma il robot quadro per quadro. Parte dai dati che avete già e guarda il quadro vero.',
 			steps: [
 				{
 					number: '01',
-					kicker: 'Percezione',
-					title: 'Vedere il prodotto reale',
-					body: 'Telecamere e sensori 3D, insieme a modelli di deep learning, individuano componenti, cavi, connettori ed etichette sul pezzo vero e ricostruiscono dove si trova davvero ogni elemento, non dove dovrebbe stare secondo il disegno.',
-					specs: [
-						'Sensori RGB, RGB-D e 3D',
-						'Riconoscimento di componenti, cavi, connettori e oggetti lineari deformabili',
-						'Compensazione delle tolleranze di produzione e degli errori di posizionamento',
-						'Monitoraggio continuo durante l’esecuzione',
-					],
+					kicker: 'Vede',
+					title: 'Vede il quadro vero',
+					body: 'Telecamere e sensori 3D, con modelli di deep learning, trovano componenti, morsetti e siglature dove stanno davvero, non dove dice il disegno.',
 				},
 				{
 					number: '02',
-					kicker: 'Integrazione',
-					title: 'Si parte dai vostri dati EPLAN e CAD',
-					body: 'Il sistema importa i dati di progettazione che avete già. Un prodotto nuovo non significa un nuovo programma robot.',
-					specs: [
-						'Modelli CAD e schemi elettrici (EPLAN)',
-						'Liste collegamenti e librerie componenti',
-						'Dati di produzione dai vostri sistemi gestionali',
-						'Nuove varianti con un intervento minimo dell’operatore',
-					],
+					kicker: 'Parte',
+					title: 'Parte dalla vostra lista collegamenti EPLAN',
+					body: 'Il sistema importa lo schema e la lista collegamenti che avete già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
 				},
 				{
 					number: '03',
-					kicker: 'Pianificazione',
-					title: 'Traiettorie che tengono conto dei cavi',
-					body: 'Un motore di pianificazione che unisce ragionamento AI, digital twin e simulazione fisica genera traiettorie senza collisioni, considerando cavi, cablaggi e il dress pack del robot stesso.',
-					specs: [
-						'Digital twin della cella e del prodotto',
-						'Simulazione basata sulla fisica',
-						'Anticollisione che include cavi e dress pack',
-						'Generazione delle traiettorie in tempo reale',
-					],
+					kicker: 'Documenta',
+					title: 'Lascia il verbale di collaudo',
+					body: 'Due bracci collaborativi con puntali su misura verificano la continuità di ogni collegamento. Ogni prova è registrata: il quadro esce con il suo verbale. Le decisioni restano al vostro collaudatore.',
+				},
+			],
+			demo: {
+				label: 'Disegno animato: i morsetti di un quadro si accendono uno alla volta mentre accanto un verbale di collaudo si compila riga per riga.',
+				reportTitle: 'Verbale di collaudo',
+				reportSub: 'Prova di continuità · dalla lista collegamenti EPLAN',
+				to: 'a',
+				result: 'OK',
+				rows: [
+					['Morsettiera', 'Bobina relè'],
+					['Contatto relè', 'Morsetto a molla'],
+					['Morsetto a molla', 'Alimentazione controllore'],
+					['Uscita controllore', 'Modulo ingressi'],
+					['Modulo ingressi', 'Alimentatore 0 V'],
+					['Alimentatore 24 V', 'Connettore principale'],
+					['Morsettiera', 'Barra di terra'],
+				],
+				summary: '7 collegamenti su 7 verificati',
+				caption: 'Disegno illustrativo: quadro e righe di fantasia, non un verbale reale.',
+			},
+			techLine: {
+				text: 'Dentro: percezione, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi.',
+				link: 'La tecnologia',
+			},
+		},
+
+		benefits: {
+			id: 'what-you-get',
+			eyebrow: 'Cosa ottenete',
+			title: 'Cosa cambia nel vostro collaudo',
+			intro:
+				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
+			items: [
+				{
+					title: 'Meno ore di collaudo manuale',
+					body: 'Il robot va da un punto all’altro; il tecnico non passa più la giornata con i puntali in mano.',
+					value: '[TBD: minuti per quadro]',
+					valueLabel: 'Tempo ciclo di collaudo per quadro',
 				},
 				{
-					number: '04',
-					kicker: 'Esecuzione',
-					title: 'Agire, misurare, documentare',
-					body: 'Robot collaborativi con end-effector su misura, sensori di visione e utensili in controllo di forza eseguono il lavoro. Ogni operazione viene registrata: ogni prodotto ha la sua documentazione digitale.',
-					specs: [
-						'Prova di continuità elettrica',
-						'Inserimento connettori e instradamento cavi',
-						'Manipolazione di cablaggi e assemblaggio di precisione',
-						'Report digitali automatici e tracciabilità completa',
-					],
+					title: 'Ogni collegamento verificato',
+					body: 'La sequenza nasce dalla lista collegamenti: ogni filo della lista ha la sua prova, nessuno saltato per fretta.',
+					value: '[TBD: % di punti di prova raggiunti in automatico]',
+					valueLabel: 'Punti di prova raggiunti in automatico',
+				},
+				{
+					title: 'Un verbale per il vostro cliente',
+					body: 'Ogni quadro esce con il suo verbale di collaudo digitale, tracciabile. Pronto da consegnare insieme al quadro.',
+					value: '[TBD: esempio di verbale anonimizzato]',
+					valueLabel: 'Verbale d’esempio',
+				},
+				{
+					title: 'Persone esperte sul lavoro che conta',
+					body: 'Il robot si prende il giro ripetitivo dei punti di prova. Le decisioni restano a chi conosce il mestiere.',
+					value: '[TBD: ore di tecnico liberate per quadro]',
+					valueLabel: 'Tempo del tecnico liberato',
+				},
+			],
+			note: 'Ogni numero arriverà con le sue condizioni di prova: [TBD: tipo di quadro, numero di punti di prova, data della misura].',
+		},
+
+		proof: {
+			id: 'proof',
+			eyebrow: 'Prototipo',
+			title: 'Un prototipo vero, su un quadro vero',
+			intro:
+				'Due bracci collaborativi con puntali progettati su misura collaudano i collegamenti di un quadro elettrico. È un prototipo, e lo chiamiamo così.',
+			status: 'Stato: prototipo funzionante',
+			video: {
+				id: 'video',
+				title: 'Il prototipo al lavoro',
+				caption:
+					'Una telecamera su un braccio trova i componenti di un quadro elettrico, poi due bracci collaborativi ne verificano i fili. Nell’angolo del video compare la velocità quando le riprese sono accelerate o rallentate (da ×0,5 a ×8).',
+				description:
+					'Video di 90 secondi, senza audio, con didascalie in inglese: una telecamera su un robot collaborativo trova i 25 componenti di un quadro elettrico, poi due bracci ne verificano i fili uno per uno.',
+				posterAlt: 'Fotogramma dall’alto: due bracci robotici collaborativi sopra un quadro elettrico aperto',
+			},
+			photo: {
+				alt: 'Un end-effector rosso a puntale, progettato su misura, montato sul polso di un robot collaborativo, con il puntale rivolto in basso',
+				caption: 'Uno dei due end-effector a puntale, progettati da ROBOSECT per la prova di continuità.',
+			},
+			factsTitle: 'Chi c’è dietro',
+			facts: [
+				{
+					name: 'Spin-off dell’Università di Bologna',
+					detail: 'ROBOSECT SRL è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, nata da anni di ricerca accademica e di progetti europei di innovazione.',
+					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
+				},
+				{
+					name: 'Progetto finanziato da AIRISE.eu',
+					detail: 'Finanziamento per sviluppare una piattaforma robotica basata su AI per il controllo qualità dei quadri elettrici: ispezione visiva dei difetti di montaggio, lettura delle siglature, prova di continuità. [TBD: confermare il nome del progetto, CONTENT o CONTEST]',
+					logoAlt: 'AIRISE.eu',
+				},
+				{
+					name: 'Sponsor ed espositore a IEEE/ASME AIM 2026',
+					detail: 'Genova, 7–10 luglio 2026.',
+					logoAlt: '',
 				},
 			],
 		},
 
-		applications: {
-			id: 'applications',
-			eyebrow: 'Applicazioni',
-			title: 'Quattro applicazioni, un filo conduttore: il cavo',
-			intro:
-				'Dal collaudo dei quadri finiti alla pianificazione dei movimenti attorno ai cavi: ogni applicazione poggia sulla stessa base di percezione, pianificazione ed esecuzione.',
+		alsoFor: {
+			id: 'also-for-you',
+			eyebrow: 'Anche per voi',
+			title: 'Non costruite quadri? I cavi sono comunque il nostro mestiere.',
+			intro: 'La stessa base, percezione, pianificazione ed esecuzione, lavora anche su altre parti che si piegano.',
 			statusLabel: 'Stato',
 			items: [
 				{
-					id: 'switchboard-testing',
-					title: 'Collaudo automatico dei quadri elettrici',
-					oneLiner:
-						'Prova di continuità dei quadri, generata dai vostri dati di cablaggio ed eseguita dai robot.',
-					body: 'Il sistema riconosce i componenti sul quadro, costruisce la sequenza di prova dalla lista collegamenti CAD/EPLAN e fa verificare ai robot ogni collegamento con puntali montati su end-effector progettati ad hoc. I risultati confluiscono in un report digitale: ogni quadro ha il suo verbale di collaudo, tracciabile.',
-					bullets: [
-						'Riconoscimento AI dei componenti del quadro',
-						'Sequenza di prova generata dai dati CAD/EPLAN',
-						'Verifica automatica della continuità elettrica',
-						'Report di collaudo digitale e tracciabilità completa',
-						'In sviluppo nel progetto AIRISE.eu: ispezione visiva dei difetti di montaggio e lettura delle siglature dei cavi',
-					],
-					status: 'Prototipo',
-					project: 'finanziato da AIRISE.eu [TBD: confermare il nome, CONTENT o CONTEST]',
-				},
-				{
-					id: 'wiring-harness',
-					title: 'Automazione dei cablaggi',
-					oneLiner:
-						'Manipolazione, assemblaggio e rigenerazione robotizzati dei cablaggi automotive.',
-					body: 'Un cablaggio è lungo, ramificato e cedevole: l’esatto contrario di ciò che una pinza gestisce bene. Combiniamo percezione multimodale, pianificazione AI e robot collaborativi per afferrarlo, instradarlo e collegarlo, anche nella rigenerazione, dove ogni cablaggio rientra in condizioni diverse.',
-					bullets: [
-						'Percezione multimodale di cavi, diramazioni e connettori',
-						'Presa e instradamento di cavi flessibili',
-						'Inserimento dei connettori',
-						'Processi di assemblaggio e rigenerazione (remanufacturing)',
-					],
+					title: 'Produttori e rigeneratori di cablaggi',
+					body: 'Percezione di cavi, diramazioni e connettori; presa e instradamento di cavi flessibili. Pensato per le varianti e per il rigenerato, dove ogni cablaggio rientra in condizioni diverse.',
 					status: 'Aperto a collaborazioni',
-					project: '',
 				},
 				{
-					id: 'motion-planning',
-					title: 'Pianificazione del movimento attenta ai cavi',
-					oneLiner:
-						'Traiettorie senza collisioni che tengono conto di cavi, dress pack e oggetti deformabili.',
-					body: 'I pianificatori standard trattano il robot come una catena di corpi rigidi e ignorano tutto ciò che gli pende addosso. Il nostro pianifica in tempo reale con cavi, dress pack e oggetti deformabili dentro il modello, ovunque un robot lavori in una cella affollata o si porti dietro i propri cavi.',
-					bullets: [
-						'Pianificazione di traiettorie senza collisioni in tempo reale',
-						'Dress pack e cavi dell’utensile inclusi nel modello',
-						'Oggetti deformabili nello spazio di lavoro',
-						'Digital twin e simulazione basata sulla fisica',
-					],
+					title: 'Celle robotizzate e integratori',
+					body: 'Traiettorie senza collisioni che tengono conto dei cavi, compreso il dress pack del robot. Cerchiamo integratori con cui lavorare: partner, non solo clienti.',
 					status: 'Aperto a collaborazioni',
-					project: '',
-				},
-				{
-					id: 'custom-robotics',
-					title: 'Robotica su misura per parti deformabili',
-					oneLiner:
-						'Sistemi robotici dedicati per processi con parti flessibili, attività di ispezione o forte variabilità di prodotto.',
-					body: 'Se il vostro processo ha a che fare con qualcosa che si piega, si aggroviglia o cambia da un pezzo all’altro, partiamo dai vostri pezzi e da come lavorate oggi, e progettiamo il sistema robotico intorno a loro: percezione, end-effector, pianificazione e integrazione.',
-					bullets: [
-						'Manipolazione di oggetti deformabili',
-						'Ispezione robotizzata',
-						'AI industriale e visione artificiale',
-						'Robotica collaborativa, con l’operatore al comando',
-					],
-					status: 'Su progetto',
-					project: '',
 				},
 			],
 			cta: 'Raccontateci il vostro processo',
@@ -972,75 +937,7 @@ export const copy = {
 					status: 'Su progetto',
 				},
 			],
-			video: {
-				id: 'video',
-				eyebrow: 'Prototipo',
-				title: 'La piattaforma di collaudo dei collegamenti in azione',
-				caption:
-					'Prototipo della piattaforma di collaudo dei collegamenti: una telecamera su un braccio trova i componenti di un quadro elettrico, poi due bracci collaborativi ne verificano i fili. Nell’angolo del video compare la velocità quando le riprese sono accelerate o rallentate (da ×0,5 a ×8).',
-				description:
-					'Video di 90 secondi, senza audio, con didascalie in inglese: una telecamera su un robot collaborativo trova i 25 componenti di un quadro elettrico, poi due bracci ne verificano i fili uno per uno.',
-				posterAlt:
-					'Fotogramma dall’alto: due bracci robotici collaborativi sopra un quadro elettrico aperto',
-			},
 			back: 'Torna alla home',
-		},
-
-		proof: {
-			id: 'proof',
-			eyebrow: 'Fatti',
-			title: 'A che punto siamo',
-			intro:
-				'Un prototipo funzionante, un progetto europeo finanziato e un team che viene dalla ricerca universitaria. Pubblichiamo i numeri qui sotto solo dopo averli misurati.',
-			metrics: [
-				{
-					value: '[TBD: punti di prova all’ora]',
-					label: 'Punti di prova verificati all’ora sul prototipo',
-				},
-				{
-					value: '[TBD: minuti per quadro]',
-					label: 'Tempo ciclo di collaudo per quadro',
-				},
-				{
-					value: '[TBD: %]',
-					label: 'Quota di punti di prova raggiunti in automatico',
-				},
-				{
-					value: '[TBD: %]',
-					label: 'Accuratezza nel riconoscimento dei componenti',
-				},
-			],
-			metricsNote: '[TBD: condizioni di prova, es. tipo di quadro, numero di punti, data della misura]',
-			programmesTitle: 'Ecosistema e programmi',
-			programmes: [
-				{
-					name: 'Università di Bologna',
-					role: 'ROBOSECT è uno spin-off dell’Alma Mater Studiorum – Università di Bologna.',
-					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
-				},
-				{
-					name: 'AIRISE.eu',
-					role: 'Finanziamento per lo sviluppo di una piattaforma robotica basata su AI per il controllo qualità dei quadri elettrici.',
-					logoAlt: 'AIRISE.eu',
-				},
-				{
-					name: 'EIT Manufacturing',
-					role: '[TBD: nome del programma e tipo di supporto]',
-					logoAlt: 'EIT Manufacturing, cofinanziato dall’Unione Europea',
-				},
-				{
-					name: 'CTE COBO',
-					role: '[TBD: nome del programma e tipo di supporto]',
-					logoAlt: 'CTE COBO',
-				},
-			],
-			eventsTitle: 'Eventi',
-			events: [
-				{
-					name: 'IEEE/ASME AIM 2026',
-					detail: 'Sponsor ed espositore, Genova, 7–10 luglio 2026',
-				},
-			],
 		},
 
 		team: {
@@ -1048,7 +945,7 @@ export const copy = {
 			eyebrow: 'Team',
 			title: 'Dal laboratorio alla linea di produzione',
 			intro:
-				'ROBOSECT è un team multidisciplinare di ingegneri robotici, ricercatori di intelligenza artificiale e specialisti di automazione industriale, con radici all’Università di Bologna. Quattro competenze, un obiettivo: robot che lavorano su prodotti veri, non solo in laboratorio.',
+				'ROBOSECT è un team di ingegneri robotici, ricercatori di intelligenza artificiale e specialisti di automazione industriale, con radici all’Università di Bologna. Un obiettivo: robot che lavorano su prodotti veri, non solo in laboratorio.',
 			areas: [
 				{
 					title: 'Robotica e motion planning',

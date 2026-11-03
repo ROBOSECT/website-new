@@ -1,0 +1,147 @@
+---
+/**
+ * Also for you: the secondary audiences, two short cards. Wiring harness makers and remanufacturers; robot cells and
+ * integrators (invited to work with us). Maturity stated on each.
+ * (+C5's vignette: the camera reads the lead's wire marker and checks it against the connection list.)
+ */
+import { Image } from 'astro:assets';
+import imgDresspack from '../../assets/images/home/problem-dresspack.jpg';
+import Compartment from '../panel/Compartment.astro';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const a = copy[lang].alsoFor;
+const L = {
+	en: {
+		harness: 'Drawing of a wiring harness: one trunk that branches into four connectors',
+		cell: 'The upper arm of a collaborative robot with black and green cables strapped along it',
+	},
+	it: {
+		harness: 'Disegno di un cablaggio: un tronco che si dirama in quattro connettori',
+		cell: 'Il braccio di un robot collaborativo con cavi neri e verdi fascettati lungo il braccio',
+	},
+}[lang];
+---
+
+<Compartment n={5} lang={lang} id={a.id} name={a.eyebrow} title={a.title} intro={a.intro} ground="light">
+	<div class="alts">
+		{
+			a.items.map((it, i) => (
+				<article class="alt" data-b>
+					<figure class="alt__pic">
+						{i === 0 ? (
+							<svg class="harness" viewBox="0 0 680 383" preserveAspectRatio="xMidYMid slice" role="img" aria-label={L.harness}>
+								<rect x="0" y="0" width="680" height="383" fill="#E2E6EB" stroke="none" />
+								<g>
+									<path fill="none" stroke="#173C78" stroke-width="12" stroke-linecap="butt" d="M 0 214 L 560 214 A 36 36 0 0 0 596 178 L 596 96" />
+									<path fill="none" stroke="#173C78" stroke-width="12" stroke-linecap="butt" d="M 168 214 A 36 36 0 0 0 204 178 L 204 72" />
+									<path fill="none" stroke="#173C78" stroke-width="12" stroke-linecap="butt" d="M 300 214 A 36 36 0 0 1 336 250 L 336 318" />
+									<path fill="none" stroke="#173C78" stroke-width="12" stroke-linecap="butt" d="M 424 214 A 36 36 0 0 0 460 178 L 460 118" />
+								</g>
+								<g>
+									<rect x="100" y="203" width="12" height="22" fill="#5A6676" stroke="none" />
+									<rect x="240" y="203" width="12" height="22" fill="#5A6676" stroke="none" />
+									<rect x="380" y="203" width="12" height="22" fill="#5A6676" stroke="none" />
+									<rect x="508" y="203" width="12" height="22" fill="#5A6676" stroke="none" />
+								</g>
+								<g>
+									<rect x="176" y="32" width="56" height="44" fill="#0D1B2E" stroke="none" />
+									<rect x="308" y="314" width="56" height="44" fill="#0D1B2E" stroke="none" />
+									<rect x="432" y="78" width="56" height="44" fill="#0D1B2E" stroke="none" />
+									<rect x="568" y="56" width="56" height="44" fill="#0D1B2E" stroke="none" />
+								</g>
+							</svg>
+						) : (
+							<Image src={imgDresspack} alt={L.cell} widths={[480, 720]} sizes="(min-width: 1100px) 560px, 100vw" loading="lazy" />
+						)}
+					</figure>
+					<p class="alt__status">
+						<span class="visually-hidden">{a.statusLabel}: </span>
+						{it.status}
+					</p>
+					<h3 class="alt__title">{it.title}</h3>
+					<p class="alt__body">{it.body}</p>
+				</article>
+			))
+		}
+	</div>
+	<p class="alts__cta" data-b>
+		<a class="text-link" href="#contact">
+			{a.cta}
+			<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+		</a>
+	</p>
+</Compartment>
+
+<style>
+	.alts {
+		display: grid;
+		gap: 40px;
+	}
+
+	.alt {
+		min-width: 0;
+	}
+
+	.alt__pic {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--mist);
+		margin-bottom: 18px;
+	}
+
+	.alt__pic :global(img),
+	.harness {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.alt__status {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--blue);
+	}
+
+	.alt__title {
+		margin-top: 6px;
+		font-size: 22px;
+		line-height: 1.2;
+	}
+
+	.alt__body {
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.55;
+		max-width: 40em;
+	}
+
+	.alts__cta {
+		margin-top: 32px;
+	}
+
+	@media (min-width: 700px) {
+		.alts {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 40px var(--gap);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.alt__body {
+			font-size: 17px;
+		}
+
+		.alts__cta {
+			margin-top: 48px;
+		}
+	}
+</style>
