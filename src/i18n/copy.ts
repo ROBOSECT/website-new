@@ -8,7 +8,7 @@
  * Rules applied:
  * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
  *   harnesses and robot cells are secondary («Also for you»). One call to action everywhere: «Send us a switchboard» /
- *   «Proponeteci un quadro».
+ *   «Proponici un quadro» (Italian addresses the reader as «tu»).
  * - No invented metrics, clients, testimonials, certifications or people. Every missing
  *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
  *   going live; none of them should reach production.
@@ -93,7 +93,7 @@ export const copy = {
 			subheadline:
 				'Robots that test your switchboards starting from your EPLAN project. They check every connection, and every switchboard leaves with its test report.',
 			primaryCta: { label: 'Send us a switchboard', href: '#contact' },
-			secondaryCta: { label: 'Watch the prototype', duration: '1:30', href: '#video' },
+			secondaryCta: { label: 'Watch the demo', duration: '1:30', href: '#video' },
 			proofChips: [
 				'University of Bologna spin-off',
 				'AIRISE.eu-funded project',
@@ -586,12 +586,12 @@ export const copy = {
 			htmlLang: 'it',
 			ogLocale: 'it_IT',
 			dateLocale: 'it-IT',
-			title: 'ROBOSECT | Collaudo automatico dei quadri elettrici con robot, dal vostro EPLAN',
+			title: 'ROBOSECT | Collaudo automatico dei quadri elettrici con robot, dal tuo EPLAN',
 			description:
-				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN: ogni collegamento verificato, un verbale per ogni quadro. Spin-off dell’Università di Bologna.',
+				'Robot che collaudano i quadri elettrici partendo dalla tua lista collegamenti EPLAN: ogni collegamento verificato, un verbale per ogni quadro. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
-				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto EPLAN. Ogni quadro esce con il suo verbale. Spin-off dell’Università di Bologna.',
+				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal tuo progetto EPLAN. Ogni quadro esce con il suo verbale. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
 				'Due robot collaborativi con end-effector a puntale su misura posizionati sopra un quadro elettrico',
 		},
@@ -618,7 +618,7 @@ export const copy = {
 		nav: {
 			links: [
 				{ id: 'how-it-works', label: 'Come funziona', page: false },
-				{ id: 'what-you-get', label: 'Cosa ottenete', page: false },
+				{ id: 'what-you-get', label: 'Cosa ottieni', page: false },
 				{ id: 'proof', label: 'Prototipo', page: false },
 				{ id: 'technology', label: 'Tecnologia', page: true },
 				{ id: 'team', label: 'Team', page: false },
@@ -629,22 +629,22 @@ export const copy = {
 				short: 'EN',
 				ariaLabel: 'Read the site in English',
 			},
-			cta: 'Proponeteci un quadro',
-			ctaShort: 'Proponete un quadro',
-			ctaTiny: 'Il vostro quadro',
+			cta: 'Proponici un quadro',
+			ctaShort: 'Proponici un quadro',
+			ctaTiny: 'Il tuo quadro',
 		},
 
 		cta: {
-			label: 'Proponeteci un quadro',
-			promise: 'Vi diciamo con franchezza se un robot può collaudarlo, e come.',
+			label: 'Proponici un quadro',
+			promise: 'Ti diciamo con franchezza se un robot può collaudarlo, e come.',
 		},
 
 		hero: {
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
-				'Robot che collaudano i vostri quadri elettrici partendo dal progetto EPLAN. Verificano ogni collegamento, e ogni quadro esce con il suo verbale di collaudo.',
-			primaryCta: { label: 'Proponeteci un quadro', href: '#contact' },
-			secondaryCta: { label: 'Guardate il prototipo', duration: '1:30', href: '#video' },
+				'Robot che collaudano i tuoi quadri elettrici partendo dal progetto EPLAN. Verificano ogni collegamento, e ogni quadro esce con il suo verbale di collaudo.',
+			primaryCta: { label: 'Proponici un quadro', href: '#contact' },
+			secondaryCta: { label: 'Guarda la demo', duration: '1:30', href: '#video' },
 			proofChips: [
 				'Spin-off dell’Università di Bologna',
 				'Progetto finanziato da AIRISE.eu',
@@ -681,9 +681,9 @@ export const copy = {
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'Come funziona',
-			title: 'Dal vostro progetto EPLAN al verbale di collaudo, in tre passi',
+			title: 'Dal tuo progetto EPLAN al verbale di collaudo, in tre passi',
 			intro:
-				'Nessuno programma il robot quadro per quadro. Parte dai dati che avete già e guarda il quadro vero.',
+				'Nessuno programma il robot quadro per quadro. Parte dai dati che hai già e guarda il quadro vero.',
 			steps: [
 				{
 					number: '01',
@@ -694,14 +694,14 @@ export const copy = {
 				{
 					number: '02',
 					kicker: 'Parte',
-					title: 'Parte dalla vostra lista collegamenti EPLAN',
-					body: 'Il sistema importa lo schema e la lista collegamenti che avete già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
+					title: 'Parte dalla tua lista collegamenti EPLAN',
+					body: 'Il sistema importa lo schema e la lista collegamenti che hai già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
 				},
 				{
 					number: '03',
 					kicker: 'Documenta',
 					title: 'Lascia il verbale di collaudo',
-					body: 'Due bracci collaborativi con puntali su misura verificano la continuità di ogni collegamento. Ogni prova è registrata: il quadro esce con il suo verbale. Le decisioni restano al vostro collaudatore.',
+					body: 'Due bracci collaborativi con puntali su misura verificano la continuità di ogni collegamento. Ogni prova è registrata: il quadro esce con il suo verbale. Le decisioni restano al tuo collaudatore.',
 				},
 			],
 			demo: {
@@ -730,10 +730,10 @@ export const copy = {
 
 		benefits: {
 			id: 'what-you-get',
-			eyebrow: 'Cosa ottenete',
-			title: 'Cosa cambia nel vostro collaudo',
+			eyebrow: 'Cosa ottieni',
+			title: 'Cosa cambia nel tuo collaudo',
 			intro:
-				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
+				'Il robot fa il giro dei punti di prova. Le tue persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
 			items: [
 				{
 					title: 'Meno ore di collaudo manuale',
@@ -748,7 +748,7 @@ export const copy = {
 					valueLabel: 'Punti di prova raggiunti in automatico',
 				},
 				{
-					title: 'Un verbale per il vostro cliente',
+					title: 'Un verbale per il tuo cliente',
 					body: 'Ogni quadro esce con il suo verbale di collaudo digitale, tracciabile. Pronto da consegnare insieme al quadro.',
 					value: '[TBD: esempio di verbale anonimizzato]',
 					valueLabel: 'Verbale d’esempio',
@@ -805,8 +805,8 @@ export const copy = {
 
 		alsoFor: {
 			id: 'also-for-you',
-			eyebrow: 'Anche per voi',
-			title: 'Non costruite quadri? I cavi sono comunque il nostro mestiere.',
+			eyebrow: 'Anche per te',
+			title: 'Non costruisci quadri? I cavi sono comunque il nostro mestiere.',
 			intro: 'La stessa base, percezione, pianificazione ed esecuzione, lavora anche su altre parti che si piegano.',
 			statusLabel: 'Stato',
 			items: [
@@ -821,7 +821,7 @@ export const copy = {
 					status: 'Aperto a collaborazioni',
 				},
 			],
-			cta: 'Raccontateci il vostro processo',
+			cta: 'Raccontaci il tuo processo',
 		},
 
 		technology: {
@@ -831,10 +831,10 @@ export const copy = {
 				'La piattaforma ROBOSECT: percezione RGB, RGB-D e 3D, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi, cobot che collaudano e documentano.',
 			eyebrow: 'Tecnologia',
 			title: 'Una piattaforma costruita attorno al cavo',
-			body: 'Quasi tutte le piattaforme di automazione trattano i cavi come un disturbo. La nostra li mette al centro: modelli di percezione che riconoscono oggetti lineari deformabili, un digital twin alimentato dai vostri dati di progettazione e una pianificazione che simula ciò che si flette. Nasce da anni di ricerca all’Università di Bologna e in progetti europei di innovazione, e oggi è al lavoro su un prototipo funzionante.',
+			body: 'Quasi tutte le piattaforme di automazione trattano i cavi come un disturbo. La nostra li mette al centro: modelli di percezione che riconoscono oggetti lineari deformabili, un digital twin alimentato dai tuoi dati di progettazione e una pianificazione che simula ciò che si flette. Nasce da anni di ricerca all’Università di Bologna e in progetti europei di innovazione, e oggi è al lavoro su un prototipo funzionante.',
 			pillars: [
 				{
-					title: 'Un digital twin dai vostri dati di progetto',
+					title: 'Un digital twin dai tuoi dati di progetto',
 					body: 'I dati CAD ed EPLAN diventano la mappa del prodotto per il robot; la percezione poi la corregge confrontandola con il pezzo reale.',
 				},
 				{
@@ -870,12 +870,12 @@ export const copy = {
 				{
 					number: '02',
 					kicker: 'Integrazione',
-					title: 'Si parte dai vostri dati EPLAN e CAD',
-					body: 'Il sistema importa i dati di progettazione che avete già. Un prodotto nuovo non significa un nuovo programma robot.',
+					title: 'Si parte dai tuoi dati EPLAN e CAD',
+					body: 'Il sistema importa i dati di progettazione che hai già. Un prodotto nuovo non significa un nuovo programma robot.',
 					specs: [
 						'Modelli CAD e schemi elettrici (EPLAN)',
 						'Liste collegamenti e librerie componenti',
-						'Dati di produzione dai vostri sistemi gestionali',
+						'Dati di produzione dai tuoi sistemi gestionali',
 						'Nuove varianti con un intervento minimo dell’operatore',
 					],
 				},
@@ -980,8 +980,8 @@ export const copy = {
 				href: '[TBD: link all’elenco delle pubblicazioni]',
 			},
 			joinUs: {
-				text: 'Volete lavorare su robot che fanno ciò che gli altri evitano?',
-				cta: 'Scriveteci',
+				text: 'Vuoi lavorare su robot che fanno ciò che gli altri evitano?',
+				cta: 'Scrivici',
 			},
 		},
 
@@ -989,9 +989,9 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contatti',
 			closingTag: 'Automazione, fino all’ultimo filo.',
-			title: 'Proponeteci un quadro.',
-			answer: 'Vi diciamo con franchezza se un robot può collaudarlo, e come.',
-			body: 'Bastano poche righe: che quadri costruite, quanti all’anno, come li collaudate oggi.',
+			title: 'Proponici un quadro.',
+			answer: 'Ti diciamo con franchezza se un robot può collaudarlo, e come.',
+			body: 'Bastano poche righe: che quadri costruisci, quanti all’anno, come li collaudi oggi.',
 			responseTime: 'Rispondiamo entro due giorni lavorativi.',
 			form: {
 				name: { label: 'Nome e cognome' },
@@ -999,22 +999,22 @@ export const copy = {
 				email: { label: 'Email aziendale', placeholder: 'nome@azienda.it' },
 				phone: { label: 'Telefono' },
 				boards: {
-					label: 'Che quadri costruite?',
-					placeholder: 'Scegliete',
+					label: 'Che quadri costruisci?',
+					placeholder: 'Scegli',
 					options: ['A bordo macchina', 'Di distribuzione', 'Di automazione', 'Altro'],
 				},
 				volumes: {
 					label: 'Quadri all’anno',
-					placeholder: 'Scegliete',
+					placeholder: 'Scegli',
 					options: ['Meno di 100', 'Da 100 a 500', 'Oltre 500'],
 				},
 				eplan: {
-					label: 'Usate EPLAN?',
-					placeholder: 'Scegliete',
+					label: 'Usi EPLAN?',
+					placeholder: 'Scegli',
 					options: ['Sì', 'No', 'Altro software'],
 				},
 				process: {
-					label: 'Come collaudate oggi?',
+					label: 'Come collaudi oggi?',
 					placeholder: 'es. un tecnico con tester e lista collegamenti, circa … ore a quadro',
 				},
 				required: 'obbligatorio',
@@ -1027,18 +1027,18 @@ export const copy = {
 				submit: 'Invia la richiesta',
 			},
 			direct: {
-				label: 'Preferite l’email? Scriveteci a',
+				label: 'Preferisci l’email? Scrivici a',
 				email: 'info@robosect.it',
 				address: 'Via Lazio 2, 40139 Bologna',
-				linkedin: 'Seguite ROBOSECT su LinkedIn',
+				linkedin: 'Segui ROBOSECT su LinkedIn',
 			},
 			show: {
 				figureLabel: 'Animazione, circa {s} s: due bracci robotici costruiscono questo modulo di contatto, una parte per ogni operazione, per ultimo il pulsante Invia. RESET la riavvia, STOP ferma i robot.',
 				details: [
 					'La telecamera segue un filo da un capo all’altro: la casella Nome. Trova un capo arricciato, non dove lo mette il disegno: Azienda.',
-					'La pinza raddrizza quel capo: Email aziendale. Lo afferra con decisione: Telefono. Lo inserisce nel morsetto a vite dell’interruttore: Che quadri costruite.',
-					'L’avvitatore serra il morsetto: Quadri all’anno. La pinza fa la prova di trazione sul filo: Usate EPLAN.',
-					'La pinza prende l’altro capo del filo: Come collaudate oggi. La leva tiene aperto il morsetto a molla, il capo entra e la molla si richiude: la casella del consenso.',
+					'La pinza raddrizza quel capo: Email aziendale. Lo afferra con decisione: Telefono. Lo inserisce nel morsetto a vite dell’interruttore: Che quadri costruisci.',
+					'L’avvitatore serra il morsetto: Quadri all’anno. La pinza fa la prova di trazione sul filo: Usi EPLAN.',
+					'La pinza prende l’altro capo del filo: Come collaudi oggi. La leva tiene aperto il morsetto a molla, il capo entra e la molla si richiude: la casella del consenso.',
 					'La pinza chiude l’interruttore: la corrente attraversa tutte le caselle già costruite.',
 					'Due puntali collaudano il circuito da un capo all’altro: Invia la richiesta. I robot tornano a riposo.',
 				],
@@ -1051,23 +1051,23 @@ export const copy = {
 				},
 			},
 			handoff: {
-				helper: 'Si apre il vostro programma di posta con la richiesta pronta. Parte solo quando premete Invia lì.',
-				live: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta compilata. Premete Invia lì per recapitarcela.',
+				helper: 'Si apre il tuo programma di posta con la richiesta pronta. Parte solo quando premi Invia lì.',
+				live: 'Dovrebbe aprirsi il tuo programma di posta con la richiesta compilata. Premi Invia lì per recapitarcela.',
 				receiptHeading: 'La richiesta è pronta da inviare.',
-				lead: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta, indirizzata a info@robosect.it. Premete Invia lì: non parte nulla finché non lo fate.',
-				nothingOpened: 'Non si è aperto nulla? Usate Riapri l’email, oppure copiate il messaggio e scrivete a info@robosect.it.',
+				lead: 'Dovrebbe aprirsi il tuo programma di posta con la richiesta, indirizzata a info@robosect.it. Premi Invia lì: non parte nulla finché non lo fai.',
+				nothingOpened: 'Non si è aperto nulla? Usa Riapri l’email, oppure copia il messaggio e scrivi a info@robosect.it.',
 				reply: 'Rispondiamo entro due giorni lavorativi.',
 				openAgain: 'Riapri l’email ↗',
 				copyMessage: 'Copia il messaggio',
 				copyAddress: 'Copia l’indirizzo',
 				noApp: 'Nessun programma di posta?',
-				noAppText: 'Copiate il messaggio e inviatelo a info@robosect.it da qualsiasi casella di posta.',
+				noAppText: 'Copia il messaggio e invialo a info@robosect.it da qualsiasi casella di posta.',
 				copied: 'Copiato ✓',
-				selectCopy: 'Selezionatelo e copiatelo (Ctrl+C / ⌘C)',
+				selectCopy: 'Selezionalo e copialo (Ctrl+C / ⌘C)',
 				shortened: '[Messaggio accorciato per il programma di posta: il testo completo è sulla pagina — Copia il messaggio]',
-				restored: 'La vostra richiesta è ancora pronta da inviare.',
+				restored: 'La tua richiesta è ancora pronta da inviare.',
 				change: 'Modifica la richiesta',
-				noscript: 'Si aprirà il vostro programma di posta con la richiesta. Se non si apre nulla, scrivete a info@robosect.it.',
+				noscript: 'Si aprirà il tuo programma di posta con la richiesta. Se non si apre nulla, scrivi a info@robosect.it.',
 				subject: 'Un quadro da collaudare',
 				consentLine: 'Consenso: chi scrive ha letto l’informativa privacy e acconsente al trattamento dei dati da parte di ROBOSECT SRL per ricevere risposta a questa richiesta.',
 				previewTo: 'A',
