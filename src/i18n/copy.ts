@@ -32,12 +32,12 @@ export const copy = {
 			htmlLang: 'en',
 			ogLocale: 'en_GB',
 			dateLocale: 'en-GB',
-			title: 'ROBOSECT | Robotics for Cables, Wiring Harnesses & Switchboards',
+			title: 'ROBOSECT | Automated switchboard testing with robots, from your EPLAN data',
 			description:
-				'AI-driven robots that work on cables: automatic switchboard testing, wiring harness handling and cable-aware motion planning from EPLAN/CAD data.',
+				'Robots that test electrical switchboards starting from your EPLAN connection list: every connection checked, a test report for every board. A University of Bologna spin-off.',
 			ogTitle: 'Automation stops at the cable. Ours doesn’t.',
 			ogDescription:
-				'ROBOSECT, a University of Bologna spin-off, builds robots that see, plan around and work on cables, wiring harnesses and switchboards.',
+				'ROBOSECT builds robots that test switchboards starting from your EPLAN project. Every switchboard leaves with its test report. A University of Bologna spin-off.',
 			ogImageAlt:
 				'Two collaborative robots with custom probe end-effectors positioned over an electrical switchboard',
 		},
@@ -586,12 +586,12 @@ export const copy = {
 			htmlLang: 'it',
 			ogLocale: 'it_IT',
 			dateLocale: 'it-IT',
-			title: 'ROBOSECT | Robotica per cavi, cablaggi e quadri elettrici',
+			title: 'ROBOSECT | Collaudo automatico dei quadri elettrici con robot, dal vostro EPLAN',
 			description:
-				'Robot con AI che lavorano sui cavi: collaudo automatico dei quadri elettrici, automazione dei cablaggi e pianificazione anticollisione, a partire da EPLAN/CAD.',
+				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN: ogni collegamento verificato, un verbale per ogni quadro. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
-				'ROBOSECT, spin-off dell’Università di Bologna, sviluppa robot che riconoscono i cavi e ci lavorano sopra: collaudo dei quadri elettrici, cablaggi, motion planning.',
+				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto EPLAN. Ogni quadro esce con il suo verbale. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
 				'Due robot collaborativi con end-effector a puntale su misura posizionati sopra un quadro elettrico',
 		},
