@@ -28,9 +28,10 @@ const partners = [
 <footer class="footer on-dark" data-ground="dark">
 	<div class="wrap">
 		<div class="footer__top">
-			<p class="footer__tagline">{f.tagline}</p>
+			{/* the home page closes on the tagline right above its form: here it would say it twice */}
+			{!isHome && <p class="footer__tagline">{f.tagline}</p>}
 
-			<nav class="footer__cols" aria-label={lang === 'it' ? 'Piè di pagina' : 'Footer'}>
+			<nav class:list={['footer__cols', isHome && 'footer__cols--wide']} aria-label={lang === 'it' ? 'Piè di pagina' : 'Footer'}>
 				<div>
 					<h2 class="footer__h">{f.columns.site}</h2>
 					<ul>
@@ -124,6 +125,10 @@ const partners = [
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: var(--gap);
+	}
+
+	.footer__cols--wide {
+		grid-column: 1 / -1;
 	}
 
 	.footer__h {

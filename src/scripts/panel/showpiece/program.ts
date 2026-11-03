@@ -733,7 +733,7 @@ export function flexAt(F: FlexTable, id: Id, t: number, out: number[] = [0, 0, 0
 
 /* ------------------------------------------------------------------ the form's parts */
 /** the Contact form's parts, top to bottom, as the page names them ([data-part] in Contact.astro) */
-export const PARTS = ['name', 'company', 'email', 'part', 'volumes', 'process', 'message', 'consent', 'send'] as const;
+export const PARTS = ['name', 'company', 'email', 'phone', 'boards', 'volumes', 'eplan', 'process', 'consent', 'send'] as const;
 export type PartId = (typeof PARTS)[number];
 /** where a part's pulse leaves the work: up drop A or drop B from its end (or a point that far from it) into the duct */
 export type PartSrc = { k: 'A' | 'B'; fromEnd: number };
@@ -761,10 +761,11 @@ export function formParts(S: Show): Part[] {
 		{ id: 'name', t: need(hit('lock'), 'lock'), src: { k: 'B', fromEnd: 0 }, job: 'trace' },
 		{ id: 'company', t: need(hit('delta'), 'delta'), src: { k: 'A', fromEnd: 0 }, job: 'delta' },
 		{ id: 'email', t: need(hit('comb'), 'comb'), src: { k: 'A', fromEnd: G.GIA + 15 }, job: 'comb' },
-		{ id: 'part', t: need(hit('seat', 0), 'seat'), src: { k: 'A', fromEnd: 0 }, job: 'seat' },
+		{ id: 'phone', t: need(hit('grip', 0), 'grip'), src: { k: 'A', fromEnd: G.GIA }, job: 'gripA' },
+		{ id: 'boards', t: need(hit('seat', 0), 'seat'), src: { k: 'A', fromEnd: 0 }, job: 'seat' },
 		{ id: 'volumes', t: need(hit('torque'), 'torque'), src: { k: 'A', fromEnd: 0 }, job: 'torque' },
-		{ id: 'process', t: need(hit('pull'), 'pull'), src: { k: 'A', fromEnd: 0 }, job: 'pull' },
-		{ id: 'message', t: need(hit('grip', 1), 'grip'), src: { k: 'B', fromEnd: G.GIB }, job: 'gripB' },
+		{ id: 'eplan', t: need(hit('pull'), 'pull'), src: { k: 'A', fromEnd: 0 }, job: 'pull' },
+		{ id: 'process', t: need(hit('grip', 1), 'grip'), src: { k: 'B', fromEnd: G.GIB }, job: 'gripB' },
 		{ id: 'consent', t: need(hit('snap'), 'snap'), src: { k: 'B', fromEnd: 0 }, job: 'snap' },
 		{ id: 'send', t: S.tEnergize + TEST_RUN, src: { k: 'B', fromEnd: 0 }, job: 'test' },
 	];

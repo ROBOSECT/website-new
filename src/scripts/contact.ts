@@ -20,7 +20,7 @@ interface Cfg {
 }
 const TO = 'info@robosect.it';
 const MAX_URL = 1800;
-const REQUIRED = ['name', 'company', 'email', 'part', 'consent'];
+const REQUIRED = ['name', 'company', 'email', 'boards', 'consent'];
 
 export function initContact(show: Show) {
 	const sec = document.querySelector<HTMLElement>('section[data-contact]');
@@ -85,7 +85,7 @@ export function initContact(show: Show) {
 	form.addEventListener('focusin', (e) => {
 		clearTimeout(leaveT);
 		const t = e.target as HTMLElement;
-		if (t.matches('input[type="text"], input[type="email"], textarea')) show?.fermata(true);
+		if (t.matches('input[type="text"], input[type="email"], input[type="tel"], textarea')) show?.fermata(true);
 	});
 	form.addEventListener('keydown', () => show?.fermata(true), { passive: true, once: false });
 	form.addEventListener('focusout', (e) => {
@@ -99,7 +99,7 @@ export function initContact(show: Show) {
 	function compose() {
 		const data = new FormData(form!);
 		const L = cfg.fieldLabels;
-		const keys = ['name', 'company', 'email', 'part', 'volumes', 'process', 'message'];
+		const keys = ['name', 'company', 'email', 'phone', 'boards', 'volumes', 'eplan', 'process'];
 		const vals: Record<string, string> = {};
 		for (const key of keys) vals[key] = String(data.get(key) ?? '').trim();
 		const co = vals.company;
@@ -116,12 +116,12 @@ export function initContact(show: Show) {
 		let href = url(body);
 		let shortened = false;
 		// the length guard: the identifying fields and the consent line always stay; only the free texts
-		// are shortened (the message first, then how it is done today), each cut at a word boundary, then the note
+		// is shortened (how they test today), cut at a word boundary, then the note
 		if (href.length > MAX_URL) {
 			shortened = true;
 			const note = '\n\n' + cfg.handoff.shortened;
 			const v = { ...vals };
-			for (const key of ['message', 'process']) {
+			for (const key of ['process']) {
 				if (url(bodyOf(v, note)).length <= MAX_URL) break;
 				const whole = v[key];
 				// the longest prefix (binary search on its length) that fits, then back to the last space

@@ -37,18 +37,19 @@ const sh = c.show;
 const st = sh.station;
 const ho = c.handoff;
 const privacyHref = '/privacy-policy';
-// the title is two sentences: the question is the heading, the answer follows as its own line
-const qIdx = c.title.indexOf('? ');
-const titleQ = qIdx > 0 ? c.title.slice(0, qIdx + 1) : c.title;
-const titleA = qIdx > 0 ? c.title.slice(qIdx + 2) : '';
+// the call to action is the heading, the promise behind it follows as its own line
+const titleQ = c.title;
+const titleA = c.answer;
+// the mail's lines, in the form's order (scripts/contact.ts)
 const labels = {
 	name: f.name.label,
 	company: f.company.label,
 	email: f.email.label,
-	part: f.partType.label,
+	phone: f.phone.label,
+	boards: f.boards.label,
 	volumes: f.volumes.label,
-	process: f.currentProcess.label,
-	message: f.message.label,
+	eplan: f.eplan.label,
+	process: f.process.label,
 };
 
 // the film, compiled once per build (both pages), its robot QA (fails the build; it also proves which film times a RESET
@@ -77,6 +78,8 @@ const cfg = {
 <section id={c.id} class="cmp cmp--contact" data-contact data-dir="ltr" aria-labelledby="contact-title">
 	<div class="stage stage--free" data-contact-stage>
 		<div class="contact__wrap">
+			{/* the brand's closing line (the promise opens the page, the tagline closes it), then the form */}
+			<p class="closing-tag">{c.closingTag}</p>
 			<div class="card on-dark" data-card>
 				<div class="legend__head card__head" data-legend-head>
 					<h2 id="contact-title" class="card__title">{titleQ}</h2>
@@ -132,37 +135,48 @@ const cfg = {
 									<label for="cf-email">{f.email.label} <span class="req">({f.required})</span></label>
 									<div class="box"><input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder={f.email.placeholder} required data-box /><i class="caret" aria-hidden="true"></i></div>
 								</div>
-								<div class="field" data-part="part">
-									<label for="cf-part">{f.partType.label} <span class="req">({f.required})</span></label>
+								<div class="field" data-part="phone">
+									<label for="cf-phone">{f.phone.label} <span class="opt">({f.optional})</span></label>
+									<div class="box"><input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" data-box /><i class="caret" aria-hidden="true"></i></div>
+								</div>
+							</div>
+							<div class="form__row">
+								<div class="field" data-part="boards">
+									<label for="cf-boards">{f.boards.label} <span class="req">({f.required})</span></label>
 									<div class="box select">
-										<select id="cf-part" name="part" required data-box>
-											<option value="">{f.partType.placeholder}</option>
-											{f.partType.options.map((o) => <option>{o}</option>)}
+										<select id="cf-boards" name="boards" required data-box>
+											<option value="">{f.boards.placeholder}</option>
+											{f.boards.options.map((o) => <option>{o}</option>)}
+										</select>
+									</div>
+								</div>
+								<div class="field" data-part="volumes">
+									<label for="cf-volumes">{f.volumes.label} <span class="opt">({f.optional})</span></label>
+									<div class="box select">
+										<select id="cf-volumes" name="volumes" data-box>
+											<option value="">{f.volumes.placeholder}</option>
+											{f.volumes.options.map((o) => <option>{o}</option>)}
 										</select>
 									</div>
 								</div>
 							</div>
 							<div class="form__row">
-								<div class="field" data-part="volumes">
-									<label for="cf-volumes">{f.volumes.label} <span class="opt">({f.optional})</span></label>
+								<div class="field" data-part="eplan">
+									<label for="cf-eplan">{f.eplan.label} <span class="opt">({f.optional})</span></label>
 									<div class="box select">
-										<select id="cf-volumes" name="volumes" aria-describedby="cf-volumes-hint" data-box>
-											<option value="">{f.volumes.placeholder}</option>
-											{f.volumes.options.map((o) => <option>{o}</option>)}
+										<select id="cf-eplan" name="eplan" data-box>
+											<option value="">{f.eplan.placeholder}</option>
+											{f.eplan.options.map((o) => <option>{o}</option>)}
 										</select>
 									</div>
-									<p class="hint" id="cf-volumes-hint">{f.volumes.hint}</p>
 								</div>
 								<div class="field" data-part="process">
-									<label for="cf-process">{f.currentProcess.label} <span class="opt">({f.optional})</span></label>
-									<div class="box"><input id="cf-process" name="process" type="text" placeholder={f.currentProcess.placeholder} data-box /><i class="caret" aria-hidden="true"></i></div>
+									<label for="cf-process">{f.process.label} <span class="opt">({f.optional})</span></label>
+									<div class="box"><textarea id="cf-process" name="process" rows="3" placeholder={f.process.placeholder} data-box></textarea><i class="caret caret--top" aria-hidden="true"></i></div>
 								</div>
 							</div>
-							<div class="form__row form__row--end">
-								<div class="field" data-part="message">
-									<label for="cf-message">{f.message.label} <span class="opt">({f.optional})</span></label>
-									<div class="box"><textarea id="cf-message" name="message" rows="3" placeholder={f.message.placeholder} data-box></textarea><i class="caret caret--top" aria-hidden="true"></i></div>
-								</div>
+							{/* (the consent on its own row, in the right column on two columns: the form's wire never crosses its words) */}
+							<div class="form__row">
 								<div class="consent" data-part="consent">
 									<span class="consent__box"><input id="cf-consent" name="consent" type="checkbox" required data-box /></span>
 									<label for="cf-consent">
@@ -232,6 +246,23 @@ const cfg = {
 
 	.contact__wrap {
 		padding-inline: calc(var(--lane) + var(--duct) / 2 + var(--mgap));
+	}
+
+	.closing-tag {
+		margin: 0 0 32px;
+		padding-inline: var(--card-pad);
+		max-width: 16em;
+		font-size: clamp(32px, 8.4vw, 64px);
+		font-weight: 600;
+		line-height: 1.04;
+		letter-spacing: -0.035em;
+		color: var(--ink);
+	}
+
+	@media (min-width: 1100px) {
+		.closing-tag {
+			margin-bottom: 48px;
+		}
 	}
 
 	.card {
@@ -665,6 +696,7 @@ const cfg = {
 
 	.form input[type='text'],
 	.form input[type='email'],
+	.form input[type='tel'],
 	.form select,
 	.form textarea {
 		display: block;
@@ -1300,6 +1332,11 @@ const cfg = {
 		.form__row > .field > label {
 			align-self: end;
 			margin-bottom: 7px;
+		}
+
+		/* a box as tall as its own control (a select beside a textarea keeps its height) */
+		.form__row > .field > .box {
+			align-self: start;
 		}
 
 		.form__row > .field > .hint {
