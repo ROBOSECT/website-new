@@ -50,7 +50,7 @@ const RACK_EDGE = 156;
 /** a one-arm cell's offset (units × the scale) that centres its arm, rack and device on the page; 0 for +C4 */
 export function soloDu(cfg: CellCfg) {
 	if (!cfg.solo) return 0;
-	const half = DEV[cfg.dev].w / 2;
+	const half = Math.max(DEV[cfg.dev].w / 2, cfg.far ?? 0);
 	const c0 = (-RACK_EDGE + half) / 2;
 	return Math.round((cfg.solo === 'L' ? -c0 : c0) * 10) / 10;
 }

@@ -25,7 +25,8 @@ import { PROGRAMS } from '../../scripts/panel/programs';
 import { compile, tokens, type Bp } from '../../scripts/panel/program';
 import { runPx } from '../../scripts/panel/scroll';
 import { DEV, staticDevice } from '../../scripts/panel/devices';
-import { CELL_BOX, staticCell } from '../../scripts/panel/robot/draw';
+import { CELL_BOX, parkedMarkup, staticCell } from '../../scripts/panel/robot/draw';
+import { propsMarkup } from '../../scripts/panel/props';
 import type { Rig } from '../../scripts/panel/robot/rig';
 import { assertRobots } from '../../scripts/panel/robot/buildqa';
 import { SOLO_K, soloDu, soloK } from '../../scripts/panel/solo';
@@ -103,7 +104,12 @@ for (const bp of Object.keys(REF) as Bp[]) pins[`${bp[0]}s`] = runCss(compileAt(
 // the robot pair, parked: as it stands before its program (motion, first paint) and after it (no-JS, reduced motion)
 const B = compileAt('desktop', undefined, 'd');
 const rig = B.rig as Rig | null;
-const robStatic = rig ? staticCell(rig.cellState(0), rig.cellState(B.tEnd)) : '';
+// (with the scene's bench props under the arms: as they stand before the program, and as it leaves them)
+const robStatic = !rig
+	? ''
+	: B.props.length
+		? `<g class="rb-start">${propsMarkup(B.props, 0)}${parkedMarkup(rig.cellState(0))}</g><g class="rb-end">${propsMarkup(B.props, B.tEnd)}${parkedMarkup(rig.cellState(B.tEnd))}</g>`
+		: staticCell(rig.cellState(0), rig.cellState(B.tEnd));
 
 // the wire marker printed on the sleeve: the compartment's plain name (no codes on screen)
 const marker = name;

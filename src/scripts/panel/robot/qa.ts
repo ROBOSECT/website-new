@@ -179,6 +179,8 @@ export interface QaReport {
 	minDuct: number;
 	minRack: number;
 	minWorld: number;
+	/** the closest any arm or tool came to a bench prop (units) */
+	minProps: number;
 	maxBelowBench: number;
 	cableInArm: number;
 	cableInLinks: number;
@@ -226,6 +228,7 @@ export function runQa(B: Compiled, tEnd: number, o: { strict?: boolean; maxViola
 		minDuct: Infinity,
 		minRack: Infinity,
 		minWorld: Infinity,
+		minProps: Infinity,
 		maxBelowBench: -Infinity,
 		cableInArm: 0,
 		cableInLinks: 0,
@@ -363,6 +366,7 @@ export function runQa(B: Compiled, tEnd: number, o: { strict?: boolean; maxViola
 			if (fx > 0.62) bad(`flex${id}`, `${id} drawn tool ${fx.toFixed(2)} units off its commanded pose at ${ms(t)} ms`);
 		}
 		const contactW = { L: rig.L.inContact(t), R: rig.R.inContact(t) };
+		const propSolids = B.props.flatMap((pr) => pr.solids?.(t) ?? []);
 		// peer (two drawn arms only)
 		if (IDS.length === 2) for (const a of arms.L.pcs) {
 			if (a.kind === 'base') continue;
@@ -449,6 +453,16 @@ export function runQa(B: Compiled, tEnd: number, o: { strict?: boolean; maxViola
 					if (p.kind === 'tip' && contactW[id] > 0) continue;
 					const d = sepConvex(p.p, s);
 					if (d < (p.kind === 'tip' ? -0.02 : 0.3)) bad(`x4${id}${p.n}`, `${id} ${p.n} into -X4 (${d.toFixed(2)}) at ${ms(t)} ms`);
+				}
+				// the bench props (props.ts): terminals, paper, the printer, the fork… (a probe's tip only in a contact window: it
+				// bottoms in a terminal's socket, or lands on its top as a taught point that misses)
+				for (const s of propSolids) {
+					if (p.kind === 'tip' && contactW[id] > 0) continue;
+					const sb = bbox(s);
+					if (boxGap(p.b, sb) > 0.6) continue;
+					const d = sepConvex(p.p, s);
+					R.minProps = Math.min(R.minProps, d);
+					if (d < 0.3) bad(`prop${id}${p.n}`, `${id} ${p.n} into a bench prop (${d.toFixed(2)}) at ${ms(t)} ms`);
 				}
 				// racks and the tools in them (except the arm's own docking and coupling)
 				for (const rk of W.racks.filter((r) => IDS.includes(r.id))) {
@@ -573,6 +587,7 @@ export function runQa(B: Compiled, tEnd: number, o: { strict?: boolean; maxViola
 		minDuct: r2(R.minDuct),
 		minRack: r2(R.minRack),
 		minWorld: r2(R.minWorld),
+		minProps: r2(R.minProps),
 		maxBelowBench: r2(R.maxBelowBench),
 		minToolCable: r2(R.minToolCable),
 		maxContactErr: +R.maxContactErr.toFixed(3),

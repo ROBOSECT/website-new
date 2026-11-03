@@ -11,6 +11,7 @@
 import { Chan, Route, carrot, lcg, type Pt } from './core';
 import { CAGE, DEV, SCREW, SCREW_BITE, SCREW_TIGHT, SOCKET_Y, TAB, TOGGLE, screwTop, togglePivot, type DevKind } from './devices';
 import { SLOT, type X4 } from './robot/draw';
+import type { Prop } from './props';
 
 /* ------------------------------------------------------------------ tokens */
 export interface RopeCfg {
@@ -237,6 +238,9 @@ export interface CellCfg {
 	layout?(T: Tok): { cx?: number; y0?: number; laneL?: number };
 	/** vignettes: the one arm that works (the other is not drawn); absent = both arms (C4's test) */
 	solo?: 'L' | 'R';
+	/** a one-arm cell: how far its props reach on the device's far side (units from the device centre; solo.ts centres the
+	 * cell from the rack's outer edge to here) */
+	far?: number;
 	program(B: Builder): void;
 }
 /** a camera job (vignettes; drawn in place, stage.ts visionAt: no inset, no words),
@@ -343,6 +347,8 @@ export class Builder {
 		sweep: new Chan(0),
 	};
 	fx: Fx[] = [];
+	/** the bench props the scene's robot works on (props.ts): drawn live and in the static cell, kept clear by the QA */
+	props: Prop[] = [];
 	cable: { grips: Grip[]; arrive: Arrival | null; seatT: number | null } = { grips: [], arrive: null, seatT: null };
 	/** the out-lead's laid route: the carrot from tR (tip s0 past the out-mouth) to D, the bench level in the exit lane */
 	out: { t: number; D: number; s0: number } | null = null;

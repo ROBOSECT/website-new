@@ -12,6 +12,7 @@ import { GLOW, PAL } from './paint';
 import { compile, MORPH_DUR, tokens, type CellCfg, type Compiled, type Geo } from './program';
 import { Track, type Glide } from './scroll';
 import type { Sample } from './sim';
+import { propsMarkup, type ArmView } from './props';
 
 const NS = 'http://www.w3.org/2000/svg';
 /** StageView.qd's slots, 9 per part */
@@ -138,6 +139,8 @@ export class StageView {
 
 	B!: Compiled;
 	G!: Geo;
+	/** the bench props' group (props.ts) */
+	private propsP: Patch | null = null;
 	tr!: Track;
 	stageH = 0;
 	Mh = 0;
@@ -532,6 +535,14 @@ export class StageView {
 		Object.assign(N, { housing: housingG, doors, doorL, doorR, face: faceG, faceR, led, ports });
 		const dev = this.cfg.dev;
 		this.P = { face: new Patch(faceG, facePainter(dev)), faceR: new Patch(faceR, facePainter(dev)), ports: new Patch(ports, tabPainter), led: new Patch(led, tabLedPainter(dev)), jaws: new Patch(N.jaws, tabPainter) };
+		// ---- the bench props (props.ts): in the robot layer, under the arms (cell units, one group, written through a Patch)
+		this.robots.querySelector(':scope > [data-props]')?.remove();
+		this.propsP = null;
+		if (this.B.props.length) {
+			const pg = el('g', { 'data-props': '', transform: `translate(${f(G.cx)} ${f(G.floor)}) scale(${sc})` });
+			this.robots.insertBefore(pg, this.robots.firstChild);
+			this.propsP = new Patch(pg, (s) => s);
+		}
 		// ---- robots: mounted on their own (ensureRig: in idle time, or in the frame the cell first shows); until then the
 		// static parked pair stands in, as it does before the panel boots
 		this.rigView?.remove?.();
@@ -1319,6 +1330,9 @@ export class StageView {
 		// ---- effects
 		this.fxAt(t);
 		lap('fx');
+		// ---- the props (their arm-bound parts follow the drawn, flexed arms)
+		if (this.propsP) this.propsP.write(propsMarkup(this.B.props, t, (S.rig as ArmView) ?? null));
+		lap('props');
 		// ---- robots (mounted now if idle time has not done it yet)
 		if (!this.rigView && S.rig) this.ensureRig();
 		if (this.rigView && S.rig) {
