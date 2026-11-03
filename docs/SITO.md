@@ -10,9 +10,9 @@ Per chi porta online il nuovo robosect.it. Il sito è fatto con Astro: pagine st
 ## In breve
 
 - Una home in due lingue (`/` e `/it/`), una pagina Tecnologia in due lingue (`/technology/` e `/it/tecnologia/`), un blog, quattro pagine legali, una pagina 404: 12 pagine.
-- **A chi parla (versione 3, novembre 2026):** ai costruttori di quadri elettrici (titolare, responsabile di produzione e qualità, ufficio tecnico EPLAN). Cablaggi e celle robotizzate sono «anche per voi». Un'unica azione ovunque: «Proponeteci un quadro» / «Send us a switchboard», con la promessa «Vi diciamo con franchezza se un robot può collaudarlo, e come.»
+- **A chi parla (versione 3, novembre 2026):** ai costruttori di quadri elettrici (titolare, responsabile di produzione e qualità, ufficio tecnico EPLAN). Cablaggi e celle robotizzate sono «anche per te». Un'unica azione ovunque: «Proponici un quadro» / «Send us a switchboard», con la promessa «Ti diciamo con franchezza se un robot può collaudarlo, e come.» L'italiano dà del tu (novembre 2026); i testi legali restano formali.
 - Nessun codice sul server, nessun database, nessun cookie di tracciamento, nessuna statistica. Il modulo contatti apre il programma di posta del visitatore.
-- La home è un quadro elettrico: un solo cavo parte dalla R del logo e attraversa la pagina; in ogni sezione un piccolo robot fa un lavoro vero; alla fine i robot costruiscono il modulo contatti.
+- La home è un quadro elettrico: un solo cavo parte dalla R del logo e attraversa la pagina; in ogni sezione un piccolo robot racconta con un lavoro vero quello che dice la sezione; alla fine i robot piegano il cavo fino a farne la R del logo, accanto al modulo contatti.
 - Per lavorarci servono Node 22.23.4 o più recente, `npm ci`, `npm run dev`, `npm run build`.
 - I testi stanno tutti in `src/i18n/copy.ts`, inglese e italiano con le stesse chiavi.
 - Prima di andare online: contenuti `[TBD]`, informativa privacy, prova su Safari e iPhone, ricerca di anteriorità del marchio, hosting e dominio (capitolo 8).
@@ -27,18 +27,18 @@ ROBOSECT è uno spin-off dell'Università di Bologna. Costruisce robot con intel
 
 | Sezione (ancora) | Contenuto | Lavoro del robot | Attrezzo |
 |---|---|---|---|
-| Apertura (hero) | «L'automazione si ferma al cavo. La nostra no.»; robot che collaudano i quadri partendo dal progetto EPLAN; foto del prototipo con il pulsante del video (si apre in una finestra, il file si scarica solo allora); «Proponeteci un quadro» | il capocorda si sfila dalla R | – |
-| Il problema (`#problem`) | collaudo a mano filo per filo: ore di persone esperte, ogni quadro è una variante, nessuna traccia di cosa è stato provato | punto insegnato mancato, vite trovata e stretta | avvitatore |
-| Come funziona (`#how-it-works`) | tre passi (vede il quadro vero · parte dalla lista collegamenti EPLAN · lascia il verbale) e un disegno animato: i punti di prova si accendono uno alla volta mentre il verbale si compila; una riga e un link alla pagina Tecnologia | la telecamera guarda, il disegno si allinea, il cavo segue il percorso | telecamera (1° lavoro) |
-| Cosa ottenete (`#what-you-get`) | meno ore di collaudo, ogni collegamento verificato, un verbale per il cliente, persone esperte libere; i numeri sono `[TBD]` | la lama apre la molla, quattro uscite si accendono | leva apri-molla |
-| Prototipo (`#proof`, video `#video`) | video del prototipo, end-effector a puntale, spin-off UniBo, AIRISE.eu, IEEE/ASME AIM 2026, ultime news; «Stato: prototipo funzionante» | due puntali sui due capi dello stesso filo | puntali di prova |
-| Anche per voi (`#also-for-you`) | cablaggi; celle robotizzate e integratori (invitati a collaborare) | la telecamera legge il marcacavi | telecamera (2° lavoro) |
-| Team (`#team`) | come prima | la pinza inserisce il cavo e accende l'interruttore | pinza |
-| Contatti (`#contact`) | la tagline «Automazione, fino all'ultimo filo.», poi «Proponeteci un quadro.» e il modulo | i due robot costruiscono il modulo: ogni lavoro crea una casella | tutti |
+| Apertura (hero) | «L'automazione si ferma al cavo. La nostra no.»; robot che collaudano i quadri partendo dal progetto EPLAN; foto del prototipo con il pulsante «Guarda la demo» (il video si apre in una finestra, il file si scarica solo allora); «Proponici un quadro» | il capocorda si sfila dalla R | – |
+| Il problema (`#problem`) | collaudo a mano filo per filo: ore di persone esperte, ogni quadro è una variante, nessuna traccia di cosa è stato provato | un quadro «variante»: i morsetti non sono dove dice il disegno (tratteggio); il puntale atterra sul punto insegnato (✕), esita da un morsetto all'altro, ne prova uno che si accende e si spegne; accanto il verbale resta bianco | puntale |
+| Come funziona (`#how-it-works`) | tre passi (vede il quadro vero · parte dalla lista collegamenti EPLAN · lascia il verbale) e un disegno animato: i punti di prova si accendono uno alla volta mentre il verbale si compila; una riga e un link alla pagina Tecnologia | la telecamera sul polso guarda il quadro (cono e parentesi), la lista collegamenti esce dal suo alimentatore, il puntale prova i morsetti nell'ordine della lista: ogni morsetto verificato diventa rame, la sua riga riceve la spunta | puntale con telecamera |
+| Cosa ottieni (`#what-you-get`) | meno ore di collaudo, ogni collegamento verificato, un verbale per il cliente, persone esperte libere; i numeri sono `[TBD]` | il puntale prova gli ultimi due morsetti (ora tutti in rame) e la stampante fa uscire il verbale, ogni riga spuntata, davanti ai verbali dei quadri precedenti | puntale |
+| Prototipo (`#proof`, video `#video`) | video del prototipo, end-effector a puntale, spin-off UniBo, AIRISE.eu, IEEE/ASME AIM 2026, ultime news; «Stato: prototipo funzionante» | due bracci con puntale su un quadro (due piastre, una canalina): i due aghi sui due capi dello stesso filo, nello stesso istante, due volte; il filo verificato si accende in rame | puntali di prova |
+| Anche per te (`#also-for-you`) | cablaggi; celle robotizzate e integratori (invitati a collaborare) | la pinza prende il connettore di un cablaggio, lo fa passare sulla forcella e lo innesta; lungo il braccio corre il suo dress pack | pinza |
+| Team (`#team`) | come prima | calma: la pinza solleva una matassa di cavo in disordine e la posa ordinata; poi si parcheggia | pinza |
+| Contatti (`#contact`) | la tagline «Automazione, fino all'ultimo filo.», poi «Proponici un quadro.» e il modulo | il cavo della pagina esce dal banco, dritto; i due robot lo posano passo dopo passo nella R del logo e crimpano il puntale di rame | due pinze |
 
 Il disegno animato di «Come funziona» parte quando è sullo schermo e la sezione è aperta (`initDemo` in `src/scripts/home.ts`); con il movimento ridotto e senza JavaScript si vede già finito.
 
-**Il modulo** chiede poco: nome, azienda, email (obbligatori), telefono (facoltativo), che quadri costruite (a bordo macchina, di distribuzione, di automazione, altro; obbligatorio), quadri all'anno (meno di 100, da 100 a 500, oltre 500), usate EPLAN (sì, no, altro software), come collaudate oggi (testo libero), consenso privacy. Invio come prima: `mailto:` con conferma. Risposta entro due giorni lavorativi (deciso con la proprietà). Le caselle sono 10 parti costruite dai robot (`PARTS` in `scripts/panel/showpiece/program.ts`; la presa salda del filo costruisce il telefono).
+**Il modulo** chiede poco: nome, azienda, email (obbligatori), telefono (facoltativo), che quadri costruisci (a bordo macchina, di distribuzione, di automazione, altro; obbligatorio), quadri all'anno (meno di 100, da 100 a 500, oltre 500), usi EPLAN (sì, no, altro software), come collaudi oggi (testo libero), consenso privacy. Invio come prima: `mailto:` con conferma. Risposta entro due giorni lavorativi (deciso con la proprietà). Il modulo è completo e usabile da subito, con o senza JavaScript: l'animazione non blocca mai la scrittura né l'invio.
 
 **I segni.** Ogni segno vuol dire una cosa sola, ovunque:
 
@@ -70,7 +70,7 @@ Sullo schermo non ci sono codici tecnici né ingrandimenti: è una scelta del cl
 | `/404.html` | pagina non trovata | inglese | `src/pages/404.astro` |
 
 - **Ancore della home**, uguali in inglese e in italiano: `#problem`, `#how-it-works`, `#what-you-get`, `#proof`, `#video`, `#also-for-you`, `#team`, `#contact`. Le vecchie `#applications` e `#technology` non esistono più (la tecnologia ha la sua pagina).
-- **Menu:** Come funziona, Cosa ottenete, Prototipo, Tecnologia (pagina), Team, cambio lingua, «Proponeteci un quadro» (porta a `#contact`, sempre nella barra; sui telefoni stretti «Proponete un quadro» o «Il vostro quadro»). News è nel footer.
+- **Menu:** Come funziona, Cosa ottieni, Prototipo, Tecnologia (pagina), Team, cambio lingua, «Proponici un quadro» (porta a `#contact`, sempre nella barra; sui telefoni stretti «Proponici un quadro» o «Il tuo quadro»). News è nel footer.
 - **File fissi** (`public/`): `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `site.webmanifest`, `og-logo.png` e `og-logo-it.png` (anteprime social), `avatar-400.png` (logo nei dati strutturati), `robots.txt`, `firma/robosect-firma-logo.png` (logo delle firme email).
 - **Generati dal build:** `sitemap-index.xml` e `sitemap-0.xml`.
 - Le pagine del sito attuale (home, blog, quattro pagine legali) restano agli stessi indirizzi. Nuove: `/it/` e la 404.
@@ -130,19 +130,19 @@ Da sapere:
 - Nei browser che non la supportano (Firefox; Safari prima del supporto) non c'è rallentamento: i lavori si svolgono durante lo scorrimento normale.
 - Morbidezza: un inseguitore smorzato (0,15 s; 0,13 s al tocco). La simulazione gira a 120 Hz e salva un'istantanea ogni 0,2 s di programma: tornare indietro è esatto e veloce. Quando la rotella si ferma i cavi si assestano (`relax.ts`).
 
-**Le sei scene.** Sei programmi (`programs.ts`): un attrezzo, un braccio (due bracci per la prova di continuità). Il controllo dei robot gira durante il build (`robot/buildqa.ts`): ogni programma su 13 impaginazioni. Una collisione, un limite superato o un contatto mancato fermano il build.
+**Le sei scene.** Sei programmi (`programs.ts`): un braccio (due bracci per il prototipo) e gli oggetti sul banco su cui lavora (`props.ts`: morsettiere su piastra con canalina, verbale, lista collegamenti, stampante, cablaggio con forcella, dress pack, matassa), disegnati in unità della cella, dal vivo e nei fotogrammi statici di inizio e fine. Il rame solo dove succede qualcosa di vero: un collegamento verificato, una spunta sul verbale, il puntale crimpato. Il controllo dei robot gira durante il build (`robot/buildqa.ts`): ogni programma su 13 impaginazioni. Una collisione, un limite superato o un contatto mancato fermano il build.
 
-**Il gran finale (Contatti).** Non segue lo scorrimento: parte da solo quando entra nello schermo e si ferma fuori schermo o con la scheda nascosta. Ogni lavoro costruisce una casella del modulo; senza toccare nulla il modulo è completo in circa 23 secondi (il film va a 1,2 volte la velocità di progetto: `FILM_RATE` in `showpiece/player.ts`). Il visitatore non aspetta mai: appena mostra di voler scrivere (clic, tocco, Tab, digitazione, compilazione automatica, puntatore fermo sul modulo, «Parliamone») tutte le caselle si montano in circa 0,3 secondi. RESET (blu) rifà il lavoro e non svuota mai una casella con del testo o con il cursore. STOP (rosso) ferma robot e costruzione. Invia apre il programma di posta (`mailto:info@robosect.it`), con una conferma e la possibilità di copiare il testo.
+**Il gran finale (Contatti): la R.** Non segue lo scorrimento: parte da solo quando entra nello schermo, si ferma fuori schermo, con la scheda nascosta e mentre il visitatore scrive. Il cavo della pagina entra nella scheda, corre nella canalina sotto il banco ed esce dal banco dove starà l'asta della R; il resto è disteso dritto sul banco. Il braccio sinistro lo posa nell'asta, nell'angolo e nel tratto superiore; lo passa al destro, che posa l'occhiello, la gamba e il piede; poi il destro prende il puntale dal suo supporto, lo infila sull'estremità e lo crimpa (l'unico momento in rame). Il cavo non cambia mai lunghezza: la sua forma è la linea mediana della R del kit del logo (`lib/cable-geometry.ts`) fino al punto posato, poi un tratto fino alla pinza e il resto disteso. Il fotogramma finale è il tracciato del kit, con il suo puntale, sotto una sola trasformazione (scala 0,75): si sovrappone alla R del logo (verificato al pixel a 1440 e 390 px). Circa 15 secondi. RESET (blu, acceso a R finita) la rifà dal cavo dritto; STOP (rosso) ferma i robot, un secondo STOP li lascia ripartire. Invia apre il programma di posta (`mailto:info@robosect.it`), con una conferma e la possibilità di copiare il testo. File: `showpiece/rfilm.ts` (geometria, coreografia, forma del cavo), `rview.ts` (disegno), `player.ts` (orologio e pulsanti), `rqa.ts` (controllo dei robot del finale nel build).
 
 **Movimento ridotto e senza JavaScript.**
 
-- Con il movimento ridotto: niente rallentamenti, tutte le sezioni aperte, robot fermi, modulo già costruito; RESET e STOP disattivati.
+- Con il movimento ridotto: niente rallentamenti, tutte le sezioni aperte, robot fermi, la R già finita; RESET e STOP disattivati.
 - Senza JavaScript: una pagina statica normale; i robot sono disegnati durante il build; il modulo usa `mailto:`.
 - Se gli script non partono entro 3,5 secondi, la pagina torna da sola allo stato statico.
 
 **Il visitatore non resta mai bloccato.** Scorrimento nativo, tastiera, ancore, ricerca nella pagina: un salto a un'ancora arriva sul titolo con la sezione già completa.
 
-**I file** (`src/scripts/panel/`): `index.ts` (regia, misure, ridimensionamento, modalità), `scroll.ts` (morbidezza, rallentamento, ancore, tastiera), `stage.ts` (una sezione disegnata), `program.ts` e `programs.ts` (le sei scene), `sim.ts` (simulazione e istantanee), `robot/` (cinematica, disegno, controllo, logo), `devices.ts` (i componenti), `hero.ts` (il capocorda che si sfila), `sleeve.ts` (i marcacavi), `relax.ts`, `showpiece/` (il gran finale e il modulo), `svgpatch.ts`, `paint.ts`. Il modulo: `src/scripts/contact.ts`.
+**I file** (`src/scripts/panel/`): `index.ts` (regia, misure, ridimensionamento, modalità), `scroll.ts` (morbidezza, rallentamento, ancore, tastiera), `stage.ts` (una sezione disegnata), `program.ts` e `programs.ts` (le sei scene), `sim.ts` (simulazione e istantanee), `robot/` (cinematica, disegno, controllo, logo), `devices.ts` (i componenti), `hero.ts` (il capocorda che si sfila), `sleeve.ts` (i marcacavi), `relax.ts`, `props.ts` (gli oggetti sul banco), `showpiece/` (il gran finale: la R), `svgpatch.ts`, `paint.ts`. Il modulo: `src/scripts/contact.ts`.
 
 **Per guardarci dentro.** Nell'indirizzo: `?panel-debug=1` (pannello con i valori), `?panel-capture=1` (immagini ripetibili), `?panel-sda=0` (prova senza rallentamento). Nella console: `window.__panel`, `__scroll`, `__show`.
 
@@ -153,7 +153,7 @@ Da sapere:
 **Dentro il repository.**
 
 - `npx astro check`: tipi e modelli.
-- `npm run build`: oltre al sito, il controllo dei robot delle sei scene e del gran finale. Se un robot sbaglia, il build si ferma.
+- `npm run build`: oltre al sito, il controllo dei robot delle sei scene (anche la distanza dagli oggetti sul banco) e del gran finale (limiti e velocità dei giunti, distanza fra i bracci, banco e bordi, nessun braccio attraverso il cavo). Se un robot sbaglia, il build si ferma.
 
 **Fuori dal repository.** Le prove automatiche con Playwright usate durante il lavoro sono nella cartella di lavoro della sessione in cui è nato il sito, `proposte/B2/qa/` (235 MB con i risultati). Non sono in nessun repository. Sono scritte per quella macchina: percorsi assoluti, solo Chromium. Si lanciano così: `npm run build`, poi `(cd dist && python3 -m http.server 8771)`, poi lo script.
 
@@ -168,7 +168,7 @@ Da sapere:
 | `qa/v4/perf.mjs` | tempo di JavaScript per immagine, con processore rallentato 4 volte |
 | `qa/r3/ev.sh static` e `timed` | gli script dei revisori |
 
-**Ultimi risultati.** Il 03/11/2026, versione 3 (home per i costruttori di quadri): `npx astro build` 12 pagine, controllo dei robot superato (anche il modulo a 10 caselle); `npx astro check` 0 errori, 0 avvisi; Playwright con Chromium a 1440 × 900 e 390 × 844 (e 360 × 740), inglese e italiano, con movimento, con movimento ridotto e senza JavaScript: nessun errore nella console, nessuno scorrimento orizzontale sui telefoni; modulo: campi obbligatori, invio con `mailto:` e conferma provati; finestra del video provata (il file non si riproduce nel Chromium di prova, che non ha il codec H.264). Il 28/10/2026, su questo ramo: build, `astro check` e sezione Tecnologia come nel capitolo 3. Prima (verifica R1 del 27/10/2026 sul commit 93fd4dd del repository di lavoro, uguale a questo ramo tranne il video, il logo della firma e le dipendenze): build 10 pagine; `astro check` 0 errori e 0 avvisi; robot: tutto superato; colori SVG: superato su 10 pagine; logo su 9 bracci su 9; modulo: tutto come previsto; rotella vera a 1440, 1280 e 768 (inglese), 390 e 360 (italiano): nessuna immagine tagliata. La verifica completa precedente (v4) aveva provato 10 misure di schermo in due lingue: nessuna immagine tagliata.
+**Ultimi risultati.** Il 03/11/2026, scene raccontate e finale con la R: `npx astro build` 12 pagine, controllo dei robot superato (sei scene su 13 impaginazioni, finale); `npx astro check` 0 errori, 0 avvisi; Playwright con Chromium a 1440 × 900 e 390 × 844: strisce di fotogrammi di ogni scena guardate e corrette in due giri, la R finale sovrapposta alla R del logo (nessun pixel diverso oltre 1 px), movimento ridotto e senza JavaScript (R finita), nessun errore nella console, nessuno scorrimento orizzontale sui telefoni. Prima, il 03/11/2026, versione 3 (home per i costruttori di quadri): `npx astro build` 12 pagine, controllo dei robot superato (anche il modulo a 10 caselle); `npx astro check` 0 errori, 0 avvisi; Playwright con Chromium a 1440 × 900 e 390 × 844 (e 360 × 740), inglese e italiano, con movimento, con movimento ridotto e senza JavaScript: nessun errore nella console, nessuno scorrimento orizzontale sui telefoni; modulo: campi obbligatori, invio con `mailto:` e conferma provati; finestra del video provata (il file non si riproduce nel Chromium di prova, che non ha il codec H.264). Il 28/10/2026, su questo ramo: build, `astro check` e sezione Tecnologia come nel capitolo 3. Prima (verifica R1 del 27/10/2026 sul commit 93fd4dd del repository di lavoro, uguale a questo ramo tranne il video, il logo della firma e le dipendenze): build 10 pagine; `astro check` 0 errori e 0 avvisi; robot: tutto superato; colori SVG: superato su 10 pagine; logo su 9 bracci su 9; modulo: tutto come previsto; rotella vera a 1440, 1280 e 768 (inglese), 390 e 360 (italiano): nessuna immagine tagliata. La verifica completa precedente (v4) aveva provato 10 misure di schermo in due lingue: nessuna immagine tagliata.
 
 Tutte le prove sono state fatte solo con Chromium. Safari, iPhone e Firefox non sono mai stati provati.
 
@@ -196,7 +196,7 @@ Tutte le prove sono state fatte solo con Chromium. Safari, iPhone e Firefox non 
 
 | Punto | Cosa manca | Chi |
 |---|---|---|
-| Contenuti `[TBD]` | in `copy.ts` più l'indirizzo LinkedIn in `Team.astro`: quattro numeri di «Cosa ottenete» (minuti per quadro, % di punti raggiunti in automatico, verbale d'esempio anonimizzato, ore di tecnico liberate) e le condizioni di prova; nome del progetto AIRISE (CONTENT o CONTEST); il ruolo di EIT Manufacturing e CTE COBO (oggi solo loghi nel footer); una frase sulla nascita di ROBOSECT; bio, nome e ruolo del co-fondatore, ritratti; elenco delle pubblicazioni. Nessuno deve andare online | ROBOSECT |
+| Contenuti `[TBD]` | in `copy.ts` più l'indirizzo LinkedIn in `Team.astro`: quattro numeri di «Cosa ottieni» (minuti per quadro, % di punti raggiunti in automatico, verbale d'esempio anonimizzato, ore di tecnico liberate) e le condizioni di prova; nome del progetto AIRISE (CONTENT o CONTEST); il ruolo di EIT Manufacturing e CTE COBO (oggi solo loghi nel footer); una frase sulla nascita di ROBOSECT; bio, nome e ruolo del co-fondatore, ritratti; elenco delle pubblicazioni. Nessuno deve andare online | ROBOSECT |
 | Informativa privacy | il paragrafo ora descrive il modulo (prepara un'email, il sito non salva nulla); il testo legale va approvato. Da valutare se citare che la home ricorda la posizione di scorrimento nella sessione del browser (`sessionStorage`, nessun dato personale). Se un giorno il modulo invierà a un server, il testo va rifatto | ROBOSECT |
 | Safari e iPhone | mai provati (solo Chromium). Gli SVG sono controllati; il passaggio al programma di posta è pensato per Safari ma non verificato. Provare l'anteprima su un iPhone, su Safari desktop e su Firefox (lì senza rallentamento, per scelta) | team web |
 | Logo della firma a `/firma/` | le firme email lo caricano da `www.robosect.it/firma/robosect-firma-logo.png`: finché il nuovo sito non è online a quell'indirizzo, nelle firme l'immagine non compare | team web |
@@ -209,9 +209,8 @@ Tutte le prove sono state fatte solo con Chromium. Safari, iPhone e Firefox non 
 
 **Limiti noti, nessuno blocca** (da `BUILD-NOTES.md`, verifica v4):
 
-- sui telefoni i bracci del gran finale sono piccoli (circa 50 px);
+- sui telefoni il gran finale è piccolo (la R è alta circa 70 px) e gli oggetti delle scene a due bracci (il prototipo) sono minuti;
 - il tempo di JavaScript per immagine è poco sopra l'obiettivo;
-- RESET premuto a metà lavoro aspetta fino a circa 3 secondi;
 - sui telefoni orizzontali bassi una scena dura 1–3 scatti;
 - l'apertura (il capocorda) dura meno di 2 scatti sugli schermi da 1280 a 1536;
 - il film va a 1,2 volte la velocità di progetto;
