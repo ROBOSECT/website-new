@@ -9,7 +9,8 @@ Per chi porta online il nuovo robosect.it. Il sito è fatto con Astro: pagine st
 
 ## In breve
 
-- Una home in due lingue (`/` e `/it/`), un blog, quattro pagine legali, una pagina 404: 10 pagine.
+- Una home in due lingue (`/` e `/it/`), una pagina Tecnologia in due lingue (`/technology/` e `/it/tecnologia/`), un blog, quattro pagine legali, una pagina 404: 12 pagine.
+- **A chi parla (versione 3, novembre 2026):** ai costruttori di quadri elettrici (titolare, responsabile di produzione e qualità, ufficio tecnico EPLAN). Cablaggi e celle robotizzate sono «anche per voi». Un'unica azione ovunque: «Proponeteci un quadro» / «Send us a switchboard», con la promessa «Vi diciamo con franchezza se un robot può collaudarlo, e come.»
 - Nessun codice sul server, nessun database, nessun cookie di tracciamento, nessuna statistica. Il modulo contatti apre il programma di posta del visitatore.
 - La home è un quadro elettrico: un solo cavo parte dalla R del logo e attraversa la pagina; in ogni sezione un piccolo robot fa un lavoro vero; alla fine i robot costruiscono il modulo contatti.
 - Per lavorarci servono Node 22.23.4 o più recente, `npm ci`, `npm run dev`, `npm run build`.
@@ -22,17 +23,22 @@ ROBOSECT è uno spin-off dell'Università di Bologna. Costruisce robot con intel
 
 **Il cavo.** In alto c'è la fotografia del prototipo vero: due bracci collaborativi con puntali di prova su un quadro. La R del logo è un cavo che finisce in un capocorda di rame. Al primo scatto della rotella il capocorda si sfila e il cavo scende lungo la pagina. È lo stesso cavo fino al modulo contatti.
 
-**Sei sezioni, sei lavori.** Ogni sezione è uno scomparto del quadro. Mentre il visitatore scorre, un robot fa un lavoro con un attrezzo; poi il componente si apre nel contenuto della sezione.
+**Sei sezioni, sei lavori.** Ogni sezione è uno scomparto del quadro. Mentre il visitatore scorre, un robot fa un lavoro con un attrezzo; poi il componente si apre nel contenuto della sezione. L'ordine segue chi compra: prima il problema, poi la soluzione, poi le prove, poi la richiesta.
 
-| Sezione (ancora) | Cosa succede | Attrezzo |
-|---|---|---|
-| Il problema (`#problem`) | il robot va sul punto insegnato e manca la vite; la trova, la stringe, il morsetto si accende | avvitatore |
-| Come funziona (`#how-it-works`) | la telecamera guarda, il disegno si allinea al pezzo vero, il cavo segue il percorso pianificato | telecamera (1° lavoro) |
-| Applicazioni (`#applications`) | la lama apre la molla, il cavo entra, quattro uscite si accendono | leva apri-molla |
-| Tecnologia (`#technology`, video `#video`) | due bracci, due puntali sui due capi dello stesso filo: prova di continuità | puntali di prova |
-| Fatti (`#proof`) | la telecamera legge il marcacavi e controlla i LED | telecamera (2° lavoro) |
-| Team (`#team`) | la pinza inserisce il cavo e accende l'interruttore | pinza |
-| Contatti (`#contact`) | i due robot, con tutti gli attrezzi, costruiscono il modulo: ogni lavoro crea una casella | tutti |
+| Sezione (ancora) | Contenuto | Lavoro del robot | Attrezzo |
+|---|---|---|---|
+| Apertura (hero) | «L'automazione si ferma al cavo. La nostra no.»; robot che collaudano i quadri partendo dal progetto EPLAN; foto del prototipo con il pulsante del video (si apre in una finestra, il file si scarica solo allora); «Proponeteci un quadro» | il capocorda si sfila dalla R | – |
+| Il problema (`#problem`) | collaudo a mano filo per filo: ore di persone esperte, ogni quadro è una variante, nessuna traccia di cosa è stato provato | punto insegnato mancato, vite trovata e stretta | avvitatore |
+| Come funziona (`#how-it-works`) | tre passi (vede il quadro vero · parte dalla lista collegamenti EPLAN · lascia il verbale) e un disegno animato: i punti di prova si accendono uno alla volta mentre il verbale si compila; una riga e un link alla pagina Tecnologia | la telecamera guarda, il disegno si allinea, il cavo segue il percorso | telecamera (1° lavoro) |
+| Cosa ottenete (`#what-you-get`) | meno ore di collaudo, ogni collegamento verificato, un verbale per il cliente, persone esperte libere; i numeri sono `[TBD]` | la lama apre la molla, quattro uscite si accendono | leva apri-molla |
+| Prototipo (`#proof`, video `#video`) | video del prototipo, end-effector a puntale, spin-off UniBo, AIRISE.eu, IEEE/ASME AIM 2026, ultime news; «Stato: prototipo funzionante» | due puntali sui due capi dello stesso filo | puntali di prova |
+| Anche per voi (`#also-for-you`) | cablaggi; celle robotizzate e integratori (invitati a collaborare) | la telecamera legge il marcacavi | telecamera (2° lavoro) |
+| Team (`#team`) | come prima | la pinza inserisce il cavo e accende l'interruttore | pinza |
+| Contatti (`#contact`) | la tagline «Automazione, fino all'ultimo filo.», poi «Proponeteci un quadro.» e il modulo | i due robot costruiscono il modulo: ogni lavoro crea una casella | tutti |
+
+Il disegno animato di «Come funziona» parte quando è sullo schermo e la sezione è aperta (`initDemo` in `src/scripts/home.ts`); con il movimento ridotto e senza JavaScript si vede già finito.
+
+**Il modulo** chiede poco: nome, azienda, email (obbligatori), telefono (facoltativo), che quadri costruite (a bordo macchina, di distribuzione, di automazione, altro; obbligatorio), quadri all'anno (meno di 100, da 100 a 500, oltre 500), usate EPLAN (sì, no, altro software), come collaudate oggi (testo libero), consenso privacy. Invio come prima: `mailto:` con conferma. Risposta entro due giorni lavorativi (deciso con la proprietà). Le caselle sono 10 parti costruite dai robot (`PARTS` in `scripts/panel/showpiece/program.ts`; la presa salda del filo costruisce il telefono).
 
 **I segni.** Ogni segno vuol dire una cosa sola, ovunque:
 
@@ -52,6 +58,8 @@ Sullo schermo non ci sono codici tecnici né ingrandimenti: è una scelta del cl
 |---|---|---|---|
 | `/` | home | inglese | `src/pages/index.astro` → `src/components/home/Home.astro` |
 | `/it/` | home | italiano | `src/pages/it/index.astro` → stessa `Home.astro` |
+| `/technology/` | tecnologia | inglese | `src/pages/technology.astro` → `src/components/tech/TechPage.astro` |
+| `/it/tecnologia/` | tecnologia | italiano | `src/pages/it/tecnologia.astro` → stessa `TechPage.astro` |
 | `/blog/` | notizie | inglese | `src/pages/blog/index.astro` |
 | `/blog/aim-2026/` | articolo | inglese | `src/content/blog/aim-2026/index.md` |
 | `/blog/2026-02-01_airise_kickoff/` | articolo | inglese | `src/content/blog/2026-02-01_AIRISE_KICKOFF/index.md` |
@@ -61,8 +69,8 @@ Sullo schermo non ci sono codici tecnici né ingrandimenti: è una scelta del cl
 | `/gender-equality-diversity-policy/` | parità di genere | inglese | `src/pages/gender-equality-diversity-policy.astro` |
 | `/404.html` | pagina non trovata | inglese | `src/pages/404.astro` |
 
-- **Ancore della home**, uguali in inglese e in italiano: `#problem`, `#how-it-works`, `#applications`, `#technology`, `#video`, `#proof`, `#team`, `#contact`.
-- **Menu:** Perché i cavi, Come funziona, Applicazioni, Tecnologia, Team, News, cambio lingua, «Parliamone» (porta a `#contact`).
+- **Ancore della home**, uguali in inglese e in italiano: `#problem`, `#how-it-works`, `#what-you-get`, `#proof`, `#video`, `#also-for-you`, `#team`, `#contact`. Le vecchie `#applications` e `#technology` non esistono più (la tecnologia ha la sua pagina).
+- **Menu:** Come funziona, Cosa ottenete, Prototipo, Tecnologia (pagina), Team, cambio lingua, «Proponeteci un quadro» (porta a `#contact`, sempre nella barra; sui telefoni stretti «Proponete un quadro» o «Il vostro quadro»). News è nel footer.
 - **File fissi** (`public/`): `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `site.webmanifest`, `og-logo.png` e `og-logo-it.png` (anteprime social), `avatar-400.png` (logo nei dati strutturati), `robots.txt`, `firma/robosect-firma-logo.png` (logo delle firme email).
 - **Generati dal build:** `sitemap-index.xml` e `sitemap-0.xml`.
 - Le pagine del sito attuale (home, blog, quattro pagine legali) restano agli stessi indirizzi. Nuove: `/it/` e la 404.
@@ -160,7 +168,7 @@ Da sapere:
 | `qa/v4/perf.mjs` | tempo di JavaScript per immagine, con processore rallentato 4 volte |
 | `qa/r3/ev.sh static` e `timed` | gli script dei revisori |
 
-**Ultimi risultati.** Il 28/10/2026, su questo ramo: build, `astro check` e sezione Tecnologia come nel capitolo 3. Prima (verifica R1 del 27/10/2026 sul commit 93fd4dd del repository di lavoro, uguale a questo ramo tranne il video, il logo della firma e le dipendenze): build 10 pagine; `astro check` 0 errori e 0 avvisi; robot: tutto superato; colori SVG: superato su 10 pagine; logo su 9 bracci su 9; modulo: tutto come previsto; rotella vera a 1440, 1280 e 768 (inglese), 390 e 360 (italiano): nessuna immagine tagliata. La verifica completa precedente (v4) aveva provato 10 misure di schermo in due lingue: nessuna immagine tagliata.
+**Ultimi risultati.** Il 03/11/2026, versione 3 (home per i costruttori di quadri): `npx astro build` 12 pagine, controllo dei robot superato (anche il modulo a 10 caselle); `npx astro check` 0 errori, 0 avvisi; Playwright con Chromium a 1440 × 900 e 390 × 844 (e 360 × 740), inglese e italiano, con movimento, con movimento ridotto e senza JavaScript: nessun errore nella console, nessuno scorrimento orizzontale sui telefoni; modulo: campi obbligatori, invio con `mailto:` e conferma provati; finestra del video provata (il file non si riproduce nel Chromium di prova, che non ha il codec H.264). Il 28/10/2026, su questo ramo: build, `astro check` e sezione Tecnologia come nel capitolo 3. Prima (verifica R1 del 27/10/2026 sul commit 93fd4dd del repository di lavoro, uguale a questo ramo tranne il video, il logo della firma e le dipendenze): build 10 pagine; `astro check` 0 errori e 0 avvisi; robot: tutto superato; colori SVG: superato su 10 pagine; logo su 9 bracci su 9; modulo: tutto come previsto; rotella vera a 1440, 1280 e 768 (inglese), 390 e 360 (italiano): nessuna immagine tagliata. La verifica completa precedente (v4) aveva provato 10 misure di schermo in due lingue: nessuna immagine tagliata.
 
 Tutte le prove sono state fatte solo con Chromium. Safari, iPhone e Firefox non sono mai stati provati.
 
@@ -188,7 +196,7 @@ Tutte le prove sono state fatte solo con Chromium. Safari, iPhone e Firefox non 
 
 | Punto | Cosa manca | Chi |
 |---|---|---|
-| Contenuti `[TBD]` | 20 per lingua in `copy.ts` più l'indirizzo LinkedIn in `Team.astro`: tempo di risposta; quattro numeri misurati e le condizioni di prova; nome del progetto AIRISE (CONTENT o CONTEST); programma e tipo di supporto per EIT Manufacturing e CTE COBO; una frase sulla nascita di ROBOSECT; bio, nome e ruolo del co-fondatore, ritratti; elenco delle pubblicazioni. Nessuno deve andare online | ROBOSECT |
+| Contenuti `[TBD]` | in `copy.ts` più l'indirizzo LinkedIn in `Team.astro`: quattro numeri di «Cosa ottenete» (minuti per quadro, % di punti raggiunti in automatico, verbale d'esempio anonimizzato, ore di tecnico liberate) e le condizioni di prova; nome del progetto AIRISE (CONTENT o CONTEST); il ruolo di EIT Manufacturing e CTE COBO (oggi solo loghi nel footer); una frase sulla nascita di ROBOSECT; bio, nome e ruolo del co-fondatore, ritratti; elenco delle pubblicazioni. Nessuno deve andare online | ROBOSECT |
 | Informativa privacy | il paragrafo ora descrive il modulo (prepara un'email, il sito non salva nulla); il testo legale va approvato. Da valutare se citare che la home ricorda la posizione di scorrimento nella sessione del browser (`sessionStorage`, nessun dato personale). Se un giorno il modulo invierà a un server, il testo va rifatto | ROBOSECT |
 | Safari e iPhone | mai provati (solo Chromium). Gli SVG sono controllati; il passaggio al programma di posta è pensato per Safari ma non verificato. Provare l'anteprima su un iPhone, su Safari desktop e su Firefox (lì senza rallentamento, per scelta) | team web |
 | Logo della firma a `/firma/` | le firme email lo caricano da `www.robosect.it/firma/robosect-firma-logo.png`: finché il nuovo sito non è online a quell'indirizzo, nelle firme l'immagine non compare | team web |
@@ -234,4 +242,4 @@ La storia del lavoro sul sito (19 commit, dal 23 al 27/10/2026) è rimasta nel r
 
 ---
 
-ROBOSECT SRL · spin-off dell'Università di Bologna · Via Lazio 2, 40139 Bologna · P.IVA 04228581205 · consegna del sito, versione 2, 28/10/2026
+ROBOSECT SRL · spin-off dell'Università di Bologna · Via Lazio 2, 40139 Bologna · P.IVA 04228581205 · consegna del sito, versione 3, 03/11/2026
