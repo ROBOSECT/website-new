@@ -14,3 +14,6 @@ export const t = (lang: Lang) => copy[lang];
 
 /** "[TBD: …]" strings are placeholders, not real values */
 export const isTbd = (s: string) => s.trim().startsWith('[TBD:');
+
+/** The technology page: /technology/ (English) and /it/tecnologia/ */
+export const techPath = (lang: Lang) => (lang === 'it' ? '/it/tecnologia/' : '/technology/');

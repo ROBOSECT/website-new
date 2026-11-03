@@ -75,6 +75,11 @@ export const copy = {
 			cta: 'Let’s talk',
 		},
 
+		cta: {
+			label: 'Send us a switchboard',
+			promise: 'We will tell you plainly whether a robot can test it, and how.',
+		},
+
 		hero: {
 			eyebrow: 'Robotics for cables, wiring harnesses and switchboards',
 			headline: 'Automation stops at the cable. Ours doesn’t.',
@@ -251,6 +256,9 @@ export const copy = {
 
 		technology: {
 			id: 'technology',
+			metaTitle: 'Technology',
+			metaDescription:
+				'The ROBOSECT platform: RGB, RGB-D and 3D perception, EPLAN and CAD integration, cable-aware planning with a digital twin, cobots that test and document.',
 			eyebrow: 'Technology',
 			title: 'One stack, built around the cable',
 			body: 'Most automation stacks treat cables as noise. Ours treats them as the main subject: perception models that detect deformable linear objects, a digital twin fed by your engineering data, and planning that simulates what flexes. It comes from years of research at the University of Bologna and in European innovation projects, and it runs today on a working prototype.',
@@ -273,6 +281,83 @@ export const copy = {
 				caption:
 					'The ROBOSECT dual-arm setup: each arm carries a custom probe end-effector for continuity testing on a switchboard.',
 			},
+			platformTitle: 'The platform, in four parts',
+			platformIntro:
+				'The same digital model of the product runs through all four, so the robot knows what it should find before it starts looking.',
+			platform: [
+				{
+					number: '01',
+					kicker: 'Perceive',
+					title: 'See the real product',
+					body: 'Cameras and 3D sensors, paired with deep-learning models, find components, cables, connectors and labels on the actual part, and reconstruct where everything really is, not where the drawing says it should be.',
+					specs: [
+						'RGB, RGB-D and 3D sensing',
+						'Detection of components, cables, connectors and deformable linear objects',
+						'Compensation of manufacturing tolerances and positioning errors',
+						'Continuous monitoring during execution',
+					],
+				},
+				{
+					number: '02',
+					kicker: 'Integrate',
+					title: 'Start from your EPLAN and CAD data',
+					body: 'The system imports the engineering data you already have. A new product does not mean a new robot program.',
+					specs: [
+						'CAD models and electrical schematics (EPLAN)',
+						'Connection lists and component libraries',
+						'Production data from your management systems',
+						'New variants with minimal operator input',
+					],
+				},
+				{
+					number: '03',
+					kicker: 'Plan',
+					title: 'Plan around the cable',
+					body: 'A planning engine that combines AI reasoning, a digital twin and physics-based simulation generates collision-free trajectories that account for cables, harnesses and the robot’s own dress pack.',
+					specs: [
+						'Digital twin of cell and product',
+						'Physics-based simulation',
+						'Collision avoidance that includes cables and dress packs',
+						'Real-time trajectory generation',
+					],
+				},
+				{
+					number: '04',
+					kicker: 'Execute',
+					title: 'Act, measure, document',
+					body: 'Collaborative robots with custom end-effectors, vision sensors and force-controlled tools carry out the task. Every operation is logged, so each product comes with its own digital record.',
+					specs: [
+						'Electrical continuity testing',
+						'Connector insertion and cable routing',
+						'Harness manipulation and precision assembly',
+						'Automatic digital reports and full traceability',
+					],
+				},
+			],
+			statusTitle: 'Where it stands, application by application',
+			statusLabel: 'Status',
+			applications: [
+				{
+					title: 'Automatic switchboard testing',
+					body: 'Continuity testing generated from the CAD/EPLAN connection list and carried out by robots, with a digital test report. In development within the AIRISE.eu project: visual inspection of assembly defects and cable-marker reading.',
+					status: 'Prototype',
+				},
+				{
+					title: 'Wiring harness automation',
+					body: 'Robotic handling, assembly and remanufacturing of automotive wiring harnesses.',
+					status: 'Open to collaboration',
+				},
+				{
+					title: 'Cable-aware motion planning',
+					body: 'Collision-free trajectories that account for cables, dress packs and deformable objects.',
+					status: 'Open to collaboration',
+				},
+				{
+					title: 'Custom robotics for deformable parts',
+					body: 'Tailored robotic systems for processes with flexible parts, inspection tasks or high product variability.',
+					status: 'On request',
+				},
+			],
 			video: {
 				id: 'video',
 				eyebrow: 'Prototype',
@@ -284,6 +369,7 @@ export const copy = {
 				posterAlt:
 					'Still frame from above: two collaborative robot arms over an open switchboard',
 			},
+			back: 'Back to home',
 		},
 
 		proof: {
@@ -515,6 +601,7 @@ export const copy = {
 				contact: 'Contact',
 			},
 			links: {
+				technology: 'Technology',
 				blog: 'News',
 				contact: 'Contact',
 				linkedin: 'LinkedIn',
@@ -600,6 +687,11 @@ export const copy = {
 				ariaLabel: 'Read the site in English',
 			},
 			cta: 'Parliamone',
+		},
+
+		cta: {
+			label: 'Proponeteci un quadro',
+			promise: 'Vi diciamo con franchezza se un robot può collaudarlo, e come.',
 		},
 
 		hero: {
@@ -778,6 +870,9 @@ export const copy = {
 
 		technology: {
 			id: 'technology',
+			metaTitle: 'Tecnologia',
+			metaDescription:
+				'La piattaforma ROBOSECT: percezione RGB, RGB-D e 3D, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi, cobot che collaudano e documentano.',
 			eyebrow: 'Tecnologia',
 			title: 'Una piattaforma costruita attorno al cavo',
 			body: 'Quasi tutte le piattaforme di automazione trattano i cavi come un disturbo. La nostra li mette al centro: modelli di percezione che riconoscono oggetti lineari deformabili, un digital twin alimentato dai vostri dati di progettazione e una pianificazione che simula ciò che si flette. Nasce da anni di ricerca all’Università di Bologna e in progetti europei di innovazione, e oggi è al lavoro su un prototipo funzionante.',
@@ -800,6 +895,83 @@ export const copy = {
 				caption:
 					'Il setup ROBOSECT a due bracci: ogni braccio monta un end-effector a puntale progettato su misura per la prova di continuità sul quadro.',
 			},
+			platformTitle: 'La piattaforma, in quattro parti',
+			platformIntro:
+				'Lo stesso modello digitale del prodotto le attraversa tutte: il robot sa già cosa deve trovare prima ancora di guardare.',
+			platform: [
+				{
+					number: '01',
+					kicker: 'Percezione',
+					title: 'Vedere il prodotto reale',
+					body: 'Telecamere e sensori 3D, insieme a modelli di deep learning, individuano componenti, cavi, connettori ed etichette sul pezzo vero e ricostruiscono dove si trova davvero ogni elemento, non dove dovrebbe stare secondo il disegno.',
+					specs: [
+						'Sensori RGB, RGB-D e 3D',
+						'Riconoscimento di componenti, cavi, connettori e oggetti lineari deformabili',
+						'Compensazione delle tolleranze di produzione e degli errori di posizionamento',
+						'Monitoraggio continuo durante l’esecuzione',
+					],
+				},
+				{
+					number: '02',
+					kicker: 'Integrazione',
+					title: 'Si parte dai vostri dati EPLAN e CAD',
+					body: 'Il sistema importa i dati di progettazione che avete già. Un prodotto nuovo non significa un nuovo programma robot.',
+					specs: [
+						'Modelli CAD e schemi elettrici (EPLAN)',
+						'Liste collegamenti e librerie componenti',
+						'Dati di produzione dai vostri sistemi gestionali',
+						'Nuove varianti con un intervento minimo dell’operatore',
+					],
+				},
+				{
+					number: '03',
+					kicker: 'Pianificazione',
+					title: 'Traiettorie che tengono conto dei cavi',
+					body: 'Un motore di pianificazione che unisce ragionamento AI, digital twin e simulazione fisica genera traiettorie senza collisioni, considerando cavi, cablaggi e il dress pack del robot stesso.',
+					specs: [
+						'Digital twin della cella e del prodotto',
+						'Simulazione basata sulla fisica',
+						'Anticollisione che include cavi e dress pack',
+						'Generazione delle traiettorie in tempo reale',
+					],
+				},
+				{
+					number: '04',
+					kicker: 'Esecuzione',
+					title: 'Agire, misurare, documentare',
+					body: 'Robot collaborativi con end-effector su misura, sensori di visione e utensili in controllo di forza eseguono il lavoro. Ogni operazione viene registrata: ogni prodotto ha la sua documentazione digitale.',
+					specs: [
+						'Prova di continuità elettrica',
+						'Inserimento connettori e instradamento cavi',
+						'Manipolazione di cablaggi e assemblaggio di precisione',
+						'Report digitali automatici e tracciabilità completa',
+					],
+				},
+			],
+			statusTitle: 'A che punto è, applicazione per applicazione',
+			statusLabel: 'Stato',
+			applications: [
+				{
+					title: 'Collaudo automatico dei quadri elettrici',
+					body: 'Prova di continuità generata dalla lista collegamenti CAD/EPLAN ed eseguita dai robot, con verbale di collaudo digitale. In sviluppo nel progetto AIRISE.eu: ispezione visiva dei difetti di montaggio e lettura delle siglature dei cavi.',
+					status: 'Prototipo',
+				},
+				{
+					title: 'Automazione dei cablaggi',
+					body: 'Manipolazione, assemblaggio e rigenerazione robotizzati dei cablaggi automotive.',
+					status: 'Aperto a collaborazioni',
+				},
+				{
+					title: 'Pianificazione del movimento attenta ai cavi',
+					body: 'Traiettorie senza collisioni che tengono conto di cavi, dress pack e oggetti deformabili.',
+					status: 'Aperto a collaborazioni',
+				},
+				{
+					title: 'Robotica su misura per parti deformabili',
+					body: 'Sistemi robotici dedicati per processi con parti flessibili, attività di ispezione o forte variabilità di prodotto.',
+					status: 'Su progetto',
+				},
+			],
 			video: {
 				id: 'video',
 				eyebrow: 'Prototipo',
@@ -811,6 +983,7 @@ export const copy = {
 				posterAlt:
 					'Fotogramma dall’alto: due bracci robotici collaborativi sopra un quadro elettrico aperto',
 			},
+			back: 'Torna alla home',
 		},
 
 		proof: {
@@ -1039,6 +1212,7 @@ export const copy = {
 				contact: 'Contatti',
 			},
 			links: {
+				technology: 'Tecnologia',
 				blog: 'News',
 				contact: 'Contatti',
 				linkedin: 'LinkedIn',

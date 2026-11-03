@@ -6,7 +6,7 @@ import logoSpinoff from '../../assets/images/logo_spinoff_unibo.png';
 import logoCobo from '../../assets/images/logo_cobo.png';
 import logoEit from '../../assets/images/logo_EIT.png';
 import { copy, type Lang } from '../../i18n/copy';
-import { sectionHref } from '../../lib/i18n';
+import { sectionHref, techPath } from '../../lib/i18n';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
 
 interface Props {
@@ -34,6 +34,7 @@ const partners = [
 				<div>
 					<h2 class="footer__h">{f.columns.site}</h2>
 					<ul>
+						<li><a href={techPath(lang)}>{f.links.technology}</a></li>
 						<li><a href="/blog">{f.links.blog}</a></li>
 						<li><a href={sectionHref(lang, 'contact', isHome)}>{f.links.contact}</a></li>
 						<li>

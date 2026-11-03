@@ -1,0 +1,349 @@
+---
+/**
+ * The technology page (/technology/ and /it/tecnologia/): what is inside the robots, for the EPLAN office and whoever
+ * wants the detail. The homepage keeps one line and a link here. Static page: no panel engine.
+ */
+import { Image } from 'astro:assets';
+import setup from '../../assets/images/setup.jpeg';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../site/PageHeader.astro';
+import { copy, type Lang } from '../../i18n/copy';
+import { homePath, techPath } from '../../lib/i18n';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const t = copy[lang].technology;
+const cta = copy[lang].cta;
+// the body's first two sentences are the header's intro, the rest opens the page
+const sentences = t.body.split(/(?<=\.)\s+/);
+const intro = sentences.slice(0, 2).join(' ');
+const rest = sentences.slice(2).join(' ');
+---
+
+<BaseLayout title={t.metaTitle} description={t.metaDescription} lang={lang} alternates={{ en: techPath('en'), it: techPath('it') }}>
+	<PageHeader title={t.title} intro={intro} back={{ href: homePath(lang), label: t.back }} />
+
+	<section class="tp tp--intro wrap" aria-label={t.eyebrow}>
+		<div class="tp-intro">
+			<div class="tp-intro__text">
+				<p class="tp-lead">{rest}</p>
+				<ul class="tp-pillars">
+					{
+						t.pillars.map((p) => (
+							<li>
+								<h2>{p.title}</h2>
+								<p>{p.body}</p>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<figure class="tp-photo">
+				<div class="tp-photo__frame">
+					<Image src={setup} alt={t.photo.alt} widths={[480, 720, 960, 1280]} sizes="(min-width: 1100px) 520px, 100vw" loading="eager" />
+				</div>
+				<figcaption>{t.photo.caption}</figcaption>
+			</figure>
+		</div>
+	</section>
+
+	<section class="tp tp--platform wrap" aria-labelledby="tp-platform">
+		<h2 id="tp-platform" class="tp-h">{t.platformTitle}</h2>
+		<p class="tp-sub">{t.platformIntro}</p>
+		<ol class="tp-steps">
+			{
+				t.platform.map((s) => (
+					<li class="tp-step">
+						<p class="tp-step__n" aria-hidden="true">{s.number}</p>
+						<p class="tp-step__k">{s.kicker}</p>
+						<h3 class="tp-step__t">{s.title}</h3>
+						<p class="tp-step__b">{s.body}</p>
+						<ul class="tp-step__specs">
+							{s.specs.map((x) => (
+								<li>{x}</li>
+							))}
+						</ul>
+					</li>
+				))
+			}
+		</ol>
+	</section>
+
+	<section class="tp tp--status wrap" aria-labelledby="tp-status">
+		<h2 id="tp-status" class="tp-h">{t.statusTitle}</h2>
+		<ul class="tp-apps">
+			{
+				t.applications.map((a) => (
+					<li class="tp-app">
+						<h3>{a.title}</h3>
+						<p class="tp-app__s">
+							<span class="visually-hidden">{t.statusLabel}: </span>
+							{a.status}
+						</p>
+						<p class="tp-app__b">{a.body}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="tp-cta on-dark" aria-labelledby="tp-cta">
+		<div class="wrap tp-cta__in">
+			<h2 id="tp-cta" class="tp-cta__h">{cta.label}.</h2>
+			<p class="tp-cta__p">{cta.promise}</p>
+			<a class="btn" href={`${homePath(lang)}#contact`}>
+				{cta.label}
+				<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+					><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+				>
+			</a>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.tp {
+		padding-block: clamp(56px, 7vw, 104px);
+		background: var(--paper);
+	}
+
+	.tp--intro {
+		padding-bottom: clamp(40px, 5vw, 72px);
+	}
+
+	.tp-intro {
+		display: grid;
+		gap: 40px;
+	}
+
+	.tp-lead {
+		font-size: var(--t-lead);
+		line-height: 1.5;
+		max-width: 38em;
+	}
+
+	.tp-pillars {
+		list-style: none;
+		display: grid;
+		gap: 24px;
+		margin-top: 36px;
+	}
+
+	.tp-pillars li {
+		padding-left: 20px;
+		border-left: 4px solid var(--blue);
+	}
+
+	.tp-pillars h2 {
+		font-size: 20px;
+		line-height: 1.25;
+	}
+
+	.tp-pillars p {
+		margin-top: 6px;
+		font-size: 17px;
+		line-height: 1.55;
+		max-width: 48ch;
+	}
+
+	.tp-photo__frame {
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--mist);
+	}
+
+	.tp-photo__frame :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.tp-photo figcaption {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--steel);
+		max-width: 46ch;
+	}
+
+	.tp--platform {
+		background: var(--white);
+	}
+
+	.tp-h {
+		font-size: var(--t-h2);
+		line-height: 1.1;
+		letter-spacing: -0.025em;
+		max-width: 20em;
+	}
+
+	.tp-sub {
+		margin-top: 14px;
+		font-size: 17px;
+		line-height: 1.55;
+		max-width: 46em;
+		color: var(--steel);
+	}
+
+	.tp-steps {
+		list-style: none;
+		display: grid;
+		gap: 36px;
+		margin-top: 40px;
+	}
+
+	.tp-step {
+		padding-top: 18px;
+		border-top: 4px solid var(--blue);
+		min-width: 0;
+	}
+
+	.tp-step__n {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		color: var(--steel);
+	}
+
+	.tp-step__k {
+		margin-top: 4px;
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--blue);
+	}
+
+	.tp-step__t {
+		margin-top: 6px;
+		font-size: 20px;
+		line-height: 1.25;
+	}
+
+	.tp-step__b {
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.55;
+	}
+
+	.tp-step__specs {
+		list-style: none;
+		display: grid;
+		gap: 8px;
+		margin-top: 16px;
+		font-size: 15px;
+		line-height: 1.4;
+		color: var(--steel);
+	}
+
+	.tp-step__specs li {
+		position: relative;
+		padding-left: 20px;
+	}
+
+	.tp-step__specs li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.62em;
+		width: 11px;
+		height: 3px;
+		background: var(--blue);
+	}
+
+	.tp-apps {
+		list-style: none;
+		display: grid;
+		gap: 4px;
+		margin-top: 32px;
+	}
+
+	.tp-app {
+		display: grid;
+		gap: 6px;
+		padding: 20px;
+		background: var(--white);
+	}
+
+	.tp-app h3 {
+		font-size: 19px;
+		line-height: 1.25;
+	}
+
+	.tp-app__s {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--blue);
+	}
+
+	.tp-app__b {
+		font-size: 16px;
+		line-height: 1.55;
+		max-width: 60ch;
+	}
+
+	.tp-cta {
+		background: var(--blue);
+	}
+
+	.tp-cta__in {
+		padding-block: clamp(56px, 7vw, 96px);
+		display: grid;
+		justify-items: start;
+		gap: 16px;
+	}
+
+	.tp-cta__h {
+		font-size: var(--t-h2);
+		line-height: 1.1;
+		color: var(--paper);
+	}
+
+	.tp-cta__p {
+		font-size: var(--t-lead);
+		line-height: 1.5;
+		max-width: 36em;
+		color: var(--paper);
+		margin-bottom: 12px;
+	}
+
+	@media (min-width: 700px) {
+		.tp-steps {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 48px var(--gap);
+		}
+
+		.tp-app {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 7fr);
+			gap: 4px var(--gap);
+			align-items: baseline;
+			padding: 22px 24px;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.tp-intro {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: var(--gap);
+			align-items: start;
+		}
+
+		.tp-intro__text {
+			grid-column: 1 / span 6;
+		}
+
+		.tp-photo {
+			grid-column: 8 / -1;
+		}
+
+		.tp-lead {
+			font-size: 20px;
+		}
+
+		.tp-steps {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+</style>
