@@ -46,10 +46,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			</a>
 		</div>
 		<p class="hero__promise">{cta.promise}</p>
-		<p class="hero__other">
-			{h.otherLine.text}{' '}
-			<a href="#contact">{h.otherLine.link}<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg></a>
-		</p>
 		<ul class="hero__facts">
 			{h.proofChips.map((c) => <li>{c}</li>)}
 		</ul>

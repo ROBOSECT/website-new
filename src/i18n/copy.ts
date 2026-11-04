@@ -7,8 +7,8 @@
  *
  * Rules applied:
  * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
- *   harnesses, robot cells and other manipulation are «Also for you». «Send us a switchboard» / «Proponici un quadro» where
- *   the switchboard story is; «Write to us» / «Scrivici» in the bar and «Tell us about your process» / «Parlaci del tuo
+ *   harnesses, robot cells and other manipulation are «Also for you». «Bring us a project» / «Proponici un progetto» is the
+ *   main action; «Write to us» / «Scrivici» in the bar and «Tell us about your process» / «Parlaci del tuo
  *   processo» for every other process (Italian addresses the reader as «tu»).
  * - No invented metrics, clients, testimonials, certifications or people. Every missing
  *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
@@ -78,8 +78,8 @@ export const copy = {
 				short: 'IT',
 				ariaLabel: 'Leggi il sito in italiano',
 			},
-			// the bar's action is for every visitor (switchboards or any other process); «Send us a switchboard» stays where the
-			// switchboard story is (hero, What you get)
+			// the bar's action is for every visitor (switchboards or any other process); «Bring us a project» is the main action
+			// (hero, What you get, contact)
 			cta: 'Write to us',
 			// narrow phones: the same action in fewer letters (the bar holds the logo, this button and the menu button)
 			ctaShort: 'Write to us',
@@ -87,8 +87,8 @@ export const copy = {
 		},
 
 		cta: {
-			label: 'Send us a switchboard',
-			promise: 'We will tell you plainly whether a robot can test it, and how.',
+			label: 'Bring us a project',
+			promise: 'We will tell you plainly whether a robot can do it, and how.',
 		},
 
 		// the action for every process (the technology page, Also for you, the hero's second line)
@@ -101,7 +101,7 @@ export const copy = {
 			headline: 'Automation stops at the cable. Ours doesn’t.',
 			subheadline:
 				'Robots that test your switchboards starting from your EPLAN project: every connection checked, every switchboard leaves with its test report. Switchboards come first; the same platform takes robotic manipulation all the way to the hardest case, cables and deformable parts.',
-			primaryCta: { label: 'Send us a switchboard', href: '#contact' },
+			primaryCta: { label: 'Bring us a project', href: '#contact' },
 			secondaryCta: { label: 'Watch the demo', duration: '1:30' },
 			otherLine: { text: 'Not a switchboard builder?', link: 'Tell us about your process' },
 			proofChips: [
@@ -452,7 +452,7 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contact',
 			closingTag: 'Automation, down to the last wire.',
-			title: 'Send us a switchboard, or tell us about your process.',
+			title: 'Bring us a project.',
 			answer: 'We will tell you plainly whether a robot can do it, and how.',
 			body: 'A few lines are enough: what you do, what you would like a robot to handle, how it is done today.',
 			responseTime: 'We reply within two working days.',
@@ -654,8 +654,8 @@ export const copy = {
 		},
 
 		cta: {
-			label: 'Proponici un quadro',
-			promise: 'Ti diciamo con franchezza se un robot può collaudarlo, e come.',
+			label: 'Proponici un progetto',
+			promise: 'Ti diciamo con franchezza se un robot può farlo, e come.',
 		},
 
 		ctaAll: {
@@ -667,7 +667,7 @@ export const copy = {
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
 				'Robot che collaudano i tuoi quadri elettrici partendo dal progetto EPLAN: ogni collegamento verificato, ogni quadro esce con il suo verbale. I quadri vengono per primi; la stessa piattaforma porta la manipolazione robotica fino al caso più difficile, cavi e parti deformabili.',
-			primaryCta: { label: 'Proponici un quadro', href: '#contact' },
+			primaryCta: { label: 'Proponici un progetto', href: '#contact' },
 			secondaryCta: { label: 'Guarda la demo', duration: '1:30' },
 			otherLine: { text: 'Non costruisci quadri?', link: 'Parlaci del tuo processo' },
 			proofChips: [
@@ -1018,7 +1018,7 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contatti',
 			closingTag: 'Automazione, fino all’ultimo filo.',
-			title: 'Proponici un quadro, o parlaci del tuo processo.',
+			title: 'Proponici un progetto.',
 			answer: 'Ti diciamo con franchezza se un robot può farlo, e come.',
 			body: 'Bastano poche righe: di cosa ti occupi, cosa vorresti affidare a un robot, come lo fai oggi.',
 			responseTime: 'Rispondiamo entro due giorni lavorativi.',
