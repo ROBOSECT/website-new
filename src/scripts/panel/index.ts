@@ -789,6 +789,7 @@ export function initPanel() {
 		if (!motion) return window.scrollY;
 		const v = built ? V(window.scrollY) : window.scrollY;
 		motion = false;
+		thaw();
 		root.classList.remove('motion');
 		// the static page is an ordinary page: the browser's own restoration is right for it
 		if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
@@ -1128,50 +1129,93 @@ export function initPanel() {
 		panelApi.ready = true;
 		root.dataset.panelReady = '1';
 	}
-	// a resize re-lays out once it settles (a window drag sends many); phones: the URL bar changes innerHeight by
-	// < 120 px, which is not a re-layout (the pen line is in svh)
-	// the place is taken at the first resize event of a burst (the model is still the one the visitor saw)
-	let resizeT = 0,
-		resizeA: Anchor | null = null;
-	addEventListener('resize', () => {
+	/* ------------------------------------------------------------ re-layout on resize: once, when it settles */
+	// A window drag sends a resize (and a ResizeObserver change) every frame. Nothing heavy runs while it goes on: the
+	// first event of a burst takes the visitor's place (the model is still the one the visitor saw), each later event only
+	// pushes the settle timer, and one re-layout runs SETTLE ms after the last change, in an animation frame. The
+	// ResizeObserver (a font swap, an image, the message box) shares the same timer, so the two never re-lay out twice,
+	// and a change that moved nothing the zones depend on (the signature) only re-measures Contact. Phones: the URL bar
+	// changes innerHeight by < 120 px, which is not a re-layout (the pen line is in svh).
+	const SETTLE = 180;
+	let settleT = 0,
+		settleRaf = 0,
+		resizeA: Anchor | null = null,
+		viewportMoved = false;
+	/** while the window is being resized, the stages far from the screen skip their rendering (content-visibility, at the
+	 * height they had): each resize step then lays out and paints only what the visitor sees; the settle re-layout
+	 * thaws them first. Their places come from the model (no layout read). */
+	const contactStage = contactSec?.querySelector<HTMLElement>('[data-contact-stage]') ?? null;
+	let frozen: HTMLElement[] = [];
+	function freezeFar() {
+		if (frozen.length || !('contentVisibility' in document.documentElement.style)) return;
+		const Y = renderedY ?? window.scrollY;
+		const far = (top: number, h: number) => top + h < -0.5 * vh || top > 1.5 * vh;
+		const list: [HTMLElement, number][] = [];
+		for (const s of stages) if (far(s.tr.stageTop(Y) - Y, s.stageH)) list.push([s.stage, s.stageH]);
+		if (contactStage && contactSec) {
+			const cTop = contactTop + (SDA && glide.zones.length ? glide.G(Y) - glide.total : 0) - Y;
+			if (far(cTop, contactH)) list.push([contactStage, contactStage.offsetHeight]);
+		}
+		for (const [el, h] of list) {
+			el.style.containIntrinsicSize = `auto ${Math.round(h)}px`;
+			el.style.contentVisibility = 'hidden';
+		}
+		frozen = list.map(([el]) => el);
+	}
+	function thaw() {
+		for (const el of frozen) {
+			el.style.contentVisibility = '';
+			el.style.containIntrinsicSize = '';
+		}
+		frozen = [];
+	}
+	function scheduleRelayout(fromViewport: boolean) {
 		if (!motion || !built) return;
-		if (document.documentElement.clientWidth === lastW && Math.abs(window.innerHeight - lastH) < 120) return;
-		// (from the place last drawn: by the resize event the browser may already have clamped the scroll
-		// position to the new, shorter page)
-		resizeA ??= anchorNow(renderedY ?? window.scrollY);
-		clearTimeout(resizeT);
-		resizeT = window.setTimeout(() => {
-			const a = resizeA;
-			resizeA = null;
+		if (fromViewport) {
+			freezeFar();
+			viewportMoved = true;
+			// (from the place last drawn: by the resize event the browser may already have clamped the scroll position to
+			// the new, shorter page)
+			resizeA ??= anchorNow(renderedY ?? window.scrollY);
+		}
+		clearTimeout(settleT);
+		cancelAnimationFrame(settleRaf);
+		settleT = window.setTimeout(() => {
+			settleRaf = requestAnimationFrame(() => {
+				const a = resizeA,
+					moved = viewportMoved;
+				resizeA = null;
+				viewportMoved = false;
+				thaw();
+				if (!motion || !built) return;
+				const wChanged = document.documentElement.clientWidth !== lastW || Math.abs(window.innerHeight - lastH) >= 120;
+				if ((moved && wChanged) || signature() !== sig) {
+					// (QA: the place the re-layout kept)
+					(window as Window & { __resizeAnchor?: unknown }).__resizeAnchor = a && a.k === 'el' ? { ...a, el: a.el.tagName } : a;
+					relayout(a ?? undefined);
+					lastW = vw;
+					lastH = vh;
+				} else if (contactSec) {
+					// below the last zone (Contact, the footer): only Contact's own geometry can change (the receipt, the
+					// message box): the cable's gland and the sleeve's place
+					relayoutContact();
+					render(true);
+				}
+			});
+		}, SETTLE);
+	}
+	addEventListener(
+		'resize',
+		() => {
 			if (!motion || !built) return;
-			// (QA: the place the re-layout kept)
-			(window as Window & { __resizeAnchor?: unknown }).__resizeAnchor = a && a.k === 'el' ? { ...a, el: a.el.tagName } : a;
-			relayout(a ?? undefined);
-			lastW = vw;
-			lastH = vh;
-		}, 140);
-	});
-	// a late layout change (web font swap, an image without a box, the visitor resizing the message box): re-plan only
-	// when what the zones depend on moved (the signature), once it settles; never inside the frame that changed it
+			if (!viewportMoved && document.documentElement.clientWidth === lastW && Math.abs(window.innerHeight - lastH) < 120) return;
+			scheduleRelayout(true);
+		},
+		{ passive: true },
+	);
 	if ('ResizeObserver' in window) {
 		const cab = document.querySelector<HTMLElement>('[data-cab]');
-		let roT = 0;
-		const ro = new ResizeObserver(() => {
-			if (!motion || !built || roT) return;
-			roT = window.setTimeout(() => {
-				roT = 0;
-				requestAnimationFrame(() => {
-					if (!motion || !built) return;
-					if (signature() !== sig) relayout();
-					else if (contactSec) {
-						// below the last zone (Contact, the footer): only Contact's own geometry can change (the receipt, the
-						// message box): the cable's gland and the sleeve's place
-						relayoutContact();
-						render(true);
-					}
-				});
-			}, 120);
-		});
+		const ro = new ResizeObserver(() => scheduleRelayout(false));
 		if (cab) ro.observe(cab);
 		if (heroEl) ro.observe(heroEl);
 		if (contactSec) ro.observe(contactSec);
