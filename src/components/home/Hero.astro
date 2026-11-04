@@ -46,6 +46,10 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			</a>
 		</div>
 		<p class="hero__promise">{cta.promise}</p>
+		<p class="hero__other">
+			{h.otherLine.text}{' '}
+			<a href="#contact">{h.otherLine.link}<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg></a>
+		</p>
 		<ul class="hero__facts">
 			{h.proofChips.map((c) => <li>{c}</li>)}
 		</ul>
@@ -208,6 +212,29 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		font-size: 15px;
 		line-height: 1.45;
 		color: var(--steel-light);
+	}
+
+	/* every other process: one quiet line under the switchboard promise */
+	.hero__other {
+		margin-top: 10px;
+		max-width: 34em;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--steel-light);
+	}
+
+	.hero__other a {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		color: var(--paper);
+		font-weight: 600;
+		text-underline-offset: 0.2em;
+	}
+
+	.hero__other svg {
+		width: 15px;
+		height: 15px;
 	}
 
 	/* the prototype video on the first screen: a play badge on the photo of the prototype */

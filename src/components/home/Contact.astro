@@ -43,6 +43,7 @@ const labels = {
 	company: f.company.label,
 	email: f.email.label,
 	phone: f.phone.label,
+	sector: f.sector.label,
 	boards: f.boards.label,
 	volumes: f.volumes.label,
 	eplan: f.eplan.label,
@@ -60,7 +61,7 @@ const label = sh.figureLabel.replace('{s}', String(Math.round(F.tEnd)));
 const cfg = {
 	lang,
 	live: ho.live,
-	handoff: { subject: ho.subject, consentLine: ho.consentLine, shortened: ho.shortened, copied: ho.copied, selectCopy: ho.selectCopy, nothingOpened: ho.nothingOpened, restored: ho.restored, previewTo: ho.previewTo, previewSubject: ho.previewSubject },
+	handoff: { subject: ho.subject, subjectOther: ho.subjectOther, sbSector: f.sector.options[0], consentLine: ho.consentLine, shortened: ho.shortened, copied: ho.copied, selectCopy: ho.selectCopy, nothingOpened: ho.nothingOpened, restored: ho.restored, previewTo: ho.previewTo, previewSubject: ho.previewSubject },
 	fieldLabels: labels,
 };
 ---
@@ -110,6 +111,20 @@ const cfg = {
 					     box the robots' pulse outlines) */}
 					<form class="form" action="mailto:info@robosect.it" method="post" enctype="text/plain" data-contact-form data-restore="off">
 						<div class="form__fields">
+							{/* who is writing: the first question, open to every process */}
+							<fieldset class="sector" data-part="sector">
+								<legend>{f.sector.label} <span class="req">({f.required})</span></legend>
+								<div class="sector__opts">
+									{
+										f.sector.options.map((o, i) => (
+											<label class="sector__opt" for={`cf-sector-${i}`}>
+												<input id={`cf-sector-${i}`} type="radio" name="sector" value={o} required={i === 0} data-box />
+												<span>{o}</span>
+											</label>
+										))
+									}
+								</div>
+							</fieldset>
 							<div class="form__row">
 								<div class="field" data-part="name">
 									<label for="cf-name">{f.name.label} <span class="req">({f.required})</span></label>
@@ -130,28 +145,31 @@ const cfg = {
 									<div class="box"><input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" data-box /><i class="caret" aria-hidden="true"></i></div>
 								</div>
 							</div>
-							<div class="form__row">
-								<div class="field" data-part="boards">
-									<label for="cf-boards">{f.boards.label} <span class="req">({f.required})</span></label>
-									<div class="box select">
-										<select id="cf-boards" name="boards" required data-box>
-											<option value="">{f.boards.placeholder}</option>
-											{f.boards.options.map((o) => <option>{o}</option>)}
-										</select>
+							{/* the switchboard questions: shown once the visitor says they build switchboards (CSS :has, no script);
+							     where :has is not supported they stay visible, all optional */}
+							<div class="sbonly" data-sbonly>
+								<p class="sbonly__h">{f.sbGroup}</p>
+								<div class="form__row">
+									<div class="field" data-part="boards">
+										<label for="cf-boards">{f.boards.label} <span class="opt">({f.optional})</span></label>
+										<div class="box select">
+											<select id="cf-boards" name="boards" data-box>
+												<option value="">{f.boards.placeholder}</option>
+												{f.boards.options.map((o) => <option>{o}</option>)}
+											</select>
+										</div>
+									</div>
+									<div class="field" data-part="volumes">
+										<label for="cf-volumes">{f.volumes.label} <span class="opt">({f.optional})</span></label>
+										<div class="box select">
+											<select id="cf-volumes" name="volumes" data-box>
+												<option value="">{f.volumes.placeholder}</option>
+												{f.volumes.options.map((o) => <option>{o}</option>)}
+											</select>
+										</div>
 									</div>
 								</div>
-								<div class="field" data-part="volumes">
-									<label for="cf-volumes">{f.volumes.label} <span class="opt">({f.optional})</span></label>
-									<div class="box select">
-										<select id="cf-volumes" name="volumes" data-box>
-											<option value="">{f.volumes.placeholder}</option>
-											{f.volumes.options.map((o) => <option>{o}</option>)}
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="form__row">
-								<div class="field" data-part="eplan">
+								<div class="field field--half" data-part="eplan">
 									<label for="cf-eplan">{f.eplan.label} <span class="opt">({f.optional})</span></label>
 									<div class="box select">
 										<select id="cf-eplan" name="eplan" data-box>
@@ -160,10 +178,10 @@ const cfg = {
 										</select>
 									</div>
 								</div>
-								<div class="field" data-part="process">
-									<label for="cf-process">{f.process.label} <span class="opt">({f.optional})</span></label>
-									<div class="box"><textarea id="cf-process" name="process" rows="3" placeholder={f.process.placeholder} data-box></textarea><i class="caret caret--top" aria-hidden="true"></i></div>
-								</div>
+							</div>
+							<div class="field" data-part="process">
+								<label for="cf-process">{f.process.label} <span class="opt">({f.optional})</span></label>
+								<div class="box"><textarea id="cf-process" name="process" rows="3" placeholder={f.process.placeholder} data-box></textarea><i class="caret caret--top" aria-hidden="true"></i></div>
 							</div>
 							{/* (the consent on its own row, in the right column on two columns: the form's wire never crosses its words) */}
 							<div class="form__row">
@@ -778,6 +796,93 @@ const cfg = {
 		color: var(--mist);
 	}
 
+	/* ---------------- who is writing: four choices, all visible */
+	.sector {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		min-width: 0;
+	}
+
+	.sector legend {
+		padding: 0;
+		margin-bottom: 9px;
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--paper);
+	}
+
+	.sector__opts {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 6px;
+	}
+
+	.sector__opt {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 48px;
+		padding: 8px 12px;
+		background: var(--blue-2);
+		border-bottom: 2px solid var(--steel-light);
+		font-size: 15px;
+		line-height: 1.25;
+		color: var(--paper);
+		cursor: pointer;
+	}
+
+	.sector__opt:hover {
+		border-bottom-color: var(--paper);
+	}
+
+	.sector__opt input {
+		flex: none;
+		width: 18px;
+		height: 18px;
+		margin: 0;
+		accent-color: var(--cu-light);
+	}
+
+	.sector__opt:has(input:checked) {
+		border-bottom-color: var(--cu-light);
+		background: color-mix(in srgb, var(--blue-2) 70%, var(--paper) 12%);
+	}
+
+	.sector__opt:has(input:focus-visible) {
+		outline: 3px solid var(--cu-light);
+		outline-offset: 0;
+	}
+
+	/* the switchboard questions: only for switchboard builders (without :has they stay, all optional) */
+	.sbonly {
+		display: grid;
+		gap: 18px;
+		padding-top: 14px;
+		border-top: 1px solid rgb(244 241 236 / 0.25);
+	}
+
+	.sbonly__h {
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--mist);
+	}
+
+	@supports selector(:has(*)) {
+		.form:not(:has(#cf-sector-0:checked)) .sbonly {
+			display: none;
+		}
+	}
+
+	@media (max-width: 380px) {
+		.sector__opts {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
 	.consent {
 		position: relative;
 		display: grid;
@@ -1331,6 +1436,10 @@ const cfg = {
 
 		.form__row > .field > .hint {
 			margin-top: 6px;
+		}
+
+		.field--half {
+			max-width: calc(50% - var(--gut) / 2);
 		}
 
 		.form__row > .consent {

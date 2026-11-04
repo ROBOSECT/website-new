@@ -15,7 +15,8 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = copy[lang].technology;
-const cta = copy[lang].cta;
+// the technology page speaks to every process: the general action
+const cta = copy[lang].ctaAll;
 // the body's first two sentences are the header's intro, the rest opens the page
 const sentences = t.body.split(/(?<=\.)\s+/);
 const intro = sentences.slice(0, 2).join(' ');
@@ -91,7 +92,7 @@ const rest = sentences.slice(2).join(' ');
 
 	<section class="tp-cta on-dark" aria-labelledby="tp-cta">
 		<div class="wrap tp-cta__in">
-			<h2 id="tp-cta" class="tp-cta__h">{cta.label}.</h2>
+			<h2 id="tp-cta" class="tp-cta__h">{cta.label}</h2>
 			<p class="tp-cta__p">{cta.promise}</p>
 			<a class="btn" href={`${homePath(lang)}#contact`}>
 				{cta.label}

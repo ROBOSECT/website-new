@@ -15,12 +15,14 @@ type Show = {
 
 interface Cfg {
 	live: string;
-	handoff: { subject: string; consentLine: string; shortened: string; copied: string; selectCopy: string; nothingOpened: string; restored: string; previewTo: string; previewSubject: string };
+	handoff: { subject: string; subjectOther: string; sbSector: string; consentLine: string; shortened: string; copied: string; selectCopy: string; nothingOpened: string; restored: string; previewTo: string; previewSubject: string };
 	fieldLabels: Record<string, string>;
 }
 const TO = 'info@robosect.it';
 const MAX_URL = 1800;
-const REQUIRED = ['name', 'company', 'email', 'boards', 'consent'];
+const REQUIRED = ['sector', 'name', 'company', 'email', 'consent'];
+/** the switchboard questions: sent only when the visitor builds switchboards */
+const SB_KEYS = ['boards', 'volumes', 'eplan'];
 
 export function initContact(show: Show) {
 	const sec = document.querySelector<HTMLElement>('section[data-contact]');
@@ -38,7 +40,8 @@ export function initContact(show: Show) {
 	const liveEl = sec.querySelector<HTMLElement>('[data-live]')!;
 	const copyMsg = receipt.querySelector<HTMLButtonElement>('[data-copy="message"]')!;
 	const copyAddr = receipt.querySelector<HTMLButtonElement>('[data-copy="address"]')!;
-	const el = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+	const el = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | RadioNodeList | null;
+	const partOf = (name: string) => form.querySelector<HTMLElement>(`[data-part="${name}"]`);
 
 	let message = { subject: '', body: '', href: '', full: '' };
 
@@ -46,6 +49,7 @@ export function initContact(show: Show) {
 	const isValid = (name: string) => {
 		const e = el(name);
 		if (!e) return false;
+		if (e instanceof RadioNodeList) return e.value !== '';
 		if (e instanceof HTMLInputElement && e.type === 'checkbox') return e.checked;
 		return e.value.trim() !== '' && e.checkValidity();
 	};
@@ -54,7 +58,7 @@ export function initContact(show: Show) {
 		for (const k of REQUIRED) {
 			const ok = isValid(k);
 			if (ok) n++;
-			const f = el(k)?.closest<HTMLElement>('[data-part]');
+			const f = partOf(k);
 			if (f && ok !== f.hasAttribute('data-valid')) {
 				if (ok) f.setAttribute('data-valid', '');
 				else f.removeAttribute('data-valid');
@@ -99,11 +103,13 @@ export function initContact(show: Show) {
 	function compose() {
 		const data = new FormData(form!);
 		const L = cfg.fieldLabels;
-		const keys = ['name', 'company', 'email', 'phone', 'boards', 'volumes', 'eplan', 'process'];
+		const sector = String(data.get('sector') ?? '');
+		const sb = sector === cfg.handoff.sbSector;
+		const keys = ['sector', 'name', 'company', 'email', 'phone', 'boards', 'volumes', 'eplan', 'process'].filter((k) => sb || !SB_KEYS.includes(k));
 		const vals: Record<string, string> = {};
 		for (const key of keys) vals[key] = String(data.get(key) ?? '').trim();
 		const co = vals.company;
-		const subject = `${cfg.handoff.subject}${co ? ` · ${co}` : ''}`;
+		const subject = `${sb ? cfg.handoff.subject : cfg.handoff.subjectOther}${co ? ` · ${co}` : ''}`;
 		const bodyOf = (v: Record<string, string>, note = '') => {
 			const lines: string[] = [];
 			for (const key of keys) if (v[key]) lines.push(`${L[key] ?? key}: ${v[key]}`);

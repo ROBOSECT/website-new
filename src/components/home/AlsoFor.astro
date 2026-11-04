@@ -1,7 +1,8 @@
 ---
 /**
- * Also for you: the secondary audiences, two short cards. Wiring harness makers and remanufacturers; robot cells and
- * integrators (invited to work with us). Maturity stated on each.
+ * Also for you: everyone who does not build switchboards, three short cards. Wiring harness makers and remanufacturers;
+ * robot cells and integrators (invited to work with us); any other manipulation of parts that are hard to handle. Maturity
+ * stated on each.
  * (+C5's vignette: the camera reads the lead's wire marker and checks it against the connection list.)
  */
 import { Image } from 'astro:assets';
@@ -17,10 +18,12 @@ const a = copy[lang].alsoFor;
 const L = {
 	en: {
 		harness: 'Drawing of a wiring harness: one trunk that branches into four connectors',
+		other: 'Drawing of a robot gripper holding a flexible part that bends between its jaws',
 		cell: 'The arm of a collaborative robot with its black cables strapped along it, over a switchboard',
 	},
 	it: {
 		harness: 'Disegno di un cablaggio: un tronco che si dirama in quattro connettori',
+		other: 'Disegno di una pinza robotica che tiene una parte flessibile piegata tra le sue dita',
 		cell: 'Il braccio di un robot collaborativo con i suoi cavi neri fascettati lungo il braccio, sopra un quadro',
 	},
 }[lang];
@@ -53,6 +56,15 @@ const L = {
 									<rect x="432" y="78" width="56" height="44" fill="#0D1B2E" stroke="none" />
 									<rect x="568" y="56" width="56" height="44" fill="#0D1B2E" stroke="none" />
 								</g>
+							</svg>
+						) : i === 2 ? (
+							<svg class="harness" viewBox="0 0 680 383" preserveAspectRatio="xMidYMid slice" role="img" aria-label={L.other}>
+								<rect x="0" y="0" width="680" height="383" fill="#E2E6EB" stroke="none" />
+								<path fill="none" stroke="#173C78" stroke-width="12" stroke-linecap="butt" d="M 0 250 C 120 250 160 150 260 150 S 400 250 470 250 S 600 170 680 170" />
+								<rect x="236" y="96" width="48" height="40" fill="#0D1B2E" stroke="none" />
+								<rect x="236" y="164" width="48" height="40" fill="#0D1B2E" stroke="none" />
+								<rect x="252" y="40" width="16" height="56" fill="#5A6676" stroke="none" />
+								<rect x="210" y="24" width="100" height="20" fill="#5A6676" stroke="none" />
 							</svg>
 						) : (
 							<Image src={imgDresspack} alt={L.cell} widths={[480, 720]} sizes="(min-width: 1100px) 560px, 100vw" loading="lazy" />
@@ -138,6 +150,10 @@ const L = {
 	@media (min-width: 1100px) {
 		.alt__body {
 			font-size: 17px;
+		}
+
+		.alts {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 
 		.alts__cta {

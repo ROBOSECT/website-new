@@ -7,8 +7,9 @@
  *
  * Rules applied:
  * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
- *   harnesses and robot cells are secondary («Also for you»). One call to action everywhere: «Send us a switchboard» /
- *   «Proponici un quadro» (Italian addresses the reader as «tu»).
+ *   harnesses, robot cells and other manipulation are «Also for you». «Send us a switchboard» / «Proponici un quadro» where
+ *   the switchboard story is; «Write to us» / «Scrivici» in the bar and «Tell us about your process» / «Parlaci del tuo
+ *   processo» for every other process (Italian addresses the reader as «tu»).
  * - No invented metrics, clients, testimonials, certifications or people. Every missing
  *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
  *   going live; none of them should reach production.
@@ -32,12 +33,12 @@ export const copy = {
 			htmlLang: 'en',
 			ogLocale: 'en_GB',
 			dateLocale: 'en-GB',
-			title: 'ROBOSECT | Automated switchboard testing with robots, from your EPLAN data',
+			title: 'ROBOSECT | Robotic manipulation down to the cable, starting with switchboard testing',
 			description:
-				'Robots that test electrical switchboards starting from your EPLAN connection list: every connection checked, a test report for every board. A University of Bologna spin-off.',
+				'Robots that test electrical switchboards starting from your EPLAN connection list, with a test report for every board, and robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
 			ogTitle: 'Automation stops at the cable. Ours doesn’t.',
 			ogDescription:
-				'ROBOSECT builds robots that test switchboards starting from your EPLAN project. Every switchboard leaves with its test report. A University of Bologna spin-off.',
+				'ROBOSECT builds robots that test switchboards starting from your EPLAN project, and takes robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
 			ogImageAlt:
 				'Two collaborative robots testing the wires of an electrical switchboard on the bench',
 		},
@@ -77,10 +78,12 @@ export const copy = {
 				short: 'IT',
 				ariaLabel: 'Leggi il sito in italiano',
 			},
-			cta: 'Send us a switchboard',
+			// the bar's action is for every visitor (switchboards or any other process); «Send us a switchboard» stays where the
+			// switchboard story is (hero, What you get)
+			cta: 'Write to us',
 			// narrow phones: the same action in fewer letters (the bar holds the logo, this button and the menu button)
-			ctaShort: 'Send a switchboard',
-			ctaTiny: 'Your switchboard',
+			ctaShort: 'Write to us',
+			ctaTiny: 'Write to us',
 		},
 
 		cta: {
@@ -88,12 +91,19 @@ export const copy = {
 			promise: 'We will tell you plainly whether a robot can test it, and how.',
 		},
 
+		// the action for every process (the technology page, Also for you, the hero's second line)
+		ctaAll: {
+			label: 'Tell us about your process',
+			promise: 'Switchboards, wiring harnesses, robot cells or any part that is hard to handle: we will tell you plainly whether a robot can do it, and how.',
+		},
+
 		hero: {
 			headline: 'Automation stops at the cable. Ours doesn’t.',
 			subheadline:
-				'Robots that test your switchboards starting from your EPLAN project. They check every connection, and every switchboard leaves with its test report.',
+				'Robots that test your switchboards starting from your EPLAN project: every connection checked, every switchboard leaves with its test report. Switchboards come first; the same platform takes robotic manipulation all the way to the hardest case, cables and deformable parts.',
 			primaryCta: { label: 'Send us a switchboard', href: '#contact' },
-			secondaryCta: { label: 'Watch the demo', duration: '1:30', href: '#video' },
+			secondaryCta: { label: 'Watch the demo', duration: '1:30' },
+			otherLine: { text: 'Not a switchboard builder?', link: 'Tell us about your process' },
 			proofChips: [
 				'University of Bologna spin-off',
 				'AIRISE.eu-funded project',
@@ -255,8 +265,8 @@ export const copy = {
 		alsoFor: {
 			id: 'also-for-you',
 			eyebrow: 'Also for you',
-			title: 'You don’t build switchboards? Cables are our job anyway.',
-			intro: 'The same base, perception, planning and execution, works on other parts that bend.',
+			title: 'Not a switchboard builder? Manipulation is our job, down to the cable.',
+			intro: 'The same base, perception, planning and execution, works wherever parts are hard to handle: cables, wiring harnesses and other parts that bend.',
 			statusLabel: 'Status',
 			items: [
 				{
@@ -269,6 +279,11 @@ export const copy = {
 					body: 'Collision-free trajectories that account for cables, including the robot’s own dress pack. We are looking for integrators to work with: partners, not only customers.',
 					status: 'Open to collaboration',
 				},
+				{
+					title: 'Other manipulation tasks',
+					body: 'Processes with flexible parts, inspection tasks or high product variability: robotic systems designed around your process.',
+					status: 'On request',
+				},
 			],
 			cta: 'Tell us about your process',
 		},
@@ -277,7 +292,7 @@ export const copy = {
 			id: 'technology',
 			metaTitle: 'Technology',
 			metaDescription:
-				'The ROBOSECT platform: RGB, RGB-D and 3D perception, EPLAN and CAD integration, cable-aware planning with a digital twin, cobots that test and document.',
+				'The ROBOSECT platform for robotic manipulation down to cables and deformable parts: RGB, RGB-D and 3D perception, EPLAN and CAD integration, cable-aware planning with a digital twin, cobots that act, measure and document.',
 			eyebrow: 'Technology',
 			title: 'One stack, built around the cable',
 			body: 'Most automation stacks treat cables as noise. Ours treats them as the main subject: perception models that detect deformable linear objects, a digital twin fed by your engineering data, and planning that simulates what flexes. It comes from years of research at the University of Bologna and in European innovation projects, and it runs today on a working prototype.',
@@ -437,15 +452,21 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contact',
 			closingTag: 'Automation, down to the last wire.',
-			title: 'Send us a switchboard.',
-			answer: 'We will tell you plainly whether a robot can test it, and how.',
-			body: 'A few lines are enough: what switchboards you build, how many a year, how you test them today.',
+			title: 'Send us a switchboard, or tell us about your process.',
+			answer: 'We will tell you plainly whether a robot can do it, and how.',
+			body: 'A few lines are enough: what you do, what you would like a robot to handle, how it is done today.',
 			responseTime: 'We reply within two working days.',
 			form: {
 				name: { label: 'Name and surname' },
 				company: { label: 'Company' },
 				email: { label: 'Work email', placeholder: 'name@company.com' },
 				phone: { label: 'Phone' },
+				sector: {
+					label: 'What do you do?',
+					// the first option is the switchboard builders': it shows the switchboard questions
+					options: ['Electrical switchboards', 'Wiring harnesses', 'Robot cells and integration', 'Other manipulation'],
+				},
+				sbGroup: 'If you build switchboards',
 				boards: {
 					label: 'What switchboards do you build?',
 					placeholder: 'Choose one',
@@ -462,8 +483,8 @@ export const copy = {
 					options: ['Yes', 'No', 'Other software'],
 				},
 				process: {
-					label: 'How do you test them today?',
-					placeholder: 'e.g. one technician, tester and connection list, about … hours per board',
+					label: 'How is it done today, and what would you like a robot to handle?',
+					placeholder: 'e.g. what you make, how many pieces, what is still done by hand',
 				},
 				required: 'required',
 				optional: 'optional',
@@ -518,6 +539,7 @@ export const copy = {
 				change: 'Change the request',
 				noscript: 'Your email app will open with the request. If nothing opens, write to info@robosect.it.',
 				subject: 'A switchboard to test',
+				subjectOther: 'A process to automate',
 				consentLine: 'Consent: the sender has read the Privacy Policy and agrees that ROBOSECT SRL may use these data to reply to this request.',
 				previewTo: 'To',
 				previewSubject: 'Subject',
@@ -583,12 +605,12 @@ export const copy = {
 			htmlLang: 'it',
 			ogLocale: 'it_IT',
 			dateLocale: 'it-IT',
-			title: 'ROBOSECT | Collaudo automatico dei quadri elettrici con robot, dal tuo EPLAN',
+			title: 'ROBOSECT | Manipolazione robotica fino al cavo, a partire dal collaudo dei quadri elettrici',
 			description:
-				'Robot che collaudano i quadri elettrici partendo dalla tua lista collegamenti EPLAN: ogni collegamento verificato, un verbale per ogni quadro. Spin-off dell’Università di Bologna.',
+				'Robot che collaudano i quadri elettrici partendo dalla tua lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
-				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal tuo progetto EPLAN. Ogni quadro esce con il suo verbale. Spin-off dell’Università di Bologna.',
+				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal tuo progetto EPLAN, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
 				'Due robot collaborativi provano i fili di un quadro elettrico sul banco',
 		},
@@ -626,9 +648,9 @@ export const copy = {
 				short: 'EN',
 				ariaLabel: 'Read the site in English',
 			},
-			cta: 'Proponici un quadro',
-			ctaShort: 'Proponici un quadro',
-			ctaTiny: 'Il tuo quadro',
+			cta: 'Scrivici',
+			ctaShort: 'Scrivici',
+			ctaTiny: 'Scrivici',
 		},
 
 		cta: {
@@ -636,12 +658,18 @@ export const copy = {
 			promise: 'Ti diciamo con franchezza se un robot può collaudarlo, e come.',
 		},
 
+		ctaAll: {
+			label: 'Parlaci del tuo processo',
+			promise: 'Quadri, cablaggi, celle robotizzate o un pezzo difficile da maneggiare: ti diciamo con franchezza se un robot può farlo, e come.',
+		},
+
 		hero: {
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
-				'Robot che collaudano i tuoi quadri elettrici partendo dal progetto EPLAN. Verificano ogni collegamento, e ogni quadro esce con il suo verbale di collaudo.',
+				'Robot che collaudano i tuoi quadri elettrici partendo dal progetto EPLAN: ogni collegamento verificato, ogni quadro esce con il suo verbale. I quadri vengono per primi; la stessa piattaforma porta la manipolazione robotica fino al caso più difficile, cavi e parti deformabili.',
 			primaryCta: { label: 'Proponici un quadro', href: '#contact' },
-			secondaryCta: { label: 'Guarda la demo', duration: '1:30', href: '#video' },
+			secondaryCta: { label: 'Guarda la demo', duration: '1:30' },
+			otherLine: { text: 'Non costruisci quadri?', link: 'Parlaci del tuo processo' },
 			proofChips: [
 				'Spin-off dell’Università di Bologna',
 				'Progetto finanziato da AIRISE.eu',
@@ -803,8 +831,8 @@ export const copy = {
 		alsoFor: {
 			id: 'also-for-you',
 			eyebrow: 'Anche per te',
-			title: 'Non costruisci quadri? I cavi sono comunque il nostro mestiere.',
-			intro: 'La stessa base, percezione, pianificazione ed esecuzione, lavora anche su altre parti che si piegano.',
+			title: 'Non costruisci quadri? La manipolazione è il nostro mestiere, fino al cavo.',
+			intro: 'La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
 			statusLabel: 'Stato',
 			items: [
 				{
@@ -817,15 +845,20 @@ export const copy = {
 					body: 'Traiettorie senza collisioni che tengono conto dei cavi, compreso il dress pack del robot. Cerchiamo integratori con cui lavorare: partner, non solo clienti.',
 					status: 'Aperto a collaborazioni',
 				},
+				{
+					title: 'Altra manipolazione',
+					body: 'Processi con parti flessibili, compiti di ispezione o grande varietà di prodotto: sistemi robotici progettati attorno al tuo processo.',
+					status: 'Su progetto',
+				},
 			],
-			cta: 'Raccontaci il tuo processo',
+			cta: 'Parlaci del tuo processo',
 		},
 
 		technology: {
 			id: 'technology',
 			metaTitle: 'Tecnologia',
 			metaDescription:
-				'La piattaforma ROBOSECT: percezione RGB, RGB-D e 3D, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi, cobot che collaudano e documentano.',
+				'La piattaforma ROBOSECT per la manipolazione robotica fino a cavi e parti deformabili: percezione RGB, RGB-D e 3D, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi, cobot che agiscono, misurano e documentano.',
 			eyebrow: 'Tecnologia',
 			title: 'Una piattaforma costruita attorno al cavo',
 			body: 'Quasi tutte le piattaforme di automazione trattano i cavi come un disturbo. La nostra li mette al centro: modelli di percezione che riconoscono oggetti lineari deformabili, un digital twin alimentato dai tuoi dati di progettazione e una pianificazione che simula ciò che si flette. Nasce da anni di ricerca all’Università di Bologna e in progetti europei di innovazione, e oggi è al lavoro su un prototipo funzionante.',
@@ -985,15 +1018,20 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contatti',
 			closingTag: 'Automazione, fino all’ultimo filo.',
-			title: 'Proponici un quadro.',
-			answer: 'Ti diciamo con franchezza se un robot può collaudarlo, e come.',
-			body: 'Bastano poche righe: che quadri costruisci, quanti all’anno, come li collaudi oggi.',
+			title: 'Proponici un quadro, o parlaci del tuo processo.',
+			answer: 'Ti diciamo con franchezza se un robot può farlo, e come.',
+			body: 'Bastano poche righe: di cosa ti occupi, cosa vorresti affidare a un robot, come lo fai oggi.',
 			responseTime: 'Rispondiamo entro due giorni lavorativi.',
 			form: {
 				name: { label: 'Nome e cognome' },
 				company: { label: 'Azienda' },
 				email: { label: 'Email aziendale', placeholder: 'nome@azienda.it' },
 				phone: { label: 'Telefono' },
+				sector: {
+					label: 'Di cosa ti occupi?',
+					options: ['Quadri elettrici', 'Cablaggi', 'Celle robotizzate e integrazione', 'Altra manipolazione'],
+				},
+				sbGroup: 'Se costruisci quadri',
 				boards: {
 					label: 'Che quadri costruisci?',
 					placeholder: 'Scegli',
@@ -1010,8 +1048,8 @@ export const copy = {
 					options: ['Sì', 'No', 'Altro software'],
 				},
 				process: {
-					label: 'Come collaudi oggi?',
-					placeholder: 'es. un tecnico con tester e lista collegamenti, circa … ore a quadro',
+					label: 'Come lo fai oggi, e cosa vorresti affidare a un robot?',
+					placeholder: 'per esempio: cosa produci, quanti pezzi, cosa si fa ancora a mano',
 				},
 				required: 'obbligatorio',
 				optional: 'facoltativo',
@@ -1063,6 +1101,7 @@ export const copy = {
 				change: 'Modifica la richiesta',
 				noscript: 'Si aprirà il tuo programma di posta con la richiesta. Se non si apre nulla, scrivi a info@robosect.it.',
 				subject: 'Un quadro da collaudare',
+				subjectOther: 'Un processo da automatizzare',
 				consentLine: 'Consenso: chi scrive ha letto l’informativa privacy e acconsente al trattamento dei dati da parte di ROBOSECT SRL per ricevere risposta a questa richiesta.',
 				previewTo: 'A',
 				previewSubject: 'Oggetto',
