@@ -67,6 +67,20 @@ function initFooterBrand() {
 	}).observe(foot);
 }
 
+/** the bar is sticky and the page keeps a scroll padding as tall as the bar (anchors land under it), so Chrome scrolls
+ * every bar item that takes the keyboard focus "into view" and moves the page up by half a screen at each Tab. The bar
+ * is always on screen: the place is put back at once. (The focus scroll happens before focusin, its scroll event only
+ * in the next frame: the last scroll event still holds the place the visitor was at.) */
+function initBarFocus() {
+	const nav = document.querySelector<HTMLElement>('[data-nav]');
+	if (!nav) return;
+	let lastY = window.scrollY;
+	addEventListener('scroll', () => (lastY = window.scrollY), { passive: true });
+	nav.addEventListener('focusin', () => {
+		if (Math.abs(window.scrollY - lastY) > 1) window.scrollTo({ top: lastY, behavior: 'instant' });
+	});
+}
+
 /** print: pictures still waiting for their lazy load are fetched now, so the paper is not left with
  * empty boxes where a browser prints before scrolling them into view */
 function initPrint() {
@@ -74,6 +88,7 @@ function initPrint() {
 }
 
 initMenu();
+initBarFocus();
 initReveal();
 initFooterBrand();
 initPrint();
