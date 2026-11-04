@@ -1147,8 +1147,9 @@ const cfg = {
 		visibility: hidden;
 	}
 
+	/* the confirmation takes the form's place from its top (where the visitor was writing), never from the bottom */
 	.receipt {
-		align-self: end;
+		align-self: start;
 		padding: 24px 22px;
 		background: var(--ink);
 		border: 1px solid #24508f;
@@ -1165,10 +1166,10 @@ const cfg = {
 
 	@keyframes receipt-in {
 		from {
-			clip-path: inset(100% 0 0 0 round 10px);
+			opacity: 0;
 		}
 		to {
-			clip-path: inset(0 0 0 0 round 10px);
+			opacity: 1;
 		}
 	}
 

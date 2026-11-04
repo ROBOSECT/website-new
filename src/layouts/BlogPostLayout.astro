@@ -109,14 +109,14 @@ const blogPostingSchema = {
 	}
 
 	.post {
-		padding-block: 0 clamp(96px, 10vw, 152px);
+		padding-block: clamp(40px, 5vw, 72px) clamp(96px, 10vw, 152px);
 		background: var(--paper);
 	}
 
-	/* never wider than the image itself: small covers (logo artwork) are not blown up into blur */
+	/* never wider than the image itself: small covers (logo artwork) are not blown up into blur. It sits on the page,
+	   under the header band (not tucked over its edge) */
 	.post__cover {
 		max-width: 920px;
-		margin-top: clamp(-72px, -5vw, -32px);
 		position: relative;
 		background: var(--white);
 	}

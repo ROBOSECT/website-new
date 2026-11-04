@@ -8,6 +8,7 @@ import Proof from './Proof.astro';
 import AlsoFor from './AlsoFor.astro';
 import Team from './Team.astro';
 import Contact from './Contact.astro';
+import HomeNews from './HomeNews.astro';
 import { type Lang } from '../../i18n/copy';
 
 interface Props {
@@ -17,7 +18,7 @@ const { lang } = Astro.props;
 // The home page is an electrical panel under test: every section is a compartment
 // (+C1…+C7) on one mounting plate, and the copper of the R leads the test cable through all of them.
 // Order (for switchboard builders): problem · how it works · what you get · prototype (proof) · also for you · team ·
-// contact (the tagline, then the form).
+// contact (the tagline, then the form); then the latest news, a plain section.
 // The visitor's scroll drives everything (scripts/panel).
 ---
 
@@ -35,6 +36,8 @@ const { lang } = Astro.props;
 		<Contact lang={lang} />
 		<div class="cab__close" aria-hidden="true"></div>
 	</div>
+	{/* the latest news: a plain section after the panel */}
+	<HomeNews lang={lang} />
 </BaseLayout>
 
 <script>

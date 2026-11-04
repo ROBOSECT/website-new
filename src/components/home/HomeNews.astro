@@ -1,0 +1,191 @@
+---
+/**
+ * The latest news on the home page: a plain section after the panel, before the footer (no compartment, no robot, no
+ * morph). Up to three posts as cards; the whole card is the link to the post. The posts are in English only: the Italian
+ * page says so. It moves with the footer while the page glides (scripts/panel: one of the gliding blocks).
+ */
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { copy, type Lang } from '../../i18n/copy';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const b = copy[lang].blog;
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((x, y) => y.data.date.valueOf() - x.data.date.valueOf()).slice(0, 3);
+const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+{
+	posts.length > 0 && (
+		<section id="news" class="hnews" data-home-news aria-labelledby="news-title">
+			<div class="wrap">
+				<div class="hnews__head">
+					<h2 id="news-title" class="hnews__title">{b.homeTeaserTitle}</h2>
+					<a class="text-link hnews__all" href="/blog">
+						{b.viewAll}
+						<svg viewBox="0 0 18 18" aria-hidden="true">
+							<path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" />
+						</svg>
+					</a>
+				</div>
+				{b.languageNote && <p class="hnews__note">{b.languageNote}</p>}
+				<ul class="hnews__list">
+					{posts.map((post) => (
+						<li class="hcard">
+							<div class:list={['hcard__pic', post.data.cover.width / post.data.cover.height > 2 && 'is-logo']}>
+								<Image src={post.data.cover} alt="" widths={[360, 540, 720]} sizes="(min-width: 1100px) 400px, (min-width: 700px) 45vw, 100vw" loading="lazy" />
+							</div>
+							<p class="hcard__date">
+								<time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+							</p>
+							<h3 class="hcard__title">
+								<a href={`/blog/${post.id}`} hreflang="en">
+									{post.data.title}
+								</a>
+							</h3>
+							<p class="hcard__desc">{post.data.description}</p>
+						</li>
+					))}
+				</ul>
+			</div>
+		</section>
+	)
+}
+
+<style>
+	.hnews {
+		position: relative;
+		padding-block: clamp(56px, 7vw, 104px);
+		background: var(--paper);
+		color: var(--ink);
+	}
+
+	.hnews__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px 32px;
+	}
+
+	.hnews__title {
+		font-size: var(--t-h2);
+		line-height: 1.1;
+		letter-spacing: -0.025em;
+	}
+
+	.hnews__all {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+	}
+
+	.hnews__all svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	.hnews__note {
+		margin-top: 10px;
+		font-size: 15px;
+		color: var(--steel);
+	}
+
+	.hnews__list {
+		list-style: none;
+		display: grid;
+		gap: 36px;
+		margin-top: 32px;
+	}
+
+	/* one card, one link: the title's link covers the card */
+	.hcard {
+		position: relative;
+		display: grid;
+		align-content: start;
+		gap: 8px;
+	}
+
+	.hcard__pic {
+		aspect-ratio: 3 / 2;
+		margin-bottom: 8px;
+		overflow: hidden;
+		border-radius: 0 0 0 var(--bend);
+		background: var(--white);
+	}
+
+	/* a cover is shown whole (some are logo strips or posters with words on them): never cropped */
+	.hcard__pic :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	/* a logo strip gets room around it */
+	.hcard__pic.is-logo :global(img) {
+		padding: 10% 12%;
+	}
+
+	.hcard__date {
+		font-size: 14px;
+		color: var(--steel);
+	}
+
+	.hcard__title {
+		font-size: 21px;
+		line-height: 1.2;
+		letter-spacing: -0.015em;
+	}
+
+	.hcard__title a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.hcard__title a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.hcard:hover .hcard__title a,
+	.hcard__title a:focus-visible {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.15em;
+	}
+
+	.hcard__title a:focus-visible {
+		outline: none;
+	}
+
+	.hcard:has(a:focus-visible) {
+		outline: 3px solid var(--cu);
+		outline-offset: 6px;
+	}
+
+	.hcard__desc {
+		font-size: 16px;
+		line-height: 1.5;
+		color: var(--ink);
+		max-width: 46ch;
+	}
+
+	@media (min-width: 700px) {
+		.hnews__list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 48px var(--gap);
+		}
+	}
+
+	/* three columns: cards keep one size however many posts there are */
+	@media (min-width: 1100px) {
+		.hnews__list {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>

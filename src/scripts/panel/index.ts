@@ -102,8 +102,9 @@ export function initPanel() {
 	const slowCss = document.createElement('style');
 	slowCss.setAttribute('data-panel-glide', '');
 	document.head.append(slowCss);
-	// the blocks of the page that glide: the hero, the side ducts, every compartment, the closing duct, the footer
-	const blocks: { el: HTMLElement; C: number; g: string }[] = [heroEl, sductL, sductR, ...sections, contactSec, document.querySelector<HTMLElement>('.cab__close'), document.querySelector<HTMLElement>('body > footer, .footer')]
+	// the blocks of the page that glide: the hero, the side ducts, every compartment, the closing duct, the news, the footer
+	const newsEl = document.querySelector<HTMLElement>('[data-home-news]');
+	const blocks: { el: HTMLElement; C: number; g: string }[] = [heroEl, sductL, sductR, ...sections, contactSec, document.querySelector<HTMLElement>('.cab__close'), newsEl, document.querySelector<HTMLElement>('body > footer, .footer')]
 		.filter((e): e is HTMLElement => !!e)
 		.map((el) => ({ el, C: 0, g: '' }));
 	let glide = new Glide();
@@ -256,7 +257,7 @@ export function initPanel() {
 		stages.forEach((s, i) => sleeves[i].measure(s.stage, { vh, cu: cuL, hero: heroEl }));
 		leadTok = { lane, cable, cuL, cuW: thin ? 2.15 : bp === 'tablet' ? 3 : 4.3, jr: bp === 'phone' ? 5 : bp === 'tablet' ? 8 : 12 };
 		relayoutContact();
-		belowEls = [ccard ?? contactSec, footerEl].filter((e): e is HTMLElement => !!e).map((el) => ({ el, top: docTop(el), h: el.offsetHeight }));
+		belowEls = [ccard ?? contactSec, newsEl, footerEl].filter((e): e is HTMLElement => !!e).map((el) => ({ el, top: docTop(el), h: el.offsetHeight }));
 		for (const b of blocks) {
 			const s = stages.find((k) => k.sec === b.el);
 			b.C = s ? s.tr.C : b.el === heroEl || b.el === sductL || b.el === sductR ? 0 : glide.total;

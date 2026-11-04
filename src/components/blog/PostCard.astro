@@ -9,7 +9,7 @@ interface Props {
 
 const { post } = Astro.props;
 const b = copy.en.blog;
-// a very wide cover is a logo strip, not a photograph: show it whole instead of cropping it
+// a very wide cover is a logo strip, not a photograph: more room around it
 const isLogo = post.data.cover.width / post.data.cover.height > 2;
 const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 	year: 'numeric',
@@ -46,20 +46,17 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 		background: var(--white);
 	}
 
+	/* every cover is shown whole (posters with words and logo strips among them): never cropped */
 	.post-row__img :global(img) {
+		display: block;
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
-		transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+		object-fit: contain;
 	}
 
 	.is-logo :global(img) {
 		object-fit: contain;
 		padding: 12% 10%;
-	}
-
-	.post-row:hover .post-row__img :global(img) {
-		transform: scale(1.03);
 	}
 
 	.post-row__date {
@@ -114,6 +111,15 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 
 	.post-row:hover .post-row__more svg {
 		transform: translateX(3px);
+	}
+
+	.post-row:has(a:focus-visible) {
+		outline: 3px solid var(--cu);
+		outline-offset: 8px;
+	}
+
+	.post-row__title a:focus-visible {
+		outline: none;
 	}
 
 	@media (min-width: 700px) {

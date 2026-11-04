@@ -1,6 +1,6 @@
 ---
 title: "ROBOSECT @ AIM 2026"
-description: "ROBOSECT will partecipate to the Advanced Intelligent Mechatronics (AIM) 2026, in Genoa, Italy."
+description: "ROBOSECT will participate in the Advanced Intelligent Mechatronics (AIM) 2026, in Genoa, Italy."
 date: 2026-07-10
 cover: "./AIM_2.jpg"
 coverAlt: "ROBOSECT @ AIM 2026"
