@@ -333,6 +333,28 @@ export function initPanel() {
 		prefill(CAPTURE);
 		scrollApi.settle();
 	}
+	/** the same, in slices (one compartment per task: no long task after a resize). The slices only read the layout and
+	 * replace the model; nothing is drawn until the model is whole (render waits on `laying`), and a newer re-layout
+	 * supersedes an older one still running. */
+	let laying = false,
+		layId = 0;
+	async function relayoutAsync(a: Anchor) {
+		const id = ++layId;
+		laying = true;
+		for (const _ of rebuildSteps()) {
+			await yieldTask();
+			if (id !== layId) return;
+			if (!motion) {
+				laying = false;
+				return;
+			}
+		}
+		laying = false;
+		goTo(anchorY(a));
+		keepFocusInView();
+		prefill(CAPTURE);
+		scrollApi.settle();
+	}
 
 	/** the glide as scroll-driven animations of the root scroller over [first zone, last zone]: one per distinct C, the
 	 * runs above the block folded into its keyframes (exact piecewise cubics as cubic-béziers). Fail-safe: if the
@@ -386,7 +408,8 @@ export function initPanel() {
 	/** one frame. Y: the scroll position read at the start of this frame (reading it again after DOM writes
 	 * would force a synchronous layout of the whole page) */
 	function render(force: boolean, Yin?: number) {
-		if (!built) return;
+		// (nothing is drawn from a model half rebuilt: a sliced re-layout draws once it is whole)
+		if (!built || laying) return;
 		const t0 = performance.now();
 		if (PROF) {
 			PT.cur = {};
@@ -797,6 +820,8 @@ export function initPanel() {
 		const v = built ? V(window.scrollY) : window.scrollY;
 		motion = false;
 		thaw();
+		layId++;
+		laying = false;
 		root.classList.remove('motion');
 		// the static page is an ordinary page: the browser's own restoration is right for it
 		if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
@@ -1199,9 +1224,15 @@ export function initPanel() {
 				if ((moved && wChanged) || signature() !== sig) {
 					// (QA: the place the re-layout kept)
 					(window as Window & { __resizeAnchor?: unknown }).__resizeAnchor = a && a.k === 'el' ? { ...a, el: a.el.tagName } : a;
-					relayout(a ?? undefined);
-					lastW = vw;
-					lastH = vh;
+					const done = () => {
+						lastW = vw;
+						lastH = vh;
+					};
+					// (capture mode stays synchronous: its stills are taken right after a resize)
+					if (CAPTURE) {
+						relayout(a ?? undefined);
+						done();
+					} else void relayoutAsync(a ?? anchorNow()).then(done);
 				} else if (contactSec) {
 					// below the last zone (Contact, the footer): only Contact's own geometry can change (the receipt, the
 					// message box): the cable's gland and the sleeve's place
