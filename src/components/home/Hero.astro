@@ -61,13 +61,14 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			class="hero__img"
 			data-hero-img
 		/>
-		{/* without JS the badge goes to the video in the Prototype section; with JS it opens the video here (scripts/home.ts) */}
-		<a class="hero__play" href={h.secondaryCta.href} data-video-open>
+		{/* the prototype video plays over the page, right here: the badge is a button the script reveals once the player
+		     works (scripts/home.ts); without it there is no badge, and the video plays in place in the Prototype section */}
+		<button type="button" class="hero__play" data-video-open hidden>
 			<span class="hero__play-btn" aria-hidden="true"
 				><svg viewBox="0 0 18 18"><path d="M5.5 3.5v11l9-5.5z" fill="#F4F1EC" stroke="none"></path></svg></span
 			>
 			<span class="hero__play-txt">{h.secondaryCta.label}<span class="hero__play-dur">{h.secondaryCta.duration}</span></span>
-		</a>
+		</button>
 	</figure>
 	{/* the prototype video, opened from the first screen; nothing is downloaded until it plays (preload none, src set on open) */}
 	<dialog class="vdlg" data-video-dialog aria-label={h.videoTitle}>
@@ -222,10 +223,17 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		padding: 6px 16px 6px 6px;
 		background: rgb(13 27 46 / 0.86);
 		color: var(--paper);
+		font: inherit;
 		font-size: 15px;
 		font-weight: 600;
 		text-decoration: none;
+		border: 0;
+		cursor: pointer;
 		transition: background-color 0.18s var(--ease-out);
+	}
+
+	.hero__play[hidden] {
+		display: none;
 	}
 
 	.hero__play:hover {
@@ -259,23 +267,36 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		color: var(--steel-light);
 	}
 
+	/* the video over the page: the dialog fills the screen (its own dark ground), so the wheel or a swipe anywhere on it
+	   belongs to it and never scrolls the page behind (scripts/home.ts) */
 	.vdlg {
-		width: min(1200px, calc(100vw - 24px));
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		max-width: none;
-		max-height: calc(100svh - 24px);
-		padding: 0;
+		max-height: none;
+		margin: 0;
+		padding: 12px;
 		border: 0;
-		background: transparent;
-		overflow: visible;
+		background: rgb(13 27 46 / 0.92);
+		overflow: hidden;
+		overscroll-behavior: contain;
+	}
+
+	.vdlg[open] {
+		display: grid;
+		place-items: center;
 	}
 
 	.vdlg::backdrop {
-		background: rgb(13 27 46 / 0.9);
+		background: transparent;
 	}
 
 	.vdlg__in {
 		position: relative;
 		display: grid;
+		width: min(1200px, 100%);
 	}
 
 	.vdlg__v {

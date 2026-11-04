@@ -691,7 +691,8 @@ export function initPanel() {
 		return y;
 	}
 	document.addEventListener('click', (e) => {
-		if (!motion || !built) return;
+		// (a click another handler already took, such as the video opener, is not a jump)
+		if (!motion || !built || e.defaultPrevented) return;
 		const a = (e.target as Element).closest?.('a[href*="#"]') as HTMLAnchorElement | null;
 		if (!a || a.origin !== location.origin || a.pathname !== location.pathname) return;
 		const id = decodeURIComponent(a.hash.slice(1));
@@ -699,8 +700,13 @@ export function initPanel() {
 		if (y == null) return;
 		e.preventDefault();
 		// the visitor's place, for back/forward (scroll restoration is manual on this page: the panel restores it)
-		history.replaceState({ ...(history.state ?? {}), panelY: window.scrollY }, '');
-		history.pushState({ panelY: y }, '', '#' + id);
+		// (a sandboxed frame with an opaque origin refuses history entries: the jump still happens, without one)
+		try {
+			history.replaceState({ ...(history.state ?? {}), panelY: window.scrollY }, '');
+			history.pushState({ panelY: y }, '', '#' + id);
+		} catch {
+			/* no history entry */
+		}
 		goTo(y);
 		markInput();
 		kick();

@@ -126,30 +126,65 @@ function initBrandOnce() {
 	});
 }
 
-/** the prototype video from the first screen: a modal dialog; the file is fetched only when it opens (without JS the
- * links go to the video in the Prototype section) */
+/** the prototype video from the first screen: a modal dialog over the page, right where the visitor is; the file is
+ * fetched only when it opens. The page never moves: no anchor, the wheel and the paging keys over the dialog do not
+ * scroll what is behind it, and the place is put back on close should anything have moved it. The badge is shown only
+ * once all this is wired (without script, or where <dialog> is missing, the video plays in place in the Prototype
+ * section). Nothing here touches storage, history or fullscreen, so it works the same in a sandboxed frame. */
 function initVideoDialog() {
 	const dlg = document.querySelector<HTMLDialogElement>('[data-video-dialog]');
 	const v = dlg?.querySelector<HTMLVideoElement>('video');
-	if (!dlg || !v || typeof dlg.showModal !== 'function') return;
+	const openers = Array.from(document.querySelectorAll<HTMLElement>('[data-video-open]'));
+	if (!dlg || !v || !openers.length || typeof dlg.showModal !== 'function') return;
 	let opener: HTMLElement | null = null;
-	document.querySelectorAll<HTMLElement>('[data-video-open]').forEach((a) =>
+	let keepY = 0;
+	const restore = () => {
+		if (Math.abs(window.scrollY - keepY) > 1) window.scrollTo({ top: keepY, behavior: 'instant' });
+	};
+	const open = (from: HTMLElement) => {
+		opener = from;
+		keepY = window.scrollY;
+		if (!v.getAttribute('src') && v.dataset.src) v.src = v.dataset.src;
+		try {
+			dlg.showModal();
+		} catch {
+			return;
+		}
+		restore();
+		// (a refused autoplay leaves the controls to the visitor)
+		try {
+			v.play()?.catch(() => {});
+		} catch {
+			/* the controls are there */
+		}
+	};
+	for (const a of openers) {
 		a.addEventListener('click', (e) => {
 			e.preventDefault();
-			opener = a;
-			if (!v.src && v.dataset.src) v.src = v.dataset.src;
-			dlg.showModal();
-			v.play().catch(() => {});
-		}),
-	);
+			open(a);
+		});
+		a.hidden = false;
+	}
 	dlg.querySelector('[data-video-close]')?.addEventListener('click', () => dlg.close());
 	// a click on the backdrop closes it
 	dlg.addEventListener('click', (e) => {
 		if (e.target === dlg) dlg.close();
 	});
+	// the page behind stays put: no wheel or touch scroll through the backdrop, no paging keys (the video keeps its own)
+	const hold = (e: Event) => e.preventDefault();
+	dlg.addEventListener('wheel', hold, { passive: false });
+	dlg.addEventListener('touchmove', hold, { passive: false });
+	dlg.addEventListener('keydown', (e) => {
+		const t = e.target as HTMLElement;
+		if (t === v) return;
+		if (['PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown'].includes(e.key) || (e.key === ' ' && t.tagName !== 'BUTTON')) e.preventDefault();
+	});
 	dlg.addEventListener('close', () => {
 		v.pause();
 		opener?.focus({ preventScroll: true });
+		restore();
+		// (the browser's own focus return may still move the page in the next frame)
+		requestAnimationFrame(restore);
 	});
 }
 

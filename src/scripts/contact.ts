@@ -147,7 +147,12 @@ export function initContact(show: Show) {
 	function deliver(href: string) {
 		// (QA: the handoff is recorded instead of leaving the page)
 		if (form!.dataset.qa === 'no-mailto') return void ((window as Window & { __mailto?: string }).__mailto = href);
-		window.location.href = href;
+		// (a sandboxed frame may refuse the navigation: the confirmation still offers the link and the copy)
+		try {
+			window.location.href = href;
+		} catch {
+			/* the receipt's own link and copy buttons remain */
+		}
 	}
 
 	form.addEventListener('submit', (e) => {
