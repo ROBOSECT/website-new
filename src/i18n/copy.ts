@@ -39,7 +39,7 @@ export const copy = {
 			ogDescription:
 				'ROBOSECT builds robots that test switchboards starting from your EPLAN project. Every switchboard leaves with its test report. A University of Bologna spin-off.',
 			ogImageAlt:
-				'Two collaborative robots with custom probe end-effectors positioned over an electrical switchboard',
+				'Two collaborative robots testing the wires of an electrical switchboard on the bench',
 		},
 
 		brand: {
@@ -100,7 +100,7 @@ export const copy = {
 				'Working prototype on a real switchboard',
 			],
 			imageAlt:
-				'ROBOSECT prototype: two collaborative robots with red custom probe end-effectors working on an electrical switchboard',
+				'The ROBOSECT prototype: two collaborative robots testing the wires of an electrical switchboard laid on the bench',
 			videoTitle: 'The ROBOSECT prototype testing a switchboard',
 		},
 
@@ -229,8 +229,8 @@ export const copy = {
 				posterAlt: 'Still frame from above: two collaborative robot arms over an open switchboard',
 			},
 			photo: {
-				alt: 'A red custom probe end-effector mounted on the wrist of a collaborative robot, with its probe tip pointing down',
-				caption: 'One of the two probe end-effectors, designed by ROBOSECT for continuity testing.',
+				alt: 'Two collaborative robot arms centimetres apart over a terminal block: on the left a gripper, on the right a test probe pointing down',
+				caption: 'Two arms in one workspace: their tools work centimetres apart on the same terminal block, without touching. A still from the demo video.',
 			},
 			factsTitle: 'Who stands behind it',
 			facts: [
@@ -296,9 +296,8 @@ export const copy = {
 				},
 			],
 			photo: {
-				alt: 'Two collaborative robots with red custom probe end-effectors positioned over an electrical switchboard',
-				caption:
-					'The ROBOSECT dual-arm setup: each arm carries a custom probe end-effector for continuity testing on a switchboard.',
+				alt: 'Two collaborative robots over an electrical switchboard laid on the bench, with a bench multimeter beside it',
+				caption: 'The ROBOSECT prototype: two collaborative arms, a switchboard laid on the bench and a bench multimeter. A still from the demo video.',
 			},
 			platformTitle: 'The platform, in four parts',
 			platformIntro:
@@ -591,7 +590,7 @@ export const copy = {
 			ogDescription:
 				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal tuo progetto EPLAN. Ogni quadro esce con il suo verbale. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
-				'Due robot collaborativi con end-effector a puntale su misura posizionati sopra un quadro elettrico',
+				'Due robot collaborativi provano i fili di un quadro elettrico sul banco',
 		},
 
 		brand: {
@@ -649,7 +648,7 @@ export const copy = {
 				'Prototipo funzionante su un quadro vero',
 			],
 			imageAlt:
-				'Prototipo ROBOSECT: due robot collaborativi con end-effector rossi a puntale, progettati su misura, al lavoro su un quadro elettrico',
+				'Il prototipo ROBOSECT: due robot collaborativi provano i fili di un quadro elettrico appoggiato sul banco',
 			videoTitle: 'Il prototipo ROBOSECT collauda un quadro',
 		},
 
@@ -778,8 +777,8 @@ export const copy = {
 				posterAlt: 'Fotogramma dall’alto: due bracci robotici collaborativi sopra un quadro elettrico aperto',
 			},
 			photo: {
-				alt: 'Un end-effector rosso a puntale, progettato su misura, montato sul polso di un robot collaborativo, con il puntale rivolto in basso',
-				caption: 'Uno dei due end-effector a puntale, progettati da ROBOSECT per la prova di continuità.',
+				alt: 'Due bracci robotici collaborativi a pochi centimetri sopra una morsettiera: a sinistra una pinza, a destra un puntale di prova rivolto in basso',
+				caption: 'Due bracci nello stesso spazio: i loro attrezzi lavorano a pochi centimetri sulla stessa morsettiera, senza toccarsi. Un fotogramma del video della demo.',
 			},
 			factsTitle: 'Chi c’è dietro',
 			facts: [
@@ -845,9 +844,8 @@ export const copy = {
 				},
 			],
 			photo: {
-				alt: 'Due robot collaborativi con end-effector rossi a puntale, progettati su misura, posizionati sopra un quadro elettrico',
-				caption:
-					'Il setup ROBOSECT a due bracci: ogni braccio monta un end-effector a puntale progettato su misura per la prova di continuità sul quadro.',
+				alt: 'Due robot collaborativi sopra un quadro elettrico appoggiato sul banco, con un multimetro da banco accanto',
+				caption: 'Il prototipo ROBOSECT: due bracci collaborativi, un quadro appoggiato sul banco e un multimetro da banco. Un fotogramma del video della demo.',
 			},
 			platformTitle: 'La piattaforma, in quattro parti',
 			platformIntro:

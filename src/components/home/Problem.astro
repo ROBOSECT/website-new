@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import imgBoard from '../../assets/images/home/stage-perceive.jpg';
-import imgVariant from '../../assets/images/home/problem-variant.jpg';
+import imgBoard from '../../assets/images/home/demo-board.jpg';
+import imgVariant from '../../assets/images/home/demo-located.jpg';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
 
@@ -14,15 +14,15 @@ const p = copy[lang].problem;
 const L = {
 	en: {
 		alts: [
-			'Close view of a switchboard: controller modules, relays and terminal blocks wired in blue between grey ducts',
-			'A different switchboard layout, photographed from the side on a slotted table',
+			'An electrical switchboard seen from above: modules, terminal blocks and a socket, wired in blue between grey ducts',
+			'The same switchboard as the robot’s vision sees it: each of its 25 components outlined in green where it was found',
 		],
 		list: 'Drawing of a connection list ticked by hand: some rows have a tick, two are blank',
 	},
 	it: {
 		alts: [
-			'Vista ravvicinata di un quadro: moduli del controllore, relè e morsettiere cablati in blu tra canaline grigie',
-			'Un quadro con una disposizione diversa, fotografato di lato su un banco a doghe',
+			'Un quadro elettrico visto dall’alto: moduli, morsettiere e una presa, cablati in blu tra canaline grigie',
+			'Lo stesso quadro come lo vede la visione del robot: ciascuno dei 25 componenti contornato in verde dove è stato trovato',
 		],
 		list: 'Disegno di una lista collegamenti spuntata a mano: alcune righe hanno il segno, due sono vuote',
 	},

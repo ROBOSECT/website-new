@@ -7,8 +7,8 @@
  */
 import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import imgTool from '../../assets/images/home/tech-endeffector.jpg';
-import posterSrc from '../../assets/images/home/video-poster.jpg';
+import imgTool from '../../assets/images/home/demo-two-probes.jpg';
+import posterSrc from '../../assets/images/home/demo-poster.jpg';
 import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import logoUnibo from '../../assets/images/logo_unibo.png';
 import logoAirise from '../../assets/images/home/logo-airise.png';
@@ -52,7 +52,7 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 	<div class="facts">
 		<figure class="tool" data-b>
 			<div class="tool__frame">
-				<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 640]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
+				<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 760]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
 			</div>
 			<figcaption>{p.photo.caption}</figcaption>
 		</figure>

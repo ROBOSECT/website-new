@@ -5,7 +5,7 @@
  * (+C5's vignette: the camera reads the lead's wire marker and checks it against the connection list.)
  */
 import { Image } from 'astro:assets';
-import imgDresspack from '../../assets/images/home/problem-dresspack.jpg';
+import imgDresspack from '../../assets/images/home/demo-dresspack.jpg';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
 
@@ -17,11 +17,11 @@ const a = copy[lang].alsoFor;
 const L = {
 	en: {
 		harness: 'Drawing of a wiring harness: one trunk that branches into four connectors',
-		cell: 'The upper arm of a collaborative robot with black and green cables strapped along it',
+		cell: 'The arm of a collaborative robot with its black cables strapped along it, over a switchboard',
 	},
 	it: {
 		harness: 'Disegno di un cablaggio: un tronco che si dirama in quattro connettori',
-		cell: 'Il braccio di un robot collaborativo con cavi neri e verdi fascettati lungo il braccio',
+		cell: 'Il braccio di un robot collaborativo con i suoi cavi neri fascettati lungo il braccio, sopra un quadro',
 	},
 }[lang];
 ---
