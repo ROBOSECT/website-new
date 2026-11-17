@@ -246,20 +246,49 @@ export const copy = {
 			facts: [
 				{
 					name: 'University of Bologna spin-off',
-					detail: 'ROBOSECT SRL is a spin-off of the Alma Mater Studiorum – Università di Bologna, born from years of academic research and European innovation projects.',
+					detail: 'ROBOSECT SRL is a spin-off of the Alma Mater Studiorum – Università di Bologna, founded in 2024 and born from years of academic research and European innovation projects.',
 					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
+					mark: '',
 				},
 				{
-					name: 'AIRISE.eu-funded project',
-					detail: 'Funding to develop an AI-based robotic platform for switchboard quality control: visual inspection of assembly defects, cable-marker reading, continuity testing. [TBD: confirm project name, CONTENT or CONTEST]',
+					name: 'AIRISE.eu-funded project: CONTEST',
+					detail: 'Funding to develop an AI-based robotic platform for switchboard quality control: visual inspection of assembly defects, cable-marker reading, continuity testing.',
 					logoAlt: 'AIRISE.eu',
+					mark: '',
+				},
+				{
+					name: 'Patented technology',
+					detail: 'Italian patent 102023000014613, extended to the EU: vision-based recognition and localisation of wired components in electrical panels.',
+					logoAlt: '',
+					mark: 'PATENT',
+				},
+				{
+					name: 'Startup awards',
+					detail: 'Emilia-Romagna startCUP 2022, 3rd place. University of Bologna Call for Startup and Business Plan 2022, 1st place.',
+					logoAlt: '',
+					mark: '2022',
+				},
+				{
+					name: 'Incubated at EIT Manufacturing and CTE COBO',
+					detail: 'Two incubation programmes that follow the company as it moves from the lab to its first customers.',
+					logoAlt: '',
+					mark: 'EIT · COBO',
 				},
 				{
 					name: 'Sponsor and exhibitor at IEEE/ASME AIM 2026',
 					detail: 'Genoa, 7–10 July 2026.',
 					logoAlt: '',
+					mark: 'AIM 2026',
 				},
 			],
+			targets: {
+				title: 'What the project is aiming for',
+				items: [
+					{ from: '30 s', to: '10 s', label: 'One connection test' },
+					{ from: '45 min', to: '15 min', label: 'The reference switchboard' },
+				],
+				note: 'These are the targets of the AIRISE project, not measurements. Measured figures will be published with their test conditions.',
+			},
 		},
 
 		alsoFor: {
@@ -812,20 +841,49 @@ export const copy = {
 			facts: [
 				{
 					name: 'Spin-off dell’Università di Bologna',
-					detail: 'ROBOSECT SRL è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, nata da anni di ricerca accademica e di progetti europei di innovazione.',
+					detail: 'ROBOSECT SRL è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, fondata nel 2024 e nata da anni di ricerca accademica e di progetti europei di innovazione.',
 					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
+					mark: '',
 				},
 				{
-					name: 'Progetto finanziato da AIRISE.eu',
-					detail: 'Finanziamento per sviluppare una piattaforma robotica basata su AI per il controllo qualità dei quadri elettrici: ispezione visiva dei difetti di montaggio, lettura delle siglature, prova di continuità. [TBD: confermare il nome del progetto, CONTENT o CONTEST]',
+					name: 'Progetto finanziato da AIRISE.eu: CONTEST',
+					detail: 'Finanziamento per sviluppare una piattaforma robotica basata su AI per il controllo qualità dei quadri elettrici: ispezione visiva dei difetti di montaggio, lettura delle siglature, prova di continuità.',
 					logoAlt: 'AIRISE.eu',
+					mark: '',
+				},
+				{
+					name: 'Tecnologia brevettata',
+					detail: 'Brevetto italiano 102023000014613, esteso all’UE: riconoscimento e localizzazione con la visione dei componenti cablati nei quadri elettrici.',
+					logoAlt: '',
+					mark: 'BREVETTO',
+				},
+				{
+					name: 'Premi per le startup',
+					detail: 'Emilia-Romagna startCUP 2022, terzo posto. Call UniBo per Startup e Business Plan 2022, primo posto.',
+					logoAlt: '',
+					mark: '2022',
+				},
+				{
+					name: 'In incubazione a EIT Manufacturing e CTE COBO',
+					detail: 'Due percorsi di incubazione che accompagnano l’azienda dal laboratorio ai primi clienti.',
+					logoAlt: '',
+					mark: 'EIT · COBO',
 				},
 				{
 					name: 'Sponsor ed espositore a IEEE/ASME AIM 2026',
 					detail: 'Genova, 7–10 luglio 2026.',
 					logoAlt: '',
+					mark: 'AIM 2026',
 				},
 			],
+			targets: {
+				title: 'Dove punta il progetto',
+				items: [
+					{ from: '30 s', to: '10 s', label: 'Una prova di collegamento' },
+					{ from: '45 min', to: '15 min', label: 'Il quadro di riferimento' },
+				],
+				note: 'Sono gli obiettivi del progetto AIRISE, non misure. I valori misurati li pubblicheremo con le loro condizioni di prova.',
+			},
 		},
 
 		alsoFor: {

@@ -22,10 +22,10 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].proof;
 const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
+// logos for the first two facts; the others carry a short mono mark (fact.mark)
 const logos = [
 	{ src: logoUnibo, h: 52 },
 	{ src: logoAirise, h: 22 },
-	null,
 ];
 ---
 
@@ -63,7 +63,7 @@ const logos = [
 								{logos[i] ? (
 									<Image src={logos[i]!.src} alt={f.logoAlt} height={logos[i]!.h * 2} style={`height:${logos[i]!.h}px`} loading="lazy" />
 								) : (
-									<span class="who__mark" aria-hidden="true">AIM 2026</span>
+									<span class="who__mark" aria-hidden="true">{f.mark}</span>
 								)}
 							</div>
 							<div>
@@ -78,9 +78,91 @@ const logos = [
 			</ul>
 		</div>
 	</div>
+
+	<div class="targets" data-b>
+		<h3 class="targets__h">{p.targets.title}</h3>
+		<ul class="targets__list">
+			{
+				p.targets.items.map((t) => (
+					<li class="targets__item">
+						<p class="targets__label">{t.label}</p>
+						<p class="targets__val">
+							<span class="targets__from">{t.from}</span>
+							<span aria-hidden="true">→</span>
+							<span class="visually-hidden"> to </span>
+							<span class="targets__to">{t.to}</span>
+						</p>
+					</li>
+				))
+			}
+		</ul>
+		<p class="targets__note">{p.targets.note}</p>
+	</div>
 </Compartment>
 
 <style>
+	.targets {
+		margin-top: 56px;
+	}
+
+	.targets__h {
+		font-size: 24px;
+		line-height: 1.2;
+	}
+
+	.targets__list {
+		list-style: none;
+		display: grid;
+		gap: 4px;
+		margin-top: 20px;
+	}
+
+	.targets__item {
+		display: grid;
+		gap: 6px;
+		padding: 16px;
+		background: var(--white);
+	}
+
+	.targets__label {
+		font-size: 15px;
+		color: var(--steel);
+	}
+
+	.targets__val {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+		font-family: var(--font-mono);
+		font-size: 28px;
+		font-weight: 500;
+		color: var(--blue);
+	}
+
+	.targets__from {
+		color: var(--steel);
+	}
+
+	.targets__note {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--steel);
+		max-width: 60ch;
+	}
+
+	@media (min-width: 700px) {
+		.targets__list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.targets {
+			margin-top: 80px;
+		}
+	}
+
 	.tvid__print {
 		display: none;
 	}
