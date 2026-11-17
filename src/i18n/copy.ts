@@ -320,8 +320,8 @@ export const copy = {
 		alsoFor: {
 			id: 'also-for-you',
 			eyebrow: 'Also for you',
-			title: 'Not a switchboard builder? Manipulation is our job, down to the cable.',
-			intro: 'The same base, perception, planning and execution, works wherever parts are hard to handle: cables, wiring harnesses and other parts that bend.',
+			title: 'A platform for deformable objects',
+			intro: 'Not a switchboard builder? The same base, perception, planning and execution, works wherever parts are hard to handle: cables, wiring harnesses and other parts that bend.',
 			statusLabel: 'Status',
 			items: [
 				{
@@ -941,8 +941,8 @@ export const copy = {
 		alsoFor: {
 			id: 'also-for-you',
 			eyebrow: 'Anche per te',
-			title: 'Non costruisci quadri? La manipolazione è il nostro mestiere, fino al cavo.',
-			intro: 'La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
+			title: 'Una piattaforma per gli oggetti deformabili',
+			intro: 'Non costruisci quadri? La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
 			statusLabel: 'Stato',
 			items: [
 				{
