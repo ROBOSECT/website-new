@@ -21,7 +21,12 @@ function initMenu() {
 		menu.classList.toggle('is-open', open);
 		if (label) label.textContent = (open ? toggle.dataset.closeLabel : toggle.dataset.openLabel) ?? '';
 	};
-	toggle.addEventListener('click', () => set(toggle.getAttribute('aria-expanded') !== 'true'));
+	toggle.addEventListener('click', () => {
+		const open = toggle.getAttribute('aria-expanded') !== 'true';
+		set(open);
+		// the menu comes before the toggle in the page order: without this, Tab from the toggle skips the open menu
+		if (open) menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+	});
 	menu.addEventListener('click', (e) => {
 		if ((e.target as HTMLElement).closest('a')) set(false);
 	});
