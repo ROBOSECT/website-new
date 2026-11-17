@@ -7,9 +7,9 @@
  *
  * Rules applied:
  * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
- *   harnesses, robot cells and other manipulation are «Also for you». «Bring us a project» / «Proponici un progetto» is the
- *   main action; «Write to us» / «Scrivici» in the bar and «Tell us about your process» / «Parlaci del tuo
- *   processo» for every other process (Italian addresses the reader as «tu»).
+ *   harnesses, robot cells and other manipulation are «Also for you». «Bring us a project» / «Proponeteci un progetto» is the
+ *   main action; «Write to us» / «Scriveteci» in the bar and «Tell us about your process» / «Parlateci del vostro
+ *   processo» for every other process (Italian addresses the reader as «voi», except the Team job line, which stays «tu»).
  * - No invented metrics, clients, testimonials, certifications or people. Every missing
  *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
  *   going live; none of them should reach production.
@@ -638,10 +638,10 @@ export const copy = {
 			dateLocale: 'it-IT',
 			title: 'ROBOSECT | Manipolazione robotica fino al cavo, a partire dal collaudo dei quadri elettrici',
 			description:
-				'Robot che collaudano i quadri elettrici partendo dalla tua lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
+				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
-				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal tuo progetto EPLAN, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
+				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto EPLAN, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
 				'Due robot collaborativi provano i fili di un quadro elettrico sul banco',
 		},
@@ -658,7 +658,7 @@ export const copy = {
 			openMenu: 'Apri il menu',
 			closeMenu: 'Chiudi il menu',
 			linkedin: 'ROBOSECT su LinkedIn (si apre in una nuova scheda)',
-			email: 'Scrivi a ROBOSECT',
+			email: 'Scrivete a ROBOSECT',
 			opensInNewTab: '(si apre in una nuova scheda)',
 			playVideo: 'Avvia il video',
 			pauseVideo: 'Metti in pausa il video',
@@ -680,28 +680,28 @@ export const copy = {
 				short: 'EN',
 				ariaLabel: 'Read the site in English',
 			},
-			cta: 'Scrivici',
-			ctaShort: 'Scrivici',
-			ctaTiny: 'Scrivici',
+			cta: 'Scriveteci',
+			ctaShort: 'Scriveteci',
+			ctaTiny: 'Scriveteci',
 		},
 
 		cta: {
-			label: 'Proponici un progetto',
-			promise: 'Ti diciamo con franchezza se un robot può farlo, e come.',
+			label: 'Proponeteci un progetto',
+			promise: 'Vi diciamo con franchezza se un robot può farlo, e come.',
 		},
 
 		ctaAll: {
-			label: 'Parlaci del tuo processo',
-			promise: 'Quadri, cablaggi, bobine, celle robotizzate o un pezzo difficile da maneggiare: ti diciamo con franchezza se un robot può farlo, e come.',
+			label: 'Parlateci del vostro processo',
+			promise: 'Quadri, cablaggi, bobine, celle robotizzate o un pezzo difficile da maneggiare: vi diciamo con franchezza se un robot può farlo, e come.',
 		},
 
 		hero: {
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
-				'Robot che collaudano i tuoi quadri elettrici partendo dal progetto EPLAN: ogni collegamento verificato, ogni quadro esce con il suo verbale. I quadri vengono per primi; la stessa piattaforma porta la manipolazione robotica fino al caso più difficile, cavi e parti deformabili.',
-			primaryCta: { label: 'Proponici un progetto', href: '#contact' },
-			secondaryCta: { label: 'Guarda la demo', duration: '1:30' },
-			otherLine: { text: 'Non costruisci quadri?', link: 'Parlaci del tuo processo' },
+				'Robot che collaudano i vostri quadri elettrici partendo dal progetto EPLAN: ogni collegamento verificato, ogni quadro esce con il suo verbale. I quadri vengono per primi; la stessa piattaforma porta la manipolazione robotica fino al caso più difficile, cavi e parti deformabili.',
+			primaryCta: { label: 'Proponeteci un progetto', href: '#contact' },
+			secondaryCta: { label: 'Guardate la demo', duration: '1:30' },
+			otherLine: { text: 'Non costruite quadri?', link: 'Parlateci del vostro processo' },
 			proofChips: [
 				'Spin-off dell’Università di Bologna',
 				'Progetto finanziato da AIRISE.eu',
@@ -743,9 +743,9 @@ export const copy = {
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'Come funziona',
-			title: 'Dal tuo progetto EPLAN al verbale di collaudo, in tre passi',
+			title: 'Dal vostro progetto EPLAN al verbale di collaudo, in tre passi',
 			intro:
-				'Nessuno programma il robot quadro per quadro. Parte dai dati che hai già e guarda il quadro vero.',
+				'Nessuno programma il robot quadro per quadro. Parte dai dati che avete già e guarda il quadro vero.',
 			steps: [
 				{
 					number: '01',
@@ -756,14 +756,14 @@ export const copy = {
 				{
 					number: '02',
 					kicker: 'Parte',
-					title: 'Parte dalla tua lista collegamenti EPLAN',
-					body: 'Il sistema importa lo schema e la lista collegamenti che hai già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
+					title: 'Parte dalla vostra lista collegamenti EPLAN',
+					body: 'Il sistema importa lo schema e la lista collegamenti che avete già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
 				},
 				{
 					number: '03',
 					kicker: 'Documenta',
 					title: 'Lascia il verbale di collaudo',
-					body: 'Due bracci collaborativi con puntali su misura verificano la continuità di ogni collegamento. Ogni prova è registrata: il quadro esce con il suo verbale. Le decisioni restano al tuo collaudatore.',
+					body: 'Due bracci collaborativi con puntali su misura verificano la continuità di ogni collegamento. Ogni prova è registrata: il quadro esce con il suo verbale. Le decisioni restano al vostro collaudatore.',
 				},
 			],
 			demo: {
@@ -791,10 +791,10 @@ export const copy = {
 
 		benefits: {
 			id: 'what-you-get',
-			eyebrow: 'Cosa ottieni',
-			title: 'Cosa cambia nel tuo collaudo',
+			eyebrow: 'Cosa ottenete',
+			title: 'Cosa cambia nel vostro collaudo',
 			intro:
-				'Il robot fa il giro dei punti di prova. Le tue persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
+				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
 			items: [
 				{
 					title: 'Meno ore di collaudo manuale',
@@ -809,7 +809,7 @@ export const copy = {
 					valueLabel: 'Punti di prova raggiunti in automatico',
 				},
 				{
-					title: 'Un verbale per il tuo cliente',
+					title: 'Un verbale per il vostro cliente',
 					body: 'Ogni quadro esce con il suo verbale di collaudo digitale, tracciabile. Pronto da consegnare insieme al quadro.',
 					value: '[TBD: esempio di verbale anonimizzato]',
 					valueLabel: 'Verbale d’esempio',
@@ -825,7 +825,7 @@ export const copy = {
 			products: {
 				id: 'products',
 				title: 'Quattro prodotti, dai quadri alle bobine',
-				intro: 'Tre strumenti per il collaudo dei quadri e uno per le macchine di confezionamento. I primi tre hanno una cosa in comune: i dati del tuo progetto. La cella cambio bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona anche da solo.',
+				intro: 'Tre strumenti per il collaudo dei quadri e uno per le macchine di confezionamento. I primi tre hanno una cosa in comune: i dati del vostro progetto. La cella cambio bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona anche da solo.',
 				forLabel: 'Per',
 				cards: [
 					{
@@ -836,17 +836,17 @@ export const copy = {
 						line: 'Un’unità da banco semiautomatica: una telecamera legge le etichette dei cavi dall’alto e una spia di stato guida l’operatore.',
 						forWhom: 'Piccoli costruttori di quadri',
 						note: '',
-						cta: 'Chiedici una demo',
+						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'cell',
 						alt: 'Due bracci collaborativi sopra un quadro cablato, un puntale tocca un morsetto',
 						status: 'In validazione',
 						name: 'Quality Control Cell',
-						line: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della tua lista EPLAN e ogni quadro esce con il suo verbale digitale.',
+						line: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della vostra lista EPLAN e ogni quadro esce con il suo verbale digitale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 						note: '',
-						cta: 'Chiedici una demo',
+						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'schemes',
@@ -856,7 +856,7 @@ export const copy = {
 						line: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri prodotti.',
 						forWhom: 'Costruttori e manutentori con gli schemi solo in PDF',
 						note: '',
-						cta: 'Chiedici una demo',
+						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'reel',
@@ -866,7 +866,7 @@ export const copy = {
 						line: 'Una cella robotizzata che carica la bobina nuova, infila il nastro e fa la giunta, in retrofit o come opzione.',
 						forWhom: 'Costruttori e utilizzatori di macchine automatiche per il confezionamento',
 						note: 'Finora in simulazione: trovare il capo libero, prenderlo, infilare il nastro e giuntarlo.',
-						cta: 'Chiedici una demo',
+						cta: 'Chiedeteci una demo',
 					},
 				],
 			},
@@ -944,9 +944,9 @@ export const copy = {
 
 		alsoFor: {
 			id: 'also-for-you',
-			eyebrow: 'Anche per te',
+			eyebrow: 'Anche per voi',
 			title: 'Una piattaforma per gli oggetti deformabili',
-			intro: 'Non costruisci quadri? La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
+			intro: 'Non costruite quadri? La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
 			statusLabel: 'Stato',
 			items: [
 				{
@@ -961,33 +961,33 @@ export const copy = {
 				},
 				{
 					title: 'Altra manipolazione',
-					body: 'Processi con parti flessibili, compiti di ispezione o grande varietà di prodotto: sistemi robotici progettati attorno al tuo processo.',
+					body: 'Processi con parti flessibili, compiti di ispezione o grande varietà di prodotto: sistemi robotici progettati attorno al vostro processo.',
 					status: 'Su progetto',
 				},
 			],
 			work: {
 				id: 'work',
 				title: 'Ingegneria e R&D per ciò che si piega',
-				intro: 'Lavoriamo anche su commissione: il lavoro lo fa il team che ha costruito la piattaforma. Tre modi di lavorare insieme; se nessuno fa al caso tuo, scrivici lo stesso.',
+				intro: 'Lavoriamo anche su commissione: il lavoro lo fa il team che ha costruito la piattaforma. Tre modi di lavorare insieme; se nessuno fa al caso vostro, scriveteci lo stesso.',
 				items: [
 					{
 						kicker: 'Progetti',
 						title: 'Progetti di ingegneria',
-						body: 'Robotica su misura per oggetti deformabili. Studiamo il tuo processo, ti diciamo se un robot può farlo e costruiamo la prova di fattibilità.',
+						body: 'Robotica su misura per oggetti deformabili. Studiamo il vostro processo, vi diciamo se un robot può farlo e costruiamo la prova di fattibilità.',
 					},
 					{
 						kicker: 'Licenze',
 						title: 'Moduli in licenza',
-						body: 'Parti della piattaforma, come un pianificatore di movimento che tiene conto di cavi e dress pack, che puoi prendere in licenza e integrare nel tuo sistema.',
+						body: 'Parti della piattaforma, come un pianificatore di movimento che tiene conto di cavi e dress pack, che potete prendere in licenza e integrare nel vostro sistema.',
 					},
 					{
 						kicker: 'Finanziamenti',
 						title: 'Progetti finanziati',
-						body: 'Partecipiamo a progetti di ricerca e innovazione, come il progetto AIRISE.eu dietro il nostro robot per quadri. Porta un caso d’uso e guardiamo insieme il bando giusto.',
+						body: 'Partecipiamo a progetti di ricerca e innovazione, come il progetto AIRISE.eu dietro il nostro robot per quadri. Portate un caso d’uso e guardiamo insieme il bando giusto.',
 					},
 				],
 			},
-			cta: 'Parlaci del tuo processo',
+			cta: 'Parlateci del vostro processo',
 		},
 
 		team: {
@@ -1076,9 +1076,9 @@ export const copy = {
 			id: 'contact',
 			eyebrow: 'Contatti',
 			closingTag: 'Automazione, fino all’ultimo filo.',
-			title: 'Proponici un progetto.',
-			answer: 'Ti diciamo con franchezza se un robot può farlo, e come.',
-			body: 'Bastano poche righe: di cosa ti occupi, cosa vorresti affidare a un robot, come lo fai oggi.',
+			title: 'Proponeteci un progetto.',
+			answer: 'Vi diciamo con franchezza se un robot può farlo, e come.',
+			body: 'Bastano poche righe: di cosa vi occupate, cosa vorreste affidare a un robot, come lo fate oggi.',
 			responseTime: 'Rispondiamo entro due giorni lavorativi.',
 			form: {
 				name: { label: 'Nome e cognome' },
@@ -1086,28 +1086,28 @@ export const copy = {
 				email: { label: 'Email aziendale', placeholder: 'nome@azienda.it' },
 				phone: { label: 'Telefono' },
 				sector: {
-					label: 'Di cosa ti occupi?',
+					label: 'Di cosa vi occupate?',
 					options: ['Quadri elettrici', 'Cablaggi', 'Celle robotizzate e integrazione', 'Macchine per il confezionamento', 'Altra manipolazione'],
 				},
-				sbGroup: 'Se costruisci quadri',
+				sbGroup: 'Se costruite quadri',
 				boards: {
-					label: 'Che quadri costruisci?',
-					placeholder: 'Scegli',
+					label: 'Che quadri costruite?',
+					placeholder: 'Scegliete',
 					options: ['A bordo macchina', 'Di distribuzione', 'Di automazione', 'Altro'],
 				},
 				volumes: {
 					label: 'Quadri all’anno',
-					placeholder: 'Scegli',
+					placeholder: 'Scegliete',
 					options: ['Meno di 100', 'Da 100 a 500', 'Oltre 500'],
 				},
 				eplan: {
-					label: 'Usi EPLAN?',
-					placeholder: 'Scegli',
+					label: 'Usate EPLAN?',
+					placeholder: 'Scegliete',
 					options: ['Sì', 'No', 'Altro software'],
 				},
 				process: {
-					label: 'Come lo fai oggi, e cosa vorresti affidare a un robot?',
-					placeholder: 'per esempio: cosa produci, quanti pezzi, cosa si fa ancora a mano',
+					label: 'Come lo fate oggi, e cosa vorreste affidare a un robot?',
+					placeholder: 'per esempio: cosa producete, quanti pezzi, cosa si fa ancora a mano',
 				},
 				required: 'obbligatorio',
 				optional: 'facoltativo',
@@ -1116,13 +1116,13 @@ export const copy = {
 					linkLabel: 'l’informativa privacy',
 					suffix: 'e acconsento al trattamento dei miei dati da parte di ROBOSECT SRL per ricevere risposta a questa richiesta.',
 				},
-				submit: 'Invia la richiesta',
+				submit: 'Inviate la richiesta',
 			},
 			direct: {
-				label: 'Preferisci l’email? Scrivici a',
+				label: 'Preferite l’email? Scriveteci a',
 				email: 'info@robosect.it',
 				address: 'Via Lazio 2, 40139 Bologna',
-				linkedin: 'Segui ROBOSECT su LinkedIn',
+				linkedin: 'Seguite ROBOSECT su LinkedIn',
 			},
 			show: {
 				figureLabel: 'Animazione, circa {s} s: due bracci robotici piegano un cavo dritto, passo dopo passo, fino a farne la R del logo ROBOSECT, poi crimpano il puntale di rame sulla sua estremità. RESET la riavvia, STOP ferma i robot.',
@@ -1141,23 +1141,23 @@ export const copy = {
 				},
 			},
 			handoff: {
-				helper: 'Si apre il tuo programma di posta con la richiesta pronta. Parte solo quando premi Invia lì.',
-				live: 'Dovrebbe aprirsi il tuo programma di posta con la richiesta compilata. Premi Invia lì per recapitarcela.',
+				helper: 'Si apre il vostro programma di posta con la richiesta pronta. Parte solo quando premete Invia lì.',
+				live: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta compilata. Premete Invia lì per recapitarcela.',
 				receiptHeading: 'La richiesta è pronta da inviare.',
-				lead: 'Dovrebbe aprirsi il tuo programma di posta con la richiesta, indirizzata a info@robosect.it. Premi Invia lì: non parte nulla finché non lo fai.',
-				nothingOpened: 'Non si è aperto nulla? Usa Riapri l’email, oppure copia il messaggio e scrivi a info@robosect.it.',
+				lead: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta, indirizzata a info@robosect.it. Premete Invia lì: non parte nulla finché non lo fate.',
+				nothingOpened: 'Non si è aperto nulla? Riaprite l’email, oppure copiate il messaggio e scrivete a info@robosect.it.',
 				reply: 'Rispondiamo entro due giorni lavorativi.',
-				openAgain: 'Riapri l’email ↗',
-				copyMessage: 'Copia il messaggio',
-				copyAddress: 'Copia l’indirizzo',
+				openAgain: 'Riaprite l’email ↗',
+				copyMessage: 'Copiate il messaggio',
+				copyAddress: 'Copiate l’indirizzo',
 				noApp: 'Nessun programma di posta?',
-				noAppText: 'Copia il messaggio e invialo a info@robosect.it da qualsiasi casella di posta.',
+				noAppText: 'Copiate il messaggio e inviatelo a info@robosect.it da qualsiasi casella di posta.',
 				copied: 'Copiato ✓',
-				selectCopy: 'Selezionalo e copialo (Ctrl+C / ⌘C)',
-				shortened: '[Messaggio accorciato per il programma di posta: il testo completo è sulla pagina — Copia il messaggio]',
-				restored: 'La tua richiesta è ancora pronta da inviare.',
-				change: 'Modifica la richiesta',
-				noscript: 'Si aprirà il tuo programma di posta con la richiesta. Se non si apre nulla, scrivi a info@robosect.it.',
+				selectCopy: 'Selezionatelo e copiatelo (Ctrl+C / ⌘C)',
+				shortened: '[Messaggio accorciato per il programma di posta: il testo completo è sulla pagina — Copiate il messaggio]',
+				restored: 'La vostra richiesta è ancora pronta da inviare.',
+				change: 'Modificate la richiesta',
+				noscript: 'Si aprirà il vostro programma di posta con la richiesta. Se non si apre nulla, scrivete a info@robosect.it.',
 				subject: 'Un quadro da collaudare',
 				subjectOther: 'Un processo da automatizzare',
 				consentLine: 'Consenso: chi scrive ha letto l’informativa privacy e acconsente al trattamento dei dati da parte di ROBOSECT SRL per ricevere risposta a questa richiesta.',
