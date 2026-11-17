@@ -43,9 +43,11 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 							<p class="person__name">
 								<Rich text={person.name} />
 							</p>
-							<p class="person__role">
-								<Rich text={person.role} />
-							</p>
+							{person.role ? (
+								<p class="person__role">
+									<Rich text={person.role} />
+								</p>
+							) : null}
 							{person.bio ? (
 								<p class="person__bio">
 									<Rich text={person.bio} />
