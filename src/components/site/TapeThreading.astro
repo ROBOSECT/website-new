@@ -6,6 +6,7 @@
  * close-up of threading and splicing, not as a second list of steps.
  */
 import ReelVideo from './ReelVideo.astro';
+import type { Lang } from '../../i18n/copy';
 interface Step {
 	n: string;
 	t: string;
@@ -16,15 +17,16 @@ interface Props {
 	desc: string;
 	caption: string;
 	steps: readonly Step[];
+	lang: Lang;
 }
-const { title, desc, caption, steps } = Astro.props;
+const { title, desc, caption, steps, lang } = Astro.props;
 ---
 
 <figure class="tt" role="group" aria-labelledby="tt-title">
 	<h3 id="tt-title" class="tt__h">{title}</h3>
 	<p class="tt__desc visually-hidden">{desc}</p>
 	<div class="tt__video">
-		<ReelVideo label={desc} />
+		<ReelVideo label={desc} lang={lang} />
 	</div>
 	<figcaption class="tt__cap">{caption}</figcaption>
 	<ol class="tt__row">

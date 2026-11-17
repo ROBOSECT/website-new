@@ -2,36 +2,99 @@
 /**
  * The simulation of threading a tape: a muted loop recorded from our own 3D model (scene only, no labels).
  * Used by the Packaging page and by the reel-change card on Products; still when the visitor prefers reduced motion.
+ * The loop runs longer than five seconds, so it has its own pause / play button (WCAG 2.2.2).
  */
 import poster from '../../assets/images/packaging/tape-threading-poster.jpg';
 import mp4 from '../../assets/videos/tape-threading.mp4';
 import webm from '../../assets/videos/tape-threading.webm';
+import { copy, type Lang } from '../../i18n/copy';
 interface Props {
 	label: string;
+	lang?: Lang;
 }
-const { label } = Astro.props;
+const { label, lang = 'en' } = Astro.props;
+const a = copy[lang].a11y;
 ---
 
-<video class="reel-video" width="864" height="538" autoplay muted loop playsinline preload="metadata" poster={poster.src} aria-label={label}>
-	<source src={mp4} type="video/mp4" />
-	<source src={webm} type="video/webm" />
-</video>
+<div class="reel" data-reel>
+	<video class="reel-video" width="864" height="538" autoplay muted loop playsinline preload="metadata" poster={poster.src} aria-label={label}>
+		<source src={mp4} type="video/mp4" />
+		<source src={webm} type="video/webm" />
+	</video>
+	<button type="button" class="reel__btn" aria-label={a.pauseVideo} data-pause={a.pauseVideo} data-play={a.playVideo}>
+		<svg class="reel__i reel__i--pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"></path></svg>
+		<svg class="reel__i reel__i--play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l8 5-8 5z" fill="currentColor"></path></svg>
+	</button>
+</div>
 
 <script>
-	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		document.querySelectorAll<HTMLVideoElement>('video.reel-video').forEach((v) => {
+	const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	document.querySelectorAll<HTMLElement>('[data-reel]').forEach((box) => {
+		const v = box.querySelector('video');
+		const b = box.querySelector<HTMLButtonElement>('.reel__btn');
+		if (!v || !b) return;
+		const show = () => {
+			const paused = v.paused;
+			box.classList.toggle('is-paused', paused);
+			b.setAttribute('aria-label', (paused ? b.dataset.play : b.dataset.pause) || '');
+		};
+		if (still) {
 			v.removeAttribute('autoplay');
 			v.pause();
+		}
+		b.addEventListener('click', () => {
+			if (v.paused) void v.play().catch(() => undefined);
+			else v.pause();
 		});
-	}
+		v.addEventListener('play', show);
+		v.addEventListener('pause', show);
+		show();
+	});
 </script>
 
 <style>
+	.reel {
+		position: relative;
+	}
+
 	.reel-video {
 		display: block;
 		width: 100%;
 		height: auto;
 		aspect-ratio: 864 / 538;
 		background: var(--ink);
+	}
+
+	.reel__btn {
+		position: absolute;
+		right: 12px;
+		bottom: 12px;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		border: 1px solid rgb(255 255 255 / 0.5);
+		border-radius: 50%;
+		background: rgb(13 27 46 / 0.75);
+		color: #fff;
+		cursor: pointer;
+	}
+
+	.reel__btn:hover {
+		background: rgb(13 27 46 / 0.95);
+	}
+
+	.reel__i {
+		width: 16px;
+		height: 16px;
+	}
+
+	.reel__i--play,
+	.is-paused .reel__i--pause {
+		display: none;
+	}
+
+	.is-paused .reel__i--play {
+		display: block;
 	}
 </style>

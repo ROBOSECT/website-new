@@ -112,7 +112,7 @@ const organizationSchema = {
 		<meta name="generator" content={Astro.generator} />
 		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 		<meta name="theme-color" content="#0D1B2E" />
-		<link rel="canonical" href={canonicalURL} />
+		{!noindex && <link rel="canonical" href={canonicalURL} />}
 		{
 			alternates &&
 				Object.entries(alternates).map(([l, path]) => (
