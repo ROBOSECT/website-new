@@ -467,7 +467,7 @@ export const copy = {
 					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
 					{ title: 'Plain about the stage', body: 'The robot cell is a prototype, being validated in the AIRISE.eu project. The Cable Reader is coming. Ask us what is ready today.' },
 				],
-				photo: { alt: 'A switchboard laid on the bench with the robot probes over it', caption: 'The CONTEST prototype on a switchboard. A still from the demo video.' },
+				photo: { alt: 'A switchboard laid on the bench, seen from above, wired and ready to be tested', caption: 'A switchboard on the bench, seen from above. A still from the demo video.' },
 				sectionTitle: 'The three, one by one',
 				sectionIntro: 'They share one thing: your project data. Start from what fits you and move up when you want.',
 				items: [
@@ -1248,7 +1248,7 @@ export const copy = {
 					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
 					{ title: 'Chiari sullo stato', body: 'La cella robotizzata è un prototipo, in validazione nel progetto AIRISE.eu. Il Cable Reader sta arrivando. Chiedici che cosa è pronto oggi.' },
 				],
-				photo: { alt: 'Un quadro elettrico sul banco con i puntali del robot sopra', caption: 'Il prototipo CONTEST su un quadro. Un fotogramma del video della demo.' },
+				photo: { alt: 'Un quadro elettrico sul banco, visto dall’alto, cablato e pronto da collaudare', caption: 'Un quadro elettrico sul banco, visto dall’alto. Un fotogramma del video della demo.' },
 				sectionTitle: 'I tre, uno per uno',
 				sectionIntro: 'Hanno una cosa in comune: i dati del tuo progetto. Parti da quello che ti serve e sali quando vuoi.',
 				items: [
