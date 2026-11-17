@@ -8,7 +8,7 @@ import { Image } from 'astro:assets';
 import reader from '../../assets/images/products/cable-reader.jpg';
 import cell from '../../assets/images/home/demo-two-probes.jpg';
 import ReelVideo from './ReelVideo.astro';
-import { homePath, pagePath } from '../../lib/i18n';
+import { homePath } from '../../lib/i18n';
 import type { Lang } from '../../i18n/copy';
 
 interface Card {
@@ -19,7 +19,6 @@ interface Card {
 	line: string;
 	forWhom: string;
 	cta: string;
-	more: string;
 }
 interface Props {
 	lang: Lang;
@@ -69,12 +68,6 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 							{c.cta}
 							<svg viewBox="0 0 18 18" aria-hidden="true"><path d={arrow} fill="none" stroke="currentColor" stroke-width="2"></path></svg>
 						</a>
-						{c.more ? (
-							<a class="text-link" href={pagePath(lang, 'packaging')}>
-								{c.more}
-								<svg viewBox="0 0 18 18" aria-hidden="true"><path d={arrow} fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-							</a>
-						) : null}
 					</p>
 				</div>
 			</li>

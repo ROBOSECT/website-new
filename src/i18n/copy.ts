@@ -493,7 +493,6 @@ export const copy = {
 						line: 'A semi-automatic bench unit: a camera reads the cable labels from above and a status light guides the operator.',
 						forWhom: 'Small switchboard builders',
 						cta: 'Ask us for a demo',
-						more: '',
 					},
 					{
 						media: 'cell',
@@ -503,7 +502,6 @@ export const copy = {
 						line: 'A robot cell with two collaborative arms that tests every connection of the project and writes the report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
 						cta: 'Ask us for a demo',
-						more: '',
 					},
 					{
 						media: 'schemes',
@@ -513,7 +511,6 @@ export const copy = {
 						line: 'Turns schematics that exist only as PDF into the structured data the other products need.',
 						forWhom: 'Builders and maintainers whose schematics exist only as PDF',
 						cta: 'Ask us for a demo',
-						more: '',
 					},
 					{
 						media: 'reel',
@@ -523,7 +520,6 @@ export const copy = {
 						line: 'A robot cell that loads the new reel, threads the tape and splices it, as a retrofit or an option.',
 						forWhom: 'Makers and users of automatic packaging machines',
 						cta: 'Ask us for a demo',
-						more: 'Details',
 					},
 				],
 				targetsTitle: 'What the AIRISE.eu project aims for',
@@ -1310,7 +1306,6 @@ export const copy = {
 						line: 'Un’unità da banco semiautomatica: una telecamera legge le etichette dei cavi dall’alto e una spia di stato guida l’operatore.',
 						forWhom: 'Piccoli costruttori di quadri',
 						cta: 'Chiedici una demo',
-						more: '',
 					},
 					{
 						media: 'cell',
@@ -1320,7 +1315,6 @@ export const copy = {
 						line: 'Una cella robotizzata con due bracci collaborativi che prova ogni collegamento del progetto e scrive il verbale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 						cta: 'Chiedici una demo',
-						more: '',
 					},
 					{
 						media: 'schemes',
@@ -1330,7 +1324,6 @@ export const copy = {
 						line: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri prodotti.',
 						forWhom: 'Costruttori e manutentori con gli schemi solo in PDF',
 						cta: 'Chiedici una demo',
-						more: '',
 					},
 					{
 						media: 'reel',
@@ -1340,7 +1333,6 @@ export const copy = {
 						line: 'Una cella robotizzata che carica la bobina nuova, infila il nastro e fa la giunta, in retrofit o come opzione.',
 						forWhom: 'Costruttori e utilizzatori di macchine automatiche per il confezionamento',
 						cta: 'Chiedici una demo',
-						more: 'Dettagli',
 					},
 				],
 				targetsTitle: 'A che cosa punta il progetto AIRISE.eu',
