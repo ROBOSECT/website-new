@@ -220,6 +220,32 @@ export const copy = {
 				},
 			],
 			note: 'Every figure will come with its test conditions: [TBD: switchboard type, number of test points, date of measurement].',
+			products: {
+				id: 'products',
+				title: 'Three products, in steps',
+				intro: 'Start small with the reader, move up to the robot cell, and bring your schematics in whatever format you have them.',
+				stepLabel: 'Step',
+				items: [
+					{
+						name: 'Cable Reader',
+						status: 'Coming soon',
+						body: 'The semi-automatic entry product, for small switchboard builders.',
+						cta: 'Ask us for a demo',
+					},
+					{
+						name: 'CONTEST cell',
+						status: 'Fully automatic',
+						body: 'For larger builders and manufacturers with their own switchboard shop: the robot tests every connection of the project and writes the report.',
+						cta: '',
+					},
+					{
+						name: 'Schematic conversion',
+						status: 'Software and service',
+						body: 'Turns schematics that exist only as PDF into the structured data the other two need. It can also be used on its own, for revamps and maintenance.',
+						cta: '',
+					},
+				],
+			},
 		},
 
 		proof: {
@@ -815,6 +841,32 @@ export const copy = {
 				},
 			],
 			note: 'Ogni numero arriverà con le sue condizioni di prova: [TBD: tipo di quadro, numero di punti di prova, data della misura].',
+			products: {
+				id: 'products',
+				title: 'Tre prodotti, a gradini',
+				intro: 'Parti in piccolo con il lettore, sali alla cella robotizzata e porta i tuoi schemi nel formato che hai.',
+				stepLabel: 'Passo',
+				items: [
+					{
+						name: 'Cable Reader',
+						status: 'In arrivo',
+						body: 'Il prodotto semiautomatico d’ingresso, per i piccoli costruttori di quadri.',
+						cta: 'Chiedici una demo',
+					},
+					{
+						name: 'Cella CONTEST',
+						status: 'Completamente automatica',
+						body: 'Per i costruttori più grandi e per le aziende con un reparto quadri interno: il robot prova ogni collegamento del progetto e scrive il verbale.',
+						cta: '',
+					},
+					{
+						name: 'Conversione degli schemi',
+						status: 'Software e servizio',
+						body: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri due. Si può usare anche da sola, per revamping e manutenzione.',
+						cta: '',
+					},
+				],
+			},
 		},
 
 		proof: {

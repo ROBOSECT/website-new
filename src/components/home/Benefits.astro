@@ -35,6 +35,27 @@ const cta = copy[lang].cta;
 		}
 	</ul>
 	<p class="gets__note" data-b><Rich text={b.note} /></p>
+	<div class="prods" id={b.products.id} data-b>
+		<h3 class="prods__h">{b.products.title}</h3>
+		<p class="prods__intro">{b.products.intro}</p>
+		<ol class="prods__list">
+			{
+				b.products.items.map((it, i) => (
+					<li class={`prod prod--${i + 1}`}>
+						<p class="prod__step"><span class="visually-hidden">{b.products.stepLabel} </span>{i + 1} · {it.status}</p>
+						<h4 class="prod__name">{it.name}</h4>
+						<p class="prod__body">{it.body}</p>
+						{it.cta ? (
+							<a class="text-link" href="#contact">
+								{it.cta}
+								<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+							</a>
+						) : null}
+					</li>
+				))
+			}
+		</ol>
+	</div>
 	<p class="gets__cta" data-b>
 		<a class="btn" href="#contact">
 			{cta.label}
@@ -47,6 +68,99 @@ const cta = copy[lang].cta;
 </Compartment>
 
 <style>
+	.prods {
+		margin-top: 56px;
+	}
+
+	.prods__h {
+		font-size: 24px;
+		line-height: 1.2;
+		color: var(--paper);
+	}
+
+	.prods__intro {
+		margin-top: 8px;
+		font-size: 16px;
+		line-height: 1.5;
+		color: var(--steel-light);
+		max-width: 46em;
+	}
+
+	.prods__list {
+		list-style: none;
+		display: grid;
+		gap: 8px;
+		margin-top: 24px;
+	}
+
+	.prod {
+		padding: 20px;
+		background: var(--ink-2);
+		border-left: 4px solid var(--blue);
+	}
+
+	.prod--2 {
+		margin-left: 16px;
+	}
+
+	.prod--3 {
+		margin-left: 32px;
+	}
+
+	.prod__step {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--steel-light);
+	}
+
+	.prod__name {
+		margin-top: 6px;
+		font-size: 21px;
+		line-height: 1.2;
+		color: var(--paper);
+	}
+
+	.prod__body {
+		margin: 8px 0 12px;
+		font-size: 16px;
+		line-height: 1.5;
+		color: var(--paper);
+		max-width: 46em;
+	}
+
+	.prod__body:last-child {
+		margin-bottom: 0;
+	}
+
+	@media (min-width: 1100px) {
+		.prods {
+			margin-top: 80px;
+		}
+
+		.prods__list {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			align-items: start;
+			gap: 8px;
+		}
+
+		/* a staircase going up: the entry product lowest */
+		.prod--1 {
+			margin-top: 56px;
+		}
+
+		.prod--2 {
+			margin-left: 0;
+			margin-top: 28px;
+		}
+
+		.prod--3 {
+			margin-left: 0;
+		}
+	}
+
 	.gets {
 		list-style: none;
 		display: grid;
