@@ -9,7 +9,7 @@ Per chi porta online il nuovo robosect.it. Il sito è fatto con Astro: pagine st
 
 ## In breve
 
-- Una home in due lingue (`/` e `/it/`), una pagina Tecnologia in due lingue (`/technology/` e `/it/tecnologia/`), un blog, quattro pagine legali, una pagina 404: 12 pagine.
+- Una home in due lingue (`/` e `/it/`), un blog, quattro pagine legali, una pagina 404: 10 pagine. Il sito è monopagina: prodotti, ingegneria e R&D e la tecnologia sono sezioni della home.
 - **A chi parla (versione 4, 04/11/2026):** prima di tutto ai costruttori di quadri elettrici (titolare, responsabile di produzione e qualità, ufficio tecnico EPLAN), ma il messaggio è più largo: ROBOSECT fa manipolazione robotica fino al caso più difficile, cavi e parti deformabili. Cablaggi, celle robotizzate e «altra manipolazione» sono «anche per te». Le azioni: «Proponici un quadro» dove si parla di quadri (apertura, Cosa ottieni), «Scrivici» nella barra, «Parlaci del tuo processo» per tutti gli altri (riga sotto l'apertura, Anche per te, pagina Tecnologia). L'italiano dà del tu; i testi legali restano formali.
 - Nessun codice sul server, nessun database, nessun cookie di tracciamento, nessuna statistica. Il modulo contatti apre il programma di posta del visitatore.
 - La home è un quadro elettrico: un solo cavo parte dalla R del logo e attraversa la pagina; in ogni sezione un piccolo robot racconta con un lavoro vero quello che dice la sezione; alla fine i robot piegano il cavo fino a farne la R del logo, accanto al modulo contatti.
@@ -60,8 +60,6 @@ Sullo schermo non ci sono codici tecnici né ingrandimenti: è una scelta del cl
 |---|---|---|---|
 | `/` | home | inglese | `src/pages/index.astro` → `src/components/home/Home.astro` |
 | `/it/` | home | italiano | `src/pages/it/index.astro` → stessa `Home.astro` |
-| `/technology/` | tecnologia | inglese | `src/pages/technology.astro` → `src/components/tech/TechPage.astro` |
-| `/it/tecnologia/` | tecnologia | italiano | `src/pages/it/tecnologia.astro` → stessa `TechPage.astro` |
 | `/blog/` | notizie | inglese | `src/pages/blog/index.astro` |
 | `/blog/aim-2026/` | articolo | inglese | `src/content/blog/aim-2026/index.md` |
 | `/blog/2026-02-01_airise_kickoff/` | articolo | inglese | `src/content/blog/2026-02-01_AIRISE_KICKOFF/index.md` |
@@ -71,8 +69,9 @@ Sullo schermo non ci sono codici tecnici né ingrandimenti: è una scelta del cl
 | `/gender-equality-diversity-policy/` | parità di genere | inglese | `src/pages/gender-equality-diversity-policy.astro` |
 | `/404.html` | pagina non trovata | inglese | `src/pages/404.astro` |
 
-- **Ancore della home**, uguali in inglese e in italiano: `#problem`, `#how-it-works`, `#what-you-get`, `#proof`, `#video`, `#also-for-you`, `#team`, `#contact`, `#news`. Le vecchie `#applications` e `#technology` non esistono più (la tecnologia ha la sua pagina).
-- **Menu:** Come funziona, Cosa ottieni, Prototipo, Tecnologia (pagina), Team, cambio lingua, «Scrivici» / «Write to us» (porta a `#contact`, sempre nella barra). News è nel footer e in fondo alla home.
+- **Ancore della home**, uguali in inglese e in italiano: `#problem`, `#how-it-works`, `#what-you-get`, `#proof`, `#video`, `#products`, `#also-for-you`, `#work`, `#team`, `#contact`, `#news`. Le vecchie `#applications` e `#technology` non esistono più (la tecnologia ha la sua pagina).
+- **Menu:** Come funziona, Prodotti (`#products`, dentro «Cosa ottieni»), Prototipo, Ingegneria e R&D (`#work`, dentro «Anche per te»), Team, News, cambio lingua, «Scrivici» / «Write to us» (porta a `#contact`). Dalle pagine a sé le voci portano a `/#àncora`. Il menu a tendina scatta sotto 1100 px.
+- **Vecchi indirizzi:** `/technology/`, `/products/`, `/packaging/`, `/work-with-us/` e le versioni `/it/…` sono pagine di rinvio (`redirects` in `astro.config.mjs`, meta refresh e canonical) verso le àncore della home; non stanno nella sitemap.
 - **File fissi** (`public/`): `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `site.webmanifest`, `og-logo.png` e `og-logo-it.png` (anteprime social), `avatar-400.png` (logo nei dati strutturati), `robots.txt`, `firma/robosect-firma-logo.png` (logo delle firme email).
 - **Generati dal build:** `sitemap-index.xml` e `sitemap-0.xml`.
 - Le pagine del sito attuale (home, blog, quattro pagine legali) restano agli stessi indirizzi. Nuove: `/it/` e la 404.
