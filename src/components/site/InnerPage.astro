@@ -19,6 +19,8 @@ interface Props {
 }
 const { lang, page } = Astro.props;
 const t = copy[lang].pages[page];
+// the copy is `as const`, so a page with `photo: null` has no shape for it: state the shape here (null = no photo)
+const photo = t.photo as { alt: string; caption: string } | null;
 // products speak to switchboard builders; the other two to every process
 const cta = page === 'products' ? copy[lang].cta : copy[lang].ctaAll;
 const key: PageKey = page;
@@ -29,7 +31,7 @@ const key: PageKey = page;
 
 	{page !== 'products' && (
 	<section class="tp tp--intro wrap" aria-label={t.eyebrow}>
-		<div class:list={['tp-intro', { 'tp-intro--solo': !t.photo }]}>
+		<div class:list={['tp-intro', { 'tp-intro--solo': !photo }]}>
 			<div class="tp-intro__text">
 				<ul class="tp-pillars tp-pillars--first">
 					{
@@ -43,12 +45,12 @@ const key: PageKey = page;
 				</ul>
 			</div>
 			{
-				t.photo && (
+				photo && (
 					<figure class="tp-photo">
 						<div class="tp-photo__frame">
-							<Image src={setup} alt={t.photo.alt} widths={[480, 720, 960, 1280]} sizes="(min-width: 1100px) 520px, 100vw" loading="eager" />
+							<Image src={setup} alt={photo.alt} widths={[480, 720, 960, 1280]} sizes="(min-width: 1100px) 520px, 100vw" loading="eager" />
 						</div>
-						<figcaption>{t.photo.caption}</figcaption>
+						<figcaption>{photo.caption}</figcaption>
 					</figure>
 				)
 			}
