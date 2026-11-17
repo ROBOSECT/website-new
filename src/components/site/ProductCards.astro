@@ -2,11 +2,12 @@
 /**
  * The four products, one card each, always in the same order: media, stage, name, what it does, who it is for, action.
  * Texts from copy.pages.products.cards. The media is a key: the Cable Reader render, a still of the Quality Control Cell,
- * a drawing for schematic conversion, the tape-threading simulation for the reel-change cell.
+ * the rebuilt switchboard for schematic conversion, the tape-threading simulation for the reel-change cell.
  */
 import { Image } from 'astro:assets';
 import reader from '../../assets/images/products/cable-reader.jpg';
 import cell from '../../assets/images/home/demo-two-probes.jpg';
+import schemes from '../../assets/images/products/schematic-conversion.jpg';
 import ReelVideo from './ReelVideo.astro';
 import { homePath } from '../../lib/i18n';
 import type { Lang } from '../../i18n/copy';
@@ -37,26 +38,7 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 					{c.media === 'reader' && <Image src={reader} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 					{c.media === 'cell' && <Image src={cell} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 					{c.media === 'reel' && <ReelVideo label={c.alt} lang={lang} />}
-					{
-						c.media === 'schemes' && (
-							<svg viewBox="0 0 432 269" role="img" aria-label={c.alt}>
-								<rect width="432" height="269" fill="var(--mist)" />
-								<g fill="var(--white)" stroke="var(--steel)" stroke-width="2">
-									<rect x="40" y="36" width="132" height="197" />
-								</g>
-								<g stroke="var(--steel)" stroke-width="3" stroke-linecap="round" fill="none">
-									<path d="M60 70h92M60 100h60M60 130h92M60 160h40M60 190h76" />
-								</g>
-								<path d="M190 134h50M228 120l14 14-14 14" fill="none" stroke="var(--blue)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-								<g fill="var(--white)" stroke="var(--blue)" stroke-width="2">
-									<rect x="260" y="60" width="132" height="148" />
-								</g>
-								<g stroke="var(--blue)" stroke-width="2">
-									<path d="M260 96h132M260 132h132M260 168h132M304 60v148" />
-								</g>
-							</svg>
-						)
-					}
+					{c.media === 'schemes' && <Image src={schemes} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 				</div>
 				<div class="pc__body">
 					<p class="pc__status">{c.status}</p>
@@ -99,8 +81,7 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 	}
 
 	.pc__media :global(img),
-	.pc__media :global(svg),
-	.pc__media :global(video) {
+		.pc__media :global(video) {
 		display: block;
 		width: 100%;
 		height: 100%;

@@ -505,7 +505,7 @@ export const copy = {
 					},
 					{
 						media: 'schemes',
-						alt: 'Drawing: a page of schematic lines on the left, an arrow, a table of structured data on the right',
+						alt: 'Switchboard rebuilt as data: components, terminals, ducts and wire paths',
 						status: 'In development',
 						name: 'Schematic conversion',
 						line: 'Turns schematics that exist only as PDF into the structured data the other products need.',
@@ -1318,7 +1318,7 @@ export const copy = {
 					},
 					{
 						media: 'schemes',
-						alt: 'Disegno: a sinistra una pagina di linee di schema, una freccia, a destra una tabella di dati strutturati',
+						alt: 'Quadro ricostruito come dati: componenti, morsetti, canaline e percorsi dei fili',
 						status: 'In sviluppo',
 						name: 'Conversione degli schemi',
 						line: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri prodotti.',
