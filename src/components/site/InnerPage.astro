@@ -5,6 +5,7 @@
  */
 import { Image } from 'astro:assets';
 import setup from '../../assets/images/home/demo-board.jpg';
+import reader from '../../assets/images/products/cable-reader.jpg';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../site/PageHeader.astro';
 import Rich from '../ui/Rich.astro';
@@ -55,6 +56,16 @@ const key: PageKey = page;
 	<section class="tp tp--platform wrap" aria-labelledby="tp-items">
 		<h2 id="tp-items" class="tp-h">{t.sectionTitle}</h2>
 		<p class="tp-sub">{t.sectionIntro}</p>
+		{
+			t.render && (
+				<figure class="tp-render">
+					<div class="tp-photo__frame">
+						<Image src={reader} alt={t.render.alt} widths={[480, 720, 960, 1400]} sizes="(min-width: 1100px) 520px, 100vw" />
+					</div>
+					<figcaption>{t.render.caption}</figcaption>
+				</figure>
+			)
+		}
 		<ol class="tp-steps tp-steps--3">
 			{
 				t.items.map((s) => (
@@ -161,6 +172,19 @@ const key: PageKey = page;
 	}
 
 	.tp-photo figcaption {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--steel);
+		max-width: 46ch;
+	}
+
+	.tp-render {
+		margin-top: 32px;
+		max-width: 520px;
+	}
+
+	.tp-render figcaption {
 		margin-top: 12px;
 		font-size: 15px;
 		line-height: 1.45;

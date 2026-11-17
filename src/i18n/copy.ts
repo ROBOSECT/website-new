@@ -468,6 +468,8 @@ export const copy = {
 					{ title: 'Plain about the stage', body: 'The robot cell is a prototype, being validated in the AIRISE.eu project. The Cable Reader is coming. Ask us what is ready today.' },
 				],
 				photo: { alt: 'A switchboard laid on the bench, seen from above, wired and ready to be tested', caption: 'A switchboard on the bench, seen from above. A still from the demo video.' },
+				render: { alt: 'Render of the Cable Reader: a C-shaped bench unit with the camera head above a white base', caption: 'The Cable Reader, a render of the bench unit. It is a prototype under development.' },
+				diagram: null,
 				sectionTitle: 'The three, one by one',
 				sectionIntro: 'They share one thing: your project data. Start from what fits you and move up when you want.',
 				items: [
@@ -476,7 +478,7 @@ export const copy = {
 						kicker: 'Coming soon',
 						title: 'Cable Reader',
 						body: 'The semi-automatic entry product, for small switchboard builders. It is not on sale yet: ask us for a demo and tell us how you test today.',
-						specs: ['Semi-automatic: the operator stays in the loop', 'For small switchboard builders', '[TBD: what the Cable Reader reads and checks, in one line]'],
+						specs: ['Semi-automatic: the operator stays in the loop', 'For small switchboard builders', 'Reads the cable labels from above, on a white backdrop', 'Polarised light cuts the glare on glossy sleeves', 'A status light tells the operator what to do', 'One USB-C cable to the PC'],
 						cta: 'Ask us for a demo',
 					},
 					{
@@ -519,6 +521,8 @@ export const copy = {
 					{ title: 'No promises yet', body: 'We are building and testing the demo. We make no promise on dates or on what it will cover.' },
 				],
 				photo: null,
+				render: null,
+				diagram: null,
 				sectionTitle: 'The three steps the cell has to do',
 				sectionIntro: 'The same three steps a person does at the machine today.',
 				items: [
@@ -544,6 +548,8 @@ export const copy = {
 					{ title: 'A plain answer first', body: 'We tell you whether a robot can do the job, and how, before anything is built.' },
 				],
 				photo: null,
+				render: null,
+				diagram: null,
 				sectionTitle: 'Three ways to work together',
 				sectionIntro: 'Pick the one closest to your case. If none fits, write to us anyway.',
 				items: [
@@ -1249,6 +1255,8 @@ export const copy = {
 					{ title: 'Chiari sullo stato', body: 'La cella robotizzata è un prototipo, in validazione nel progetto AIRISE.eu. Il Cable Reader sta arrivando. Chiedici che cosa è pronto oggi.' },
 				],
 				photo: { alt: 'Un quadro elettrico sul banco, visto dall’alto, cablato e pronto da collaudare', caption: 'Un quadro elettrico sul banco, visto dall’alto. Un fotogramma del video della demo.' },
+				render: { alt: 'Render del Cable Reader: un’unità da banco a C con la testa della telecamera sopra una base bianca', caption: 'Il Cable Reader, un render dell’unità da banco. È un prototipo in sviluppo.' },
+				diagram: null,
 				sectionTitle: 'I tre, uno per uno',
 				sectionIntro: 'Hanno una cosa in comune: i dati del tuo progetto. Parti da quello che ti serve e sali quando vuoi.',
 				items: [
@@ -1257,7 +1265,7 @@ export const copy = {
 						kicker: 'In arrivo',
 						title: 'Cable Reader',
 						body: 'Il prodotto semiautomatico d’ingresso, per i piccoli costruttori di quadri. Non è ancora in vendita: chiedici una demo e raccontaci come collaudi oggi.',
-						specs: ['Semiautomatico: l’operatore resta nel ciclo', 'Per i piccoli costruttori di quadri', '[TBD: che cosa legge e controlla il Cable Reader, in una riga]'],
+						specs: ['Semiautomatico: l’operatore resta nel ciclo', 'Per i piccoli costruttori di quadri', 'Legge le etichette dei cavi dall’alto, su fondo bianco', 'La luce polarizzata toglie i riflessi dalle guaine lucide', 'Un segnale di stato dice all’operatore che cosa fare', 'Un solo cavo USB-C al PC'],
 						cta: 'Chiedici una demo',
 					},
 					{
@@ -1300,6 +1308,8 @@ export const copy = {
 					{ title: 'Nessuna promessa, per ora', body: 'Stiamo costruendo e provando la demo. Non promettiamo date né che cosa coprirà.' },
 				],
 				photo: null,
+				render: null,
+				diagram: null,
 				sectionTitle: 'I tre passaggi che la cella deve fare',
 				sectionIntro: 'Gli stessi tre che oggi fa una persona alla macchina.',
 				items: [
@@ -1325,6 +1335,8 @@ export const copy = {
 					{ title: 'Prima una risposta chiara', body: 'Ti diciamo se un robot può fare il lavoro, e come, prima di costruire qualsiasi cosa.' },
 				],
 				photo: null,
+				render: null,
+				diagram: null,
 				sectionTitle: 'Tre modi di lavorare insieme',
 				sectionIntro: 'Scegli quello più vicino al tuo caso. Se nessuno ti somiglia, scrivici lo stesso.',
 				items: [
