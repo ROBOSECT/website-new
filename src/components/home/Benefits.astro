@@ -7,6 +7,7 @@
 import Rich from '../ui/Rich.astro';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
+import { pagePath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -55,6 +56,12 @@ const cta = copy[lang].cta;
 				))
 			}
 		</ol>
+		<p class="prods__more">
+			<a class="text-link" href={pagePath(lang, 'products')}>
+				{b.products.more}
+				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+			</a>
+		</p>
 	</div>
 	<p class="gets__cta" data-b>
 		<a class="btn" href="#contact">
@@ -84,6 +91,10 @@ const cta = copy[lang].cta;
 		line-height: 1.5;
 		color: var(--steel-light);
 		max-width: 46em;
+	}
+
+	.prods__more {
+		margin-top: 24px;
 	}
 
 	.prods__list {

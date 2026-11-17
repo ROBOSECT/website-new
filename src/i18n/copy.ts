@@ -63,13 +63,16 @@ export const copy = {
 		},
 
 		nav: {
-			// `page: true` links go to their own page (the technology page), the others to a homepage section
+			// links with a `page` go to their own page (products, technology, packaging, work), the others to a homepage section
 			links: [
-				{ id: 'how-it-works', label: 'How it works', page: false },
-				{ id: 'what-you-get', label: 'What you get', page: false },
-				{ id: 'proof', label: 'Prototype', page: false },
-				{ id: 'technology', label: 'Technology', page: true },
-				{ id: 'team', label: 'Team', page: false },
+				{ id: 'how-it-works', label: 'How it works', page: '' },
+				{ id: 'what-you-get', label: 'What you get', page: '' },
+				{ id: 'proof', label: 'Prototype', page: '' },
+				{ id: 'products', label: 'Products', page: 'products' },
+				{ id: 'technology', label: 'Technology', page: 'technology' },
+				{ id: 'packaging', label: 'Packaging', page: 'packaging' },
+				{ id: 'team', label: 'Team', page: '' },
+				{ id: 'work', label: 'Work with us', page: 'work' },
 			],
 			blog: 'News',
 			// Label and ariaLabel are in the TARGET language: render the link with lang="it" / lang="en".
@@ -224,6 +227,7 @@ export const copy = {
 				id: 'products',
 				title: 'Three products, in steps',
 				intro: 'Start small with the reader, move up to the robot cell, and bring your schematics in whatever format you have them.',
+				more: 'All about the products',
 				stepLabel: 'Step',
 				items: [
 					{
@@ -449,6 +453,132 @@ export const copy = {
 			back: 'Back to home',
 		},
 
+		// the inner pages: products, packaging, work with us. One shape for all three (see components/site/InnerPage.astro).
+		pages: {
+			products: {
+				metaTitle: 'Products',
+				metaDescription:
+					'Three products for switchboard testing, in steps: the Cable Reader, the CONTEST robot cell and schematic conversion. Start from your EPLAN project.',
+				eyebrow: 'Products',
+				title: 'Three products for switchboard testing',
+				body: 'Whoever builds switchboards has to check every connection before the board leaves. We are building three ways to do it, in steps: a semi-automatic reader to start with, a robot cell that tests the whole project, and a tool that brings your schematics in. You can start from any of them.',
+				pillars: [
+					{ title: 'It starts from your project', body: 'The tests are generated from your EPLAN connection list, not written by hand for each board.' },
+					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
+					{ title: 'Plain about the stage', body: 'The robot cell is a prototype, being validated in the AIRISE.eu project. The Cable Reader is coming. Ask us what is ready today.' },
+				],
+				photo: { alt: 'A switchboard laid on the bench with the robot probes over it', caption: 'The CONTEST prototype on a switchboard. A still from the demo video.' },
+				sectionTitle: 'The three, one by one',
+				sectionIntro: 'They share one thing: your project data. Start from what fits you and move up when you want.',
+				items: [
+					{
+						number: '01',
+						kicker: 'Coming soon',
+						title: 'Cable Reader',
+						body: 'The semi-automatic entry product, for small switchboard builders. It is not on sale yet: ask us for a demo and tell us how you test today.',
+						specs: ['Semi-automatic: the operator stays in the loop', 'For small switchboard builders', '[TBD: what the Cable Reader reads and checks, in one line]'],
+						cta: 'Ask us for a demo',
+					},
+					{
+						number: '02',
+						kicker: 'Fully automatic · prototype',
+						title: 'CONTEST cell',
+						body: 'For larger builders and companies with their own switchboard shop. Two collaborative arms with custom probes test every connection of the project and write the report.',
+						specs: [
+							'Test plan generated from the EPLAN connection list',
+							'Electrical continuity test of every connection',
+							'Digital test report for every switchboard',
+							'In development: cable pull test and label reading',
+						],
+						cta: '',
+					},
+					{
+						number: '03',
+						kicker: 'Software and service',
+						title: 'Schematic conversion',
+						body: 'Turns schematics that exist only as PDF into the structured data the other two need. It can also be used on its own.',
+						specs: ['Input: schematics that exist only as PDF', 'Output: structured data, ready for the cell and the reader', 'On its own: for revamps and maintenance', 'In development'],
+						cta: '',
+					},
+				],
+				targetsTitle: 'What the AIRISE.eu project aims for',
+				targets: 'The targets of the project are one connection test from 30 to 10 seconds, and the reference switchboard from 45 to 15 minutes. They are targets, not measurements.',
+				note: '',
+				back: 'Back to home',
+			},
+			packaging: {
+				metaTitle: 'Packaging',
+				metaDescription:
+					'Reel change in automatic packaging machines: a robot cell that loads, threads and splices, as a retrofit. A development under way, from our work on deformable objects.',
+				eyebrow: 'Packaging · in development',
+				title: 'Reel change in automatic machines',
+				body: 'Automatic packaging machines run on reels of film, paper and tape. When a reel ends, a person often still has to load the new one, thread it and join it to the old web. We are developing a robot cell for those steps, as a retrofit for machines already installed. It is a development under way, not a product.',
+				pillars: [
+					{ title: 'Deformable objects are our trade', body: 'Film, paper and tape bend and slip like a cable does. We have studied that problem for years, on cables.' },
+					{ title: 'A retrofit', body: 'The idea is a cell that works on machines already on the floor, and can be offered as an option on new ones.' },
+					{ title: 'No promises yet', body: 'We are building and testing the demo. We make no promise on dates or on what it will cover.' },
+				],
+				photo: null,
+				sectionTitle: 'The three steps the cell has to do',
+				sectionIntro: 'The same three steps a person does at the machine today.',
+				items: [
+					{ number: '01', kicker: 'Load', title: 'Bring the new reel to the machine', body: 'Find the reel, pick it up and place it on the unwinder.', specs: ['Reels of film, paper and tape', '[TBD: formats and weights the demo covers]'], cta: '' },
+					{ number: '02', kicker: 'Thread', title: 'Feed the web along its path', body: 'Take the free end of the web and lead it through the machine, past rollers and guides.', specs: ['A web that bends and does not hold its shape', 'The path is different on every machine'], cta: '' },
+					{ number: '03', kicker: 'Splice', title: 'Join the new web to the old one', body: 'Join the two webs so the machine keeps running.', specs: ['Joining film, paper or tape', 'Checked before the machine restarts'], cta: '' },
+				],
+				targetsTitle: '',
+				targets: '',
+				note: '[TBD: photo or video of the reel handling demo]',
+				back: 'Back to home',
+			},
+			work: {
+				metaTitle: 'Work with us',
+				metaDescription:
+					'Engineering and R&D services for robots that handle deformable objects: custom projects, licensable modules and funded research projects. ROBOSECT, University of Bologna spin-off.',
+				eyebrow: 'Work with us',
+				title: 'Engineering and R&D for deformable objects',
+				body: 'We do engineering and research for robots that handle cables, wiring harnesses, film, tape and other parts that bend. You can hire us for a project, license a module we have built, or join us in a funded project. The work is done by the team that built the platform.',
+				pillars: [
+					{ title: 'A robot for what bends', body: 'Perception, planning and grasping for objects that change shape while the robot touches them.' },
+					{ title: 'From the university', body: 'A University of Bologna spin-off, with years of research behind the platform.' },
+					{ title: 'A plain answer first', body: 'We tell you whether a robot can do the job, and how, before anything is built.' },
+				],
+				photo: null,
+				sectionTitle: 'Three ways to work together',
+				sectionIntro: 'Pick the one closest to your case. If none fits, write to us anyway.',
+				items: [
+					{
+						number: '01',
+						kicker: 'Projects',
+						title: 'Engineering projects',
+						body: 'Custom robotics for deformable objects. We study your process, tell you whether a robot can do it, and build the proof of concept.',
+						specs: ['Perception and grasping of cables and flexible parts', 'Cells with collaborative and dual-arm robots', 'Projects at a fixed price or by the day'],
+						cta: '',
+					},
+					{
+						number: '02',
+						kicker: 'Licences',
+						title: 'Licensable modules',
+						body: 'Parts of the platform that can be licensed on their own, to put in your own system.',
+						specs: ['A motion planner that accounts for cables and dress packs', '[TBD: which gripper designs are available for licence]'],
+						cta: '',
+					},
+					{
+						number: '03',
+						kicker: 'Funding',
+						title: 'Funded projects',
+						body: 'We take part in research and innovation projects, like the AIRISE.eu project behind our switchboard robot. Bring a use case and we look at the right call together.',
+						specs: ['The robotics partner of your project', 'Proposals written together'],
+						cta: '',
+					},
+				],
+				targetsTitle: '',
+				targets: '',
+				note: '',
+				back: 'Back to home',
+			},
+		},
+
 		team: {
 			id: 'team',
 			eyebrow: 'Team',
@@ -645,7 +775,10 @@ export const copy = {
 				contact: 'Contact',
 			},
 			links: {
+				products: 'Products',
 				technology: 'Technology',
+				packaging: 'Packaging',
+				work: 'Work with us',
 				blog: 'News',
 				contact: 'Contact',
 				linkedin: 'LinkedIn',
@@ -719,11 +852,14 @@ export const copy = {
 
 		nav: {
 			links: [
-				{ id: 'how-it-works', label: 'Come funziona', page: false },
-				{ id: 'what-you-get', label: 'Cosa ottieni', page: false },
-				{ id: 'proof', label: 'Prototipo', page: false },
-				{ id: 'technology', label: 'Tecnologia', page: true },
-				{ id: 'team', label: 'Team', page: false },
+				{ id: 'how-it-works', label: 'Come funziona', page: '' },
+				{ id: 'what-you-get', label: 'Cosa ottieni', page: '' },
+				{ id: 'proof', label: 'Prototipo', page: '' },
+				{ id: 'products', label: 'Prodotti', page: 'products' },
+				{ id: 'technology', label: 'Tecnologia', page: 'technology' },
+				{ id: 'packaging', label: 'Packaging', page: 'packaging' },
+				{ id: 'team', label: 'Team', page: '' },
+				{ id: 'work', label: 'Lavora con noi', page: 'work' },
 			],
 			blog: 'News',
 			langSwitch: {
@@ -873,6 +1009,7 @@ export const copy = {
 				id: 'products',
 				title: 'Tre prodotti, a gradini',
 				intro: 'Parti in piccolo con il lettore, sali alla cella robotizzata e porta i tuoi schemi nel formato che hai.',
+				more: 'Tutto sui prodotti',
 				stepLabel: 'Passo',
 				items: [
 					{
@@ -1098,6 +1235,131 @@ export const copy = {
 			back: 'Torna alla home',
 		},
 
+		pages: {
+			products: {
+				metaTitle: 'Prodotti',
+				metaDescription:
+					'Tre prodotti per il collaudo dei quadri, a gradini: il Cable Reader, la cella robotizzata CONTEST e la conversione degli schemi. Si parte dal tuo progetto EPLAN.',
+				eyebrow: 'Prodotti',
+				title: 'Tre prodotti per il collaudo dei quadri',
+				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima che il quadro parta. Stiamo costruendo tre modi per farlo, a gradini: un lettore semiautomatico per cominciare, una cella robotizzata che collauda tutto il progetto e uno strumento che porta dentro i tuoi schemi. Puoi partire da uno qualsiasi.',
+				pillars: [
+					{ title: 'Parte dal tuo progetto', body: 'I collaudi si generano dalla tua lista di collegamenti EPLAN, non si scrivono a mano per ogni quadro.' },
+					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
+					{ title: 'Chiari sullo stato', body: 'La cella robotizzata è un prototipo, in validazione nel progetto AIRISE.eu. Il Cable Reader sta arrivando. Chiedici che cosa è pronto oggi.' },
+				],
+				photo: { alt: 'Un quadro elettrico sul banco con i puntali del robot sopra', caption: 'Il prototipo CONTEST su un quadro. Un fotogramma del video della demo.' },
+				sectionTitle: 'I tre, uno per uno',
+				sectionIntro: 'Hanno una cosa in comune: i dati del tuo progetto. Parti da quello che ti serve e sali quando vuoi.',
+				items: [
+					{
+						number: '01',
+						kicker: 'In arrivo',
+						title: 'Cable Reader',
+						body: 'Il prodotto semiautomatico d’ingresso, per i piccoli costruttori di quadri. Non è ancora in vendita: chiedici una demo e raccontaci come collaudi oggi.',
+						specs: ['Semiautomatico: l’operatore resta nel ciclo', 'Per i piccoli costruttori di quadri', '[TBD: che cosa legge e controlla il Cable Reader, in una riga]'],
+						cta: 'Chiedici una demo',
+					},
+					{
+						number: '02',
+						kicker: 'Completamente automatica · prototipo',
+						title: 'Cella CONTEST',
+						body: 'Per i costruttori più grandi e per le aziende con un reparto quadri interno. Due bracci collaborativi con puntali su misura provano ogni collegamento del progetto e scrivono il verbale.',
+						specs: [
+							'Piano di prova generato dalla lista di collegamenti EPLAN',
+							'Prova di continuità elettrica di ogni collegamento',
+							'Verbale di collaudo digitale per ogni quadro',
+							'In sviluppo: prova di strappo del cavo e lettura delle etichette',
+						],
+						cta: '',
+					},
+					{
+						number: '03',
+						kicker: 'Software e servizio',
+						title: 'Conversione degli schemi',
+						body: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri due. Si può usare anche da sola.',
+						specs: ['Ingresso: schemi che esistono solo in PDF', 'Uscita: dati strutturati, pronti per la cella e per il lettore', 'Da sola: per revamping e manutenzione', 'In sviluppo'],
+						cta: '',
+					},
+				],
+				targetsTitle: 'A che cosa punta il progetto AIRISE.eu',
+				targets: 'Gli obiettivi del progetto sono una prova di collegamento da 30 a 10 secondi e il quadro di riferimento da 45 a 15 minuti. Sono obiettivi, non misure.',
+				note: '',
+				back: 'Torna alla home',
+			},
+			packaging: {
+				metaTitle: 'Packaging',
+				metaDescription:
+					'Il cambio bobina nelle macchine automatiche per il confezionamento: una cella robotizzata che carica, infila e giunta, in retrofit. Uno sviluppo in corso, dal nostro lavoro sugli oggetti deformabili.',
+				eyebrow: 'Packaging · in sviluppo',
+				title: 'Il cambio bobina nelle macchine automatiche',
+				body: 'Le macchine automatiche per il confezionamento lavorano con bobine di film, carta e nastro. Quando una bobina finisce, spesso una persona deve ancora caricare la nuova, infilarla e giuntarla alla vecchia. Stiamo sviluppando una cella robotizzata per questi passaggi, in retrofit su macchine già installate. È uno sviluppo in corso, non un prodotto.',
+				pillars: [
+					{ title: 'Gli oggetti deformabili sono il nostro mestiere', body: 'Film, carta e nastro si piegano e scivolano come un cavo. È un problema che studiamo da anni, sui cavi.' },
+					{ title: 'Un retrofit', body: 'L’idea è una cella che lavora su macchine già in reparto e che si può proporre come opzione su quelle nuove.' },
+					{ title: 'Nessuna promessa, per ora', body: 'Stiamo costruendo e provando la demo. Non promettiamo date né che cosa coprirà.' },
+				],
+				photo: null,
+				sectionTitle: 'I tre passaggi che la cella deve fare',
+				sectionIntro: 'Gli stessi tre che oggi fa una persona alla macchina.',
+				items: [
+					{ number: '01', kicker: 'Caricare', title: 'Portare la bobina nuova alla macchina', body: 'Trovare la bobina, prenderla e metterla sullo svolgitore.', specs: ['Bobine di film, carta e nastro', '[TBD: formati e pesi che la demo copre]'], cta: '' },
+					{ number: '02', kicker: 'Infilare', title: 'Far passare il nastro lungo il suo percorso', body: 'Prendere il capo libero del nastro e guidarlo dentro la macchina, tra rulli e guide.', specs: ['Un nastro che si piega e non tiene la forma', 'Il percorso cambia da macchina a macchina'], cta: '' },
+					{ number: '03', kicker: 'Giuntare', title: 'Unire il nastro nuovo al vecchio', body: 'Unire i due nastri perché la macchina non si fermi.', specs: ['Giunta di film, carta o nastro', 'Controllata prima che la macchina riparta'], cta: '' },
+				],
+				targetsTitle: '',
+				targets: '',
+				note: '[TBD: foto o video della demo di gestione bobine]',
+				back: 'Torna alla home',
+			},
+			work: {
+				metaTitle: 'Lavora con noi',
+				metaDescription:
+					'Servizi di ingegneria e R&D per robot che trattano oggetti deformabili: progetti su misura, moduli licenziabili e progetti finanziati. ROBOSECT, spin-off dell’Università di Bologna.',
+				eyebrow: 'Lavora con noi',
+				title: 'Ingegneria e R&D per gli oggetti deformabili',
+				body: 'Facciamo ingegneria e ricerca per robot che trattano cavi, cablaggi, film, nastri e altre parti che si piegano. Puoi affidarci un progetto, prendere in licenza un modulo che abbiamo sviluppato o unirti a noi in un progetto finanziato. Il lavoro lo fa il team che ha costruito la piattaforma.',
+				pillars: [
+					{ title: 'Un robot per ciò che si piega', body: 'Percezione, pianificazione e presa per oggetti che cambiano forma mentre il robot li tocca.' },
+					{ title: 'Dall’università', body: 'Uno spin-off dell’Università di Bologna, con anni di ricerca dietro la piattaforma.' },
+					{ title: 'Prima una risposta chiara', body: 'Ti diciamo se un robot può fare il lavoro, e come, prima di costruire qualsiasi cosa.' },
+				],
+				photo: null,
+				sectionTitle: 'Tre modi di lavorare insieme',
+				sectionIntro: 'Scegli quello più vicino al tuo caso. Se nessuno ti somiglia, scrivici lo stesso.',
+				items: [
+					{
+						number: '01',
+						kicker: 'Progetti',
+						title: 'Progetti di ingegneria',
+						body: 'Robotica su misura per oggetti deformabili. Studiamo il tuo processo, ti diciamo se un robot può farlo e costruiamo la prova di fattibilità.',
+						specs: ['Percezione e presa di cavi e parti flessibili', 'Celle con robot collaborativi e a due bracci', 'Progetti a prezzo fisso o a giornata'],
+						cta: '',
+					},
+					{
+						number: '02',
+						kicker: 'Licenze',
+						title: 'Moduli in licenza',
+						body: 'Parti della piattaforma che si possono licenziare da sole, da mettere nel tuo sistema.',
+						specs: ['Un pianificatore di movimento che tiene conto di cavi e dress pack', '[TBD: quali progetti di pinza sono disponibili in licenza]'],
+						cta: '',
+					},
+					{
+						number: '03',
+						kicker: 'Finanziamenti',
+						title: 'Progetti finanziati',
+						body: 'Partecipiamo a progetti di ricerca e innovazione, come il progetto AIRISE.eu dietro il nostro robot per quadri. Porta un caso d’uso e guardiamo insieme il bando giusto.',
+						specs: ['Il partner di robotica del tuo progetto', 'Proposte scritte insieme'],
+						cta: '',
+					},
+				],
+				targetsTitle: '',
+				targets: '',
+				note: '',
+				back: 'Torna alla home',
+			},
+		},
+
 		team: {
 			id: 'team',
 			eyebrow: 'Team',
@@ -1290,7 +1552,10 @@ export const copy = {
 				contact: 'Contatti',
 			},
 			links: {
+				products: 'Prodotti',
 				technology: 'Tecnologia',
+				packaging: 'Packaging',
+				work: 'Lavora con noi',
 				blog: 'News',
 				contact: 'Contatti',
 				linkedin: 'LinkedIn',

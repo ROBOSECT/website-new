@@ -31,7 +31,7 @@ function initMenu() {
 			toggle.focus();
 		}
 	});
-	window.matchMedia('(min-width: 1100px)').addEventListener('change', () => set(false));
+	window.matchMedia('(min-width: 1280px)').addEventListener('change', () => set(false));
 }
 
 function initReveal() {

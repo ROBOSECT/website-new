@@ -1,7 +1,7 @@
 ---
 import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
 import { copy, type Lang } from '../../i18n/copy';
-import { homePath, sectionHref, techPath } from '../../lib/i18n';
+import { homePath, pagePath, sectionHref, type PageKey } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -39,7 +39,7 @@ const logo = logoRaw
 					t.nav.links.map((l) =>
 						l.page ? (
 							<li>
-								<a href={techPath(lang)}>{l.label}</a>
+								<a href={pagePath(lang, l.page as PageKey)}>{l.label}</a>
 							</li>
 						) : (
 							<li>
@@ -132,7 +132,7 @@ const logo = logoRaw
 		list-style: none;
 		display: flex;
 		align-items: center;
-		gap: 26px;
+		gap: 22px;
 	}
 
 	.nav__links a,
@@ -145,6 +145,7 @@ const logo = logoRaw
 		font-size: 15px;
 		font-weight: 500;
 		text-decoration: none;
+		white-space: nowrap;
 	}
 
 	.nav__links a::after {
@@ -274,7 +275,7 @@ const logo = logoRaw
 		transform: translateY(-4px) rotate(-45deg);
 	}
 
-	@media (max-width: 1099px) {
+	@media (max-width: 1279px) {
 		.nav__bar {
 			gap: 16px;
 		}
