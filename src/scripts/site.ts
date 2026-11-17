@@ -2,6 +2,8 @@
  * Site-wide behaviour, every page: mobile menu, section entrances, the "ready" flag that keeps
  * the progressive-enhancement styles on (see the inline script in BaseLayout).
  */
+import './ritorno';
+
 declare global {
 	interface Window {
 		__robosectReady?: boolean;
