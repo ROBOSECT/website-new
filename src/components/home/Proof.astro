@@ -47,12 +47,33 @@ const logos = [
 	</div>
 
 	<div class="facts">
-		<figure class="tool" data-b>
-			<div class="tool__frame">
-				<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 760]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
+		<div class="facts__side">
+			<figure class="tool" data-b>
+				<div class="tool__frame">
+					<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 760]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
+				</div>
+				<figcaption>{p.photo.caption}</figcaption>
+			</figure>
+			<div class="targets" data-b>
+				<h3 class="targets__h">{p.targets.title}</h3>
+				<ul class="targets__list">
+					{
+						p.targets.items.map((t) => (
+							<li class="targets__item">
+								<p class="targets__label">{t.label}</p>
+								<p class="targets__val">
+									<span class="targets__from">{t.from}</span>
+									<span aria-hidden="true">→</span>
+									<span class="visually-hidden"> to </span>
+									<span class="targets__to">{t.to}</span>
+								</p>
+							</li>
+						))
+					}
+				</ul>
+				<p class="targets__note">{p.targets.note}</p>
 			</div>
-			<figcaption>{p.photo.caption}</figcaption>
-		</figure>
+		</div>
 		<div class="who" data-b>
 			<h3 class="who__h">{p.factsTitle}</h3>
 			<ul class="who__list">
@@ -78,31 +99,15 @@ const logos = [
 			</ul>
 		</div>
 	</div>
-
-	<div class="targets" data-b>
-		<h3 class="targets__h">{p.targets.title}</h3>
-		<ul class="targets__list">
-			{
-				p.targets.items.map((t) => (
-					<li class="targets__item">
-						<p class="targets__label">{t.label}</p>
-						<p class="targets__val">
-							<span class="targets__from">{t.from}</span>
-							<span aria-hidden="true">→</span>
-							<span class="visually-hidden"> to </span>
-							<span class="targets__to">{t.to}</span>
-						</p>
-					</li>
-				))
-			}
-		</ul>
-		<p class="targets__note">{p.targets.note}</p>
-	</div>
 </Compartment>
 
 <style>
+	.facts__side {
+		display: contents;
+	}
+
 	.targets {
-		margin-top: 56px;
+		margin-top: 0;
 	}
 
 	.targets__h {
@@ -151,17 +156,6 @@ const logos = [
 		max-width: 60ch;
 	}
 
-	@media (min-width: 700px) {
-		.targets__list {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
-	@media (min-width: 1100px) {
-		.targets {
-			margin-top: 80px;
-		}
-	}
 
 	.tvid__print {
 		display: none;
@@ -248,6 +242,15 @@ const logos = [
 		object-position: 50% 40%;
 	}
 
+	/* phones: photo, the facts, then the targets (the side wrapper dissolves into the grid) */
+	.who {
+		order: 1;
+	}
+
+	.targets {
+		order: 2;
+	}
+
 	.who__h {
 		font-size: 24px;
 		line-height: 1.2;
@@ -305,6 +308,19 @@ const logos = [
 			align-items: center;
 		}
 
+		.who,
+		.targets {
+			order: 0;
+		}
+
+		.facts__side {
+			display: block;
+		}
+
+		.targets {
+			margin-top: 24px;
+		}
+
 		.facts {
 			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
 			column-gap: var(--gap);
@@ -336,7 +352,7 @@ const logos = [
 			margin-top: 80px;
 		}
 
-		.tool {
+		.facts__side {
 			grid-column: 1 / span 4;
 		}
 
