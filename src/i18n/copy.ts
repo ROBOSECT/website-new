@@ -136,6 +136,11 @@ export const copy = {
 					body: 'At the end there is, at best, a list ticked by hand. Showing your customer which wire was tested, and how, is hard.',
 				},
 			],
+			vision: {
+				label: 'What the robot sees',
+				found: 'components found',
+				caption: 'No program written by hand for this board: the robot recognizes it on its own.',
+			},
 			closing: 'This is where automation has always stopped. It is where we start.',
 		},
 
@@ -727,6 +732,11 @@ export const copy = {
 					body: 'A fine collaudo resta, se va bene, una lista spuntata a mano. Dimostrare al cliente quale filo è stato provato, e come, è difficile.',
 				},
 			],
+			vision: {
+				label: 'Cosa vede il robot',
+				found: 'componenti trovati',
+				caption: 'Nessun programma scritto a mano per questo quadro: lo riconosce da solo.',
+			},
 			closing: 'Qui l’automazione si è sempre fermata. Noi partiamo da qui.',
 		},
 

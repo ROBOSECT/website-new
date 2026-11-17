@@ -10,16 +10,54 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].problem;
 
+// The 25 components the vision found, read off the photo's green outlines: x, y, w, h in percent of the picture.
+const boxes: [number, number, number, number][] = [
+	[10.83, 6.53, 20.52, 7.36],
+	[12.71, 14.86, 16.46, 9.86],
+	[14.06, 35.28, 14.58, 2.92],
+	[14.06, 38.19, 14.58, 2.92],
+	[14.06, 41.11, 14.58, 2.92],
+	[14.06, 44.03, 14.58, 2.78],
+	[15.42, 46.81, 12.5, 5.56],
+	[14.27, 58.06, 14.48, 3.47],
+	[14.27, 61.94, 14.48, 7.08],
+	[14.27, 69.03, 14.48, 7.64],
+	[14.27, 76.81, 14.48, 7.36],
+	[40.94, 8.06, 15.83, 22.78],
+	[41.46, 31.39, 17.4, 6.11],
+	[41.56, 37.5, 18.02, 9.44],
+	[44.9, 66.67, 9.58, 9.58],
+	[44.9, 76.39, 9.58, 9.86],
+	[68.96, 6.67, 12.29, 7.5],
+	[70.0, 13.89, 12.6, 11.11],
+	[68.96, 25.69, 12.08, 7.64],
+	[69.38, 33.33, 12.29, 11.67],
+	[69.38, 45.14, 12.29, 3.47],
+	[70.83, 49.58, 10.83, 11.67],
+	[69.27, 61.39, 12.19, 14.03],
+	[68.75, 75.69, 12.08, 3.61],
+	[69.9, 79.58, 9.27, 3.47],
+];
+const total = boxes.length;
+
 const alt = {
-	en: 'The switchboard as the robot’s vision sees it: each of its 25 components outlined in green where it was found',
-	it: 'Il quadro come lo vede la visione del robot: ciascuno dei 25 componenti contornato in verde dove è stato trovato',
+	en: `The switchboard as the robot’s vision sees it: each of its ${total} components outlined in green where it was found`,
+	it: `Il quadro come lo vede la visione del robot: ciascuno dei ${total} componenti contornato in verde dove è stato trovato`,
 }[lang];
 ---
 
 <Compartment n={1} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
 	<div class="pts">
 		<figure class="pts__img" data-b>
-			<Image src={imgVision} alt={alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 560px, (min-width: 700px) 90vw, 100vw" loading="lazy" />
+			<div class="vis" data-vis>
+				<Image src={imgVision} alt={alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 640px, (min-width: 700px) 90vw, 100vw" loading="lazy" />
+				<svg class="vis__boxes" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+					{boxes.map(([x, y, w, h], i) => <rect class="vis__box" x={x} y={y} width={w} height={h} style={`--i:${i}`} />)}
+				</svg>
+				<span class="vis__tag">{p.vision.label}</span>
+				<span class="vis__count" aria-hidden="true"><b data-count data-total={total}>{total}</b> {p.vision.found}</span>
+			</div>
+			<figcaption>{p.vision.caption}</figcaption>
 		</figure>
 		{
 			p.points.map((pt, i) => (
@@ -33,6 +71,39 @@ const alt = {
 	<p class="closing" data-b>{p.closing}</p>
 </Compartment>
 
+<script is:inline>
+	/* The boxes light up one after another when the picture comes into view, the counter climbs to the real number.
+	   Without JS or with reduced motion the picture stays in its full state (boxes lit, counter at the total). */
+	(function () {
+		var v = document.querySelectorAll('[data-vis]');
+		if (!v.length || !('IntersectionObserver' in window)) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		var DUR = 1500;
+		v.forEach(function (el) {
+			var c = el.querySelector('[data-count]');
+			var total = +c.getAttribute('data-total');
+			el.setAttribute('data-state', 'armed');
+			c.textContent = '0';
+			var io = new IntersectionObserver(
+				function (es) {
+					if (!es[0].isIntersecting) return;
+					io.disconnect();
+					el.setAttribute('data-state', 'run');
+					var t0 = performance.now();
+					(function tick(t) {
+						var k = Math.min(1, (t - t0) / DUR);
+						c.textContent = String(Math.round(k * total));
+						if (k < 1) requestAnimationFrame(tick);
+						else el.setAttribute('data-state', 'done');
+					})(t0);
+				},
+				{ threshold: 0.45 },
+			);
+			io.observe(el);
+		});
+	})();
+</script>
+
 <style>
 	.pts {
 		display: grid;
@@ -40,17 +111,114 @@ const alt = {
 	}
 
 	.pts__img {
+		margin: 0;
+		min-width: 0;
+	}
+
+	.vis {
+		position: relative;
 		overflow: hidden;
 		border-radius: 0 0 0 var(--bend);
 		background: var(--mist);
 		aspect-ratio: 4 / 3;
 	}
 
-	.pts__img :global(img) {
+	.vis :global(img) {
 		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: filter 0.5s ease;
+	}
+
+	.vis__boxes {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.vis__box {
+		fill: rgba(80, 255, 160, 0.16);
+		stroke: #5dffa8;
+		stroke-width: 3;
+		filter: drop-shadow(0 0 3px rgba(93, 255, 168, 0.9));
+		vector-effect: non-scaling-stroke;
+		pointer-events: all;
+		transition: fill 0.15s ease;
+	}
+
+	.vis__box:hover {
+		fill: rgba(80, 255, 160, 0.38);
+	}
+
+	.vis__tag,
+	.vis__count {
+		position: absolute;
+		left: 10px;
+		padding: 5px 10px;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.2;
+		color: #fff;
+		background: rgba(10, 22, 40, 0.78);
+		backdrop-filter: blur(4px);
+	}
+
+	.vis__tag {
+		top: 10px;
+		letter-spacing: 0.02em;
+	}
+
+	.vis__count {
+		bottom: 10px;
+		font-size: 14px;
+		color: #d8ffe9;
+	}
+
+	.vis__count b {
+		display: inline-block;
+		min-width: 1.4em;
+		font-size: 18px;
+		font-variant-numeric: tabular-nums;
+		color: #5dffa8;
+	}
+
+	.pts__img figcaption {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.45;
+		font-weight: 500;
+	}
+
+	/* animation: armed (dim, boxes hidden) -> run (boxes light up in turn) -> done */
+	.vis[data-state='armed'] :global(img) {
+		filter: grayscale(0.85) brightness(0.55) contrast(0.9);
+	}
+
+	.vis[data-state='armed'] .vis__box {
+		opacity: 0;
+	}
+
+	.vis[data-state='run'] :global(img),
+	.vis[data-state='done'] :global(img) {
+		filter: none;
+		transition-delay: 1.2s;
+	}
+
+	.vis[data-state='run'] .vis__box {
+		animation: lit 0.28s ease-out both;
+		animation-delay: calc(var(--i) * 56ms);
+	}
+
+	@keyframes lit {
+		from {
+			opacity: 0;
+			fill: rgba(80, 255, 160, 0.7);
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	.pt h3 {
@@ -83,7 +251,9 @@ const alt = {
 
 		.pts__img {
 			grid-column: 1 / -1;
-			aspect-ratio: 16 / 7;
+			width: 100%;
+			max-width: 760px;
+			justify-self: center;
 		}
 
 		.pt h3 {
@@ -96,10 +266,10 @@ const alt = {
 		}
 	}
 
-	/* desktop: the photo in the middle, two problems on its left, one on its right */
+	/* desktop: the photo in the middle (wider, so the outlines stay readable), two problems on its left, one on its right */
 	@media (min-width: 1100px) {
 		.pts {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 1fr) minmax(0, 2.3fr) minmax(0, 1fr);
 			grid-template-rows: auto auto;
 			align-items: center;
 			gap: 40px var(--gap);
@@ -108,7 +278,7 @@ const alt = {
 		.pts__img {
 			grid-column: 2;
 			grid-row: 1 / 3;
-			aspect-ratio: 4 / 3;
+			max-width: none;
 		}
 
 		.pt--1 {
