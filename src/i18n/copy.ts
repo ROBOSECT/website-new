@@ -319,6 +319,7 @@ export const copy = {
 			],
 			targets: {
 				title: 'What the project is aiming for',
+				toWord: 'to',
 				items: [
 					{ from: '30 s', to: '10 s', label: 'One connection test' },
 					{ from: '45 min', to: '15 min', label: 'The reference switchboard' },
@@ -437,8 +438,13 @@ export const copy = {
 			applications: [
 				{
 					title: 'Automatic switchboard testing',
-					body: 'Continuity testing generated from the CAD/EPLAN connection list and carried out by robots, with a digital test report. In development within the AIRISE.eu project: visual inspection of assembly defects and cable-marker reading.',
-					status: 'Prototype',
+					body: 'Continuity testing generated from the CAD/EPLAN connection list and carried out by robots, with a digital test report. This is the CONTEST cell, being validated in the AIRISE.eu project, where visual inspection of assembly defects and cable-marker reading are in development.',
+					status: 'In validation',
+				},
+				{
+					title: 'Reel change in packaging machines',
+					body: 'Loading the new reel, threading the web and splicing it on automatic machines, as a retrofit. A development under way, shown so far in simulation.',
+					status: 'In development',
 				},
 				{
 					title: 'Wiring harness automation',
@@ -1131,6 +1137,7 @@ export const copy = {
 			],
 			targets: {
 				title: 'Dove punta il progetto',
+				toWord: 'a',
 				items: [
 					{ from: '30 s', to: '10 s', label: 'Una prova di collegamento' },
 					{ from: '45 min', to: '15 min', label: 'Il quadro di riferimento' },
@@ -1249,8 +1256,13 @@ export const copy = {
 			applications: [
 				{
 					title: 'Collaudo automatico dei quadri elettrici',
-					body: 'Prova di continuità generata dalla lista collegamenti CAD/EPLAN ed eseguita dai robot, con verbale di collaudo digitale. In sviluppo nel progetto AIRISE.eu: ispezione visiva dei difetti di montaggio e lettura delle siglature dei cavi.',
-					status: 'Prototipo',
+					body: 'Prova di continuità generata dalla lista collegamenti CAD/EPLAN ed eseguita dai robot, con verbale di collaudo digitale. È la cella CONTEST, in validazione nel progetto AIRISE.eu, dove sono in sviluppo l’ispezione visiva dei difetti di montaggio e la lettura delle siglature dei cavi.',
+					status: 'In validazione',
+				},
+				{
+					title: 'Cambio bobina nelle macchine per il confezionamento',
+					body: 'Caricare la bobina nuova, infilare il nastro e giuntarlo sulle macchine automatiche, in retrofit. Uno sviluppo in corso, per ora mostrato in simulazione.',
+					status: 'In sviluppo',
 				},
 				{
 					title: 'Automazione dei cablaggi',
