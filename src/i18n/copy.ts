@@ -45,7 +45,7 @@ export const copy = {
 
 		brand: {
 			name: 'ROBOSECT',
-			descriptor: 'Robotics for cables, wiring harnesses and switchboards',
+			descriptor: 'Robotics for cables and everything that bends',
 			tagline: 'Automation, down to the last wire.',
 		},
 
@@ -775,7 +775,7 @@ export const copy = {
 
 		footer: {
 			tagline: 'Automation, down to the last wire.',
-			descriptor: 'Robotics for cables, wiring harnesses and switchboards.',
+			descriptor: 'Robotics for cables and everything that bends.',
 			ecosystemTitle: 'Ecosystem',
 			partnerAlts: {
 				unibo: 'University of Bologna',
@@ -847,7 +847,7 @@ export const copy = {
 
 		brand: {
 			name: 'ROBOSECT',
-			descriptor: 'Robotica per cavi, cablaggi e quadri elettrici',
+			descriptor: 'Robotica per i cavi e per tutto ciò che si piega',
 			tagline: 'Automazione, fino all’ultimo filo.',
 		},
 
@@ -1566,7 +1566,7 @@ export const copy = {
 
 		footer: {
 			tagline: 'Automazione, fino all’ultimo filo.',
-			descriptor: 'Robotica per cavi, cablaggi e quadri elettrici.',
+			descriptor: 'Robotica per i cavi e per tutto ciò che si piega.',
 			ecosystemTitle: 'Ecosistema',
 			partnerAlts: {
 				unibo: 'Università di Bologna',
