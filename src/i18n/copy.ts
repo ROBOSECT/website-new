@@ -33,9 +33,9 @@ export const copy = {
 			htmlLang: 'en',
 			ogLocale: 'en_GB',
 			dateLocale: 'en-GB',
-			title: 'ROBOSECT | Robotic manipulation down to the cable, starting with switchboard testing',
+			title: 'ROBOSECT | Robotics for cables and everything that bends',
 			description:
-				'Robots that test electrical switchboards starting from your EPLAN connection list, with a test report for every board, and robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
+				'Robots that test electrical switchboards starting from your EPLAN connection list, with a test report for every board, and robotic manipulation of cables and deformable parts, from wiring harnesses to reel changes on packaging machines. A University of Bologna spin-off.',
 			ogTitle: 'Automation stops at the cable. Ours doesn’t.',
 			ogDescription:
 				'ROBOSECT builds robots that test switchboards starting from your EPLAN project, and takes robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
@@ -636,9 +636,9 @@ export const copy = {
 			htmlLang: 'it',
 			ogLocale: 'it_IT',
 			dateLocale: 'it-IT',
-			title: 'ROBOSECT | Manipolazione robotica fino al cavo, a partire dal collaudo dei quadri elettrici',
+			title: 'ROBOSECT | Robotica per i cavi e per tutto ciò che si piega',
 			description:
-				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
+				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica di cavi e parti deformabili, dai cablaggi al cambio bobina nelle macchine di confezionamento. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
 				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto EPLAN, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
