@@ -28,7 +28,7 @@ const key: PageKey = page;
 	<PageHeader title={t.title} intro={t.body} back={{ href: homePath(lang), label: t.back }} />
 
 	<section class="tp tp--intro wrap" aria-label={t.eyebrow}>
-		<div class="tp-intro">
+		<div class:list={['tp-intro', { 'tp-intro--solo': !t.photo }]}>
 			<div class="tp-intro__text">
 				<ul class="tp-pillars tp-pillars--first">
 					{
@@ -57,7 +57,6 @@ const key: PageKey = page;
 	<section class="tp tp--platform wrap" aria-labelledby="tp-items">
 		<h2 id="tp-items" class="tp-h">{t.sectionTitle}</h2>
 		<p class="tp-sub">{t.sectionIntro}</p>
-		{t.diagram && <TapeThreading {...t.diagram} />}
 		{'cards' in t && <ProductCards lang={lang} forLabel={t.forLabel} cards={t.cards} />}
 		<ol class="tp-steps tp-steps--3">
 			{
@@ -82,6 +81,7 @@ const key: PageKey = page;
 				))
 			}
 		</ol>
+		{t.diagram && <TapeThreading {...t.diagram} />}
 		{
 			t.targets && (
 				<div class="tp-targets">
@@ -369,6 +369,16 @@ const key: PageKey = page;
 
 		.tp-photo {
 			grid-column: 8 / -1;
+		}
+
+		/* no photo beside them: the three pillars side by side on the whole width, no empty half */
+		.tp-intro--solo .tp-intro__text {
+			grid-column: 1 / -1;
+		}
+
+		.tp-intro--solo .tp-pillars {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			column-gap: var(--gap);
 		}
 
 		.tp-lead {

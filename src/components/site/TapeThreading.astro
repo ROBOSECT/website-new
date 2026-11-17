@@ -2,6 +2,8 @@
 /**
  * Packaging page: the simulation of threading a tape (muted loop, recorded from our own 3D model: scene only, no labels),
  * then the three moments in words (find the tail, take it, thread and join). Texts come from copy.pages.packaging.diagram.
+ * It comes after the three steps of the cell, with its own visible title, so the 1-2-3 of the simulation read as a
+ * close-up of threading and splicing, not as a second list of steps.
  */
 import ReelVideo from './ReelVideo.astro';
 interface Step {
@@ -18,7 +20,8 @@ interface Props {
 const { title, desc, caption, steps } = Astro.props;
 ---
 
-<figure class="tt" role="group" aria-label={title}>
+<figure class="tt" role="group" aria-labelledby="tt-title">
+	<h3 id="tt-title" class="tt__h">{title}</h3>
 	<p class="tt__desc visually-hidden">{desc}</p>
 	<div class="tt__video">
 		<ReelVideo label={desc} />
@@ -29,7 +32,7 @@ const { title, desc, caption, steps } = Astro.props;
 			steps.map((s) => (
 				<li class="tt__cell">
 					<p class="tt__n" aria-hidden="true">{s.n}</p>
-					<h3 class="tt__t">{s.t}</h3>
+					<h4 class="tt__t">{s.t}</h4>
 					<p class="tt__b">{s.b}</p>
 				</li>
 			))
@@ -39,7 +42,13 @@ const { title, desc, caption, steps } = Astro.props;
 
 <style>
 	.tt {
-		margin-top: 40px;
+		margin-top: 64px;
+	}
+
+	.tt__h {
+		margin-bottom: 16px;
+		font-size: 24px;
+		line-height: 1.25;
 	}
 
 	.tt__video {
