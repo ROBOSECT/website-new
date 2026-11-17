@@ -97,7 +97,7 @@ export const copy = {
 		// the action for every process (the technology page, Also for you, the hero's second line)
 		ctaAll: {
 			label: 'Tell us about your process',
-			promise: 'Switchboards, wiring harnesses, robot cells or any part that is hard to handle: we will tell you plainly whether a robot can do it, and how.',
+			promise: 'Switchboards, wiring harnesses, reels, robot cells or any part that is hard to handle: we will tell you plainly whether a robot can do it, and how.',
 		},
 
 		hero: {
@@ -226,7 +226,7 @@ export const copy = {
 			products: {
 				id: 'products',
 				title: 'Four products',
-				intro: 'A bench reader, a robot cell and a schematic converter for switchboards, and a reel-change cell for packaging machines. Each stands on its own.',
+				intro: 'A bench reader, a robot cell and a schematic converter for switchboards, and a reel-change cell for packaging machines. Each one can also be used on its own.',
 				more: 'All about the products',
 				forLabel: 'For',
 				items: [
@@ -473,16 +473,16 @@ export const copy = {
 					'Four products: the Cable Reader, the CONTEST robot cell and schematic conversion for switchboard testing, and a reel-change cell for packaging machines.',
 				eyebrow: 'Products',
 				title: 'Four products, from switchboards to reels',
-				body: 'Whoever builds switchboards has to check every connection before the board leaves. For that we are building three tools: a semi-automatic reader, a robot cell that tests the whole project, and a tool that brings your schematics in. The fourth is for automatic packaging machines: a cell that changes the reel. Each one stands on its own: pick the one that fits how you work.',
+				body: 'Whoever builds switchboards has to check every connection before the board leaves. For that we are building three tools: a semi-automatic reader, a robot cell that tests the whole project, and a tool that turns PDF schematics into data. The fourth is for automatic packaging machines: a cell that changes the reel. Pick the one that fits how you work.',
 				pillars: [
 					{ title: 'It starts from your project', body: 'For switchboards, the tests are generated from your EPLAN connection list, not written by hand for each board.' },
 					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
-					{ title: 'Plain about the stage', body: 'Each card says its stage: prototype, in validation or in development. The CONTEST cell is being validated in the AIRISE.eu project. Ask us what is ready today.' },
+					{ title: 'Honest about the stage', body: 'Each card says its stage: prototype, in validation or in development. The CONTEST cell is being validated in the AIRISE.eu project. Ask us what is ready today.' },
 				],
 				photo: { alt: 'A switchboard laid on the bench, seen from above, wired and ready to be tested', caption: 'A switchboard on the bench, seen from above. A still from the demo video.' },
 				diagram: null,
 				sectionTitle: 'The four, one by one',
-				sectionIntro: 'The first three share one thing: your project data. The reel cell comes from the same work on deformable objects. Each works alone.',
+				sectionIntro: 'The first three share one thing: your project data. The reel-change cell comes from the same work on deformable objects. Each one works on its own.',
 				forLabel: 'For',
 				cards: [
 					{
@@ -595,7 +595,7 @@ export const copy = {
 						number: '02',
 						kicker: 'Licences',
 						title: 'Licensable modules',
-						body: 'Parts of the platform that can be licensed on their own, to put in your own system.',
+						body: 'Parts of the platform that can be licensed on their own and built into your own system.',
 						specs: ['A motion planner that accounts for cables and dress packs', '[TBD: which gripper designs are available for licence]'],
 						cta: '',
 					},
@@ -713,7 +713,7 @@ export const copy = {
 				sector: {
 					label: 'What do you do?',
 					// the first option is the switchboard builders': it shows the switchboard questions
-					options: ['Electrical switchboards', 'Wiring harnesses', 'Robot cells and integration', 'Other manipulation'],
+					options: ['Electrical switchboards', 'Wiring harnesses', 'Robot cells and integration', 'Packaging machines', 'Other manipulation'],
 				},
 				sbGroup: 'If you build switchboards',
 				boards: {
@@ -915,7 +915,7 @@ export const copy = {
 
 		ctaAll: {
 			label: 'Parlaci del tuo processo',
-			promise: 'Quadri, cablaggi, celle robotizzate o un pezzo difficile da maneggiare: ti diciamo con franchezza se un robot può farlo, e come.',
+			promise: 'Quadri, cablaggi, bobine, celle robotizzate o un pezzo difficile da maneggiare: ti diciamo con franchezza se un robot può farlo, e come.',
 		},
 
 		hero: {
@@ -1044,7 +1044,7 @@ export const copy = {
 			products: {
 				id: 'products',
 				title: 'Quattro prodotti',
-				intro: 'Un lettore da banco, una cella robotizzata e un convertitore di schemi per i quadri, e una cella cambio bobina per le macchine di confezionamento. Ognuno sta in piedi da solo.',
+				intro: 'Un lettore da banco, una cella robotizzata e un convertitore di schemi per i quadri, e una cella cambio bobina per le macchine di confezionamento. Ognuno si può usare anche da solo.',
 				more: 'Tutto sui prodotti',
 				forLabel: 'Per',
 				items: [
@@ -1100,7 +1100,7 @@ export const copy = {
 			facts: [
 				{
 					name: 'Spin-off dell’Università di Bologna',
-					detail: 'ROBOSECT SRL è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, fondata nel 2024 e nata da anni di ricerca accademica e di progetti europei di innovazione.',
+					detail: 'ROBOSECT SRL, fondata nel 2024, è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, nato da anni di ricerca accademica e di progetti europei di innovazione.',
 					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
 					mark: '',
 				},
@@ -1290,7 +1290,7 @@ export const copy = {
 					'Quattro prodotti: il Cable Reader, la cella robotizzata CONTEST e la conversione degli schemi per il collaudo dei quadri, e una cella cambio bobina per le macchine di confezionamento.',
 				eyebrow: 'Prodotti',
 				title: 'Quattro prodotti, dai quadri alle bobine',
-				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima che il quadro parta. Per questo stiamo costruendo tre strumenti: un lettore semiautomatico, una cella robotizzata che collauda tutto il progetto e uno strumento che porta dentro i tuoi schemi. Il quarto è per le macchine automatiche per il confezionamento: una cella che cambia la bobina. Ognuno sta in piedi da solo: scegli quello che si adatta al tuo modo di lavorare.',
+				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima della consegna. Per questo stiamo costruendo tre strumenti: un lettore semiautomatico, una cella robotizzata che collauda tutto il progetto e uno strumento che trasforma gli schemi in PDF in dati. Il quarto è per le macchine automatiche per il confezionamento: una cella che cambia la bobina. Scegli quello che si adatta al tuo modo di lavorare.',
 				pillars: [
 					{ title: 'Parte dal tuo progetto', body: 'Per i quadri, i collaudi si generano dalla tua lista di collegamenti EPLAN, non si scrivono a mano per ogni quadro.' },
 					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
@@ -1299,7 +1299,7 @@ export const copy = {
 				photo: { alt: 'Un quadro elettrico sul banco, visto dall’alto, cablato e pronto da collaudare', caption: 'Un quadro elettrico sul banco, visto dall’alto. Un fotogramma del video della demo.' },
 				diagram: null,
 				sectionTitle: 'I quattro, uno per uno',
-				sectionIntro: 'I primi tre hanno una cosa in comune: i dati del tuo progetto. La cella bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona da solo.',
+				sectionIntro: 'I primi tre hanno una cosa in comune: i dati del tuo progetto. La cella cambio bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona anche da solo.',
 				forLabel: 'Per',
 				cards: [
 					{
@@ -1386,7 +1386,7 @@ export const copy = {
 			work: {
 				metaTitle: 'Lavora con noi',
 				metaDescription:
-					'Servizi di ingegneria e R&D per robot che trattano oggetti deformabili: progetti su misura, moduli licenziabili e progetti finanziati. ROBOSECT, spin-off dell’Università di Bologna.',
+					'Servizi di ingegneria e R&D per robot che trattano oggetti deformabili: progetti su misura, moduli in licenza e progetti finanziati. ROBOSECT, spin-off dell’Università di Bologna.',
 				eyebrow: 'Lavora con noi',
 				title: 'Ingegneria e R&D per gli oggetti deformabili',
 				body: 'Facciamo ingegneria e ricerca per robot che trattano cavi, cablaggi, film, nastri e altre parti che si piegano. Puoi affidarci un progetto, prendere in licenza un modulo che abbiamo sviluppato o unirti a noi in un progetto finanziato. Il lavoro lo fa il team che ha costruito la piattaforma.',
@@ -1398,7 +1398,7 @@ export const copy = {
 				photo: null,
 				diagram: null,
 				sectionTitle: 'Tre modi di lavorare insieme',
-				sectionIntro: 'Scegli quello più vicino al tuo caso. Se nessuno ti somiglia, scrivici lo stesso.',
+				sectionIntro: 'Scegli quello più vicino al tuo caso. Se nessuno fa al caso tuo, scrivici lo stesso.',
 				items: [
 					{
 						number: '01',
@@ -1412,7 +1412,7 @@ export const copy = {
 						number: '02',
 						kicker: 'Licenze',
 						title: 'Moduli in licenza',
-						body: 'Parti della piattaforma che si possono licenziare da sole, da mettere nel tuo sistema.',
+						body: 'Parti della piattaforma che si possono prendere in licenza da sole e integrare nel tuo sistema.',
 						specs: ['Un pianificatore di movimento che tiene conto di cavi e dress pack', '[TBD: quali progetti di pinza sono disponibili in licenza]'],
 						cta: '',
 					},
@@ -1458,7 +1458,7 @@ export const copy = {
 			],
 			founders: {
 				title: 'Il team',
-				intro: 'Spin-off dell’Università di Bologna, fondata nel 2024. Il prof. Gianluca Palli segue il team come advisor.',
+				intro: 'Spin-off dell’Università di Bologna, nato nel 2024. Il prof. Gianluca Palli segue il team come advisor.',
 				people: [
 					{
 						name: 'Alessio Caporali',
@@ -1529,7 +1529,7 @@ export const copy = {
 				phone: { label: 'Telefono' },
 				sector: {
 					label: 'Di cosa ti occupi?',
-					options: ['Quadri elettrici', 'Cablaggi', 'Celle robotizzate e integrazione', 'Altra manipolazione'],
+					options: ['Quadri elettrici', 'Cablaggi', 'Celle robotizzate e integrazione', 'Macchine per il confezionamento', 'Altra manipolazione'],
 				},
 				sbGroup: 'Se costruisci quadri',
 				boards: {

@@ -818,6 +818,11 @@ const cfg = {
 		gap: 6px;
 	}
 
+	/* an odd number of choices: the last one takes the whole row */
+	.sector__opt:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+	}
+
 	.sector__opt {
 		position: relative;
 		display: flex;
