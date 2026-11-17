@@ -3,9 +3,7 @@
  * Packaging page: the simulation of threading a tape (muted loop, recorded from our own 3D model: scene only, no labels),
  * then the three moments in words (find the tail, take it, thread and join). Texts come from copy.pages.packaging.diagram.
  */
-import poster from '../../assets/images/packaging/tape-threading-poster.jpg';
-import mp4 from '../../assets/videos/tape-threading.mp4';
-import webm from '../../assets/videos/tape-threading.webm';
+import ReelVideo from './ReelVideo.astro';
 interface Step {
 	n: string;
 	t: string;
@@ -23,10 +21,7 @@ const { title, desc, caption, steps } = Astro.props;
 <figure class="tt" role="group" aria-label={title}>
 	<p class="tt__desc visually-hidden">{desc}</p>
 	<div class="tt__video">
-		<video width="864" height="538" autoplay muted loop playsinline preload="metadata" poster={poster.src} aria-label={desc}>
-			<source src={mp4} type="video/mp4" />
-			<source src={webm} type="video/webm" />
-		</video>
+		<ReelVideo label={desc} />
 	</div>
 	<figcaption class="tt__cap">{caption}</figcaption>
 	<ol class="tt__row">
@@ -42,27 +37,14 @@ const { title, desc, caption, steps } = Astro.props;
 	</ol>
 </figure>
 
-<script>
-	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		document.querySelectorAll<HTMLVideoElement>('.tt__video video').forEach((v) => {
-			v.removeAttribute('autoplay');
-			v.pause();
-		});
-	}
-</script>
-
 <style>
 	.tt {
 		margin-top: 40px;
 	}
 
-	.tt__video video {
-		display: block;
-		width: 100%;
+	.tt__video {
 		max-width: 960px;
-		height: auto;
-		aspect-ratio: 864 / 538;
-		background: var(--ink);
+		overflow: hidden;
 		border-radius: 0 0 0 var(--bend);
 	}
 

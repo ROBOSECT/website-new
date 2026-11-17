@@ -1,0 +1,37 @@
+---
+/**
+ * The simulation of threading a tape: a muted loop recorded from our own 3D model (scene only, no labels).
+ * Used by the Packaging page and by the reel-change card on Products; still when the visitor prefers reduced motion.
+ */
+import poster from '../../assets/images/packaging/tape-threading-poster.jpg';
+import mp4 from '../../assets/videos/tape-threading.mp4';
+import webm from '../../assets/videos/tape-threading.webm';
+interface Props {
+	label: string;
+}
+const { label } = Astro.props;
+---
+
+<video class="reel-video" width="864" height="538" autoplay muted loop playsinline preload="metadata" poster={poster.src} aria-label={label}>
+	<source src={mp4} type="video/mp4" />
+	<source src={webm} type="video/webm" />
+</video>
+
+<script>
+	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		document.querySelectorAll<HTMLVideoElement>('video.reel-video').forEach((v) => {
+			v.removeAttribute('autoplay');
+			v.pause();
+		});
+	}
+</script>
+
+<style>
+	.reel-video {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 864 / 538;
+		background: var(--ink);
+	}
+</style>
