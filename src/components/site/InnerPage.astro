@@ -72,7 +72,7 @@ const key: PageKey = page;
 			{
 				t.items.map((s) => (
 					<li class="tp-step">
-						<p class="tp-step__n" aria-hidden="true">{s.number}</p>
+						{s.number && <p class="tp-step__n" aria-hidden="true">{s.number}</p>}
 						<p class="tp-step__k">{s.kicker}</p>
 						<h3 class="tp-step__t">{s.title}</h3>
 						<p class="tp-step__b">{s.body}</p>

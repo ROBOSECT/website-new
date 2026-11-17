@@ -225,15 +225,14 @@ export const copy = {
 			note: 'Every figure will come with its test conditions: [TBD: switchboard type, number of test points, date of measurement].',
 			products: {
 				id: 'products',
-				title: 'Three products, in steps',
-				intro: 'Start small with the reader, move up to the robot cell, and bring your schematics in whatever format you have them.',
+				title: 'Three products',
+				intro: 'A bench reader, a robot cell and a schematic converter. Each stands on its own, and all three work from your project data.',
 				more: 'All about the products',
-				stepLabel: 'Step',
 				items: [
 					{
 						name: 'Cable Reader',
 						status: 'Coming soon',
-						body: 'The semi-automatic entry product, for small switchboard builders.',
+						body: 'The semi-automatic bench unit, for small switchboard builders.',
 						cta: 'Ask us for a demo',
 					},
 					{
@@ -458,10 +457,10 @@ export const copy = {
 			products: {
 				metaTitle: 'Products',
 				metaDescription:
-					'Three products for switchboard testing, in steps: the Cable Reader, the CONTEST robot cell and schematic conversion. Start from your EPLAN project.',
+					'Three products for switchboard testing: the Cable Reader, the CONTEST robot cell and schematic conversion. Start from your EPLAN project.',
 				eyebrow: 'Products',
 				title: 'Three products for switchboard testing',
-				body: 'Whoever builds switchboards has to check every connection before the board leaves. We are building three ways to do it, in steps: a semi-automatic reader to start with, a robot cell that tests the whole project, and a tool that brings your schematics in. You can start from any of them.',
+				body: 'Whoever builds switchboards has to check every connection before the board leaves. We are building three ways to do it: a semi-automatic reader, a robot cell that tests the whole project, and a tool that brings your schematics in. Each one stands on its own: pick the one that fits how you work.',
 				pillars: [
 					{ title: 'It starts from your project', body: 'The tests are generated from your EPLAN connection list, not written by hand for each board.' },
 					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
@@ -471,18 +470,18 @@ export const copy = {
 				render: { alt: 'Render of the Cable Reader: a C-shaped bench unit with the camera head above a white base', caption: 'The Cable Reader, a render of the bench unit. It is a prototype under development.' },
 				diagram: null,
 				sectionTitle: 'The three, one by one',
-				sectionIntro: 'They share one thing: your project data. Start from what fits you and move up when you want.',
+				sectionIntro: 'They share one thing: your project data. Pick what fits you: each works alone, and they also work together.',
 				items: [
 					{
-						number: '01',
+						number: '',
 						kicker: 'Coming soon',
 						title: 'Cable Reader',
-						body: 'The semi-automatic entry product, for small switchboard builders. It is not on sale yet: ask us for a demo and tell us how you test today.',
+						body: 'The semi-automatic bench unit, for small switchboard builders. It is not on sale yet: ask us for a demo and tell us how you test today.',
 						specs: ['Semi-automatic: the operator stays in the loop', 'For small switchboard builders', 'Reads the cable labels from above, on a white backdrop', 'Polarised light cuts the glare on glossy sleeves', 'A status light tells the operator what to do', 'One USB-C cable to the PC'],
 						cta: 'Ask us for a demo',
 					},
 					{
-						number: '02',
+						number: '',
 						kicker: 'Fully automatic · prototype',
 						title: 'CONTEST cell',
 						body: 'For larger builders and companies with their own switchboard shop. Two collaborative arms with custom probes test every connection of the project and write the report.',
@@ -495,7 +494,7 @@ export const copy = {
 						cta: '',
 					},
 					{
-						number: '03',
+						number: '',
 						kicker: 'Software and service',
 						title: 'Schematic conversion',
 						body: 'Turns schematics that exist only as PDF into the structured data the other two need. It can also be used on its own.',
@@ -1022,15 +1021,14 @@ export const copy = {
 			note: 'Ogni numero arriverà con le sue condizioni di prova: [TBD: tipo di quadro, numero di punti di prova, data della misura].',
 			products: {
 				id: 'products',
-				title: 'Tre prodotti, a gradini',
-				intro: 'Parti in piccolo con il lettore, sali alla cella robotizzata e porta i tuoi schemi nel formato che hai.',
+				title: 'Tre prodotti',
+				intro: 'Un lettore da banco, una cella robotizzata e un convertitore di schemi. Ognuno sta in piedi da solo, e tutti e tre lavorano dai dati del tuo progetto.',
 				more: 'Tutto sui prodotti',
-				stepLabel: 'Passo',
 				items: [
 					{
 						name: 'Cable Reader',
 						status: 'In arrivo',
-						body: 'Il prodotto semiautomatico d’ingresso, per i piccoli costruttori di quadri.',
+						body: 'Il prodotto semiautomatico da banco, per i piccoli costruttori di quadri.',
 						cta: 'Chiedici una demo',
 					},
 					{
@@ -1254,10 +1252,10 @@ export const copy = {
 			products: {
 				metaTitle: 'Prodotti',
 				metaDescription:
-					'Tre prodotti per il collaudo dei quadri, a gradini: il Cable Reader, la cella robotizzata CONTEST e la conversione degli schemi. Si parte dal tuo progetto EPLAN.',
+					'Tre prodotti per il collaudo dei quadri: il Cable Reader, la cella robotizzata CONTEST e la conversione degli schemi. Si parte dal tuo progetto EPLAN.',
 				eyebrow: 'Prodotti',
 				title: 'Tre prodotti per il collaudo dei quadri',
-				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima che il quadro parta. Stiamo costruendo tre modi per farlo, a gradini: un lettore semiautomatico per cominciare, una cella robotizzata che collauda tutto il progetto e uno strumento che porta dentro i tuoi schemi. Puoi partire da uno qualsiasi.',
+				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima che il quadro parta. Stiamo costruendo tre modi per farlo: un lettore semiautomatico, una cella robotizzata che collauda tutto il progetto e uno strumento che porta dentro i tuoi schemi. Ognuno sta in piedi da solo: scegli quello che si adatta al tuo modo di lavorare.',
 				pillars: [
 					{ title: 'Parte dal tuo progetto', body: 'I collaudi si generano dalla tua lista di collegamenti EPLAN, non si scrivono a mano per ogni quadro.' },
 					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
@@ -1267,18 +1265,18 @@ export const copy = {
 				render: { alt: 'Render del Cable Reader: un’unità da banco a C con la testa della telecamera sopra una base bianca', caption: 'Il Cable Reader, un render dell’unità da banco. È un prototipo in sviluppo.' },
 				diagram: null,
 				sectionTitle: 'I tre, uno per uno',
-				sectionIntro: 'Hanno una cosa in comune: i dati del tuo progetto. Parti da quello che ti serve e sali quando vuoi.',
+				sectionIntro: 'Hanno una cosa in comune: i dati del tuo progetto. Scegli quello che ti serve: ognuno funziona da solo, e insieme funzionano anche meglio.',
 				items: [
 					{
-						number: '01',
+						number: '',
 						kicker: 'In arrivo',
 						title: 'Cable Reader',
-						body: 'Il prodotto semiautomatico d’ingresso, per i piccoli costruttori di quadri. Non è ancora in vendita: chiedici una demo e raccontaci come collaudi oggi.',
+						body: 'Il prodotto semiautomatico da banco, per i piccoli costruttori di quadri. Non è ancora in vendita: chiedici una demo e raccontaci come collaudi oggi.',
 						specs: ['Semiautomatico: l’operatore resta nel ciclo', 'Per i piccoli costruttori di quadri', 'Legge le etichette dei cavi dall’alto, su fondo bianco', 'La luce polarizzata toglie i riflessi dalle guaine lucide', 'Un segnale di stato dice all’operatore che cosa fare', 'Un solo cavo USB-C al PC'],
 						cta: 'Chiedici una demo',
 					},
 					{
-						number: '02',
+						number: '',
 						kicker: 'Completamente automatica · prototipo',
 						title: 'Cella CONTEST',
 						body: 'Per i costruttori più grandi e per le aziende con un reparto quadri interno. Due bracci collaborativi con puntali su misura provano ogni collegamento del progetto e scrivono il verbale.',
@@ -1291,7 +1289,7 @@ export const copy = {
 						cta: '',
 					},
 					{
-						number: '03',
+						number: '',
 						kicker: 'Software e servizio',
 						title: 'Conversione degli schemi',
 						body: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri due. Si può usare anche da sola.',
