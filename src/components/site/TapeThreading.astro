@@ -1,8 +1,11 @@
 ---
 /**
- * Packaging page: the three moments of threading a tape, as a clean sketch (find the tail, take it, thread and join).
- * Labels come from copy.pages.packaging.diagram. Colours are the site tokens, so it follows the theme.
+ * Packaging page: the simulation of threading a tape (muted loop, recorded from our own 3D model: scene only, no labels),
+ * then the three moments in words (find the tail, take it, thread and join). Texts come from copy.pages.packaging.diagram.
  */
+import poster from '../../assets/images/packaging/tape-threading-poster.jpg';
+import mp4 from '../../assets/videos/tape-threading.mp4';
+import webm from '../../assets/videos/tape-threading.webm';
 interface Step {
 	n: string;
 	t: string;
@@ -19,55 +22,17 @@ const { title, desc, caption, steps } = Astro.props;
 
 <figure class="tt" role="group" aria-label={title}>
 	<p class="tt__desc visually-hidden">{desc}</p>
+	<div class="tt__video">
+		<video width="864" height="538" autoplay muted loop playsinline preload="metadata" poster={poster.src} aria-label={desc}>
+			<source src={mp4} type="video/mp4" />
+			<source src={webm} type="video/webm" />
+		</video>
+	</div>
+	<figcaption class="tt__cap">{caption}</figcaption>
 	<ol class="tt__row">
 		{
-			steps.map((s, i) => (
+			steps.map((s) => (
 				<li class="tt__cell">
-					<svg viewBox="0 0 280 200" aria-hidden="true" focusable="false">
-						<rect x="0" y="0" width="280" height="200" class="bg" />
-						{i === 0 && (
-							<>
-								<circle cx="105" cy="100" r="70" class="reel" />
-								<circle cx="105" cy="100" r="58" class="web" />
-								<circle cx="105" cy="100" r="46" class="web" />
-								<circle cx="105" cy="100" r="34" class="web" />
-								<circle cx="105" cy="100" r="20" class="hub" />
-								<path d="M152 148 C176 160 206 168 236 166" class="tape" />
-								<path d="M236 166 l10 -1" class="tail" />
-								<circle cx="244" cy="165" r="16" class="focus" />
-								<rect x="196" y="22" width="52" height="22" rx="4" class="cam" />
-								<circle cx="222" cy="33" r="6" class="lens" />
-								<path d="M222 46 L244 150 M222 46 L246 150" class="ray" />
-							</>
-						)}
-						{i === 1 && (
-							<>
-								<circle cx="90" cy="110" r="64" class="reel" />
-								<circle cx="90" cy="110" r="52" class="web" />
-								<circle cx="90" cy="110" r="40" class="web" />
-								<circle cx="90" cy="110" r="18" class="hub" />
-								<path d="M138 150 C164 140 192 112 214 96" class="tape" />
-								<path d="M214 96 l12 -8" class="tail" />
-								<path d="M212 76 L232 84 L222 106" class="jaw" />
-								<path d="M232 84 L258 36" class="arm" />
-								<path d="M170 30 C188 22 208 24 224 36 M224 36 l-9 -1 M224 36 l-3 8" class="move" />
-							</>
-						)}
-						{i === 2 && (
-							<>
-								<circle cx="40" cy="64" r="22" class="roller" />
-								<circle cx="40" cy="64" r="5" class="hub" />
-								<circle cx="108" cy="140" r="22" class="roller" />
-								<circle cx="108" cy="140" r="5" class="hub" />
-								<circle cx="176" cy="64" r="22" class="roller" />
-								<circle cx="176" cy="64" r="5" class="hub" />
-								<path d="M-4 86 L40 86 M40 86 A22 22 0 0 1 40 42" class="tape" />
-								<path d="M40 42 L108 118 M108 118 A22 22 0 0 0 108 162 L176 86 M176 86 A22 22 0 0 0 176 42 L218 42" class="tape" />
-								<rect x="216" y="36" width="12" height="12" rx="2" class="splice" />
-								<path d="M228 42 L284 42" class="old" />
-							</>
-						)}
-					</svg>
 					<p class="tt__n" aria-hidden="true">{s.n}</p>
 					<h3 class="tt__t">{s.t}</h3>
 					<p class="tt__b">{s.b}</p>
@@ -75,18 +40,37 @@ const { title, desc, caption, steps } = Astro.props;
 			))
 		}
 	</ol>
-	<figcaption class="tt__cap">{caption}</figcaption>
 </figure>
+
+<script>
+	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		document.querySelectorAll<HTMLVideoElement>('.tt__video video').forEach((v) => {
+			v.removeAttribute('autoplay');
+			v.pause();
+		});
+	}
+</script>
 
 <style>
 	.tt {
 		margin-top: 40px;
 	}
 
+	.tt__video video {
+		display: block;
+		width: 100%;
+		max-width: 960px;
+		height: auto;
+		aspect-ratio: 864 / 538;
+		background: var(--ink);
+		border-radius: 0 0 0 var(--bend);
+	}
+
 	.tt__row {
 		list-style: none;
 		display: grid;
-		gap: 28px;
+		gap: 24px;
+		margin-top: 28px;
 	}
 
 	.tt__cell {
@@ -94,116 +78,7 @@ const { title, desc, caption, steps } = Astro.props;
 		position: relative;
 	}
 
-	.tt__cell svg {
-		display: block;
-		width: 100%;
-		height: auto;
-		overflow: hidden;
-		border-radius: 0 0 0 var(--bend);
-	}
-
-	.bg {
-		fill: var(--mist);
-	}
-
-	.reel {
-		fill: var(--white);
-		stroke: var(--ink);
-		stroke-width: 2;
-	}
-
-	.web {
-		fill: none;
-		stroke: var(--blue);
-		stroke-width: 2;
-		opacity: 0.55;
-	}
-
-	.hub {
-		fill: var(--mist);
-		stroke: var(--ink);
-		stroke-width: 2;
-	}
-
-	.tape {
-		fill: none;
-		stroke: var(--blue);
-		stroke-width: 5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-	}
-
-	.tail {
-		fill: none;
-		stroke: var(--cu-deep);
-		stroke-width: 5;
-		stroke-linecap: round;
-	}
-
-	.focus {
-		fill: none;
-		stroke: var(--cu-deep);
-		stroke-width: 2;
-		stroke-dasharray: 4 4;
-	}
-
-	.cam {
-		fill: var(--ink);
-	}
-
-	.lens {
-		fill: var(--mist);
-	}
-
-	.ray {
-		fill: none;
-		stroke: var(--steel);
-		stroke-width: 1.5;
-		stroke-dasharray: 3 4;
-	}
-
-	.jaw {
-		fill: none;
-		stroke: var(--ink);
-		stroke-width: 4;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-	}
-
-	.arm {
-		fill: none;
-		stroke: var(--ink);
-		stroke-width: 8;
-		stroke-linecap: round;
-	}
-
-	.move {
-		fill: none;
-		stroke: var(--cu-deep);
-		stroke-width: 2.5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-	}
-
-	.roller {
-		fill: var(--white);
-		stroke: var(--ink);
-		stroke-width: 2;
-	}
-
-	.splice {
-		fill: var(--cu-deep);
-	}
-
-	.old {
-		fill: none;
-		stroke: var(--steel);
-		stroke-width: 5;
-		stroke-linecap: round;
-	}
-
 	.tt__n {
-		margin-top: 14px;
 		font-family: var(--font-mono);
 		font-size: 13px;
 		letter-spacing: 0.06em;
@@ -223,7 +98,7 @@ const { title, desc, caption, steps } = Astro.props;
 	}
 
 	.tt__cap {
-		margin-top: 20px;
+		margin-top: 12px;
 		font-size: 15px;
 		line-height: 1.45;
 		color: var(--steel);

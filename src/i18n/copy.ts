@@ -523,9 +523,9 @@ export const copy = {
 				photo: null,
 				render: null,
 				diagram: {
-					title: 'Threading the tape, in three moments',
-					desc: 'Three sketches: a camera finds the loose end of the tape under the reel, a gripper takes it, the tape is led through rollers and joined to the old one.',
-					caption: 'Simulation. A sketch of the steps we are developing, not a finished machine.',
+					title: 'Threading the tape, in simulation',
+					desc: 'Animation of a robot arm carrying a tape off a reel, over three rollers and through the exit clamp.',
+					caption: 'Simulation. The arm carries the tape over the rollers and into the clamp. The steps we are developing, not a finished machine.',
 					steps: [
 						{ n: '1', t: 'Find the tail', b: 'A camera looks for the loose end of the tape under the reel.' },
 						{ n: '2', t: 'Take it', b: 'A gripper picks up the end.' },
@@ -1319,9 +1319,9 @@ export const copy = {
 				photo: null,
 				render: null,
 				diagram: {
-					title: 'L’infilaggio del nastro, in tre tempi',
-					desc: 'Tre disegni: una telecamera trova il capo libero del nastro sotto la bobina, una pinza lo prende, il nastro viene condotto tra i rulli e giuntato al vecchio.',
-					caption: 'Simulazione. Uno schema dei passaggi che stiamo sviluppando, non una macchina finita.',
+					title: 'L’infilaggio del nastro, in simulazione',
+					desc: 'Animazione di un braccio robotico che porta un nastro dalla bobina, sopra tre rulli e dentro la pinza d’uscita.',
+					caption: 'Simulazione. Il braccio porta il nastro sopra i rulli e dentro la pinza. I passaggi che stiamo sviluppando, non una macchina finita.',
 					steps: [
 						{ n: '1', t: 'Trovare la coda', b: 'Una telecamera cerca il capo libero del nastro sotto la bobina.' },
 						{ n: '2', t: 'Prenderla', b: 'Una pinza afferra il capo.' },
