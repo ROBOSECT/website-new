@@ -294,7 +294,7 @@ export const copy = {
 				},
 				{
 					name: 'Patented technology',
-					detail: 'Italian patent 102023000014613, extended to the EU: vision-based recognition and localisation of wired components in electrical panels.',
+					detail: 'Italian patent 102023000014613, extended to the EU.',
 					logoAlt: '',
 					mark: 'PATENT',
 				},
@@ -1112,7 +1112,7 @@ export const copy = {
 				},
 				{
 					name: 'Tecnologia brevettata',
-					detail: 'Brevetto italiano 102023000014613, esteso all’UE: riconoscimento e localizzazione con la visione dei componenti cablati nei quadri elettrici.',
+					detail: 'Brevetto italiano 102023000014613, esteso all’UE.',
 					logoAlt: '',
 					mark: 'BREVETTO',
 				},
