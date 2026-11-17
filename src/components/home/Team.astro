@@ -46,18 +46,22 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 							<p class="person__role">
 								<Rich text={person.role} />
 							</p>
-							<p class="person__bio">
-								<Rich text={person.bio} />
-							</p>
-							<p class="person__link">
-								{isTbd(person.name) ? (
-									<Rich text={person.linkedinLabel} />
-								) : (
-									<>
-										{person.linkedinLabel}: <span class="tbd">{linkedinTbd}</span>
-									</>
-								)}
-							</p>
+							{person.bio ? (
+								<p class="person__bio">
+									<Rich text={person.bio} />
+								</p>
+							) : null}
+							{person.linkedinLabel ? (
+								<p class="person__link">
+									{isTbd(person.name) ? (
+										<Rich text={person.linkedinLabel} />
+									) : (
+										<>
+											{person.linkedinLabel}: <span class="tbd">{linkedinTbd}</span>
+										</>
+									)}
+								</p>
+							) : null}
 						</div>
 					</li>
 				))
