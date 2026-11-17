@@ -237,7 +237,7 @@ export const copy = {
 						forWhom: 'Small switchboard builders',
 					},
 					{
-						name: 'CONTEST cell',
+						name: 'Quality Control Cell',
 						status: 'In validation',
 						body: 'A robot cell with two collaborative arms that tests every connection of the project and writes the report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
@@ -438,7 +438,7 @@ export const copy = {
 			applications: [
 				{
 					title: 'Automatic switchboard testing',
-					body: 'Continuity testing generated from the CAD/EPLAN connection list and carried out by robots, with a digital test report. This is the CONTEST cell, being validated in the AIRISE.eu project, where visual inspection of assembly defects and cable-marker reading are in development.',
+					body: 'Continuity testing generated from the CAD/EPLAN connection list and carried out by robots, with a digital test report. This is the Quality Control Cell, being validated in the AIRISE.eu project, where visual inspection of assembly defects and cable-marker reading are in development.',
 					status: 'In validation',
 				},
 				{
@@ -470,14 +470,14 @@ export const copy = {
 			products: {
 				metaTitle: 'Products',
 				metaDescription:
-					'Four products: the Cable Reader, the CONTEST robot cell and schematic conversion for switchboard testing, and a reel-change cell for packaging machines.',
+					'Four products: the Cable Reader, the Quality Control Cell and schematic conversion for switchboard testing, and a reel-change cell for packaging machines.',
 				eyebrow: 'Products',
 				title: 'Four products, from switchboards to reels',
 				body: 'Whoever builds switchboards has to check every connection before the board leaves. For that we are building three tools: a semi-automatic reader, a robot cell that tests the whole project, and a tool that turns PDF schematics into data. The fourth is for automatic packaging machines: a cell that changes the reel. Pick the one that fits how you work.',
 				pillars: [
 					{ title: 'It starts from your project', body: 'For switchboards, the tests are generated from your EPLAN connection list, not written by hand for each board.' },
 					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
-					{ title: 'Honest about the stage', body: 'Each card says its stage: prototype, in validation or in development. The CONTEST cell is being validated in the AIRISE.eu project. Ask us what is ready today.' },
+					{ title: 'Honest about the stage', body: 'Each card says its stage: prototype, in validation or in development. The Quality Control Cell is being validated in the AIRISE.eu project. Ask us what is ready today.' },
 				],
 				photo: { alt: 'A switchboard laid on the bench, seen from above, wired and ready to be tested', caption: 'A switchboard on the bench, seen from above. A still from the demo video.' },
 				diagram: null,
@@ -499,7 +499,7 @@ export const copy = {
 						media: 'cell',
 						alt: 'Two collaborative robot arms over a terminal block: one carries a test probe pointing down',
 						status: 'In validation',
-						name: 'CONTEST cell',
+						name: 'Quality Control Cell',
 						line: 'A robot cell with two collaborative arms that tests every connection of the project and writes the report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
 						cta: 'Ask us for a demo',
@@ -1055,7 +1055,7 @@ export const copy = {
 						forWhom: 'Piccoli costruttori di quadri',
 					},
 					{
-						name: 'Cella CONTEST',
+						name: 'Quality Control Cell',
 						status: 'In validazione',
 						body: 'Una cella robotizzata con due bracci collaborativi che prova ogni collegamento del progetto e scrive il verbale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
@@ -1256,7 +1256,7 @@ export const copy = {
 			applications: [
 				{
 					title: 'Collaudo automatico dei quadri elettrici',
-					body: 'Prova di continuità generata dalla lista collegamenti CAD/EPLAN ed eseguita dai robot, con verbale di collaudo digitale. È la cella CONTEST, in validazione nel progetto AIRISE.eu, dove sono in sviluppo l’ispezione visiva dei difetti di montaggio e la lettura delle siglature dei cavi.',
+					body: 'Prova di continuità generata dalla lista collegamenti CAD/EPLAN ed eseguita dai robot, con verbale di collaudo digitale. È la Quality Control Cell, in validazione nel progetto AIRISE.eu, dove sono in sviluppo l’ispezione visiva dei difetti di montaggio e la lettura delle siglature dei cavi.',
 					status: 'In validazione',
 				},
 				{
@@ -1287,14 +1287,14 @@ export const copy = {
 			products: {
 				metaTitle: 'Prodotti',
 				metaDescription:
-					'Quattro prodotti: il Cable Reader, la cella robotizzata CONTEST e la conversione degli schemi per il collaudo dei quadri, e una cella cambio bobina per le macchine di confezionamento.',
+					'Quattro prodotti: il Cable Reader, la Quality Control Cell e la conversione degli schemi per il collaudo dei quadri, e una cella cambio bobina per le macchine di confezionamento.',
 				eyebrow: 'Prodotti',
 				title: 'Quattro prodotti, dai quadri alle bobine',
 				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima della consegna. Per questo stiamo costruendo tre strumenti: un lettore semiautomatico, una cella robotizzata che collauda tutto il progetto e uno strumento che trasforma gli schemi in PDF in dati. Il quarto è per le macchine automatiche per il confezionamento: una cella che cambia la bobina. Scegli quello che si adatta al tuo modo di lavorare.',
 				pillars: [
 					{ title: 'Parte dal tuo progetto', body: 'Per i quadri, i collaudi si generano dalla tua lista di collegamenti EPLAN, non si scrivono a mano per ogni quadro.' },
 					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
-					{ title: 'Chiari sullo stato', body: 'Ogni scheda dice a che punto è: prototipo, in validazione o in sviluppo. La cella CONTEST è in validazione nel progetto AIRISE.eu. Chiedici che cosa è pronto oggi.' },
+					{ title: 'Chiari sullo stato', body: 'Ogni scheda dice a che punto è: prototipo, in validazione o in sviluppo. La Quality Control Cell è in validazione nel progetto AIRISE.eu. Chiedici che cosa è pronto oggi.' },
 				],
 				photo: { alt: 'Un quadro elettrico sul banco, visto dall’alto, cablato e pronto da collaudare', caption: 'Un quadro elettrico sul banco, visto dall’alto. Un fotogramma del video della demo.' },
 				diagram: null,
@@ -1316,7 +1316,7 @@ export const copy = {
 						media: 'cell',
 						alt: 'Due bracci robotici collaborativi sopra una morsettiera: uno porta un puntale di prova rivolto in basso',
 						status: 'In validazione',
-						name: 'Cella CONTEST',
+						name: 'Quality Control Cell',
 						line: 'Una cella robotizzata con due bracci collaborativi che prova ogni collegamento del progetto e scrive il verbale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 						cta: 'Chiedici una demo',
