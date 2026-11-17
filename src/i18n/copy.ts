@@ -524,7 +524,7 @@ export const copy = {
 				items: [
 					{ number: '01', kicker: 'Load', title: 'Bring the new reel to the machine', body: 'Find the reel, pick it up and place it on the unwinder.', specs: ['Reels of film, paper and tape', '[TBD: formats and weights the demo covers]'], cta: '' },
 					{ number: '02', kicker: 'Thread', title: 'Feed the web along its path', body: 'Take the free end of the web and lead it through the machine, past rollers and guides.', specs: ['A web that bends and does not hold its shape', 'The path is different on every machine'], cta: '' },
-					{ number: '03', kicker: 'Splice', title: 'Join the new web to the old one', body: 'Join the two webs so the machine keeps running.', specs: ['Joining film, paper or tape', 'Checked before the machine restarts'], cta: '' },
+					{ number: '03', kicker: 'Splice', title: 'Join the new web to the old one', body: 'Join the two webs so the machine keeps running.', specs: ['Joining film, paper or tape'], cta: '' },
 				],
 				targetsTitle: '',
 				targets: '',
@@ -1305,7 +1305,7 @@ export const copy = {
 				items: [
 					{ number: '01', kicker: 'Caricare', title: 'Portare la bobina nuova alla macchina', body: 'Trovare la bobina, prenderla e metterla sullo svolgitore.', specs: ['Bobine di film, carta e nastro', '[TBD: formati e pesi che la demo copre]'], cta: '' },
 					{ number: '02', kicker: 'Infilare', title: 'Far passare il nastro lungo il suo percorso', body: 'Prendere il capo libero del nastro e guidarlo dentro la macchina, tra rulli e guide.', specs: ['Un nastro che si piega e non tiene la forma', 'Il percorso cambia da macchina a macchina'], cta: '' },
-					{ number: '03', kicker: 'Giuntare', title: 'Unire il nastro nuovo al vecchio', body: 'Unire i due nastri perché la macchina non si fermi.', specs: ['Giunta di film, carta o nastro', 'Controllata prima che la macchina riparta'], cta: '' },
+					{ number: '03', kicker: 'Giuntare', title: 'Unire il nastro nuovo al vecchio', body: 'Unire i due nastri perché la macchina non si fermi.', specs: ['Giunta di film, carta o nastro'], cta: '' },
 				],
 				targetsTitle: '',
 				targets: '',
