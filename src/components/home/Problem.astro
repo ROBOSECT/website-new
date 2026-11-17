@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import imgBoard from '../../assets/images/home/demo-board.jpg';
-import imgVariant from '../../assets/images/home/demo-located.jpg';
+import imgVision from '../../assets/images/home/demo-located.jpg';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
 
@@ -11,88 +10,43 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].problem;
 
-const L = {
-	en: {
-		alts: [
-			'An electrical switchboard seen from above: modules, terminal blocks and a socket, wired in blue between grey ducts',
-			'The same switchboard as the robot’s vision sees it: each of its 25 components outlined in green where it was found',
-		],
-		list: 'Drawing of a connection list ticked by hand: some rows have a tick, two are blank',
-	},
-	it: {
-		alts: [
-			'Un quadro elettrico visto dall’alto: moduli, morsettiere e una presa, cablati in blu tra canaline grigie',
-			'Lo stesso quadro come lo vede la visione del robot: ciascuno dei 25 componenti contornato in verde dove è stato trovato',
-		],
-		list: 'Disegno di una lista collegamenti spuntata a mano: alcune righe hanno il segno, due sono vuote',
-	},
+const alt = {
+	en: 'The switchboard as the robot’s vision sees it: each of its 25 components outlined in green where it was found',
+	it: 'Il quadro come lo vede la visione del robot: ciascuno dei 25 componenti contornato in verde dove è stato trovato',
 }[lang];
-const images = [imgBoard, imgVariant];
-// the hand-ticked list: rows (y), ticked or left blank
-const rows = [0, 1, 2, 3, 4, 5].map((i) => ({ y: 58 + i * 34, tick: i !== 2 && i !== 4, w: [150, 120, 168, 136, 156, 112][i] }));
 ---
 
 <Compartment n={1} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
-	<ul class="pts">
+	<div class="pts">
+		<figure class="pts__img" data-b>
+			<Image src={imgVision} alt={alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 560px, (min-width: 700px) 90vw, 100vw" loading="lazy" />
+		</figure>
 		{
 			p.points.map((pt, i) => (
-				<li class="pt" data-b>
-					<figure class="pt__img">
-						{images[i] ? (
-							<Image src={images[i]!} alt={L.alts[i]} widths={[320, 480, 720]} sizes="(min-width: 1100px) 400px, (min-width: 700px) 30vw, 104px" loading="lazy" />
-						) : (
-							<svg class="pt__list" viewBox="0 0 320 260" preserveAspectRatio="xMidYMid slice" role="img" aria-label={L.list}>
-								<rect x="0" y="0" width="320" height="260" fill="#E2E6EB" stroke="none" />
-								<rect x="48" y="24" width="224" height="236" fill="#FFFFFF" stroke="none" />
-								<rect x="72" y="34" width="96" height="6" fill="#5A6676" stroke="none" />
-								{rows.map((r) => (
-									<g>
-										<rect x="72" y={r.y} width="14" height="14" fill="none" stroke="#5A6676" stroke-width="2" />
-										<rect x="98" y={r.y + 5} width={r.w} height="4" fill="#9AA6B5" stroke="none" />
-										{r.tick ? (
-											<path d={`M74 ${r.y + 7} l4 5 l8 -11`} fill="none" stroke="#0D1B2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-										) : (
-											<rect x="66" y={r.y - 6} width="26" height="26" fill="none" stroke="#173C78" stroke-width="2" stroke-dasharray="4 3" />
-										)}
-									</g>
-								))}
-							</svg>
-						)}
-					</figure>
-					<div class="pt__text">
-						<h3>{pt.title}</h3>
-						<p>{pt.body}</p>
-					</div>
-				</li>
+				<div class={`pt pt--${i + 1}`} data-b>
+					<h3>{pt.title}</h3>
+					<p>{pt.body}</p>
+				</div>
 			))
 		}
-	</ul>
+	</div>
 	<p class="closing" data-b>{p.closing}</p>
 </Compartment>
 
 <style>
 	.pts {
-		list-style: none;
 		display: grid;
 		gap: 28px;
 	}
 
-	.pt {
-		display: grid;
-		grid-template-columns: 104px minmax(0, 1fr);
-		gap: 16px;
-		align-items: start;
-	}
-
-	.pt__img {
-		aspect-ratio: 1;
+	.pts__img {
 		overflow: hidden;
 		border-radius: 0 0 0 var(--bend);
 		background: var(--mist);
+		aspect-ratio: 4 / 3;
 	}
 
-	.pt__img :global(img),
-	.pt__list {
+	.pts__img :global(img) {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -120,19 +74,16 @@ const rows = [0, 1, 2, 3, 4, 5].map((i) => ({ y: 58 + i * 34, tick: i !== 2 && i
 		color: var(--blue);
 	}
 
+	/* tablet: the photo across the top, the three problems in a row under it */
 	@media (min-width: 700px) {
 		.pts {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 40px var(--gap);
+			gap: 32px var(--gap);
 		}
 
-		.pt {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 18px;
-		}
-
-		.pt__img {
-			aspect-ratio: 4 / 3;
+		.pts__img {
+			grid-column: 1 / -1;
+			aspect-ratio: 16 / 7;
 		}
 
 		.pt h3 {
@@ -145,9 +96,34 @@ const rows = [0, 1, 2, 3, 4, 5].map((i) => ({ y: 58 + i * 34, tick: i !== 2 && i
 		}
 	}
 
+	/* desktop: the photo in the middle, two problems on its left, one on its right */
 	@media (min-width: 1100px) {
 		.pts {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) minmax(0, 1fr);
+			grid-template-rows: auto auto;
+			align-items: center;
+			gap: 40px var(--gap);
+		}
+
+		.pts__img {
+			grid-column: 2;
+			grid-row: 1 / 3;
+			aspect-ratio: 4 / 3;
+		}
+
+		.pt--1 {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		.pt--2 {
+			grid-column: 1;
+			grid-row: 2;
+		}
+
+		.pt--3 {
+			grid-column: 3;
+			grid-row: 1 / 3;
 		}
 
 		.pt p {
