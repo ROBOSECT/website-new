@@ -239,7 +239,7 @@ export const copy = {
 					{
 						name: 'Quality Control Cell',
 						status: 'In validation',
-						body: 'A robot cell with two collaborative arms that tests every connection of the project and writes the report.',
+						body: 'A robot cell with two collaborative arms: it tests every connection from your EPLAN list, and each switchboard leaves with its digital report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
 					},
 					{
@@ -474,12 +474,8 @@ export const copy = {
 				eyebrow: 'Products',
 				title: 'Four products, from switchboards to reels',
 				body: 'Whoever builds switchboards has to check every connection before the board leaves. For that we are building three tools: a semi-automatic reader, a robot cell that tests the whole project, and a tool that turns PDF schematics into data. The fourth is for automatic packaging machines: a cell that changes the reel. Pick the one that fits how you work.',
-				pillars: [
-					{ title: 'It starts from your project', body: 'For switchboards, the tests are generated from your EPLAN connection list, not written by hand for each board.' },
-					{ title: 'A report for every board', body: 'Every switchboard leaves with its digital test report.' },
-					{ title: 'Honest about the stage', body: 'Each card says its stage: prototype, in validation or in development. The Quality Control Cell is being validated in the AIRISE.eu project. Ask us what is ready today.' },
-				],
-				photo: { alt: 'Two collaborative arms over a wired switchboard, one probe touching a terminal', caption: 'Two arms test a wired switchboard. A still from the demo video.' },
+				pillars: [],
+				photo: null,
 				diagram: null,
 				sectionTitle: 'The four, one by one',
 				sectionIntro: 'The first three share one thing: your project data. The reel-change cell comes from the same work on deformable objects. Each one works on its own.',
@@ -496,10 +492,10 @@ export const copy = {
 					},
 					{
 						media: 'cell',
-						alt: 'Two collaborative robot arms over a terminal block: one carries a test probe pointing down',
+						alt: 'Two collaborative arms over a wired switchboard, one probe touching a terminal',
 						status: 'In validation',
 						name: 'Quality Control Cell',
-						line: 'A robot cell with two collaborative arms that tests every connection of the project and writes the report.',
+						line: 'A robot cell with two collaborative arms: it tests every connection from your EPLAN list, and each switchboard leaves with its digital report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
 						cta: 'Ask us for a demo',
 					},
@@ -1053,7 +1049,7 @@ export const copy = {
 					{
 						name: 'Quality Control Cell',
 						status: 'In validazione',
-						body: 'Una cella robotizzata con due bracci collaborativi che prova ogni collegamento del progetto e scrive il verbale.',
+						body: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della tua lista EPLAN e ogni quadro esce con il suo verbale digitale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 					},
 					{
@@ -1287,12 +1283,8 @@ export const copy = {
 				eyebrow: 'Prodotti',
 				title: 'Quattro prodotti, dai quadri alle bobine',
 				body: 'Chi costruisce quadri elettrici deve controllare ogni collegamento prima della consegna. Per questo stiamo costruendo tre strumenti: un lettore semiautomatico, una cella robotizzata che collauda tutto il progetto e uno strumento che trasforma gli schemi in PDF in dati. Il quarto è per le macchine automatiche per il confezionamento: una cella che cambia la bobina. Scegli quello che si adatta al tuo modo di lavorare.',
-				pillars: [
-					{ title: 'Parte dal tuo progetto', body: 'Per i quadri, i collaudi si generano dalla tua lista di collegamenti EPLAN, non si scrivono a mano per ogni quadro.' },
-					{ title: 'Un verbale per ogni quadro', body: 'Ogni quadro esce con il suo verbale di collaudo digitale.' },
-					{ title: 'Chiari sullo stato', body: 'Ogni scheda dice a che punto è: prototipo, in validazione o in sviluppo. La Quality Control Cell è in validazione nel progetto AIRISE.eu. Chiedici che cosa è pronto oggi.' },
-				],
-				photo: { alt: 'Due bracci collaborativi sopra un quadro cablato, un puntale tocca un morsetto', caption: 'Due bracci provano un quadro cablato. Un fotogramma del video della demo.' },
+				pillars: [],
+				photo: null,
 				diagram: null,
 				sectionTitle: 'I quattro, uno per uno',
 				sectionIntro: 'I primi tre hanno una cosa in comune: i dati del tuo progetto. La cella cambio bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona anche da solo.',
@@ -1309,10 +1301,10 @@ export const copy = {
 					},
 					{
 						media: 'cell',
-						alt: 'Due bracci robotici collaborativi sopra una morsettiera: uno porta un puntale di prova rivolto in basso',
+						alt: 'Due bracci collaborativi sopra un quadro cablato, un puntale tocca un morsetto',
 						status: 'In validazione',
 						name: 'Quality Control Cell',
-						line: 'Una cella robotizzata con due bracci collaborativi che prova ogni collegamento del progetto e scrive il verbale.',
+						line: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della tua lista EPLAN e ogni quadro esce con il suo verbale digitale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 						cta: 'Chiedici una demo',
 					},

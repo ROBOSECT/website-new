@@ -27,6 +27,7 @@ const key: PageKey = page;
 <BaseLayout title={t.metaTitle} description={t.metaDescription} lang={lang} alternates={{ en: pagePath('en', key), it: pagePath('it', key) }}>
 	<PageHeader title={t.title} intro={t.body} back={{ href: homePath(lang), label: t.back }} />
 
+	{page !== 'products' && (
 	<section class="tp tp--intro wrap" aria-label={t.eyebrow}>
 		<div class:list={['tp-intro', { 'tp-intro--solo': !t.photo }]}>
 			<div class="tp-intro__text">
@@ -53,6 +54,7 @@ const key: PageKey = page;
 			}
 		</div>
 	</section>
+	)}
 
 	<section class="tp tp--platform wrap" aria-labelledby="tp-items">
 		<h2 id="tp-items" class="tp-h">{t.sectionTitle}</h2>

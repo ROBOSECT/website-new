@@ -6,7 +6,7 @@
  */
 import { Image } from 'astro:assets';
 import reader from '../../assets/images/products/cable-reader.jpg';
-import cell from '../../assets/images/home/demo-two-probes.jpg';
+import cell from '../../assets/images/products/quality-control-cell.jpg';
 import schemes from '../../assets/images/products/schematic-conversion.jpg';
 import ReelVideo from './ReelVideo.astro';
 import { homePath } from '../../lib/i18n';
@@ -36,7 +36,7 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 			<li class="pc__card">
 				<div class="pc__media">
 					{c.media === 'reader' && <Image src={reader} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
-					{c.media === 'cell' && <Image src={cell} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
+					{c.media === 'cell' && <Image class="pc__img--cell" src={cell} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 					{c.media === 'reel' && <ReelVideo label={c.alt} lang={lang} />}
 					{c.media === 'schemes' && <Image src={schemes} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 				</div>
@@ -86,6 +86,11 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	/* the switchboard and the probe are in the lower part of the still: crop from the top, not the bottom */
+	.pc__media :global(img.pc__img--cell) {
+		object-position: 50% 78%;
 	}
 
 	.pc__body {
