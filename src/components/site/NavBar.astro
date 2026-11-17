@@ -1,7 +1,7 @@
 ---
 import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
 import { copy, type Lang } from '../../i18n/copy';
-import { homePath, pagePath, sectionHref, type PageKey } from '../../lib/i18n';
+import { homePath, sectionHref } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -36,19 +36,13 @@ const logo = logoRaw
 		<nav class="nav__menu" id="site-menu" aria-label={lang === 'it' ? 'Principale' : 'Main'}>
 			<ul class="nav__links">
 				{
-					t.nav.links.map((l) =>
-						l.page ? (
-							<li>
-								<a href={pagePath(lang, l.page as PageKey)}>{l.label}</a>
-							</li>
-						) : (
-							<li>
-								<a href={sectionHref(lang, l.id, isHome)} data-nav-link={l.id}>
-									{l.label}
-								</a>
-							</li>
-						),
-					)
+					t.nav.links.map((l) => (
+						<li>
+							<a href={sectionHref(lang, l.anchor, isHome)} data-nav-link={l.id}>
+								{l.label}
+							</a>
+						</li>
+					))
 				}
 			</ul>
 			<a class="nav__lang" href={langHref} hreflang={other} lang={other} aria-label={t.nav.langSwitch.ariaLabel}>
@@ -275,7 +269,7 @@ const logo = logoRaw
 		transform: translateY(-4px) rotate(-45deg);
 	}
 
-	@media (max-width: 1279px) {
+	@media (max-width: 1099px) {
 		.nav__bar {
 			gap: 16px;
 		}

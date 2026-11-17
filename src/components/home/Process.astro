@@ -8,7 +8,6 @@
  */
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
-import { techPath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -116,13 +115,7 @@ const WIRES = TB.filter((_, i) => i % 2 === 0);
 		<figcaption class="demo__cap">{d.caption}</figcaption>
 	</figure>
 
-	<p class="tech-line" data-b>
-		<span>{p.techLine.text}</span>
-		<a class="text-link" href={techPath(lang)}>
-			{p.techLine.link}
-			<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-		</a>
-	</p>
+	<p class="tech-line" data-b>{p.techLine.text}</p>
 </Compartment>
 
 <style>

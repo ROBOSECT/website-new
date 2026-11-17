@@ -1,6 +1,6 @@
 ---
 /**
- * Also for you: everyone who does not build switchboards, three short cards. Wiring harness makers and remanufacturers;
+ * Also for you: everyone who does not build switchboards, three short cards, then engineering and R&D for hire (#work). Wiring harness makers and remanufacturers;
  * robot cells and integrators (invited to work with us); any other manipulation of parts that are hard to handle. Maturity
  * stated on each.
  * (+C5's vignette: the camera reads the lead's wire marker and checks it against the connection list.)
@@ -80,6 +80,21 @@ const L = {
 			))
 		}
 	</div>
+	<div class="work" id={a.work.id} data-b>
+		<h3 class="work__h">{a.work.title}</h3>
+		<p class="work__intro">{a.work.intro}</p>
+		<ul class="work__list">
+			{
+				a.work.items.map((w) => (
+					<li class="w">
+						<p class="w__k">{w.kicker}</p>
+						<h4 class="w__t">{w.title}</h4>
+						<p class="w__b">{w.body}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
 	<p class="alts__cta" data-b>
 		<a class="text-link" href="#contact">
 			{a.cta}
@@ -140,6 +155,58 @@ const L = {
 		margin-top: 32px;
 	}
 
+	/* engineering and R&D for hire: three short cards under the three audiences */
+	.work {
+		margin-top: 56px;
+	}
+
+	.work__h {
+		font-size: 24px;
+		line-height: 1.2;
+	}
+
+	.work__intro {
+		margin-top: 8px;
+		font-size: 16px;
+		line-height: 1.5;
+		max-width: 46em;
+		color: var(--steel);
+	}
+
+	.work__list {
+		list-style: none;
+		display: grid;
+		gap: 28px;
+		margin-top: 24px;
+	}
+
+	.w {
+		min-width: 0;
+		padding-top: 14px;
+		border-top: 4px solid var(--blue);
+	}
+
+	.w__k {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--blue);
+	}
+
+	.w__t {
+		margin-top: 6px;
+		font-size: 19px;
+		line-height: 1.25;
+	}
+
+	.w__b {
+		margin-top: 8px;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
 	@media (min-width: 700px) {
 		.alts {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -154,6 +221,15 @@ const L = {
 
 		.alts {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.work {
+			margin-top: 80px;
+		}
+
+		.work__list {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 28px var(--gap);
 		}
 
 		.alts__cta {

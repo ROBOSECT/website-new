@@ -1,7 +1,7 @@
 ---
 /**
  * The four products, one card each, always in the same order: media, stage, name, what it does, who it is for, action.
- * Texts from copy.pages.products.cards. The media is a key: the Cable Reader render, a still of the Quality Control Cell,
+ * Texts from copy.benefits.products.cards (the reel-change card adds a note on what has been seen so far). The media is a key: the Cable Reader render, a still of the Quality Control Cell,
  * the rebuilt switchboard for schematic conversion, the tape-threading simulation for the reel-change cell.
  */
 import { Image } from 'astro:assets';
@@ -9,7 +9,6 @@ import reader from '../../assets/images/products/cable-reader.jpg';
 import cell from '../../assets/images/products/quality-control-cell.jpg';
 import schemes from '../../assets/images/products/schematic-conversion.jpg';
 import ReelVideo from './ReelVideo.astro';
-import { homePath } from '../../lib/i18n';
 import type { Lang } from '../../i18n/copy';
 
 interface Card {
@@ -19,18 +18,21 @@ interface Card {
 	name: string;
 	line: string;
 	forWhom: string;
+	note: string;
 	cta: string;
 }
 interface Props {
 	lang: Lang;
 	forLabel: string;
 	cards: readonly Card[];
+	/** on the dark compartment (the home's «What you get») */
+	dark?: boolean;
 }
-const { lang, forLabel, cards } = Astro.props;
+const { lang, forLabel, cards, dark = false } = Astro.props;
 const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 ---
 
-<ul class="pc">
+<ul class:list={['pc', dark && 'pc--dark']}>
 	{
 		cards.map((c) => (
 			<li class="pc__card">
@@ -45,8 +47,9 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 					<h3 class="pc__name">{c.name}</h3>
 					<p class="pc__line">{c.line}</p>
 					<p class="pc__for"><span>{forLabel}</span> {c.forWhom}</p>
+					{c.note && <p class="pc__note">{c.note}</p>}
 					<p class="pc__actions">
-						<a class="text-link" href={`${homePath(lang)}#contact`}>
+						<a class="text-link" href="#contact">
 							{c.cta}
 							<svg viewBox="0 0 18 18" aria-hidden="true"><path d={arrow} fill="none" stroke="currentColor" stroke-width="2"></path></svg>
 						</a>
@@ -132,6 +135,32 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 		font-weight: 600;
 	}
 
+	.pc__note {
+		margin-top: 8px;
+		font-size: 14px;
+		line-height: 1.45;
+		color: var(--steel);
+	}
+
+	/* on the dark compartment */
+	.pc--dark .pc__name,
+	.pc--dark .pc__line {
+		color: var(--paper);
+	}
+
+	.pc--dark .pc__status {
+		color: var(--steel-light);
+	}
+
+	.pc--dark .pc__for,
+	.pc--dark .pc__note {
+		color: var(--steel-light);
+	}
+
+	.pc--dark .pc__media {
+		background: var(--ink-2);
+	}
+
 	.pc__actions {
 		display: flex;
 		flex-wrap: wrap;
@@ -144,6 +173,13 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 		.pc {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 48px var(--gap);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.pc {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 48px 20px;
 		}
 	}
 </style>
