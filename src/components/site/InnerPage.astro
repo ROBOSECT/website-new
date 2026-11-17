@@ -6,6 +6,7 @@
 import { Image } from 'astro:assets';
 import setup from '../../assets/images/home/demo-board.jpg';
 import reader from '../../assets/images/products/cable-reader.jpg';
+import TapeThreading from './TapeThreading.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../site/PageHeader.astro';
 import Rich from '../ui/Rich.astro';
@@ -56,6 +57,7 @@ const key: PageKey = page;
 	<section class="tp tp--platform wrap" aria-labelledby="tp-items">
 		<h2 id="tp-items" class="tp-h">{t.sectionTitle}</h2>
 		<p class="tp-sub">{t.sectionIntro}</p>
+		{t.diagram && <TapeThreading {...t.diagram} />}
 		{
 			t.render && (
 				<figure class="tp-render">
