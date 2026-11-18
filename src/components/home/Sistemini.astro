@@ -1,0 +1,98 @@
+---
+/**
+ * The three little fittings (the same as the ones under the R in the head, HeroSymbol.astro), as the page cable's end at
+ * Contact: the thin lead goes in at the narrow mouth, the big cable of the stage comes out of the wide end. All three are
+ * in the HTML, one shows (html[data-sistemino], set at random before the first paint, BaseLayout: the same one as the
+ * head's); without it the reducer shows. Drawn in the head's units (the wide end at y 97, the mouth at y 106), inside a
+ * <g> that turns and scales them into the stage's viewBox (Contact.astro).
+ * At rest (static page, reduced motion) the fitting is whole and attached. In motion the page script sets --a (0 → 1) on
+ * the svg as the lead arrives (showpiece/lead.ts): the same entry as the head's, scrubbed with the scroll, both ways.
+ */
+---
+
+	<g class="sf" data-sf="giunto">
+	<g class="sf-body">
+	<path d="M-1.92 98.2A1.2 1.2 0 0 1-.72 97H12.72A1.2 1.2 0 0 1 13.92 98.2V100.4L9.4 103.8H2.6L-1.92 100.4Z" fill="#F4F1EC"/>
+	</g>
+	<rect class="sf-cu" x="3.9" y="103.8" width="4.2" height="2.2" fill="#EC8A52"/>
+</g>
+<g class="sf" data-sf="morsetto">
+	<g class="sf-body">
+	<rect x="-4" y="97" width="20" height="9" rx="2" fill="#F4F1EC" stroke="#BAC4D0" stroke-width=".3"/>
+	<rect x="-.5" y="97" width="13" height="1.3" fill="#0D1B2E"/>
+	<rect x="4.3" y="104.9" width="3.4" height="1.1" fill="#0D1B2E"/>
+	</g>
+	<g class="sf-screw"><circle cx="-1.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sf-slot" x="-2.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
+	<g class="sf-screw"><circle cx="13.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sf-slot" x="12.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
+	<circle class="sf-body" cx="6" cy="101.6" r="1.15" fill="#E9E5DE" stroke="#9AA6B5" stroke-width=".3"/>
+	<g class="sf-on"><g class="sf-glow"><circle cx="6" cy="101.6" r="2.99" fill="#EC8A52" fill-opacity=".12"/><circle cx="6" cy="101.6" r="1.95" fill="#EC8A52" fill-opacity=".22"/></g><circle cx="6" cy="101.6" r="1.15" fill="#EC8A52"/></g>
+</g>
+<g class="sf" data-sf="spina">
+	<g class="sf-body">
+	<path d="M-1.92 98.2A1.2 1.2 0 0 1-.72 97H12.72A1.2 1.2 0 0 1 13.92 98.2V100.9H-1.92Z" fill="#F4F1EC"/>
+	</g>
+	<g class="sf-plug">
+	<rect x="2.7" y="100" width="1.2" height="1.4" fill="#EC8A52"/>
+	<rect x="8.1" y="100" width="1.2" height="1.4" fill="#EC8A52"/>
+	<path d="M1 101.3H11V104.2A1.8 1.8 0 0 1 9.2 106H2.8A1.8 1.8 0 0 1 1 104.2Z" fill="#172A44" stroke="#9AA6B5" stroke-width=".35"/>
+	<circle cx="6" cy="103.5" r=".9" fill="none" stroke="#9AA6B5" stroke-width=".3"/>
+	<g class="sf-on"><g class="sf-glow"><circle cx="6" cy="103.5" r="2.34" fill="#EC8A52" fill-opacity=".12"/><circle cx="6" cy="103.5" r="1.53" fill="#EC8A52" fill-opacity=".22"/></g><circle cx="6" cy="103.5" r=".9" fill="#EC8A52"/></g>
+	</g>
+</g>
+
+<style>
+	.sf {
+		display: none;
+	}
+
+	.sf[data-sf='giunto'] {
+		display: inline;
+	}
+
+	:global(html[data-sistemino='morsetto']) .sf[data-sf='giunto'],
+	:global(html[data-sistemino='spina']) .sf[data-sf='giunto'] {
+		display: none;
+	}
+
+	:global(html[data-sistemino='morsetto']) .sf[data-sf='morsetto'],
+	:global(html[data-sistemino='spina']) .sf[data-sf='spina'] {
+		display: inline;
+	}
+
+	/* The entry, a function of --a (0 → 1; unset in motion = not yet): the head's own steps, on a scale of 0 – 1
+	   (the head's ≈ 0.85 s). clamp(0, (a − a0) / (a1 − a0), 1) is each step's progress. */
+	:global(html.motion) .sf :is(.sf-body, .sf-cu, .sf-slot) {
+		transform-box: fill-box;
+	}
+
+	:global(html.motion) .sf[data-sf='giunto'] .sf-body,
+	:global(html.motion) .sf[data-sf='spina'] .sf-body {
+		transform-origin: 50% 0;
+		opacity: clamp(0, calc(var(--a, 0) / 0.24), 1);
+		transform: scaleX(calc(1.22 - 0.22 * clamp(0, calc(var(--a, 0) / 0.54), 1)));
+	}
+
+	:global(html.motion) .sf[data-sf='giunto'] .sf-cu {
+		transform-origin: 50% 0;
+		transform: scaleY(clamp(0, calc((var(--a, 0) - 0.7) / 0.26), 1));
+	}
+
+	:global(html.motion) .sf[data-sf='morsetto'] :is(.sf-body, .sf-screw) {
+		opacity: clamp(0, calc(var(--a, 0) / 0.45), 1);
+	}
+
+	:global(html.motion) .sf[data-sf='morsetto'] .sf-slot {
+		transform-origin: 50% 50%;
+		transform: rotate(calc(-55deg * (1 - clamp(0, calc((var(--a, 0) - 0.53) / 0.31), 1))));
+	}
+
+	:global(html.motion) .sf[data-sf='morsetto'] .sf-on,
+	:global(html.motion) .sf[data-sf='spina'] .sf-on {
+		opacity: clamp(0, calc((var(--a, 0) - 0.76) / 0.24), 1);
+	}
+
+	:global(html.motion) .sf[data-sf='spina'] .sf-plug {
+		opacity: clamp(0, calc((var(--a, 0) - 0.35) / 0.2), 1);
+		transform: translateY(calc(3.5px * (1 - clamp(0, calc((var(--a, 0) - 0.35) / 0.5), 1))));
+	}
+</style>

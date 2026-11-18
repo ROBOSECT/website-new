@@ -19,6 +19,7 @@
  * stays off until then: data-restore="off"). (Markup comments are never emitted.)
  */
 import Rich from '../ui/Rich.astro';
+import Sistemini from './Sistemini.astro';
 import { copy, type Lang } from '../../i18n/copy';
 import { VB, film } from '../../scripts/panel/showpiece/rfilm';
 import { frameMarkup } from '../../scripts/panel/showpiece/rview';
@@ -90,6 +91,8 @@ const cfg = {
 				<figure class="show" data-show aria-label={label} data-state="poster" data-cfg={JSON.stringify(cfg)}>
 					<div class="show__stage" data-show-stage>
 						<svg class="show__svg" data-show-svg viewBox={vb} preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"><Fragment set:html={poster} /></svg>
+						{/* the end of the page's cable: the same little fitting as under the R of the head. Its wide end is on the stage's cable (9 units wide, entering the left edge at y −122 of the viewBox), the narrow mouth takes the thin lead; scale 0.75 = the cable's 9 over the head's 12. The head's units are turned so its wide end (y 97) lies on x −150 and its mouth (y 106) points left. Whole at rest; in motion the lead's script sets --a (showpiece/lead.ts) */}
+						<svg class="cl-fit" data-cl-fit viewBox={vb} preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"><g transform="matrix(0 0.75 -0.75 0 -77.25 -126.5)"><Sistemini /></g></svg>
 					</div>
 					<div class="station" data-station role="group" aria-label={st.group}>
 						<button type="button" class="pb pb--reset" data-reset aria-label={st.resetLabel}>
@@ -441,6 +444,16 @@ const cfg = {
 			width: min(100%, calc((100svh - 250px) * 2));
 			margin-inline: auto;
 		}
+	}
+
+	/* the fitting at the cable's end: over the stage, outside its left edge too (the card's padding) */
+	.cl-fit {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+		pointer-events: none;
 	}
 
 	.show__svg {
