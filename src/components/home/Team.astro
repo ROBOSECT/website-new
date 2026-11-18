@@ -46,7 +46,7 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 					<li class="person">
 						{photoOf(person.name) ? (
 							<div class="person__photo person__photo--img">
-								<Image src={photoOf(person.name)!} alt={photoLabel(person.photoAlt)} width={224} height={224} format="webp" quality={82} loading="lazy" />
+								<Image src={photoOf(person.name)!} alt={photoLabel(person.photoAlt)} width={224} height={224} densities={[1, 2]} format="webp" quality={90} loading="lazy" />
 							</div>
 						) : (
 							<div class="person__photo" {...(photoLabel(person.photoAlt) ? { role: 'img', 'aria-label': photoLabel(person.photoAlt) } : { 'aria-hidden': 'true' })}>
