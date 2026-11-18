@@ -39,6 +39,8 @@ export class HeroView {
 	private hurried = false;
 	/** the symbol's opening (R, then the fitting) has ended: the lead may come out */
 	private open = false;
+	/** when the opening ended (ms): from then the lead runs out of the fitting's mouth by itself, to the lane */
+	private t0: number | null = null;
 	/** called when the opening ends, to draw a frame */
 	onOpen: (() => void) | null = null;
 	private last: Record<string, string> = {};
@@ -69,10 +71,13 @@ export class HeroView {
 		const mark = () => {
 			this.wm.setAttribute('data-intro-done', '');
 			this.open = true;
+			this.t0 = performance.now();
 			this.onOpen?.();
 		};
-		if (anims.length === 0) this.open = true;
-		else Promise.allSettled(anims.map((a) => a.finished)).then(mark);
+		if (anims.length === 0) {
+			this.open = true;
+			this.t0 = performance.now();
+		} else Promise.allSettled(anims.map((a) => a.finished)).then(mark);
 	}
 
 	/** top: the hero's layout top in the document (an offsetTop chain: the glide's transform does not count); the
@@ -151,7 +156,18 @@ export class HeroView {
 	/** arc length of the tip along the lead (≤ 0: still in the R); g: the page's glide (the hero is drawn g lower) */
 	private sAt(Yh: number, penY: number, g: number) {
 		const sPen = this.jogS + (Yh + penY - (this.top + g) - this.jogY);
-		return softmin(this.rate * Math.max(0, Yh), sPen, this.phone ? 16 : 24);
+		return Math.max(softmin(this.rate * Math.max(0, Yh), sPen, this.phone ? 16 : 24), this.autoS());
+	}
+	/** the lead's own run after the opening: out of the mouth to the lane's bend, ease-out over ≈ 1.4 s (a pace of its own,
+	 * not the scroll's); the scroll takes over (max) as soon as it asks for more */
+	private autoS() {
+		if (this.t0 == null || this.jogS <= 0) return 0;
+		const k = Math.min(1, Math.max(0, (performance.now() - this.t0 - 250) / 1400));
+		return this.jogS * (1 - Math.pow(1 - k, 3));
+	}
+	/** the lead is still running by itself: the frame loop must go on */
+	autoBusy() {
+		return this.t0 != null && this.jogS > 0 && performance.now() - this.t0 < 1700;
 	}
 	/** the travelling tip in document px (null: still in the R). Before the lane it is a y above the lane's straight that
 	 * the compartments below read as «not here yet»; render reads the arc length back from it */

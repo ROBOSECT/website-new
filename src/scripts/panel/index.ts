@@ -634,7 +634,7 @@ export function initPanel() {
 		const Y = step(dt);
 		// the frame's own scroll position: no layout read after the frame's writes
 		// (a few more frames after the scroll settles: the leads' settling starts 0.12 s after the last input)
-		if (!sm.settled(Y) || morphBusy || (RELAX && quietT <= 0.15)) requestAnimationFrame(loop);
+		if (!sm.settled(Y) || morphBusy || hero.autoBusy() || (RELAX && quietT <= 0.15)) requestAnimationFrame(loop);
 		else running = false;
 	}
 	function kick() {
