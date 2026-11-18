@@ -29,6 +29,36 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 			<path d={F.cu} fill="#EC8A52" stroke="none"></path>
 		</g>
 	</g>
+	{/* the little fitting under the stem foot: the big cable goes in, the page lead comes out of its mouth (the lead starts SX units lower, Hero.astro). All three are in the HTML, one shows: html[data-sistemino] is set at random before the first paint (BaseLayout);; without it, the reducer */}
+	<g class="sx" data-sx="giunto">
+		<g class="sx-body">
+		<path d="M-1.92 98.2A1.2 1.2 0 0 1-.72 97H12.72A1.2 1.2 0 0 1 13.92 98.2V100.4L9.4 103.8H2.6L-1.92 100.4Z" fill="#F4F1EC"/>
+		</g>
+		<rect class="sx-cu" x="3.9" y="103.8" width="4.2" height="2.2" fill="#EC8A52"/>
+	</g>
+	<g class="sx" data-sx="morsetto">
+		<g class="sx-body">
+		<rect x="-4" y="97" width="20" height="9" rx="2" fill="#F4F1EC" stroke="#BAC4D0" stroke-width=".3"/>
+		<rect x="-.5" y="97" width="13" height="1.3" fill="#0D1B2E"/>
+		<rect x="4.3" y="104.9" width="3.4" height="1.1" fill="#0D1B2E"/>
+		</g>
+		<g class="sx-screw"><circle cx="-1.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sx-slot" x="-2.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
+		<g class="sx-screw"><circle cx="13.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sx-slot" x="12.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
+		<circle cx="6" cy="101.6" r="1.15" fill="#E9E5DE" stroke="#9AA6B5" stroke-width=".3"/>
+		<g class="sx-on"><g class="sx-glow"><circle cx="6" cy="101.6" r="2.99" fill="#EC8A52" fill-opacity=".12"/><circle cx="6" cy="101.6" r="1.95" fill="#EC8A52" fill-opacity=".22"/></g><circle cx="6" cy="101.6" r="1.15" fill="#EC8A52"/></g>
+	</g>
+	<g class="sx" data-sx="spina">
+		<g class="sx-body">
+		<path d="M-1.92 98.2A1.2 1.2 0 0 1-.72 97H12.72A1.2 1.2 0 0 1 13.92 98.2V100.9H-1.92Z" fill="#F4F1EC"/>
+		</g>
+		<g class="sx-plug">
+		<rect x="2.7" y="100" width="1.2" height="1.4" fill="#EC8A52"/>
+		<rect x="8.1" y="100" width="1.2" height="1.4" fill="#EC8A52"/>
+		<path d="M1 101.3H11V104.2A1.8 1.8 0 0 1 9.2 106H2.8A1.8 1.8 0 0 1 1 104.2Z" fill="#172A44" stroke="#9AA6B5" stroke-width=".35"/>
+		<circle cx="6" cy="103.5" r=".9" fill="none" stroke="#9AA6B5" stroke-width=".3"/>
+		<g class="sx-on"><g class="sx-glow"><circle cx="6" cy="103.5" r="2.34" fill="#EC8A52" fill-opacity=".12"/><circle cx="6" cy="103.5" r="1.53" fill="#EC8A52" fill-opacity=".22"/></g><circle cx="6" cy="103.5" r=".9" fill="#EC8A52"/></g>
+		</g>
+	</g>
 </svg>
 
 <style>
@@ -97,5 +127,81 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 			opacity: 1;
 			transform: none;
 		}
+	}
+	/* The fitting under the foot (10 units tall; the svg's box does not grow, it overflows). One of three is shown, chosen at
+	   random per load (BaseLayout sets html[data-sistemino]); the reducer is the default (no JS). Same opening rules as
+	   the R: only in motion, once. */
+	.sx {
+		display: none;
+	}
+
+	.sx[data-sx='giunto'] {
+		display: inline;
+	}
+
+	:global(html[data-sistemino='morsetto']) .sx[data-sx='giunto'],
+	:global(html[data-sistemino='spina']) .sx[data-sx='giunto'] {
+		display: none;
+	}
+
+	:global(html[data-sistemino='morsetto']) .sx[data-sx='morsetto'],
+	:global(html[data-sistemino='spina']) .sx[data-sx='spina'] {
+		display: inline;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) .sx :is(.sx-body, .sx-cu, .sx-slot) {
+		transform-box: fill-box;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='giunto'] .sx-body,
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-body {
+		transform-origin: 50% 0;
+		animation: sx-crimp 460ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='giunto'] .sx-cu {
+		transform-origin: 50% 0;
+		animation: sx-fill 220ms cubic-bezier(0.65, 0, 0.35, 1) 1080ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] :is(.sx-body, .sx-screw) {
+		animation: sx-fade 380ms ease-out 0ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] .sx-slot {
+		transform-origin: 50% 50%;
+		animation: sx-turn 260ms cubic-bezier(0.22, 1, 0.36, 1) 860ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] .sx-on,
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-on {
+		animation: sx-fade 200ms ease-out 1100ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-plug {
+		animation: sx-plug 420ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both;
+	}
+
+	@keyframes sx-crimp {
+		from { opacity: 0; transform: scaleX(1.22); }
+		45% { opacity: 1; }
+		to { opacity: 1; transform: none; }
+	}
+	@keyframes sx-fill {
+		from { transform: scaleY(0); }
+		to { transform: none; }
+	}
+	@keyframes sx-fade {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+	@keyframes sx-turn {
+		from { transform: rotate(-55deg); }
+		to { transform: none; }
+	}
+	@keyframes sx-plug {
+		from { opacity: 0; transform: translateY(3.5px); }
+		40% { opacity: 1; }
+		to { opacity: 1; transform: none; }
 	}
 </style>

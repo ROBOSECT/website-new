@@ -92,6 +92,12 @@ const organizationSchema = {
 			// visitor's place itself on reload/back (the browser would restore the layout position, not the visual one).
 			(function (d) {
 				d.classList.add('js');
+				// the hero's fitting under the R: one of three at random per load, chosen before the first paint
+				// (without this script the reducer shows); ?sistemino=1|2|3 forces one (for tests)
+				try {
+					var n = ['giunto', 'morsetto', 'spina'], q = /[?&]sistemino=([123])/.exec(location.search);
+					d.setAttribute('data-sistemino', n[q ? q[1] - 1 : Math.floor(Math.random() * 3)]);
+				} catch (e) {}
 				if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
 				try {
 					if (CSS.supports('animation-timeline: scroll()') && CSS.supports('animation-range: 0px 100px') && !/[?&]panel-sda=0/.test(location.search)) d.classList.add('sda');

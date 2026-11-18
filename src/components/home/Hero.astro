@@ -104,13 +104,13 @@ const wm = `--wm-clear:${G.clear}`;
 
 	/* The lead laid, shown on the static page (no JS, reduced motion, print); in motion scripts/panel/hero.ts measures
 	   these two boxes for its route and draws it instead.
-	   A: from the stem foot (--fy, right border) down to the run (bottom border, bend --j), B: the bend into the lane and
+	   A: from the mouth of the fitting under the stem foot (--fy = the foot + 10 units less 0.4, right border) down to the run (bottom border, bend --j), B: the bend into the lane and
 	   the lane down to the hero's edge (left and top borders). The run sits right under the R (phones, tablet) or along
 	   the hero's foot (desktops). Borders are centred on the route: every edge is offset by half the cable. */
 	.hero__lead {
 		--cw: var(--cable-w);
 		--j: var(--bend);
-		--fy: calc(36px + 98.42 * var(--s));
+		--fy: calc(36px + 108.02 * var(--s));
 		position: absolute;
 		inset: 0;
 		z-index: 1;
@@ -286,7 +286,7 @@ const wm = `--wm-clear:${G.clear}`;
 
 		/* the lead drops from the stem foot to the hero's foot, runs left under the text and bends down the lane */
 		.hero__lead {
-			--fy: calc(var(--wm-top) + 98.42 * var(--s));
+			--fy: calc(var(--wm-top) + 108.02 * var(--s));
 		}
 
 		.hero__lead-a {
