@@ -130,6 +130,21 @@ function initAutoVideo() {
 	).observe(v);
 }
 
+/** The short loop of the two arms (Proof, over the still photo): plays, muted, while on screen; the still stays with
+ * reduced motion, the data saver or no IntersectionObserver. It fades in only once it is really playing. */
+function initLoopVideo() {
+	const v = document.querySelector<HTMLVideoElement>('video[data-loop]');
+	if (!v || !('IntersectionObserver' in window)) return;
+	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
+	v.addEventListener('playing', () => v.classList.add('is-on'));
+	new IntersectionObserver((es) => {
+		const e = es[es.length - 1];
+		if (e.isIntersecting) v.play()?.catch(() => {});
+		else v.pause();
+	}).observe(v);
+}
+
 /** How it works: the drawing's run (test points light, the report fills) once it is on screen and its module is open
  * (in motion the panel opens it after the robot's job: [data-b] reaches full opacity). With reduced motion it stays as
  * drawn: finished. It runs again each time it comes back on screen. */
@@ -166,4 +181,5 @@ initShow();
 initNavState();
 initBrandOnce();
 initAutoVideo();
+initLoopVideo();
 initDemo();

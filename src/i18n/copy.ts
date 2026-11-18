@@ -281,7 +281,7 @@ export const copy = {
 			},
 			photo: {
 				alt: 'Two collaborative robot arms centimetres apart over a terminal block: on the left a gripper, on the right a test probe pointing down',
-				caption: 'Two arms in one workspace: their tools work centimetres apart on the same terminal block, without touching. A still from the demo video.',
+				caption: 'Two arms in one workspace: their tools work centimetres apart on the same terminal block, without touching.',
 			},
 			factsTitle: 'Who stands behind it',
 			facts: [
@@ -853,7 +853,7 @@ export const copy = {
 			},
 			photo: {
 				alt: 'Due bracci robotici collaborativi a pochi centimetri sopra una morsettiera: a sinistra una pinza, a destra un puntale di prova rivolto in basso',
-				caption: 'Due bracci nello stesso spazio: i loro attrezzi lavorano a pochi centimetri sulla stessa morsettiera, senza toccarsi. Un fotogramma del video della demo.',
+				caption: 'Due bracci nello stesso spazio: i loro attrezzi lavorano a pochi centimetri sulla stessa morsettiera, senza toccarsi.',
 			},
 			factsTitle: 'Chi c’è dietro',
 			facts: [
