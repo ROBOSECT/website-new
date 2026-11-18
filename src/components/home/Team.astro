@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Rich from '../ui/Rich.astro';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
@@ -9,6 +10,17 @@ interface Props {
 const { lang } = Astro.props;
 const t = copy[lang].team;
 const mailSubject = encodeURIComponent(lang === 'it' ? 'Candidatura spontanea' : 'Open application');
+// A person's photo is src/assets/images/team/<name-slug>.png (alessio-caporali.png): drop the file in and it shows, with the
+// same square crop and rendering for everyone; whoever has no file keeps the placeholder mark.
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/team/*.png', { eager: true });
+const slug = (name: string) =>
+	name
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-zA-Z]+/g, '-')
+		.replace(/^-|-$/g, '')
+		.toLowerCase();
+const photoOf = (name: string) => photos[`../../assets/images/team/${slug(name)}.png`]?.default;
 // screen readers never hear a placeholder: the [TBD: …] part of an alt text is visual review copy only
 const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim();
 ---
@@ -32,11 +44,17 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 			{
 				t.founders.people.map((person) => (
 					<li class="person">
-						<div class="person__photo" {...(photoLabel(person.photoAlt) ? { role: 'img', 'aria-label': photoLabel(person.photoAlt) } : { 'aria-hidden': 'true' })}>
-							<svg viewBox="0 0 82.4 96" aria-hidden="true">
-								<path fill="#5A6676" stroke="none" d="M 0 96 L 0 24 A 24 24 0 0 1 24 0 L 46 0 A 28 28 0 0 1 46 56 A 6 6 0 0 0 41.272 65.694 L 50.047 76.925 A 8 8 0 0 0 56.351 80 L 60.351 80 L 60.351 96 L 56.351 96 A 24 24 0 0 1 37.439 86.776 L 28.664 75.545 A 22 22 0 0 1 46 40 A 12 12 0 0 0 46 16 L 24 16 A 8 8 0 0 0 16 24 L 16 96 Z" />
-							</svg>
-						</div>
+						{photoOf(person.name) ? (
+							<div class="person__photo person__photo--img">
+								<Image src={photoOf(person.name)!} alt={photoLabel(person.photoAlt)} width={224} height={224} format="webp" quality={82} loading="lazy" />
+							</div>
+						) : (
+							<div class="person__photo" {...(photoLabel(person.photoAlt) ? { role: 'img', 'aria-label': photoLabel(person.photoAlt) } : { 'aria-hidden': 'true' })}>
+								<svg viewBox="0 0 82.4 96" aria-hidden="true">
+									<path fill="#5A6676" stroke="none" d="M 0 96 L 0 24 A 24 24 0 0 1 24 0 L 46 0 A 28 28 0 0 1 46 56 A 6 6 0 0 0 41.272 65.694 L 50.047 76.925 A 8 8 0 0 0 56.351 80 L 60.351 80 L 60.351 96 L 56.351 96 A 24 24 0 0 1 37.439 86.776 L 28.664 75.545 A 22 22 0 0 1 46 40 A 12 12 0 0 0 46 16 L 24 16 A 8 8 0 0 0 16 24 L 16 96 Z" />
+								</svg>
+							</div>
+						)}
 						<div class="person__text">
 							<p class="person__name">
 								<Rich text={person.name} />
@@ -124,6 +142,17 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 		place-items: center;
 		background: var(--ink);
 		border-radius: 0 0 0 var(--bend);
+	}
+
+	.person__photo--img {
+		overflow: hidden;
+	}
+
+	.person__photo--img :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 30%;
 	}
 
 	.person__photo svg {
