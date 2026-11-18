@@ -101,7 +101,23 @@ export class HeroView {
 		const ft = this.foot - this.top,
 			bt = this.bottom - this.top,
 			lane = o.lane ?? this.x;
-		if (Math.abs(lane - this.x) > 1.5) {
+		// desktops: the logo hangs in the right half, far from the lane: the lead drops from the stem foot, bends left in a run
+		// under the text (the hero's bottom padding) and joins the lane
+		const far = !o.phone && Math.abs(lane - this.x) > 150;
+		if (far) {
+			const J = HeroView.FAR_JOG;
+			const runY = Math.max(ft + 2 * J + 40, bt - 34);
+			this.route = new Route(
+				[
+					{ x: this.x, y: ft - 0.5 },
+					{ x: this.x, y: runY },
+					{ x: lane, y: runY },
+					{ x: lane, y: bt + 2 },
+				],
+				[0, J, J, 0],
+			);
+			this.jogY = runY + J;
+		} else if (Math.abs(lane - this.x) > 1.5) {
 			const J = HeroView.JOG;
 			this.route = new Route(
 				[
@@ -140,6 +156,7 @@ export class HeroView {
 	}
 
 	static JOG = 6;
+	static FAR_JOG = 28;
 	/** arc length along the lead for a hero-local y of the tip: exact on the vertical run; through the jog (and 20 px below
 	 * it) the tip covers the bend's extra length a little faster than the page scrolls, so it meets the pen in the lane */
 	private sOf(y: number) {

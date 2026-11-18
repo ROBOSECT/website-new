@@ -234,6 +234,32 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			min-height: min(calc(100svh - var(--nav-h)), 900px);
 		}
 
+		/* the logo in large in the right half (the brand's wordmark, as the kit draws it, its R the page cable): the brand block
+		   dissolves into the text column (the descriptor stays with the headline), the wordmark hangs top right on the
+		   nav's right margin. Its lead leaves the stem foot, drops down the gutter between logo and text, bends left
+		   under the text and joins the lane (scripts/panel/hero.ts, «far» route); without JS the lane starts below the hero */
+		.hero__brand {
+			display: contents;
+		}
+
+		.hero__brand::after {
+			display: none;
+		}
+
+		.hero__brand :global(.hero-wordmark) {
+			position: absolute;
+			right: var(--m);
+			top: var(--wm-top, 200px);
+		}
+
+		.hero__text .hero__descriptor {
+			margin-left: 0;
+		}
+
+		.hero__text {
+			--wm-top: clamp(150px, 15svh, 200px);
+		}
+
 		/* the wordmark sits low enough that its copper lets go before the R reaches the nav (taller
 		   desktops below) */
 		.hero__text {
@@ -259,6 +285,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 	@media (min-width: 1100px) and (min-height: 860px) {
 		.hero__text {
 			padding-top: clamp(168px, calc(108svh - 750px), 300px);
+			--wm-top: calc(clamp(168px, calc(108svh - 750px), 300px) + 8px);
 		}
 
 		.hero__facts {
