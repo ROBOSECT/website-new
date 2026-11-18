@@ -67,9 +67,10 @@ export class Sleeve {
 
 	/**
 	 * one frame. pen: the travelling tip in stage px (−1e9: not out of the R yet; 1e9: tested, laid end to end);
-	 * ready: the lead above this stage is laid down to the pen (the previous compartment's exit leg reached it)
+	 * ready: the lead above this stage is laid down to the pen (the previous compartment's exit leg reached it);
+	 * from: where the lead's straight run down the lane starts (stage px): the sleeve shows once it is wholly below it
 	 */
-	frame(pen: number, ready: boolean) {
+	frame(pen: number, ready: boolean, from = -1e9) {
 		const L = this.live;
 		if (!L) return;
 		let y = this.settle,
@@ -81,7 +82,7 @@ export class Sleeve {
 			const d = p - this.settle;
 			if (d < 0) {
 				y = p;
-				op = ready && pen > -1e8 ? smooth((d + this.ride) / 110) : 0;
+				op = ready && pen > -1e8 ? smooth((d + this.ride) / 110) * smooth((pen - this.gap - this.len / 2 - from) / 40) : 0;
 				brK = 0;
 				brO = 0;
 			} else if (d < 400) {

@@ -1,61 +1,52 @@
 /**
- * The hero: the R lets go of its copper on the first scroll (the logo's copper is the ferrule),
- * scrubbed by Ŷ over [0, D]: anticipate (the ferrule is pressed onto the cable), pop (out, spark), unseat (it slides off the
- * cable's end and is gone), the bead glides through the R to the stem foot, hand-off. Then the tip drops out of the stem foot:
- * y = foot + softmin(3·(Ŷ − 0.92·D), Ŷ + penY − foot): faster than the page, then merged onto the pen.
- * The static page (no JS, reduced motion, print): the ferrule sits on the R and the lead is laid end to end.
+ * The hero: the test lead comes out of the R's stem foot on the first scroll and runs to the page's lane.
+ * The R itself stays the kit's symbol (its opening is CSS: HeroSymbol.astro); only the lead moves.
+ * Its route is the static lead Hero.astro draws in CSS for the page without JS ([data-hero-lead]: one box for the drop and
+ * the run, one for the bend into the lane), measured here, so both are the same curve: down from the stem foot, a bend of
+ * the page cable's radius (--bend), a run to the lane, a bend down the lane.
+ * The tip runs along the route at a steady pace, a fixed number of px of cable per px of scroll, chosen so that it
+ * reaches the lane just as the pen line (the bench, 70 % of the screen) does, then rides the pen:
+ * s = softmin(rate · Ŷ, s at the pen). The static page (no JS, reduced motion, print): the CSS lead, laid end to end.
  */
-import { clamp01, f, prog, quintic, Route, smooth, softmin, SPRINGS } from './core';
-import { R_GEOMETRY as RG } from '../../lib/cable-geometry';
-
-const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
-export const heroPhases = (p: number) => ({
-	anticip: seg(p, 0.0, 0.1),
-	pop: seg(p, 0.08, 0.2),
-	unseat: seg(p, 0.16, 0.36),
-	bead: seg(p, 0.26, 0.92),
-	hand: seg(p, 0.88, 1.0),
-});
+import { clamp01, f, Route, softmin } from './core';
 
 export class HeroView {
 	hero: HTMLElement;
 	wm: SVGSVGElement;
-	ferrule: SVGGElement;
-	bead: SVGPathElement;
-	trail: SVGPathElement;
-	spark: SVGGElement;
 	wires: SVGSVGElement;
 	img: HTMLElement | null;
 	ins: SVGPathElement;
 	cu: SVGPathElement;
-	rLen = 100;
+	leadA: HTMLElement | null;
+	leadB: HTMLElement | null;
 	/** document geometry */
 	x = 0;
 	foot = 0;
 	top = 0;
 	bottom = 0;
-	D = 170;
 	cable = 10;
 	cuL = 13.5;
 	cuW = 4.3;
 	phone = false;
-	/** the lead out of the stem foot (hero px): straight down the lane; on phones the wordmark sits on the text edge, so the
-	 * lead first bends from the stem into the gutter lane right under the R (an S-jog of radius JOG), then runs down */
+	/** the lead out of the stem foot (hero px) */
 	route: Route | null = null;
-	/** y (hero px) where the lead is vertical in its lane again, and the arc length there */
+	/** y (hero px) where the lead is straight down the lane, and the arc length there */
 	private jogY = 0;
 	private jogS = 0;
+	/** px of lead per px of scroll until the tip meets the pen */
+	private rate = 3;
+	/** the opening has been hurried by a scroll that came first */
+	private hurried = false;
 	private last: Record<string, string> = {};
 
 	constructor(hero: HTMLElement) {
 		this.hero = hero;
 		this.wm = hero.querySelector<SVGSVGElement>('[data-wordmark]')!;
-		this.ferrule = this.wm.querySelector<SVGGElement>('[data-hw-ferrule]')!;
-		this.bead = this.wm.querySelector<SVGPathElement>('[data-hw-bead]')!;
-		this.trail = this.wm.querySelector<SVGPathElement>('[data-hw-trail]')!;
-		this.spark = this.wm.querySelector<SVGGElement>('[data-hw-spark]')!;
 		this.wires = hero.querySelector<SVGSVGElement>('[data-hero-wires]')!;
 		this.img = hero.querySelector<HTMLElement>('[data-hero-img]');
+		const lead = hero.querySelector<HTMLElement>('[data-hero-lead]');
+		this.leadA = (lead?.children[0] as HTMLElement | undefined) ?? null;
+		this.leadB = (lead?.children[1] as HTMLElement | undefined) ?? null;
 		const NS = 'http://www.w3.org/2000/svg';
 		this.wires.innerHTML = '';
 		const mk = (stroke: string) => {
@@ -67,110 +58,101 @@ export class HeroView {
 		};
 		this.ins = mk('#F4F1EC');
 		this.cu = mk('#EC8A52');
-		const r = this.wm.querySelector<SVGPathElement>('[data-hw-r]');
-		this.rLen = r ? r.getTotalLength() : 100;
+		// the opening plays once: a later switch back to motion (print, the reduced-motion setting) shows the R at rest
+		const mark = () => this.wm.setAttribute('data-intro-done', '');
+		this.wm.querySelector('[data-hw-r]')?.addEventListener('animationend', mark, { once: true });
+		this.wm.querySelector('[data-hw-r]')?.addEventListener('animationcancel', mark, { once: true });
 	}
 
 	/** top: the hero's layout top in the document (an offsetTop chain: the glide's transform does not count); the
-	 * wordmark is measured relative to the hero (both carry the same transform) */
-	rebuild(top: number, o: { vh: number; cable: number; cuL: number; cuW: number; phone: boolean; navH: number; lane?: number }) {
+	 * static lead is measured relative to the hero (both carry the same transform). penY: the pen line (viewport px) */
+	rebuild(top: number, o: { vh: number; penY: number; cable: number; cuL: number; cuW: number; phone: boolean; lane?: number }) {
 		const hr = this.hero.getBoundingClientRect();
-		const r = this.wm.getBoundingClientRect();
-		const vbY = RG.top - 0.5,
-			vbH = RG.bot - RG.top + 1;
 		this.top = top;
 		this.bottom = top + this.hero.offsetHeight;
-		this.x = r.left - hr.left + (RG.stemX / RG.ferrule.x1) * r.width;
-		const scrollY = top - hr.top;
-		this.foot = r.top + scrollY + ((RG.stemFootY - vbY) / vbH) * r.height;
 		this.cable = o.cable;
 		this.cuL = o.cuL;
 		this.cuW = o.cuW;
 		this.phone = o.phone;
-		// the detach is a readable beat: 2–3 wheel notches at 1440 × 900 and on phones (≈ 1.7 is too quick to read), and it
-		// ends before the R reaches the (opaque) nav bar: the whole R is in view while the bead runs
-		// through it (the hero's layout puts the wordmark low enough: Hero.astro). Where a short desktop's fold cannot afford
-		// the wordmark that low (≈ 860 px tall and less) a looser rule applies: it may run until the R's bowl is half
-		// under the bar (the ferrule, the stem and its foot, where the bead ends, stay in view), so the beat is not shorter there.
-		const wmTop = r.top + scrollY;
-		const strict = wmTop - o.navH - 8,
-			soft = wmTop - o.navH + 0.55 * r.height;
-		const lim = strict >= 0.16 * o.vh ? strict : soft;
-		this.D = Math.max(80, Math.min((o.phone ? 0.3 : 0.27) * o.vh, 300, this.foot - 16, lim));
-		// the lead: from the stem foot, straight down or (phones) bent into the lane under the R
-		const ft = this.foot - this.top,
-			bt = this.bottom - this.top,
-			lane = o.lane ?? this.x;
-		// desktops: the logo hangs in the right half, far from the lane: the lead drops from the stem foot, bends left in a run
-		// under the text (the hero's bottom padding) and joins the lane
-		const far = !o.phone && Math.abs(lane - this.x) > 150;
-		if (far) {
-			const J = HeroView.FAR_JOG;
-			// the run stays inside the hero: its last bend (J) and the lane's first px fit above the hero's bottom edge
-			const runY = Math.min(Math.max(ft + 2 * J + 14, bt - 34), bt - J - 2);
-			this.route = new Route(
-				[
-					{ x: this.x, y: ft - 0.5 },
-					{ x: this.x, y: runY },
-					{ x: lane, y: runY },
-					{ x: lane, y: bt + 2 },
-				],
-				[0, J, J, 0],
-			);
-			this.jogY = runY + J;
-		} else if (Math.abs(lane - this.x) > 1.5) {
-			const J = HeroView.JOG;
-			this.route = new Route(
-				[
-					{ x: this.x, y: ft - 0.5 },
-					{ x: this.x, y: ft + J },
-					{ x: lane, y: ft + J },
-					{ x: lane, y: bt + 2 },
-				],
-				[0, J, J, 0],
-			);
-			this.jogY = ft + 2 * J;
+		const bt = this.bottom - this.top;
+		const A = this.leadA?.getBoundingClientRect(),
+			B = this.leadB?.getBoundingClientRect();
+		let x: number, ft: number, runY: number, lane: number, J: number;
+		if (A && B && A.width > 0 && B.width > 0) {
+			// the CSS lead: A's right border is the drop, its bottom border the run; B's left border is the lane
+			const cw = parseFloat(getComputedStyle(this.leadA!).borderRightWidth) || o.cable;
+			x = A.right - hr.left - cw / 2;
+			ft = A.top - hr.top;
+			runY = A.bottom - hr.top - cw / 2;
+			lane = B.left - hr.left + cw / 2;
+			J = Math.max(0, A.left - hr.left - lane);
 		} else {
-			this.route = new Route(
-				[
-					{ x: this.x, y: ft - 0.5 },
-					{ x: this.x, y: bt + 2 },
-				],
-				[0, 0],
-			);
-			this.jogY = ft - 0.5;
+			// (no static lead in the markup) straight down from the stem foot
+			const r = this.wm.getBoundingClientRect();
+			x = r.left - hr.left + (6 / 76) * r.width;
+			ft = r.bottom - hr.top;
+			runY = ft;
+			J = 0;
+			lane = x;
 		}
+		this.x = x;
+		this.foot = top + ft;
+		this.route =
+			Math.abs(lane - x) > 1
+				? new Route(
+						[
+							{ x, y: ft - 0.5 },
+							{ x, y: runY },
+							{ x: lane, y: runY },
+							{ x: lane, y: bt + 2 },
+						],
+						[0, J, J, 0],
+					)
+				: new Route(
+						[
+							{ x, y: ft - 0.5 },
+							{ x, y: bt + 2 },
+						],
+						[0, 0],
+					);
 		const segs = this.route.segs;
-		this.jogS = segs[segs.length - 1].s0;
-		// the lead's svg box is the lane strip only (never over the text); hero-local px kept by the viewBox
+		this.jogY = Math.abs(lane - x) > 1 ? runY + J : ft - 0.5;
+		this.jogS = Math.abs(lane - x) > 1 ? segs[segs.length - 1].s0 : 0;
+		// the pace: the tip reaches the lane's straight when the pen does (Yj px of scroll); where the pen is already past it at
+		// the top of the page (phones), it catches up within ≈ a fifth of a screen
+		const Yj = top + this.jogY - o.penY;
+		const R0 = Math.max(Yj, 0.22 * o.vh);
+		this.rate = Math.max(1.6, (this.jogS + R0 - Yj) / R0);
+		// the lead's svg box is the strip from the lane to the stem (hero-local px kept by the viewBox)
 		const h = hr.height,
-			x0 = Math.floor(Math.min(this.x, lane) - 24),
-			w = Math.ceil(Math.abs(lane - this.x)) + 48;
+			x0 = Math.floor(Math.min(x, lane) - 24),
+			w = Math.ceil(Math.abs(lane - x)) + 48;
 		this.wires.setAttribute('viewBox', `${x0} 0 ${w} ${f(h)}`);
 		this.wires.setAttribute('width', String(w));
 		this.wires.setAttribute('height', String(h));
 		this.wires.style.left = x0 + 'px';
 		this.wires.style.width = w + 'px';
-		for (const p of [this.ins]) p.setAttribute('stroke-width', String(o.cable));
+		this.ins.setAttribute('stroke-width', String(o.cable));
 		this.cu.setAttribute('stroke-width', String(o.cuW));
 		this.last = {};
 	}
 
-	static JOG = 6;
-	static FAR_JOG = 20;
-	/** arc length along the lead for a hero-local y of the tip: exact on the vertical run; through the jog (and 20 px below
-	 * it) the tip covers the bend's extra length a little faster than the page scrolls, so it meets the pen in the lane */
-	private sOf(y: number) {
-		const ft = this.foot - this.top - 0.5;
-		if (this.jogS <= 0.01 || y >= this.jogY + 20) return this.jogS + (y - this.jogY);
-		return ((Math.max(ft, y) - ft) / (this.jogY + 20 - ft)) * (this.jogS + 20);
+	/** arc length of the tip along the lead (≤ 0: still in the R); g: the page's glide (the hero is drawn g lower) */
+	private sAt(Yh: number, penY: number, g: number) {
+		const sPen = this.jogS + (Yh + penY - (this.top + g) - this.jogY);
+		return softmin(this.rate * Math.max(0, Yh), sPen, this.phone ? 16 : 24);
 	}
-	/** the travelling tip in document px (null: still inside the R); g: the page's glide (the hero is drawn g lower) */
+	/** the travelling tip in document px (null: still in the R). Before the lane it is a y above the lane's straight that
+	 * the compartments below read as «not here yet»; render reads the arc length back from it */
 	tip(Yh: number, penY: number, g = 0) {
-		const Yhand = this.D * 0.92;
-		if (Yh < Yhand) return null;
-		const foot = this.foot + g;
-		return foot + softmin(3 * (Yh - Yhand), Yh + penY - foot, this.phone ? 16 : 24);
+		const s = this.sAt(Yh, penY, g);
+		if (s <= 0.5) return null;
+		return this.top + g + this.jogY + (s - this.jogS);
+	}
+
+	/** document y where the lead runs straight down the lane (g: the glide) */
+	laneY(g = 0) {
+		return this.top + g + this.jogY;
 	}
 
 	private attr(e: Element, k: string, v: string) {
@@ -181,57 +163,26 @@ export class HeroView {
 	}
 
 	/**
-	 * Yh: smoothed scroll; tip: document px or null; done: the static page (the ferrule on the R, the lead laid end to end)
+	 * Yh: smoothed scroll; tip: document px or null; done: the static page (nothing drawn here: the CSS lead shows)
 	 */
 	render(Yh: number, tip: number | null, o: { done: boolean; g?: number }) {
-		const fx0 = RG.ferrule.x0;
-		const D = this.D;
 		const bt = this.bottom - this.top;
-		const p = o.done ? 1 : clamp01(Yh / D);
-		const ph = heroPhases(p);
-		const bl = 12,
-			tl = 46,
-			L = this.rLen;
-		let tx: number,
-			sx = 1,
-			fo = 1,
-			pos = (L + 2) * quintic(ph.bead),
-			on = ph.bead > 0 && ph.hand < 1,
-			trailOp = 0.32 * (1 - ph.hand);
-		if (o.done) {
-			// the static page: the ferrule sits on the R (no bead, no trail)
-			pos = bl;
-			on = false;
-			trailOp = 0;
-			tx = 0;
-		} else {
-			// pressed on, pop (spring: the overshoot is visible when scrubbed), unseat: it slides off the cable's end (clear of
-			// the O) and is gone by the time the bead is well into the R
-			const comp = 0.18 * smooth(ph.anticip);
-			const popV = prog(ph.pop * 0.32, SPRINGS.pop);
-			const un = smooth(ph.unseat);
-			sx = 1 - comp + comp * popV;
-			tx = 4 * popV * (1 - un) + 10 * un;
-			fo = 1 - smooth(clamp01((ph.unseat - 0.3) / 0.7));
+		const R = this.route!;
+		const g = o.g ?? 0;
+		// a scroll that comes before the opening has finished hurries it (≈ a third of its time left)
+		if (!o.done && !this.hurried && Yh > 2) {
+			this.hurried = true;
+			for (const a of this.wm.getAnimations?.({ subtree: true }) ?? []) a.updatePlaybackRate(3);
 		}
-		this.attr(this.ferrule, 'transform', `translate(${f(tx + fx0)} 0) scale(${f(sx)} 1) translate(${-fx0} 0)`);
-		this.attr(this.ferrule, 'opacity', f(fo) + '');
-		this.attr(this.spark, 'opacity', !o.done && ph.pop > 0 && ph.pop < 1 ? f(Math.sin(Math.PI * ph.pop)) + '' : '0');
-		this.attr(this.bead, 'stroke-dasharray', on ? `${bl} ${f(L + 200)}` : `0 ${f(L + 200)}`);
-		this.attr(this.bead, 'stroke-dashoffset', f(-(pos - bl)) + '');
-		this.attr(this.trail, 'stroke-dasharray', on && trailOp > 0 ? `${f(Math.min(tl, Math.max(0, pos - bl)))} ${f(L + 200)}` : `0 ${f(L + 200)}`);
-		this.attr(this.trail, 'stroke-dashoffset', f(-Math.max(0, pos - bl - tl)) + '');
-		this.attr(this.trail, 'stroke-opacity', f(trailOp) + '');
-		// the lead out of the stem foot (Carta on the ink nameplate, copper tip), hero-local px
 		let ins = '',
 			cu = '';
-		const R = this.route!;
-		if (o.done) ins = R.d(0, R.len);
-		else if (tip != null && tip > this.foot + (o.g ?? 0) + 0.5) {
-			const sT = Math.min(R.len, this.sOf(tip - this.top - (o.g ?? 0)));
-			const sC = Math.max(0, sT - this.cuL);
-			ins = R.d(0, sC);
-			cu = R.d(sC, sT);
+		// (the static page: the lead laid in CSS shows, Hero.astro)
+		if (!o.done && tip != null) {
+			const s = tip - this.top - g - this.jogY + this.jogS;
+			const sT = Math.min(R.len, s),
+				sC = Math.max(0, Math.min(R.len, s - this.cuL));
+			if (sC > 0) ins = R.d(0, sC);
+			if (sT > sC) cu = R.d(sC, sT);
 		}
 		this.attr(this.ins, 'd', ins);
 		this.attr(this.cu, 'd', cu);

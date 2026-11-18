@@ -253,7 +253,7 @@ export function initPanel() {
 		const thin = phone || parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) < 0.95;
 		const cable = thin ? 5 : bp === 'tablet' ? 7 : 10;
 		const cuL = thin ? 6.75 : bp === 'tablet' ? 9.5 : 13.5;
-		hero.rebuild(docTop(heroEl!), { vh, navH, cable, cuL, cuW: thin ? 2.15 : bp === 'tablet' ? 3 : 4.3, phone, lane });
+		hero.rebuild(docTop(heroEl!), { vh, penY, cable, cuL, cuW: thin ? 2.15 : bp === 'tablet' ? 3 : 4.3, phone, lane });
 		stages.forEach((s, i) => sleeves[i].measure(s.stage, { vh, cu: cuL, hero: heroEl }));
 		leadTok = { lane, cable, cuL, cuW: thin ? 2.15 : bp === 'tablet' ? 3 : 4.3, jr: bp === 'phone' ? 5 : bp === 'tablet' ? 8 : 12 };
 		relayoutContact();
@@ -468,7 +468,8 @@ export function initPanel() {
 			const pen = !motion ? s.stageH + 10 : tip == null ? -1e9 : tip === Infinity ? 1e9 : tip - top;
 			// its wire marker rides the tip down the lane (above the stage too), once the lead above it is laid to the pen
 			const prev = si > 0 ? stages[si - 1] : null;
-			sleeves[si].frame(pen, !prev || prev.tr.latched || prev.t >= prev.tr.tEnd - 1e-3);
+			// (+C1's comes out of the hero on the lane's straight only: not over the run or the bend into the lane)
+			sleeves[si].frame(pen, !prev || prev.tr.latched || prev.t >= prev.tr.tEnd - 1e-3, si === 0 ? hero.laneY(G) - top : -1e9);
 			lap('stages');
 			// off screen: nothing to draw (no simulation either); drawn in the frame it comes on screen
 			if (!s.vis) {
@@ -1095,8 +1096,6 @@ export function initPanel() {
 			const tr = byN(n).tr;
 			return { off: tr.offset(Y), top: tr.stageTop(Y) - Y, bench: tr.stageTop(Y) + byN(n).floor - Y, speed: tr.speed(Y) };
 		},
-		/** the hero's detach distance D (px of scroll) */
-		heroD: () => hero.D,
 		/** QA: when each lead of compartment n is a free rope (stepped with pins: what a settling can start from), every 50 ms:
 		 * 'i' in-lead, 'o' out-lead, 'b' both, '.' neither */
 		ropeModes(n: number) {

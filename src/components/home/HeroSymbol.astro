@@ -1,11 +1,11 @@
 ---
 /**
  * The ROBOSECT symbol: the R of the logo (the kit's negativo: Carta and rame chiaro), drawn as a stroke (not an outline)
- * so it can come apart. At rest (without JS, with reduced motion, at the top of the page) it is exactly the kit's symbol:
- * the R ends in its crimped ferrule, same geometry and colours, nothing redrawn or stretched. The name stays in the nav bar.
- * scripts/panel/hero.ts scrubs the detach with the first ~200 px of scroll: the ferrule is pressed onto the cable, pops,
- * slides off the cable's end and is gone, and a copper bead glides through the R to the stem foot, where the test lead
- * takes over and the cable crosses the page. Scrolling back re-seats it; the static page shows it seated.
+ * so its appearance can be animated. At rest it is exactly the kit's symbol: the R ends in its crimped ferrule, same
+ * geometry and colours, nothing redrawn or stretched. The name stays in the nav bar.
+ * The opening (once, on load, motion only; pure CSS, so it plays even if the page script fails): the ferrule slides in,
+ * then the cable runs out of its mouth along the R, its copper conductor leading, and stops at the stem foot, where the
+ * test lead takes over on the first scroll (scripts/panel/hero.ts). Reduced motion, no JS, print: the symbol as it is.
  */
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
 
@@ -14,24 +14,19 @@ const vbH = G.bot - G.top + 1;
 const F = G.ferrule;
 // the symbol's box: the stem's left edge (x 0) to the strands' tip; one unit = --s px (set by the hero)
 const vbW = F.x1;
+// the conductor: as wide as the page lead's copper (0.43 of the cable), as long as its copper tip (1.35 cable widths)
 const bw = +(G.w * 0.43).toFixed(2);
 const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 ---
 
 <svg class="hero-symbol" viewBox={`0 ${vbY} ${vbW} ${vbH}`} role="img" aria-label="ROBOSECT" data-wordmark focusable="false" style={size}>
-	{/* paint as literal attributes: Carta cable and collar, rame chiaro copper; CSS sets no paint here */}
+	{/* paint as literal attributes: Carta cable and collar, rame chiaro copper; CSS sets only the opening's dashes */}
 	<g class="hw-r">
-		<path class="hw-cable" d={G.rD} fill="none" stroke="#F4F1EC" stroke-width={G.w} stroke-linecap="butt" data-hw-r></path>
+		<path class="hw-cable" d={G.rD} pathLength="100" fill="none" stroke="#F4F1EC" stroke-width={G.w} stroke-linecap="butt" data-hw-r></path>
+		<path class="hw-head" d={G.rD} pathLength="100" fill="none" stroke="#EC8A52" stroke-width={bw} stroke-linecap="butt" stroke-dasharray="0 1000" data-hw-head></path>
 		<g class="hw-ferrule" data-hw-ferrule>
 			<path d={F.collar} fill="#F4F1EC" stroke="none"></path>
 			<path d={F.cu} fill="#EC8A52" stroke="none"></path>
-		</g>
-		<path class="hw-trail" d={G.rD} fill="none" stroke="#EC8A52" stroke-opacity="0.32" stroke-width={bw} stroke-linecap="butt" stroke-dasharray="0 1000" data-hw-trail></path>
-		<path class="hw-bead" d={G.rD} fill="none" stroke="#EC8A52" stroke-width={bw} stroke-linecap="butt" stroke-dasharray="0 1000" data-hw-bead></path>
-		<g class="hw-spark" transform={`translate(${F.x1 + 2} ${F.y})`} opacity="0" data-hw-spark>
-			<line x1="2" y1="-5" x2="5" y2="-10" stroke="#EC8A52" stroke-width="2.2" stroke-linecap="round"></line>
-			<line x1="4" y1="0" x2="10" y2="0" stroke="#EC8A52" stroke-width="2.2" stroke-linecap="round"></line>
-			<line x1="2" y1="5" x2="5" y2="10" stroke="#EC8A52" stroke-width="2.2" stroke-linecap="round"></line>
 		</g>
 	</g>
 </svg>
@@ -43,5 +38,64 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 		height: auto;
 		aspect-ratio: var(--sym-ar);
 		overflow: visible;
+	}
+
+	/* The opening, ≈ 1.2 s. The cable's dashes run in pathLength units (the R = 100): the conductor's front C goes
+	   0 → 106.5 from the ferrule's mouth to the stem foot and out of it; the copper (6.5 long) is [C − 6.5, C], the white
+	   insulation [0, C − 6.5] behind it. Nothing shows at the start; at the end the white covers the whole R and the copper
+	   has run out of the path at the foot: the kit's symbol again. html.motion is set before
+	   the first paint (BaseLayout), so the R never flashes whole first; the page script marks it done
+	   (data-intro-done) so a later switch back to motion (print, the reduced-motion setting) does not replay it. */
+	:global(html.motion) .hero-symbol:not([data-intro-done]) .hw-cable {
+		stroke-dasharray: 100 200;
+		animation: hw-lay 860ms cubic-bezier(0.65, 0, 0.35, 1) 300ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) .hw-head {
+		stroke-dasharray: 6.5 300;
+		animation: hw-cu 860ms cubic-bezier(0.65, 0, 0.35, 1) 300ms both;
+	}
+
+	:global(html.motion) .hero-symbol:not([data-intro-done]) .hw-ferrule {
+		animation: hw-crimp 460ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+	}
+
+	@keyframes hw-lay {
+		from {
+			stroke-dashoffset: 106.5;
+		}
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@keyframes hw-cu {
+		from {
+			stroke-dashoffset: 6.5;
+		}
+		to {
+			stroke-dashoffset: -100;
+		}
+	}
+
+	/* the ferrule is crimped: it appears a little open (taller) and the press closes it, in place (it never leaves the
+	   symbol's box, so nothing crosses the page margin) */
+	:global(html.motion) .hw-ferrule {
+		transform-box: fill-box;
+		transform-origin: 30% 50%;
+	}
+
+	@keyframes hw-crimp {
+		from {
+			opacity: 0;
+			transform: scaleY(1.22);
+		}
+		45% {
+			opacity: 1;
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
 	}
 </style>
