@@ -37,6 +37,10 @@ export class HeroView {
 	private rate = 3;
 	/** the opening has been hurried by a scroll that came first */
 	private hurried = false;
+	/** the symbol's opening (R, then the fitting) has ended: the lead may come out */
+	private open = false;
+	/** called when the opening ends, to draw a frame */
+	onOpen: (() => void) | null = null;
 	private last: Record<string, string> = {};
 
 	constructor(hero: HTMLElement) {
@@ -59,9 +63,16 @@ export class HeroView {
 		this.ins = mk('#F4F1EC');
 		this.cu = mk('#EC8A52');
 		// the opening plays once: a later switch back to motion (print, the reduced-motion setting) shows the R at rest
-		const mark = () => this.wm.setAttribute('data-intro-done', '');
-		this.wm.querySelector('[data-hw-r]')?.addEventListener('animationend', mark, { once: true });
-		this.wm.querySelector('[data-hw-r]')?.addEventListener('animationcancel', mark, { once: true });
+		// the opening is the R, then the fitting (it enters only once the R is whole), then the lead out of its mouth: the
+		// lead is held back (tip() is null) until every animation of the symbol has ended
+		const anims = this.wm.getAnimations?.({ subtree: true }) ?? [];
+		const mark = () => {
+			this.wm.setAttribute('data-intro-done', '');
+			this.open = true;
+			this.onOpen?.();
+		};
+		if (anims.length === 0) this.open = true;
+		else Promise.allSettled(anims.map((a) => a.finished)).then(mark);
 	}
 
 	/** top: the hero's layout top in the document (an offsetTop chain: the glide's transform does not count); the
@@ -145,6 +156,7 @@ export class HeroView {
 	/** the travelling tip in document px (null: still in the R). Before the lane it is a y above the lane's straight that
 	 * the compartments below read as «not here yet»; render reads the arc length back from it */
 	tip(Yh: number, penY: number, g = 0) {
+		if (!this.open) return null;
 		const s = this.sAt(Yh, penY, g);
 		if (s <= 0.5) return null;
 		return this.top + g + this.jogY + (s - this.jogS);

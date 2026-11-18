@@ -673,6 +673,7 @@ export function initPanel() {
 	for (const ev of ['pointerup', 'pointercancel', 'mouseup', 'dragend']) addEventListener(ev, release, { passive: true, capture: true });
 	addEventListener('blur', () => (pointerHeld = false));
 	addEventListener('pointermove', (e) => e.buttons && markInput(), { passive: true, capture: true });
+	hero.onOpen = kick;
 	addEventListener('scroll', kick, { passive: true });
 	document.addEventListener('visibilitychange', onVisibility);
 	// keyboard focus: the browser scrolled the element into view with the page's transforms as they were: re-aim;

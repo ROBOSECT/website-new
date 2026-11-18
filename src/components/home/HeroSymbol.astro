@@ -44,7 +44,7 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 		</g>
 		<g class="sx-screw"><circle cx="-1.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sx-slot" x="-2.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
 		<g class="sx-screw"><circle cx="13.1" cy="101.6" r="1.5" fill="#E9E5DE" stroke="#5A6676" stroke-width=".3"/><rect class="sx-slot" x="12.1" y="101.35" width="2" height=".5" fill="#0D1B2E"/></g>
-		<circle cx="6" cy="101.6" r="1.15" fill="#E9E5DE" stroke="#9AA6B5" stroke-width=".3"/>
+		<circle class="sx-body" cx="6" cy="101.6" r="1.15" fill="#E9E5DE" stroke="#9AA6B5" stroke-width=".3"/>
 		<g class="sx-on"><g class="sx-glow"><circle cx="6" cy="101.6" r="2.99" fill="#EC8A52" fill-opacity=".12"/><circle cx="6" cy="101.6" r="1.95" fill="#EC8A52" fill-opacity=".22"/></g><circle cx="6" cy="101.6" r="1.15" fill="#EC8A52"/></g>
 	</g>
 	<g class="sx" data-sx="spina">
@@ -128,7 +128,8 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 			transform: none;
 		}
 	}
-	/* The fitting under the foot (10 units tall; the svg's box does not grow, it overflows). One of three is shown, chosen at
+	/* The fitting enters only when the R is whole (the R ends at 1160 ms; every sx delay starts there), then the lead comes out
+	   of its mouth (hero.ts holds the lead back until the last animation ends). The fitting under the foot (10 units tall; the svg's box does not grow, it overflows). One of three is shown, chosen at
 	   random per load (BaseLayout sets html[data-sistemino]); the reducer is the default (no JS). Same opening rules as
 	   the R: only in motion, once. */
 	.sx {
@@ -156,30 +157,30 @@ const size = `--sym-w:${vbW};--sym-ar:${vbW} / ${+vbH.toFixed(4)}`;
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='giunto'] .sx-body,
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-body {
 		transform-origin: 50% 0;
-		animation: sx-crimp 460ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+		animation: sx-crimp 460ms cubic-bezier(0.22, 1, 0.36, 1) 1160ms both;
 	}
 
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='giunto'] .sx-cu {
 		transform-origin: 50% 0;
-		animation: sx-fill 220ms cubic-bezier(0.65, 0, 0.35, 1) 1080ms both;
+		animation: sx-fill 220ms cubic-bezier(0.65, 0, 0.35, 1) 1760ms both;
 	}
 
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] :is(.sx-body, .sx-screw) {
-		animation: sx-fade 380ms ease-out 0ms both;
+		animation: sx-fade 380ms ease-out 1160ms both;
 	}
 
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] .sx-slot {
 		transform-origin: 50% 50%;
-		animation: sx-turn 260ms cubic-bezier(0.22, 1, 0.36, 1) 860ms both;
+		animation: sx-turn 260ms cubic-bezier(0.22, 1, 0.36, 1) 1610ms both;
 	}
 
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='morsetto'] .sx-on,
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-on {
-		animation: sx-fade 200ms ease-out 1100ms both;
+		animation: sx-fade 200ms ease-out 1810ms both;
 	}
 
 	:global(html.motion) .hero-symbol:not([data-intro-done]) [data-sx='spina'] .sx-plug {
-		animation: sx-plug 420ms cubic-bezier(0.22, 1, 0.36, 1) 560ms both;
+		animation: sx-plug 420ms cubic-bezier(0.22, 1, 0.36, 1) 1460ms both;
 	}
 
 	@keyframes sx-crimp {
