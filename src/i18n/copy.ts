@@ -1,7 +1,7 @@
 /**
  * ROBOSECT — site copy, EN + IT.
  *
- * Source of truth for every string on the one-page home, nav, footer and blog index.
+ * Source of truth for every string on the one-page home, nav, footer and news posts.
  * Both languages share the exact same key structure (and the same array lengths), so a
  * component can do `const t = copy[lang]` and never branch on language.
  *
@@ -10,9 +10,8 @@
  *   harnesses, robot cells and other manipulation are «Also for you». «Bring us a project» / «Proponeteci un progetto» is the
  *   main action; «Write to us» / «Scriveteci» in the bar and «Tell us about your process» / «Parlateci del vostro
  *   processo» for every other process (Italian addresses the reader as «voi», except the Team job line, which stays «tu»).
- * - No invented metrics, clients, testimonials, certifications or people. Every missing
- *   proof point is a visible placeholder that starts with "[TBD:". Search for "[TBD:" before
- *   going live; none of them should reach production.
+ * - No invented metrics, clients, testimonials, certifications or people. A proof point that is still missing is
+ *   left out, not shown as a placeholder (Alex, 18/11/2026: no «[TBD: …]» on the pages).
  * - Facts used: the brand story (ROBOSECT-Il-Cavo/01-Storia-e-strategia/racconto-del-marchio.md) and the previous site
  *   (website-new `master` up to 42db8e8): University of Bologna spin-off; AIRISE.eu funding for an AI-based robotic platform
  *   for switchboard quality control (visual inspection of assembly defects, cable-marker reading, continuity testing);
@@ -71,7 +70,6 @@ export const copy = {
 				{ id: 'proof', anchor: 'proof', label: 'Prototype' },
 				{ id: 'also-for-you', anchor: 'work', label: 'Engineering & R&D' },
 				{ id: 'team', anchor: 'team', label: 'Team' },
-				{ id: 'news', anchor: 'news', label: 'News' },
 			],
 			blog: 'News',
 			// Label and ariaLabel are in the TARGET language: render the link with lang="it" / lang="en".
@@ -196,36 +194,29 @@ export const copy = {
 		benefits: {
 			id: 'what-you-get',
 			eyebrow: 'What you get',
+			// the one action under the products: a demo request goes through «Bring us a project» too
+			ctaPromise: 'A demo or a project of your own: we will tell you plainly whether a robot can do it, and how.',
 			title: 'What changes in your testing',
 			intro:
-				'The robot does the round of the test points. Your people check the results and decide. The figures below are published only once measured on the prototype.',
+				'The robot does the round of the test points. Your people check the results and decide.',
 			items: [
 				{
 					title: 'Fewer hours of manual testing',
 					body: 'The robot goes from point to point; the technician no longer spends the day with the probes in hand.',
-					value: '[TBD: minutes per switchboard]',
-					valueLabel: 'Test cycle per switchboard',
 				},
 				{
 					title: 'Every connection checked',
 					body: 'The sequence comes from the connection list: every wire on the list gets its test, none is skipped in a hurry.',
-					value: '[TBD: % of test points reached automatically]',
-					valueLabel: 'Test points reached automatically',
 				},
 				{
 					title: 'A report for your customer',
 					body: 'Every switchboard leaves with its digital test report, traceable. Ready to hand over with the board.',
-					value: '[TBD: anonymised sample report]',
-					valueLabel: 'Sample report',
 				},
 				{
 					title: 'Skilled people on the work that matters',
 					body: 'The robot takes the repetitive round of the test points. The decisions stay with the people who know the trade.',
-					value: '[TBD: technician hours freed per switchboard]',
-					valueLabel: 'Technician time freed',
 				},
 			],
-			note: 'Every figure will come with its test conditions: [TBD: switchboard type, number of test points, date of measurement].',
 			products: {
 				id: 'products',
 				title: 'Four products, from switchboards to reels',
@@ -240,7 +231,6 @@ export const copy = {
 						line: 'A semi-automatic bench unit: a camera reads the cable labels from above and a status light guides the operator.',
 						forWhom: 'Small switchboard builders',
 						note: '',
-						cta: 'Ask us for a demo',
 					},
 					{
 						media: 'cell',
@@ -250,7 +240,6 @@ export const copy = {
 						line: 'A robot cell with two collaborative arms: it tests every connection from your EPLAN list, and each switchboard leaves with its digital report.',
 						forWhom: 'Larger builders and companies with their own switchboard shop',
 						note: '',
-						cta: 'Ask us for a demo',
 					},
 					{
 						media: 'schemes',
@@ -260,7 +249,6 @@ export const copy = {
 						line: 'Turns schematics that exist only as PDF into the structured data the other products need.',
 						forWhom: 'Builders and maintainers whose schematics exist only as PDF',
 						note: '',
-						cta: 'Ask us for a demo',
 					},
 					{
 						media: 'reel',
@@ -270,7 +258,6 @@ export const copy = {
 						line: 'A robot cell that loads the new reel, threads the tape and splices it, as a retrofit or an option.',
 						forWhom: 'Makers and users of automatic packaging machines',
 						note: 'Seen so far in simulation: find the loose end, take it, thread the tape and join it.',
-						cta: 'Ask us for a demo',
 					},
 				],
 			},
@@ -427,48 +414,38 @@ export const copy = {
 						role: 'CEO & Co-Founder',
 						bio: '',
 						photoAlt: 'Alessio Caporali, CEO & Co-Founder of ROBOSECT',
-						linkedinLabel: 'Alessio Caporali on LinkedIn',
 					},
 					{
 						name: 'Kevin Galassi',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Davide Chiaravalli',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Giorgio Medico',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Alex Pasquali',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Gianluca Palli',
 						role: 'Advisor',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 				],
-			},
-			publications: {
-				label: 'Selected publications',
-				href: '[TBD: link to publication list]',
 			},
 			joinUs: {
 				text: 'Want to build robots that handle what others avoid?',
@@ -614,12 +591,11 @@ export const copy = {
 			metaDescription: 'Projects, events and milestones from ROBOSECT.',
 			intro: 'Projects, events and milestones from the ROBOSECT team.',
 			readMore: 'Read more',
-			backToBlog: 'Back to news',
+			backToBlog: 'Back to the site',
 			publishedOn: 'Published on',
 			tagsLabel: 'Tags',
 			empty: 'No posts yet.',
 			homeTeaserTitle: 'Latest news',
-			viewAll: 'All news',
 			languageNote: '',
 		},
 
@@ -672,7 +648,6 @@ export const copy = {
 				{ id: 'proof', anchor: 'proof', label: 'Prototipo' },
 				{ id: 'also-for-you', anchor: 'work', label: 'Ingegneria e R&D' },
 				{ id: 'team', anchor: 'team', label: 'Team' },
-				{ id: 'news', anchor: 'news', label: 'News' },
 			],
 			blog: 'News',
 			langSwitch: {
@@ -792,36 +767,28 @@ export const copy = {
 		benefits: {
 			id: 'what-you-get',
 			eyebrow: 'Cosa ottenete',
+			ctaPromise: 'Una demo o un vostro progetto: vi diciamo con franchezza se un robot può farlo, e come.',
 			title: 'Cosa cambia nel vostro collaudo',
 			intro:
-				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono. I numeri qui sotto li pubblichiamo solo dopo averli misurati sul prototipo.',
+				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono.',
 			items: [
 				{
 					title: 'Meno ore di collaudo manuale',
 					body: 'Il robot va da un punto all’altro; il tecnico non passa più la giornata con i puntali in mano.',
-					value: '[TBD: minuti per quadro]',
-					valueLabel: 'Tempo ciclo di collaudo per quadro',
 				},
 				{
 					title: 'Ogni collegamento verificato',
 					body: 'La sequenza nasce dalla lista collegamenti: ogni filo della lista ha la sua prova, nessuno saltato per fretta.',
-					value: '[TBD: % di punti di prova raggiunti in automatico]',
-					valueLabel: 'Punti di prova raggiunti in automatico',
 				},
 				{
 					title: 'Un verbale per il vostro cliente',
 					body: 'Ogni quadro esce con il suo verbale di collaudo digitale, tracciabile. Pronto da consegnare insieme al quadro.',
-					value: '[TBD: esempio di verbale anonimizzato]',
-					valueLabel: 'Verbale d’esempio',
 				},
 				{
 					title: 'Persone esperte sul lavoro che conta',
 					body: 'Il robot si prende il giro ripetitivo dei punti di prova. Le decisioni restano a chi conosce il mestiere.',
-					value: '[TBD: ore di tecnico liberate per quadro]',
-					valueLabel: 'Tempo del tecnico liberato',
 				},
 			],
-			note: 'Ogni numero arriverà con le sue condizioni di prova: [TBD: tipo di quadro, numero di punti di prova, data della misura].',
 			products: {
 				id: 'products',
 				title: 'Quattro prodotti, dai quadri alle bobine',
@@ -836,7 +803,6 @@ export const copy = {
 						line: 'Un’unità da banco semiautomatica: una telecamera legge le etichette dei cavi dall’alto e una spia di stato guida l’operatore.',
 						forWhom: 'Piccoli costruttori di quadri',
 						note: '',
-						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'cell',
@@ -846,7 +812,6 @@ export const copy = {
 						line: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della vostra lista EPLAN e ogni quadro esce con il suo verbale digitale.',
 						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
 						note: '',
-						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'schemes',
@@ -856,7 +821,6 @@ export const copy = {
 						line: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri prodotti.',
 						forWhom: 'Costruttori e manutentori con gli schemi solo in PDF',
 						note: '',
-						cta: 'Chiedeteci una demo',
 					},
 					{
 						media: 'reel',
@@ -866,7 +830,6 @@ export const copy = {
 						line: 'Una cella robotizzata che carica la bobina nuova, infila il nastro e fa la giunta, in retrofit o come opzione.',
 						forWhom: 'Costruttori e utilizzatori di macchine automatiche per il confezionamento',
 						note: 'Finora in simulazione: trovare il capo libero, prenderlo, infilare il nastro e giuntarlo.',
-						cta: 'Chiedeteci una demo',
 					},
 				],
 			},
@@ -1023,48 +986,38 @@ export const copy = {
 						role: 'CEO e co-fondatore',
 						bio: '',
 						photoAlt: 'Alessio Caporali, CEO e co-fondatore di ROBOSECT',
-						linkedinLabel: 'Alessio Caporali su LinkedIn',
 					},
 					{
 						name: 'Kevin Galassi',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Davide Chiaravalli',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Giorgio Medico',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Alex Pasquali',
 						role: '',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 					{
 						name: 'Gianluca Palli',
 						role: 'Advisor',
 						bio: '',
 						photoAlt: '',
-						linkedinLabel: '',
 					},
 				],
-			},
-			publications: {
-				label: 'Pubblicazioni selezionate',
-				href: '[TBD: link all’elenco delle pubblicazioni]',
 			},
 			joinUs: {
 				text: 'Vuoi lavorare su robot che fanno ciò che gli altri evitano?',
@@ -1206,12 +1159,11 @@ export const copy = {
 			metaDescription: 'Progetti, eventi e traguardi di ROBOSECT.',
 			intro: 'Progetti, eventi e traguardi del team ROBOSECT.',
 			readMore: 'Leggi l’articolo',
-			backToBlog: 'Torna alle news',
+			backToBlog: 'Torna al sito',
 			publishedOn: 'Pubblicato il',
 			tagsLabel: 'Tag',
 			empty: 'Nessun articolo, per ora.',
 			homeTeaserTitle: 'Ultime news',
-			viewAll: 'Tutte le news',
 			languageNote: 'Gli articoli sono al momento disponibili solo in inglese.',
 		},
 

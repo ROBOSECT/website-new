@@ -1,10 +1,9 @@
 ---
 /**
- * What you get: four outcomes for a switchboard builder. The figures behind them are not measured yet: each one is a
- * visible [TBD] placeholder, and the note says they will come with their test conditions.
+ * What you get: four outcomes for a switchboard builder. The figures behind them are not measured yet, so the cards
+ * show none (no placeholders on the page); they come back with their test conditions once measured.
  * (+C3's vignette: the opener opens the spring cage, the lead goes in, four outputs light 1 → 4: the four outcomes.)
  */
-import Rich from '../ui/Rich.astro';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
 import ProductCards from './ProductCards.astro';
@@ -25,17 +24,10 @@ const cta = copy[lang].cta;
 					<p class="get__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
 					<h3 class="get__title">{it.title}</h3>
 					<p class="get__body">{it.body}</p>
-					<p class="get__metric">
-						<span class="get__label">{it.valueLabel}</span>
-						<span class="get__value">
-							<Rich text={it.value} />
-						</span>
-					</p>
 				</li>
 			))
 		}
 	</ul>
-	<p class="gets__note" data-b><Rich text={b.note} /></p>
 	<div class="prods" id={b.products.id} data-b>
 		<h3 class="prods__h">{b.products.title}</h3>
 		<p class="prods__intro">{b.products.intro}</p>
@@ -48,7 +40,7 @@ const cta = copy[lang].cta;
 				><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
 			>
 		</a>
-		<span class="gets__promise">{cta.promise}</span>
+		<span class="gets__promise">{b.ctaPromise}</span>
 	</p>
 </Compartment>
 
@@ -113,28 +105,6 @@ const cta = copy[lang].cta;
 		color: var(--paper);
 	}
 
-	/* the measured figure: a label and its value, at the foot of the card */
-	.get__metric {
-		display: grid;
-		gap: 6px;
-		margin-top: auto;
-		padding-top: 20px;
-	}
-
-	.get__label {
-		padding-top: 12px;
-		border-top: 1px solid #2b3a52;
-		font-size: 13.5px;
-		line-height: 1.35;
-		color: var(--steel-light);
-	}
-
-	.gets__note {
-		margin-top: 16px;
-		font-size: 15px;
-		line-height: 1.5;
-		color: var(--steel-light);
-	}
 
 	.gets__cta {
 		display: flex;

@@ -1,6 +1,6 @@
 ---
 /**
- * The four products, one card each, always in the same order: media, stage, name, what it does, who it is for, action.
+ * The four products, one card each, always in the same order: media, stage, name, what it does, who it is for. The one action sits under the cards («Bring us a project», demo requests included).
  * Texts from copy.benefits.products.cards (the reel-change card adds a note on what has been seen so far). The media is a key: the Cable Reader render, a still of the Quality Control Cell,
  * the rebuilt switchboard for schematic conversion, the tape-threading simulation for the reel-change cell.
  */
@@ -19,7 +19,6 @@ interface Card {
 	line: string;
 	forWhom: string;
 	note: string;
-	cta: string;
 }
 interface Props {
 	lang: Lang;
@@ -29,7 +28,6 @@ interface Props {
 	dark?: boolean;
 }
 const { lang, forLabel, cards, dark = false } = Astro.props;
-const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 ---
 
 <ul class:list={['pc', dark && 'pc--dark']}>
@@ -48,12 +46,6 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 					<p class="pc__line">{c.line}</p>
 					<p class="pc__for"><span>{forLabel}</span> {c.forWhom}</p>
 					{c.note && <p class="pc__note">{c.note}</p>}
-					<p class="pc__actions">
-						<a class="text-link" href="#contact">
-							{c.cta}
-							<svg viewBox="0 0 18 18" aria-hidden="true"><path d={arrow} fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-						</a>
-					</p>
 				</div>
 			</li>
 		))
@@ -161,13 +153,6 @@ const arrow = 'M2 9h12M9.5 4.5 14 9l-4.5 4.5';
 		background: var(--ink-2);
 	}
 
-	.pc__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px 24px;
-		margin-top: auto;
-		padding-top: 16px;
-	}
 
 	@media (min-width: 700px) {
 		.pc {

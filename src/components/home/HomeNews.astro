@@ -1,7 +1,8 @@
 ---
 /**
  * The latest news on the home page: a plain section after the panel, before the footer (no compartment, no robot, no
- * morph). Up to three posts as cards; the whole card is the link to the post. The posts are in English only: the Italian
+ * morph). Every post as a card, newest first; the whole card is the link to the post, which opens on its own page and leads
+ * back here. There is no news index page and no News item in the bar (Alex, 18/11/2026). The posts are in English only: the Italian
  * page says so. It moves with the footer while the page glides (scripts/panel: one of the gliding blocks).
  */
 import { Image } from 'astro:assets';
@@ -13,7 +14,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const b = copy[lang].blog;
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((x, y) => y.data.date.valueOf() - x.data.date.valueOf()).slice(0, 3);
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((x, y) => y.data.date.valueOf() - x.data.date.valueOf());
 const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
@@ -23,12 +24,6 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 			<div class="wrap">
 				<div class="hnews__head">
 					<h2 id="news-title" class="hnews__title">{b.homeTeaserTitle}</h2>
-					<a class="text-link hnews__all" href="/blog">
-						{b.viewAll}
-						<svg viewBox="0 0 18 18" aria-hidden="true">
-							<path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" />
-						</svg>
-					</a>
 				</div>
 				{b.languageNote && <p class="hnews__note">{b.languageNote}</p>}
 				<ul class="hnews__list">
@@ -76,17 +71,6 @@ const fmt = (d: Date) => d.toLocaleDateString(copy[lang].meta.dateLocale, { year
 		letter-spacing: -0.025em;
 	}
 
-	.hnews__all {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		font-weight: 600;
-	}
-
-	.hnews__all svg {
-		width: 18px;
-		height: 18px;
-	}
 
 	.hnews__note {
 		margin-top: 10px;

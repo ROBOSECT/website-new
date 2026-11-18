@@ -25,6 +25,8 @@ export default defineConfig({
 		'/it/prodotti': '/it/#products',
 		'/it/packaging': '/it/#products',
 		'/it/lavora-con-noi': '/it/#work',
+		// no news index page: the news are the strip at the foot of the home page
+		'/blog': '/#news',
 	},
 	vite: {
 		build: {
