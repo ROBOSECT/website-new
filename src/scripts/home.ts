@@ -92,38 +92,10 @@ function initNavState() {
 	document.querySelectorAll<HTMLElement>('section[id] > .pin > .stage, section[id] > .stage').forEach((st) => io.observe(st));
 }
 
-/** one brand on screen: the bar's logo stays hidden while any part of the hero wordmark is in view below the bar
- * (the page loads at the top with it hidden: no flash), and comes in once the wordmark has gone under the bar */
+/** one brand on screen: the hero carries only the symbol (the R), so the bar's logotype stays on the home page too
+ * (it leaves while the footer's big wordmark is in view: site.ts) */
 function initBrandOnce() {
-	const wm = document.querySelector<SVGElement>('[data-wordmark]');
-	const nav = document.querySelector<HTMLElement>('[data-nav]');
-	// the footer's big wordmark is the brand too: the bar's logo leaves while it is in view
-	const foot = document.querySelector<HTMLElement>('.footer__mark');
-	if (!wm || !nav || !('IntersectionObserver' in window)) {
-		document.body.classList.remove('hero-brand-visible');
-		return;
-	}
-	let io: IntersectionObserver | null = null;
-	const seen = new Map<Element, boolean>();
-	const watch = () => {
-		io?.disconnect();
-		seen.clear();
-		io = new IntersectionObserver(
-			(es) => {
-				for (const e of es) seen.set(e.target, e.isIntersecting);
-				document.body.classList.toggle('hero-brand-visible', [...seen.values()].some(Boolean));
-			},
-			{ rootMargin: `-${nav.offsetHeight}px 0px 0px 0px` },
-		);
-		io.observe(wm);
-		if (foot) io.observe(foot);
-	};
-	watch();
-	let t = 0;
-	window.addEventListener('resize', () => {
-		clearTimeout(t);
-		t = window.setTimeout(watch, 150);
-	});
+	document.body.classList.remove('hero-brand-visible');
 }
 
 /** The prototype video (Proof) starts on its own, muted and in a loop, while at least half of it is on screen, and pauses

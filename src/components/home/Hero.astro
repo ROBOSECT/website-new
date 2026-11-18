@@ -1,5 +1,5 @@
 ---
-import HeroWordmark from './HeroWordmark.astro';
+import HeroSymbol from './HeroSymbol.astro';
 import { copy, type Lang } from '../../i18n/copy';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
 
@@ -10,9 +10,9 @@ const { lang } = Astro.props;
 const h = copy[lang].hero;
 const brand = copy[lang].brand;
 const cta = copy[lang].cta;
-// the logo's measures in cable widths, from the geometry (HeroWordmark's box starts 0.5 above G.top): the stem foot below the
-// box top, the O's left edge, the clear space
-const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:${+(G.oLeft / G.w).toFixed(4)};--wm-clear:${+(G.clear / G.w).toFixed(4)}`;
+// the symbol's measures in logo-grid units (1 unit = var(--s) px), from the geometry (HeroSymbol's box starts 0.5 above G.top):
+// the clear space (the ferrule's length) kept around the R
+const wm = `--wm-clear:${G.clear}`;
 ---
 
 <section class="hero on-dark" data-hero aria-labelledby="hero-title">
@@ -20,12 +20,7 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 	<svg class="hero__wires" aria-hidden="true" focusable="false" data-hero-wires></svg>
 	<div class="hero__text">
 		<p class="hero__brand" data-hero-brand style={wm}>
-			<HeroWordmark />
-			{/* phones (no JS, reduced motion): the lead bends out of the stem foot into the gutter lane (scripts/panel/hero.ts
-			     draws the same S-jog in motion) */}
-			<svg class="hero__jog" viewBox="0 0 28 15" width="28" height="15" aria-hidden="true" focusable="false"
-				><path d="M24.5 0V0.5A6 6 0 0 1 18.5 6.5H9A6 6 0 0 0 3 12.5V15" fill="none" stroke="#F4F1EC" stroke-width="5" stroke-linecap="butt"></path></svg
-			>
+			<HeroSymbol />
 			<span class="hero__descriptor">{brand.descriptor}</span>
 		</p>
 		<h1 id="hero-title" class="hero__title">{h.headline}</h1>
@@ -71,64 +66,20 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		padding: 36px var(--m) 64px;
 	}
 
+	/* one unit of the logo grid in px: the R's stroke is 12 units. Phones and tablet: the R sits above the title */
+	.hero {
+		--s: 1.5px;
+	}
+
 	.hero__brand {
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		/* the descriptor stays out of the logo's clear space (its line box carries ≈ 6 px above the letters) */
-		gap: max(14px, calc(var(--cable-w) * var(--wm-clear) - 6px));
-		/* the R's stem sits on the cable lane: wordmark left = lane − stem half-width */
-		margin-left: calc(var(--lane) - var(--m) - var(--cable-w) / 2);
+		/* the descriptor stays out of the symbol's clear space (the ferrule's length; its line box carries ≈ 6 px above the letters) */
+		gap: max(14px, calc(var(--s) * var(--wm-clear) - 6px));
 	}
 
-	/* the laid lead out of the stem foot without JS / with reduced motion (Carta on the ink nameplate) */
-	.hero__brand::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: calc(var(--cable-w) * var(--wm-foot));
-		width: var(--cable-w);
-		height: 4000px;
-		background: var(--paper);
-		pointer-events: none;
-	}
-
-	:global(html.motion) .hero__brand::after,
-	:global(html.motion) .hero__jog {
-		display: none;
-	}
-
-	.hero__jog {
-		display: none;
-	}
-
-	/* phones: the wordmark on the text edge (one left edge, clear of the screen edge); the lead leaves the R's
-	   stem foot and bends into the gutter lane right under the R, then runs down to the cabinet */
-	@media (max-width: 699px) {
-		.hero__brand {
-			margin-left: 0;
-		}
-
-		.hero__jog {
-			display: block;
-			position: absolute;
-			left: calc(var(--lane) - var(--m) - 3px);
-			top: calc(var(--cable-w) * var(--wm-foot));
-			width: 28px;
-			height: 15px;
-			pointer-events: none;
-		}
-
-		.hero__brand::after {
-			left: calc(var(--lane) - var(--m) - var(--cable-w) / 2);
-			top: calc(var(--cable-w) * var(--wm-foot) + 14px);
-		}
-	}
-
-	/* phones: under the O (the wordmark is on the text edge); from 700 px the R hangs in the gutter on the lane, so the
-	   descriptor goes back to the text margin with the headline: one edge for the words */
 	.hero__descriptor {
-		margin-left: calc(var(--cable-w) * var(--wm-o));
 		font-size: 15px;
 		font-weight: 500;
 		color: var(--steel-light);
@@ -136,12 +87,12 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 	}
 
 	@media (min-width: 700px) {
-		.hero__descriptor {
-			margin-left: calc(var(--m) - var(--lane) + var(--cable-w) / 2);
+		.hero {
+			--s: 2.4px;
 		}
 	}
 
-	.hero__brand :global(.hero-wordmark) {
+	.hero__brand :global(.hero-symbol) {
 		position: relative;
 		z-index: 2;
 	}
@@ -230,23 +181,21 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 	}
 
 	@media (min-width: 1100px) {
+		/* the symbol in large in the right half (the R of the logo, as the kit draws it, its stroke the page cable made big, 12
+		   units wide): the brand block dissolves into the text column (the descriptor stays with the headline), the R hangs
+		   top right on the nav's right margin. The text column stops one clear space (30 units) short of it. Its lead leaves
+		   the stem foot, drops down, bends left under the text and joins the lane (scripts/panel/hero.ts, «far» route) */
 		.hero {
 			min-height: min(calc(100svh - var(--nav-h)), 900px);
+			--s: min(5px, calc((100vw - 2 * var(--m) - 520px) / 106));
+			--tw: min(640px, calc(100vw - 2 * var(--m) - 106 * var(--s)));
 		}
 
-		/* the logo in large in the right half (the brand's wordmark, as the kit draws it, its R the page cable): the brand block
-		   dissolves into the text column (the descriptor stays with the headline), the wordmark hangs top right on the
-		   nav's right margin. Its lead leaves the stem foot, drops down the gutter between logo and text, bends left
-		   under the text and joins the lane (scripts/panel/hero.ts, «far» route); without JS the lane starts below the hero */
 		.hero__brand {
 			display: contents;
 		}
 
-		.hero__brand::after {
-			display: none;
-		}
-
-		.hero__brand :global(.hero-wordmark) {
+		.hero__brand :global(.hero-symbol) {
 			position: absolute;
 			right: var(--m);
 			top: var(--wm-top, 200px);
@@ -256,21 +205,18 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			margin-left: 0;
 		}
 
-		.hero__text {
-			--wm-top: clamp(150px, 15svh, 200px);
+		.hero__text > :not(.hero__facts) {
+			max-width: var(--tw);
 		}
 
-		/* the wordmark sits low enough that its copper lets go before the R reaches the nav (taller
-		   desktops below) */
 		.hero__text {
+			--wm-top: clamp(150px, 15svh, 200px);
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
 			padding: clamp(96px, 15svh, 140px) 56px 64px var(--m);
 		}
 
-		/* (the wordmark is tall, its stroke being the page cable, and the descriptor sits out of the logo's clear space, so
-		   the headline starts 12 px closer: the −12px in the calc keeps the descriptor the logo's line and the action above the fold) */
 		.hero__title {
 			margin-top: clamp(24px, calc(4.2vw - 12px), 48px);
 		}

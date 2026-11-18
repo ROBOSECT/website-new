@@ -102,10 +102,9 @@ const logo = logoRaw
 		width: auto;
 	}
 
-	/* one brand on screen: on the home page the hero wordmark is the brand while any of it is in view below the
-	   bar; the bar's logo comes in only once it has gone under the bar (scripts/home.ts), on every screen size. Hidden also
+	/* one brand on screen: the hero carries only the symbol, so the bar's logo is always there; it leaves while the
+	   footer's big wordmark is in view. Hidden also
 	   means out of the tab order (visibility), so keyboard focus never lands on it. */
-	:global(.js .is-home.hero-brand-visible) .nav__brand,
 	:global(.js .footer-brand-visible) .nav__brand {
 		opacity: 0;
 		visibility: hidden;
@@ -352,11 +351,6 @@ const logo = logoRaw
 		:global(html:not(.js)) .nav__menu {
 			order: 3;
 			flex-basis: 100%;
-		}
-
-		/* the home page opens on the big wordmark right under this bar (which scrolls away without JS): one brand */
-		:global(html:not(.js) .is-home) .nav__brand {
-			display: none;
 		}
 
 		:global(html:not(.js)) .nav__toggle {

@@ -149,7 +149,7 @@ const organizationSchema = {
 		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} is:inline />
 		<slot name="head" />
 	</head>
-	<body class:list={[isHome && 'is-home', isHome && 'hero-brand-visible']}>
+	<body class:list={[isHome && 'is-home']}>
 		<a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
 		<NavBar lang={lang} isHome={isHome} />
 		<main id="main" tabindex="-1">

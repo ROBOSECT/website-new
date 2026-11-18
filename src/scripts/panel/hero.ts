@@ -80,7 +80,7 @@ export class HeroView {
 			vbH = RG.bot - RG.top + 1;
 		this.top = top;
 		this.bottom = top + this.hero.offsetHeight;
-		this.x = r.left - hr.left + (RG.stemX / RG.W) * r.width;
+		this.x = r.left - hr.left + (RG.stemX / RG.ferrule.x1) * r.width;
 		const scrollY = top - hr.top;
 		this.foot = r.top + scrollY + ((RG.stemFootY - vbY) / vbH) * r.height;
 		this.cable = o.cable;
@@ -106,7 +106,8 @@ export class HeroView {
 		const far = !o.phone && Math.abs(lane - this.x) > 150;
 		if (far) {
 			const J = HeroView.FAR_JOG;
-			const runY = Math.max(ft + 2 * J + 40, bt - 34);
+			// the run stays inside the hero: its last bend (J) and the lane's first px fit above the hero's bottom edge
+			const runY = Math.min(Math.max(ft + 2 * J + 14, bt - 34), bt - J - 2);
 			this.route = new Route(
 				[
 					{ x: this.x, y: ft - 0.5 },
@@ -156,7 +157,7 @@ export class HeroView {
 	}
 
 	static JOG = 6;
-	static FAR_JOG = 28;
+	static FAR_JOG = 20;
 	/** arc length along the lead for a hero-local y of the tip: exact on the vertical run; through the jog (and 20 px below
 	 * it) the tip covers the bend's extra length a little faster than the page scrolls, so it meets the pen in the lane */
 	private sOf(y: number) {
