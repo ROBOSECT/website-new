@@ -1,9 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import { getImage } from 'astro:assets';
-import setup from '../../assets/images/home/demo-hero.jpg';
-import posterSrc from '../../assets/images/home/demo-poster.jpg';
-import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import HeroWordmark from './HeroWordmark.astro';
 import { copy, type Lang } from '../../i18n/copy';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
@@ -15,8 +10,6 @@ const { lang } = Astro.props;
 const h = copy[lang].hero;
 const brand = copy[lang].brand;
 const cta = copy[lang].cta;
-const a11y = copy[lang].a11y;
-const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
 // the logo's measures in cable widths, from the geometry (HeroWordmark's box starts 0.5 above G.top): the stem foot below the
 // box top, the O's left edge, the clear space
 const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:${+(G.oLeft / G.w).toFixed(4)};--wm-clear:${+(G.clear / G.w).toFixed(4)}`;
@@ -50,35 +43,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 			{h.proofChips.map((c) => <li>{c}</li>)}
 		</ul>
 	</div>
-	<figure class="hero__media">
-		<Image
-			src={setup}
-			alt={h.imageAlt}
-			widths={[640, 960, 1280, 1740]}
-			sizes="(min-width: 1100px) 45vw, 100vw"
-			loading="eager"
-			fetchpriority="high"
-			class="hero__img"
-			data-hero-img
-		/>
-		{/* the prototype video plays over the page, right here: the badge is a button the script reveals once the player
-		     works (scripts/home.ts); without it there is no badge, and the video plays in place in the Prototype section */}
-		<button type="button" class="hero__play" data-video-open hidden>
-			<span class="hero__play-btn" aria-hidden="true"
-				><svg viewBox="0 0 18 18"><path d="M5.5 3.5v11l9-5.5z" fill="#F4F1EC" stroke="none"></path></svg></span
-			>
-			<span class="hero__play-txt">{h.secondaryCta.label}<span class="hero__play-dur">{h.secondaryCta.duration}</span></span>
-		</button>
-	</figure>
-	{/* the prototype video, opened from the first screen; nothing is downloaded until it plays (preload none, src set on open) */}
-	<dialog class="vdlg" data-video-dialog aria-label={h.videoTitle}>
-		<div class="vdlg__in">
-			<button type="button" class="vdlg__close" data-video-close aria-label={a11y.closeVideo}>
-				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3l12 12M15 3 3 15" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-			</button>
-			<video class="vdlg__v" width="1920" height="1080" controls muted playsinline preload="none" poster={poster.src} data-src={videoSrc}></video>
-		</div>
-	</dialog>
 </section>
 
 <style>
@@ -234,127 +198,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		height: 15px;
 	}
 
-	/* the prototype video on the first screen: a play badge on the photo of the prototype */
-	.hero__play {
-		position: absolute;
-		z-index: 2;
-		left: 16px;
-		bottom: 16px;
-		display: inline-flex;
-		align-items: center;
-		gap: 12px;
-		min-height: 48px;
-		padding: 6px 16px 6px 6px;
-		background: rgb(13 27 46 / 0.86);
-		color: var(--paper);
-		font: inherit;
-		font-size: 15px;
-		font-weight: 600;
-		text-decoration: none;
-		border: 0;
-		cursor: pointer;
-		transition: background-color 0.18s var(--ease-out);
-	}
-
-	.hero__play[hidden] {
-		display: none;
-	}
-
-	.hero__play:hover {
-		background: #0d1b2e;
-	}
-
-	.hero__play:focus-visible {
-		outline: 3px solid var(--cu-light);
-		outline-offset: 2px;
-	}
-
-	.hero__play-btn {
-		display: grid;
-		place-items: center;
-		width: 40px;
-		height: 40px;
-		background: var(--blue);
-		border-radius: 50%;
-	}
-
-	.hero__play-btn svg {
-		width: 18px;
-		height: 18px;
-	}
-
-	.hero__play-dur {
-		margin-left: 10px;
-		font-family: var(--font-mono);
-		font-size: 13px;
-		font-weight: 500;
-		color: var(--steel-light);
-	}
-
-	/* the video over the page: the dialog fills the screen (its own dark ground), so the wheel or a swipe anywhere on it
-	   belongs to it and never scrolls the page behind (scripts/home.ts) */
-	.vdlg {
-		position: fixed;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		max-width: none;
-		max-height: none;
-		margin: 0;
-		padding: 12px;
-		border: 0;
-		background: rgb(13 27 46 / 0.92);
-		overflow: hidden;
-		overscroll-behavior: contain;
-	}
-
-	.vdlg[open] {
-		display: grid;
-		place-items: center;
-	}
-
-	.vdlg::backdrop {
-		background: transparent;
-	}
-
-	.vdlg__in {
-		position: relative;
-		display: grid;
-		width: min(1200px, 100%);
-	}
-
-	.vdlg__v {
-		display: block;
-		width: 100%;
-		height: auto;
-		max-height: calc(100svh - 84px);
-		aspect-ratio: 16 / 9;
-		background: #0d1b2e;
-	}
-
-	.vdlg__close {
-		justify-self: end;
-		display: grid;
-		place-items: center;
-		width: 44px;
-		height: 44px;
-		margin-bottom: 8px;
-		padding: 0;
-		border: 0;
-		background: transparent;
-		color: var(--paper);
-		cursor: pointer;
-	}
-
-	.vdlg__close svg {
-		width: 20px;
-		height: 20px;
-	}
-
-	.vdlg__close:focus-visible {
-		outline: 3px solid var(--cu-light);
-	}
-
 	.hero__facts {
 		list-style: none;
 		display: flex;
@@ -380,39 +223,14 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		background: var(--steel-light);
 	}
 
-	.hero__media {
-		position: relative;
-		margin: 0;
-		overflow: hidden;
-	}
-
-	.hero__img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: 22% 50%;
-		transform-origin: 50% 30%;
-	}
-
 	@media (max-width: 699px) {
 		.hero__actions .btn {
 			width: 100%;
 		}
 	}
 
-	@media (max-width: 1099px) {
-		/* the picture first on narrow screens, then the brand and the words */
-		.hero__media {
-			order: -1;
-			height: min(42svh, 64vw);
-		}
-	}
-
 	@media (min-width: 1100px) {
 		.hero {
-			grid-template-columns: minmax(0, 1fr) 44%;
 			min-height: min(calc(100svh - var(--nav-h)), 900px);
 		}
 
@@ -429,18 +247,6 @@ const wm = `--wm-foot:${+((G.stemFootY - G.top + 0.5) / G.w).toFixed(4)};--wm-o:
 		   the headline starts 12 px closer: the −12px in the calc keeps the descriptor the logo's line and the action above the fold) */
 		.hero__title {
 			margin-top: clamp(24px, calc(4.2vw - 12px), 48px);
-		}
-
-		.hero__media {
-			min-height: 100%;
-			border-radius: 0 0 0 var(--bend);
-		}
-
-		/* the play badge on the wall above the robots: in the first screen at any height */
-		.hero__play {
-			left: 24px;
-			top: 24px;
-			bottom: auto;
 		}
 	}
 

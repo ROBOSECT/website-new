@@ -1,6 +1,6 @@
 ---
 /**
- * Proof, before any claim: the prototype video first (#video, opened from the hero too), the probe end-effector, then the
+ * Proof, before any claim: the prototype video first (#video: it starts on its own, muted and in a loop, when it is on screen; scripts/home.ts), the probe end-effector, then the
  * three verified facts (University of Bologna spin-off, AIRISE.eu funding, IEEE/ASME AIM 2026). (The news has its own
  * section after the panel: HomeNews.astro.)
  * Maturity is said plainly: a working prototype.
@@ -37,7 +37,7 @@ const logos = [
 			<p class="tvid__desc" id="video-desc">{p.video.description}</p>
 		</div>
 		<figure class="tvid__frame" data-b>
-			<video class="tvid__el" width="1920" height="1080" controls muted playsinline preload="none" poster={poster.src} aria-describedby="video-desc">
+			<video class="tvid__el" width="1920" height="1080" controls muted loop playsinline preload="none" poster={poster.src} aria-describedby="video-desc" data-autoplay>
 				<source src={videoSrc} type="video/mp4" />
 			</video>
 			{/* print: the poster in the video's place (a video prints as an empty box) */}
