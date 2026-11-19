@@ -384,11 +384,9 @@ export const copy = {
 			who: {
 				title: 'Who stands behind it',
 				items: [
+					{ mark: '2022', name: 'Two startup awards: startCUP Emilia-Romagna and University of Bologna' },
 					{ mark: 'UNIBO', name: 'University of Bologna spin-off, founded in 2024' },
 					{ mark: 'AIRISE', name: 'AIRISE.eu-funded project: CONTEST' },
-					{ mark: 'PATENT', name: 'Italian patent, extended to the EU' },
-					{ mark: '2022', name: 'Two startup awards: startCUP Emilia-Romagna and University of Bologna' },
-					{ mark: 'EIT · COBO', name: 'Incubated at EIT Manufacturing and CTE COBO' },
 					{ mark: 'AIM 2026', name: 'Sponsor and exhibitor at IEEE/ASME AIM 2026, Genoa' },
 				],
 			},
@@ -887,11 +885,9 @@ export const copy = {
 			who: {
 				title: 'Chi c’è dietro',
 				items: [
+					{ mark: '2022', name: 'Due premi per le startup: startCUP Emilia-Romagna e Università di Bologna' },
 					{ mark: 'UNIBO', name: 'Spin-off dell’Università di Bologna, fondata nel 2024' },
 					{ mark: 'AIRISE', name: 'Progetto finanziato da AIRISE.eu: CONTEST' },
-					{ mark: 'BREVETTO', name: 'Brevetto italiano, esteso all’UE' },
-					{ mark: '2022', name: 'Due premi per le startup: startCUP Emilia-Romagna e Università di Bologna' },
-					{ mark: 'EIT · COBO', name: 'In incubazione a EIT Manufacturing e CTE COBO' },
 					{ mark: 'AIM 2026', name: 'Sponsor ed espositore a IEEE/ASME AIM 2026, Genova' },
 				],
 			},

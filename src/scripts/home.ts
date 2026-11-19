@@ -108,9 +108,16 @@ function initAutoVideo() {
 	if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
 	document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach(autoVideo);
 }
+/** the first play waits for the page's load and an idle moment, so the 5 MB file never competes with the first screen */
+const pageIdle: Promise<void> = new Promise((done) => {
+	const idle = () => ('requestIdleCallback' in window ? window.requestIdleCallback(() => done(), { timeout: 2500 }) : setTimeout(done, 800));
+	if (document.readyState === 'complete') idle();
+	else window.addEventListener('load', idle, { once: true });
+});
 function autoVideo(v: HTMLVideoElement) {
 	let ours = false; // the next pause is ours, not the visitor's
 	let held = false; // the visitor paused it while on screen
+	let seen = false; // at least half of it is on screen now
 	v.addEventListener('pause', () => {
 		if (ours) ours = false;
 		else if (!v.ended) held = true;
@@ -118,8 +125,9 @@ function autoVideo(v: HTMLVideoElement) {
 	new IntersectionObserver(
 		(es) => {
 			const e = es[es.length - 1];
+			seen = e.intersectionRatio >= 0.5;
 			if (e.intersectionRatio >= 0.5) {
-				if (!held && v.paused && !v.closest('[data-paused]')) v.play()?.catch(() => {});
+				if (!held && v.paused && !v.closest('[data-paused]')) void pageIdle.then(() => { if (seen && !held && v.paused && !v.closest('[data-paused]')) v.play()?.catch(() => {}); });
 			} else if (!e.isIntersecting || e.intersectionRatio < 0.5) {
 				if (!e.isIntersecting) held = false;
 				if (!v.paused) {
