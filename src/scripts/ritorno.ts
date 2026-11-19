@@ -15,6 +15,7 @@
  * - A return link that reaches a page by a longer way (no rf: the visitor went home → products → packaging → logo)
  *   navigates normally and flags the target (robosect-want, valid 15 s): the panel restores its saved place for it
  *   (panel/index.ts), and this module finishes the job below.
+ * - A page reached going forward from the site with no anchor is put at its top (top()), in case the host kept a scroll.
  * - Safety net, after Back or a flagged return: when the reference element is not where it was (another viewport width,
  *   late images and fonts), the page is moved by the difference, a few times, instantly. A visitor who scrolls first
  *   is never moved.
@@ -22,7 +23,8 @@
  */
 const KEY = 'robosect-ritorno';
 const WANT = 'robosect-want';
-const norm = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p) || '/';
+// /it/ and /it/index.html are the same page (the preview copy of the site links its pages as index.html files)
+const norm = (p: string) => p.replace(/\/index\.html$/, '/').replace(/\/+$/, '') || '/';
 
 type Ref = { p: number[]; top: number; w: number };
 type Store = Record<string, Ref>;
@@ -96,6 +98,30 @@ function settle(ref: Ref) {
 	else addEventListener('load', start, { once: true });
 }
 
+/** reached going forward from another page of the site: a referrer of this origin (an outside arrival may carry a text
+ * fragment the browser scrolls to, which location.hash does not show) */
+const inner = () => {
+	try {
+		return !!document.referrer && new URL(document.referrer).origin === location.origin;
+	} catch {
+		return false;
+	}
+};
+
+/** a page reached going forward, with no anchor, starts at its top: the browser does it, and this makes sure of it where a
+ * host keeps a scroll position between the documents of its frame (19/11/2026, the claude.ai preview). Now and once more
+ * after the load; the visitor's own scroll or key wins. */
+function top() {
+	let stop = false;
+	for (const t of ['wheel', 'touchstart', 'keydown', 'pointerdown']) addEventListener(t, () => (stop = true), { once: true, passive: true });
+	const go = () => {
+		if (!stop && scrollY !== 0) scrollTo({ top: 0, behavior: 'instant' });
+	};
+	go();
+	if (document.readyState === 'complete') requestAnimationFrame(go);
+	else addEventListener('load', () => requestAnimationFrame(go), { once: true });
+}
+
 function init() {
 	const here = norm(location.pathname);
 	const nav = performance.getEntriesByType?.('navigation')[0] as PerformanceNavigationTiming | undefined;
@@ -143,6 +169,7 @@ function init() {
 	}
 	const ref = read()[here];
 	if (ref && (nav?.type === 'back_forward' || want)) settle(ref);
+	else if (nav?.type === 'navigate' && !location.hash && !want && inner()) top();
 	addEventListener('pageshow', (e) => {
 		// restored from the bfcache: the page is as it was left, only a viewport change can have moved it
 		if (e.persisted && ref) settle(ref);

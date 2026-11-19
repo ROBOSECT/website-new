@@ -25,9 +25,10 @@ const sub = page ? hp.sub : h.subheadline;
 // the clear space (the ferrule's length) kept around the R
 const wm = `--wm-clear:${G.clear}`;
 // the home's opening (19/11/2026): the prototype video on the left, the board tested point by point on the right; from
-// there straight to the prototype on the «How it works» page
+// there to the «How it works» page, at its top like every internal link to it (19/11/2026: the #proof anchor opened the
+// page halfway down; the anchor stays valid for old and outside links)
 const m = h.media;
-const proofHref = `${pagePath(lang, hp.path)}#${copy[lang].proof.id}`;
+const howHref = pagePath(lang, hp.path);
 const poster = page ? null : await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
 ---
 
@@ -63,14 +64,14 @@ const poster = page ? null : await getImage({ src: posterSrc, width: 1280, heigh
 			!page && poster && (
 				<div class="hero__media" data-hero-media>
 					<figure class="hm hm--video">
-						<a class="hm__frame" href={proofHref} aria-label={m.videoLabel}>
+						<a class="hm__frame" href={howHref} aria-label={m.videoLabel}>
 							{/* muted, in a loop, while on screen (scripts/home.ts); reduced motion, data saver, no JS: the poster */}
 							<video class="hm__video" width="1920" height="1080" muted loop playsinline preload="none" poster={poster.src} aria-hidden="true" tabindex="-1" data-autoplay>
 								<source src={videoSrc} type="video/mp4" />
 							</video>
 						</a>
 						<figcaption>
-							<a class="hm__go" href={proofHref}>
+							<a class="hm__go" href={howHref}>
 								{m.go}
 								<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
 							</a>
