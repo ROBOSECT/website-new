@@ -23,7 +23,7 @@ const { title, back, meta, metaDatetime, intro } = Astro.props;
 					<svg viewBox="0 0 18 18" aria-hidden="true">
 						<path d="M16 9H4M8.5 4.5 4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" />
 					</svg>
-					{back.label}
+					<span class="tl tl--quiet">{back.label}</span>
 				</a>
 			)
 		}
@@ -59,17 +59,13 @@ const { title, back, meta, metaDatetime, intro } = Astro.props;
 		text-decoration: none;
 	}
 
-	.page-head__back:hover {
-		text-decoration: underline;
-	}
-
 	.page-head__back svg {
 		width: 18px;
 		height: 18px;
-		transition: transform 0.2s ease;
+		transition: transform 0.2s var(--ease-out);
 	}
 
-	.page-head__back:hover svg {
+	:global(html.motion) .page-head__back:is(:hover, :focus-visible) svg {
 		transform: translateX(-3px);
 	}
 

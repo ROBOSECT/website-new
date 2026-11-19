@@ -80,7 +80,7 @@ const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format
 		</a>
 		<a class="text-link" href={`${homePath(lang)}#${sol.id}`}>
 			<svg class="back__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M16 9H4M8.5 4.5 4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-			{hp.back}
+			<span class="tl">{hp.back}</span>
 		</a>
 	</p>
 </Compartment>
@@ -241,6 +241,11 @@ const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format
 	.back__arrow {
 		width: 18px;
 		height: 18px;
+	}
+
+	/* the back arrow points left: it steps left */
+	:global(html.motion) .back .text-link:is(:hover, :focus-visible) .back__arrow {
+		transform: translateX(-3px);
 	}
 
 	@media (max-width: 699px) {

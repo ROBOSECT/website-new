@@ -115,9 +115,9 @@ export const copy = {
 				'The ROBOSECT prototype: two collaborative robots testing the wires of an electrical switchboard laid on the bench',
 			videoTitle: 'The ROBOSECT prototype testing a switchboard',
 			/** the opening's two pictures (19/11/2026): the prototype at work, and the drawing of a board tested point by
-			 * point; the link goes to the prototype on the «How it works» page */
+			 * point; the link goes to the top of the «How it works» page */
 			media: {
-				videoLabel: 'The ROBOSECT prototype testing a switchboard: go to the prototype',
+				videoLabel: 'The ROBOSECT prototype testing a switchboard: see how it works',
 				go: 'See the prototype at work',
 				board: 'Every point tested against your connection list',
 				pause: 'Pause',
@@ -624,7 +624,7 @@ export const copy = {
 				'Il prototipo ROBOSECT: due robot collaborativi provano i fili di un quadro elettrico appoggiato sul banco',
 			videoTitle: 'Il prototipo ROBOSECT collauda un quadro',
 			media: {
-				videoLabel: 'Il prototipo ROBOSECT collauda un quadro: vai al prototipo',
+				videoLabel: 'Il prototipo ROBOSECT collauda un quadro: vedi come funziona',
 				go: 'Guardate il prototipo al lavoro',
 				board: 'Ogni punto provato sulla vostra lista collegamenti',
 				pause: 'Pausa',

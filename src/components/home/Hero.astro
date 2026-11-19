@@ -72,7 +72,7 @@ const poster = page ? null : await getImage({ src: posterSrc, width: 1280, heigh
 						</a>
 						<figcaption>
 							<a class="hm__go" href={howHref}>
-								{m.go}
+								<span class="tl">{m.go}</span>
 								<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
 							</a>
 						</figcaption>
@@ -483,16 +483,16 @@ const poster = page ? null : await getImage({ src: posterSrc, width: 1280, heigh
 		min-height: 32px;
 		color: var(--paper);
 		font-weight: 600;
-		text-underline-offset: 0.2em;
+		text-decoration: none;
 	}
 
 	.hm__go svg {
 		width: 16px;
 		height: 16px;
-		transition: transform 0.2s;
+		transition: transform 0.2s var(--ease-out);
 	}
 
-	.hm__go:hover svg {
+	:global(html.motion) .hm__go:is(:hover, :focus-visible) svg {
 		transform: translateX(3px);
 	}
 
@@ -511,14 +511,25 @@ const poster = page ? null : await getImage({ src: posterSrc, width: 1280, heigh
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		cursor: pointer;
+		transition:
+			border-color 0.2s var(--ease-out),
+			box-shadow 0.18s var(--ease-quint-out),
+			transform 0.2s var(--ease-quint-out);
 	}
 
 	.hm__pause[hidden] {
 		display: none;
 	}
 
-	.hm__pause:hover {
+	/* a wire-marker sleeve: on hover its edge closes in (as crimped), pressed it tightens */
+	.hm__pause:is(:hover, :focus-visible) {
 		border-color: var(--paper);
+		box-shadow: inset 0 0 0 1px var(--paper);
+	}
+
+	:global(html.motion) .hm__pause:active {
+		transform: scale(0.95);
+		transition-duration: 0.1s;
 	}
 
 	.hm__pause svg {

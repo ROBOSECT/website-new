@@ -95,7 +95,7 @@ const photoLabel = (alt: string) => alt.replace(/\[TBD:[^\]]*\]\s*/g, '').trim()
 		<p class="team__join">
 			<span>{t.joinUs.text}</span>
 			<a class="text-link" href={`mailto:info@robosect.it?subject=${mailSubject}`}>
-				{t.joinUs.cta}
+				<span class="tl">{t.joinUs.cta}</span>
 				<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
 			</a>
 		</p>

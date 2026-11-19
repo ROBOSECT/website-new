@@ -2,6 +2,8 @@
 import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
 import { copy, type Lang } from '../../i18n/copy';
 import { homePath, pagePath, sectionHref } from '../../lib/i18n';
+import { R_GEOMETRY } from '../../lib/cable-geometry';
+import { cablesAt } from '../../lib/menu-cables';
 
 interface Props {
 	lang: Lang;
@@ -33,7 +35,17 @@ const logo = logoRaw
 	.replace(/\swidth="[^"]*"\sheight="[^"]*"/, ' width="145" height="22"')
 	.replace('role="img" aria-label="ROBOSECT"', 'aria-hidden="true" focusable="false" class="nav__logo"')
 	// every shape with literal paint: the asset's paths have their fill; give them their stroke too
-	.replaceAll('<path fill=', '<path stroke="none" fill=');
+	.replaceAll('<path fill=', '<path stroke="none" fill=')
+	// hover: a bead of current runs once along the R, foot to ferrule, and the ferrule's copper lights and calms (the
+	// brand's «perla di corrente»; scripts/site.ts starts it, CSS below). At rest the bead sits past the path's end: unseen
+	.replace('<path stroke="none" fill="#EC8A52"', '<path class="nav__cu" stroke="none" fill="#EC8A52"')
+	.replace(
+		'</svg>',
+		`<path class="nav__bead" d="${R_GEOMETRY.rD}" pathLength="100" fill="none" stroke="#EC8A52" stroke-width="7" stroke-dasharray="9 200" stroke-dashoffset="-100"></path></svg>`,
+	);
+// the menu button: three small cables at rest (scripts/site.ts bends them into the X)
+const cables = cablesAt(0);
+const two = (n: number) => String(n).padStart(2, '0');
 ---
 
 <header class="nav on-dark" data-nav data-x0={panel ? undefined : '7'}>
@@ -43,18 +55,21 @@ const logo = logoRaw
 		</a>
 
 		<nav class="nav__menu" id="site-menu" aria-label={lang === 'it' ? 'Principale' : 'Main'}>
+			<span class="nav__edge" aria-hidden="true"></span>
+			<p class="nav__mlabel" aria-hidden="true">Menu</p>
 			<ul class="nav__links">
 				{
-					t.nav.links.map((l) => (
-						<li>
+					t.nav.links.map((l, i) => (
+						<li style={`--i:${i + 1}`}>
 							<a href={linkHref(l)} data-nav-link={l.page ? undefined : l.id} aria-current={l.page && l.page === page ? 'page' : undefined}>
-								{l.label}
+								<span class="nav__n" aria-hidden="true">{two(i + 1)}</span>
+								<span class="nav__t">{l.label}</span>
 							</a>
 						</li>
 					))
 				}
 			</ul>
-			<a class="nav__lang" href={langHref} hreflang={other} lang={other} aria-label={t.nav.langSwitch.ariaLabel}>
+			<a class="nav__lang" href={langHref} hreflang={other} lang={other} aria-label={t.nav.langSwitch.ariaLabel} style={`--i:${t.nav.links.length + 1}`}>
 				<span class="nav__lang-long">{t.nav.langSwitch.label}</span>
 				<span class="nav__lang-short" aria-hidden="true">{t.nav.langSwitch.short}</span>
 			</a>
@@ -73,12 +88,19 @@ const logo = logoRaw
 			data-close-label={t.a11y.closeMenu}
 		>
 			<span class="visually-hidden" data-toggle-label>{t.a11y.openMenu}</span>
-			<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-				<path class="nav__toggle-a" d="M3 8h18" fill="none" stroke="currentColor" stroke-width="2" />
-				<path class="nav__toggle-b" d="M3 16h18" fill="none" stroke="currentColor" stroke-width="2" />
+			<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" data-cables>
+				{
+					cables.map((c, i) => (
+						<g class="nav__cab" style={`--i:${i}`}>
+							<path d={c.cable} fill="none" stroke="#F4F1EC" stroke-width="2" />
+							<path d={c.tip} fill="none" stroke="#EC8A52" stroke-width="1.2" />
+						</g>
+					))
+				}
 			</svg>
 		</button>
 	</div>
+	<div class="nav__scrim" data-nav-scrim aria-hidden="true"></div>
 </header>
 
 <style>
@@ -87,6 +109,8 @@ const logo = logoRaw
 		top: 0;
 		z-index: 50;
 		background: var(--ink);
+		/* the closed drawer waits past the right edge: clipped here, or a phone would widen the page to hold it */
+		overflow-x: clip;
 	}
 
 	.nav__bar {
@@ -109,6 +133,42 @@ const logo = logoRaw
 	.nav__brand :global(.nav__logo) {
 		height: 22px;
 		width: auto;
+	}
+
+	/* the bead of current (hover, keyboard focus): once along the R, foot to ferrule, 0.6 s sine (one beat of the brand
+	   grid, 100 BPM); the ferrule's copper lights as it arrives and calms. scripts/site.ts sets data-run and clears it at
+	   the end, so a short pass still runs it whole. Reduced motion: no bead, the copper a little brighter while hovered */
+	.nav__brand[data-run] :global(.nav__bead) {
+		animation: nav-bead 0.6s var(--ease-sine) both;
+	}
+
+	.nav__brand[data-run] :global(.nav__cu) {
+		animation: nav-cu 0.9s var(--ease-sine) 0.42s both;
+	}
+
+	@keyframes nav-bead {
+		from {
+			stroke-dashoffset: -100;
+		}
+
+		to {
+			stroke-dashoffset: 9;
+		}
+	}
+
+	@keyframes nav-cu {
+		0%,
+		100% {
+			fill: #ec8a52;
+		}
+
+		30% {
+			fill: #ffc39b;
+		}
+	}
+
+	:global(html:not(.motion)) .nav__brand:is(:hover, :focus-visible) :global(.nav__cu) {
+		fill: #f3a170;
 	}
 
 	/* one brand on screen: the hero carries only the symbol, so the bar's logo is always there; it leaves while the
@@ -157,15 +217,43 @@ const logo = logoRaw
 		right: 0;
 		bottom: 8px;
 		height: 2px;
-		background: var(--paper);
+		/* a cable with its copper conductor at the head: scaling from the left, the copper rides the front */
+		background: linear-gradient(90deg, var(--paper) calc(100% - 7px), var(--nav-tip) 0);
 		transform: scaleX(0);
 		transform-origin: left;
-		transition: transform 0.25s ease;
+		transition: transform 0.2s var(--ease-quad-in);
 	}
 
-	.nav__links a:hover::after,
+	.nav__links a:is(:hover, :focus-visible)::after,
 	.nav__links a[aria-current]::after {
 		transform: scaleX(1);
+		transition: transform 0.34s var(--ease-expo-out);
+	}
+
+	/* the copper lights while the cable runs, then calms into Carta; the current page's underline is all Carta */
+	@property --nav-tip {
+		syntax: '<color>';
+		inherits: true;
+		initial-value: #f4f1ec;
+	}
+
+	:global(html.motion) .nav__links a:hover:not([aria-current])::after {
+		animation: nav-tip 0.8s linear both;
+	}
+
+	@keyframes nav-tip {
+		0%,
+		45% {
+			--nav-tip: #ec8a52;
+		}
+
+		100% {
+			--nav-tip: #f4f1ec;
+		}
+	}
+
+	:global(html:not(.motion)) .nav__links a::after {
+		transition: none;
 	}
 
 	.nav__lang {
@@ -183,13 +271,30 @@ const logo = logoRaw
 		letter-spacing: 0.06em;
 		line-height: 1.2;
 		transition:
-			border-color 0.2s ease,
-			background-color 0.2s ease;
+			border-color 0.2s var(--ease-out),
+			background-color 0.2s var(--ease-out),
+			box-shadow 0.18s var(--ease-quint-out),
+			transform 0.2s var(--ease-quint-out);
 	}
 
-	.nav__lang:hover .nav__lang-short {
+	/* the sleeve closes in on hover, as crimped; pressed, it tightens */
+	.nav__lang:is(:hover, :focus-visible) .nav__lang-short {
 		border-color: var(--paper);
 		background: var(--ink-2);
+		box-shadow: inset 0 0 0 1px var(--paper);
+	}
+
+	:global(html.motion) .nav__lang:active .nav__lang-short {
+		transform: scale(0.94);
+		transition-duration: 0.1s;
+	}
+
+	/* the drawer's parts: only in the drawer (below) */
+	.nav__edge,
+	.nav__mlabel,
+	.nav__n,
+	.nav__scrim {
+		display: none;
 	}
 
 	.nav__lang-long {
@@ -260,21 +365,22 @@ const logo = logoRaw
 		background: transparent;
 		color: var(--paper);
 		cursor: pointer;
+		transition: background-color 0.2s var(--ease-out);
 	}
 
-	/* CSS transforms on SVG children: an explicit reference box and origin (WebKit and Firefox agree only then) */
-	.nav__toggle path {
-		transition: transform 0.25s ease;
-		transform-box: view-box;
-		transform-origin: 12px 12px;
+	.nav__toggle:hover {
+		background: var(--ink-2);
 	}
 
-	.nav__toggle[aria-expanded='true'] .nav__toggle-a {
-		transform: translateY(4px) rotate(45deg);
+	/* the three cables (their bend into the X is scripts/site.ts): on hover they run forward a little, head first, one
+	   after the other */
+	.nav__cab {
+		transition: transform 0.22s var(--ease-expo-out);
+		transition-delay: calc(var(--i) * 45ms);
 	}
 
-	.nav__toggle[aria-expanded='true'] .nav__toggle-b {
-		transform: translateY(-4px) rotate(-45deg);
+	:global(html.motion) .nav__toggle[aria-expanded='false']:hover .nav__cab {
+		transform: translateX(1.5px);
 	}
 
 	@media (max-width: 1099px) {
@@ -294,29 +400,162 @@ const logo = logoRaw
 			display: inline-flex;
 		}
 
+		/* the menu is a drawer from the right, under the bar (the bar and its X stay on top and usable), over a dim
+		   ground: a tap on the ground, Esc or the X close it (scripts/site.ts). It enters with expo-out and leaves with
+		   quad-in, never a bounce; its links come in one after the other; a cable runs down its edge, copper first. */
 		.nav__menu {
 			position: absolute;
 			top: 100%;
-			left: 0;
 			right: 0;
+			display: flex;
+			width: min(400px, calc(100% - 48px));
+			height: calc(100svh - var(--nav-h));
 			flex-direction: column;
 			align-items: stretch;
 			gap: 0;
 			margin: 0;
-			padding: 8px var(--m) 28px;
+			padding: 18px var(--m) 28px 32px;
 			background: var(--ink);
-			display: none;
-			/* the open menu covers the screen: the page under it (also Ink) must not read as more menu */
-			min-height: calc(100svh - var(--nav-h));
-			max-height: calc(100svh - var(--nav-h));
+			/* over the dim ground (it comes later in the page) */
+			z-index: 2;
 			overflow-y: auto;
 			overscroll-behavior: contain;
-			border-top: 1px solid var(--ink-2);
+			visibility: hidden;
+			transform: translateX(100%);
+			transition:
+				transform 0.3s var(--ease-quad-in),
+				visibility 0s linear 0.3s;
 		}
 
-		.nav__menu.is-open,
+		.nav__menu.is-open {
+			visibility: visible;
+			transform: none;
+			transition: transform 0.4s var(--ease-expo-out);
+		}
+
+		:global(html:not(.motion)) .nav__menu,
+		:global(html:not(.motion)) .nav__menu.is-open {
+			transition: none;
+		}
+
+		.nav__scrim {
+			display: block;
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			height: calc(100svh - var(--nav-h));
+			z-index: 1;
+			background: rgb(8 16 28 / 0.62);
+			opacity: 0;
+			visibility: hidden;
+			/* a scroll container that cannot scroll: a swipe on the ground does not move the page under it */
+			overflow: hidden;
+			overscroll-behavior: contain;
+			transition:
+				opacity 0.3s var(--ease-quad-in),
+				visibility 0s linear 0.3s;
+		}
+
+		.nav__scrim.is-open {
+			opacity: 1;
+			visibility: visible;
+			transition: opacity 0.36s var(--ease-expo-out);
+		}
+
+		:global(html:not(.motion)) .nav__scrim {
+			transition: none;
+		}
+
+		.nav__edge {
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 2px;
+			height: 0;
+			background: var(--paper);
+		}
+
+		/* the conductor at the cable's head: lights while it runs, then calms */
+		.nav__edge::after {
+			content: '';
+			position: absolute;
+			left: 0.5px;
+			bottom: -3px;
+			width: 1px;
+			height: 3px;
+			background: var(--cu-light);
+			opacity: 0;
+		}
+
+		.nav__menu.is-open .nav__edge {
+			height: 100%;
+			transition: height 0.45s var(--ease-expo-out) 0.05s;
+		}
+
+		:global(html.motion) .nav__menu.is-open .nav__edge::after {
+			animation: nav-edge-cu 0.9s linear 0.05s both;
+		}
+
+		@keyframes nav-edge-cu {
+			0%,
+			50% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0;
+			}
+		}
+
+		:global(html:not(.motion)) .nav__menu.is-open .nav__edge {
+			transition: none;
+		}
+
+		.nav__mlabel {
+			display: block;
+			padding: 4px 0 10px;
+			font-family: var(--font-mono); /* brand wire-marker face */
+			font-size: 11px;
+			font-weight: 500;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--steel-light);
+		}
+
+		/* the entrance of the parts, one after the other (motion only) */
+		:global(html.motion) .nav__menu :is(.nav__mlabel, .nav__links li, .nav__lang) {
+			opacity: 0;
+			transform: translateX(20px);
+			transition:
+				opacity 0.18s var(--ease-quad-in),
+				transform 0.2s var(--ease-quad-in);
+		}
+
+		:global(html.motion) .nav__menu.is-open :is(.nav__mlabel, .nav__links li, .nav__lang) {
+			opacity: 1;
+			transform: none;
+			transition:
+				opacity 0.3s var(--ease-expo-out) calc(80ms + var(--i, 0) * 40ms),
+				transform 0.4s var(--ease-expo-out) calc(80ms + var(--i, 0) * 40ms);
+		}
+
+		/* the drawer only opens with the script: without it the menu is the compact row below */
 		:global(html:not(.js)) .nav__menu {
-			display: flex;
+			visibility: visible;
+			transform: none;
+			width: auto;
+			height: auto;
+		}
+
+		:global(html:not(.js)) :is(.nav__mlabel, .nav__edge, .nav__n, .nav__scrim) {
+			display: none;
+		}
+
+		:global(html:not(.js)) .nav__menu :is(.nav__mlabel, .nav__links li, .nav__lang) {
+			opacity: 1;
+			transform: none;
 		}
 
 		:global(html:not(.js)) .nav__menu {
@@ -370,6 +609,11 @@ const logo = logoRaw
 			flex-direction: column;
 			align-items: stretch;
 			gap: 0;
+			border-top: 1px solid var(--ink-2);
+		}
+
+		.nav__links li {
+			border-bottom: 1px solid var(--ink-2);
 		}
 
 		.nav__links a,
@@ -379,20 +623,99 @@ const logo = logoRaw
 			width: 100%;
 		}
 
+		.nav__links a {
+			gap: 14px;
+			min-height: 60px;
+			letter-spacing: -0.01em;
+		}
+
 		.nav__links a::after {
 			display: none;
 		}
 
+		/* the wire number: mono, like the tags on the panel's wires */
+		.nav__n {
+			display: inline;
+			flex: none;
+			width: 18px;
+			font-family: var(--font-mono); /* brand wire-marker face */
+			font-size: 11px;
+			font-weight: 500;
+			letter-spacing: 0.06em;
+			color: var(--steel-light);
+		}
+
+		.nav__t {
+			position: relative;
+			transition: transform 0.26s var(--ease-expo-out);
+		}
+
+		/* hover, focus and the current place: a short cable runs in before the words, copper at its head */
+		.nav__t::before {
+			content: '';
+			position: absolute;
+			left: -18px;
+			top: 50%;
+			width: 12px;
+			height: 3px;
+			margin-top: -1px;
+			background: linear-gradient(90deg, var(--paper) calc(100% - 4px), var(--cu-light) 0);
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform 0.2s var(--ease-quad-in);
+		}
+
+		.nav__links a:is(:hover, :focus-visible, [aria-current]) .nav__t {
+			transform: translateX(18px);
+		}
+
+		.nav__links a:is(:hover, :focus-visible, [aria-current]) .nav__t::before {
+			transform: none;
+			transition: transform 0.26s var(--ease-expo-out);
+		}
+
+		.nav__links a[aria-current] {
+			font-weight: 600;
+		}
+
+		.nav__links a[aria-current] .nav__n {
+			color: var(--paper);
+		}
+
+		:global(html:not(.motion)) .nav__t,
+		:global(html:not(.motion)) .nav__t::before {
+			transition: none;
+		}
+
 		.nav__lang {
-			margin-top: 12px;
+			gap: 12px;
+			margin-top: auto;
+			padding-top: 20px;
 			font-size: 17px;
 		}
 
 		.nav__lang-long {
 			display: inline;
+			order: 2;
 		}
 
 		.nav__lang-short {
+			display: inline-flex;
+		}
+
+		:global(html:not(.js)) .nav__lang {
+			padding-top: 0;
+		}
+
+		:global(html:not(.js)) .nav__links {
+			border-top: 0;
+		}
+
+		:global(html:not(.js)) .nav__links li {
+			border-bottom: 0;
+		}
+
+		:global(html:not(.js)) .nav__lang-short {
 			display: none;
 		}
 	}

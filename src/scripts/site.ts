@@ -3,6 +3,7 @@
  * the progressive-enhancement styles on (see the inline script in BaseLayout).
  */
 import './ritorno';
+import { cablesAt } from '../lib/menu-cables';
 
 declare global {
 	interface Window {
@@ -13,18 +14,63 @@ declare global {
 const root = document.documentElement;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+/** the menu button's three cables bend into the X and back (lib/menu-cables), 0.4 s, cubic in-out; reduced motion: at once */
+function cableIcon(svg: SVGSVGElement | null) {
+	const paths = svg ? Array.from(svg.querySelectorAll<SVGGElement>('g')).map((g) => Array.from(g.querySelectorAll('path'))) : [];
+	let now = 0;
+	let raf = 0;
+	const draw = (t: number) => {
+		now = t;
+		cablesAt(t).forEach((c, i) => {
+			paths[i]?.[0]?.setAttribute('d', c.cable);
+			paths[i]?.[1]?.setAttribute('d', c.tip);
+		});
+	};
+	return (open: boolean) => {
+		if (!paths.length) return;
+		cancelAnimationFrame(raf);
+		const to = open ? 1 : 0;
+		if (!root.classList.contains('motion')) return draw(to);
+		const from = now;
+		const ms = 400 * Math.abs(to - from);
+		const t0 = performance.now();
+		const step = (time: number) => {
+			const k = ms ? Math.min(1, (time - t0) / ms) : 1;
+			draw(from + (to - from) * k);
+			if (k < 1) raf = requestAnimationFrame(step);
+		};
+		raf = requestAnimationFrame(step);
+	};
+}
+
+/** the menu, below 1100 px a drawer from the right under the bar (NavBar.astro). Open: the X and the drawer, the page
+ * behind it inert (no focus, no clicks); Esc, a tap on the dim ground, the X or a link close it. The page keeps its
+ * scroll (no overflow lock: the place the visitor is at stays where scripts/ritorno.ts reads it). */
 function initMenu() {
 	const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
 	const menu = document.getElementById('site-menu');
 	if (!toggle || !menu) return;
 	const label = toggle.querySelector<HTMLElement>('[data-toggle-label]');
+	const scrim = document.querySelector<HTMLElement>('[data-nav-scrim]');
+	const icon = cableIcon(toggle.querySelector<SVGSVGElement>('[data-cables]'));
+	const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
 	const set = (open: boolean) => {
+		if (open === isOpen()) return;
 		toggle.setAttribute('aria-expanded', String(open));
 		menu.classList.toggle('is-open', open);
+		scrim?.classList.toggle('is-open', open);
+		document.querySelectorAll<HTMLElement>('main, footer.footer').forEach((el) => (el.inert = open));
 		if (label) label.textContent = (open ? toggle.dataset.closeLabel : toggle.dataset.openLabel) ?? '';
+		icon(open);
+	};
+	// closing by hand puts the focus back on the button, so it never stays in the hidden drawer
+	const close = () => {
+		const inside = menu.contains(document.activeElement);
+		set(false);
+		if (inside) toggle.focus({ preventScroll: true });
 	};
 	toggle.addEventListener('click', () => {
-		const open = toggle.getAttribute('aria-expanded') !== 'true';
+		const open = !isOpen();
 		set(open);
 		// the menu comes before the toggle in the page order: without this, Tab from the toggle skips the open menu
 		if (open) menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
@@ -32,13 +78,29 @@ function initMenu() {
 	menu.addEventListener('click', (e) => {
 		if ((e.target as HTMLElement).closest('a')) set(false);
 	});
+	scrim?.addEventListener('click', close);
 	document.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+		if (e.key === 'Escape' && isOpen()) {
 			set(false);
 			toggle.focus();
 		}
 	});
 	window.matchMedia('(min-width: 1100px)').addEventListener('change', () => set(false));
+}
+
+/** the logo's bead of current (NavBar.astro): on hover or keyboard focus it runs once, whole, then waits for the next */
+function initLogoBead() {
+	const brand = document.querySelector<HTMLElement>('.nav__brand');
+	if (!brand) return;
+	const run = () => {
+		if (!root.classList.contains('motion') || brand.hasAttribute('data-run')) return;
+		brand.setAttribute('data-run', '');
+	};
+	brand.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && run());
+	brand.addEventListener('focus', () => brand.matches(':focus-visible') && run());
+	brand.addEventListener('animationend', (e) => {
+		if ((e.target as Element).classList.contains('nav__cu')) brand.removeAttribute('data-run');
+	});
 }
 
 function initReveal() {
@@ -114,6 +176,7 @@ function initLangPlace() {
 }
 
 initMenu();
+initLogoBead();
 initBarFocus();
 initReveal();
 initFooterBrand();
