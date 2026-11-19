@@ -1,7 +1,12 @@
 ---
+import { getImage } from 'astro:assets';
 import HeroSymbol from './HeroSymbol.astro';
+import BoardDrawing from './BoardDrawing.astro';
+import posterSrc from '../../assets/images/home/demo-poster.jpg';
+import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import { copy, type Lang } from '../../i18n/copy';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
+import { pagePath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
@@ -19,9 +24,14 @@ const sub = page ? hp.sub : h.subheadline;
 // the symbol's measures in logo-grid units (1 unit = var(--s) px), from the geometry (HeroSymbol's box starts 0.5 above G.top):
 // the clear space (the ferrule's length) kept around the R
 const wm = `--wm-clear:${G.clear}`;
+// the home's opening (19/11/2026): the prototype video on the left, the board tested point by point on the right; from
+// there straight to the prototype on the «How it works» page
+const m = h.media;
+const proofHref = `${pagePath(lang, hp.path)}#${copy[lang].proof.id}`;
+const poster = page ? null : await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
 ---
 
-<section class:list={['hero on-dark', page && 'hero--page']} data-hero aria-labelledby="hero-title">
+<section class:list={['hero on-dark', page ? 'hero--page' : 'hero--home']} data-hero aria-labelledby="hero-title">
 	{/* the test lead leaves the R's stem foot and runs down the lane (scripts/panel/hero.ts) */}
 	<svg class="hero__wires" aria-hidden="true" focusable="false" data-hero-wires></svg>
 	{/* the same lead laid, in CSS: the static page (no JS, reduced motion, print) shows it; in motion it is the route the script measures */}
@@ -47,6 +57,38 @@ const wm = `--wm-clear:${G.clear}`;
 				<ul class="hero__facts">
 					{h.proofChips.map((c) => <li>{c}</li>)}
 				</ul>
+			)
+		}
+		{
+			!page && poster && (
+				<div class="hero__media" data-hero-media>
+					<figure class="hm hm--video">
+						<a class="hm__frame" href={proofHref} aria-label={m.videoLabel}>
+							{/* muted, in a loop, while on screen (scripts/home.ts); reduced motion, data saver, no JS: the poster */}
+							<video class="hm__video" width="1920" height="1080" muted loop playsinline preload="none" poster={poster.src} aria-hidden="true" tabindex="-1" data-autoplay>
+								<source src={videoSrc} type="video/mp4" />
+							</video>
+						</a>
+						<figcaption>
+							<a class="hm__go" href={proofHref}>
+								{m.go}
+								<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+							</a>
+						</figcaption>
+					</figure>
+					<figure class="hm hm--board" data-sb-loop>
+						<div class="hm__frame hm__frame--board">
+							<BoardDrawing />
+						</div>
+						<figcaption class="hm__cap">
+							<span>{m.board}</span>
+							<button class="hm__pause" type="button" hidden data-hero-pause data-pause={m.pause} data-play={m.play} data-pause-label={m.pauseLabel} data-play-label={m.playLabel} aria-label={m.pauseLabel}>
+								<svg viewBox="0 0 12 12" aria-hidden="true"><path class="hm__ico-pause" d="M3 2h2v8H3zM7 2h2v8H7z" fill="currentColor"></path><path class="hm__ico-play" d="M3 2l7 4-7 4z" fill="currentColor"></path></svg>
+								<span>{m.pause}</span>
+							</button>
+						</figcaption>
+					</figure>
+				</div>
 			)
 		}
 	</div>
@@ -262,32 +304,32 @@ const wm = `--wm-clear:${G.clear}`;
 		   units wide): the brand block dissolves into the text column (the descriptor stays with the headline), the R hangs
 		   top right on the nav's right margin. The text column stops one clear space (30 units) short of it. Its lead leaves
 		   the stem foot, drops down, bends left under the text and joins the lane (scripts/panel/hero.ts, «far» route) */
-		.hero {
+		.hero--page {
 			--wm-top: clamp(150px, 15svh, 200px);
 			min-height: min(calc(100svh - var(--nav-h)), 900px);
 			--s: min(5px, calc((100vw - 2 * var(--m) - 520px) / 106));
 			--tw: min(640px, calc(100vw - 2 * var(--m) - 106 * var(--s)));
 		}
 
-		.hero__brand {
+		.hero--page .hero__brand {
 			display: contents;
 		}
 
-		.hero__brand :global(.hero-symbol) {
+		.hero--page .hero__brand :global(.hero-symbol) {
 			position: absolute;
 			right: var(--m);
 			top: var(--wm-top, 200px);
 		}
 
-		.hero__text .hero__descriptor {
+		.hero--page .hero__text .hero__descriptor {
 			margin-left: 0;
 		}
 
-		.hero__text > :not(.hero__facts) {
+		.hero--page .hero__text > :not(.hero__facts) {
 			max-width: var(--tw);
 		}
 
-		.hero__text {
+		.hero--page .hero__text {
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
@@ -295,22 +337,22 @@ const wm = `--wm-clear:${G.clear}`;
 		}
 
 		/* the lead drops from the stem foot to the hero's foot, runs left under the text and bends down the lane */
-		.hero__lead {
+		.hero--page .hero__lead {
 			--fy: calc(var(--wm-top) + 108.02 * var(--s));
 		}
 
-		.hero__lead-a {
+		.hero--page .hero__lead-a {
 			right: calc(var(--m) + 70 * var(--s) - var(--cw) / 2);
 			height: auto;
 			bottom: calc(var(--j) + 2px - var(--cw) / 2);
 		}
 
-		.hero__lead-b {
+		.hero--page .hero__lead-b {
 			top: auto;
 			height: calc(var(--j) + 3px + var(--cw) / 2);
 		}
 
-		.hero__title {
+		.hero--page .hero__title {
 			margin-top: clamp(24px, calc(4.2vw - 12px), 48px);
 		}
 	}
@@ -321,15 +363,15 @@ const wm = `--wm-clear:${G.clear}`;
 	   Italian lead: its action ends ≥ 24 px above the fold at 1536 × 864 and 1440 × 900). Shorter desktops keep the layout
 	   above (the facts under the actions). */
 	@media (min-width: 1100px) and (min-height: 860px) {
-		.hero {
+		.hero--page {
 			--wm-top: calc(clamp(168px, calc(108svh - 750px), 300px) + 8px);
 		}
 
-		.hero__text {
+		.hero--page .hero__text {
 			padding-top: clamp(168px, calc(108svh - 750px), 300px);
 		}
 
-		.hero__facts {
+		.hero--page .hero__facts {
 			position: absolute;
 			top: var(--pad-top);
 			left: var(--m);
@@ -344,11 +386,11 @@ const wm = `--wm-clear:${G.clear}`;
 			text-transform: uppercase;
 		}
 
-		.hero__facts li {
+		.hero--page .hero__facts li {
 			padding-left: 18px;
 		}
 
-		.hero__facts li::before {
+		.hero--page .hero__facts li::before {
 			top: 0.62em;
 			width: 10px;
 			height: 2px;
@@ -356,13 +398,14 @@ const wm = `--wm-clear:${G.clear}`;
 
 		/* on wide, not so tall screens (1536 × 864, 1920 × 900) the headline does not grow past its 900 px-tall size, so
 		   the action stays clear of the fold */
-		.hero__title {
+		.hero--page .hero__title {
 			margin-top: 32px;
 			font-size: clamp(2.5rem, min(4.4vw, 7.05svh), 4.25rem);
 		}
 	}
 
-	/* the «How it works» page: the same opening, shorter, the R smaller (its lead runs to the lane as on the home page) */
+	/* the «How it works» page: the R in large on the right, as the home had it until 19/11/2026 (the rules above, now
+	   for the page only), shorter, the R smaller (its lead runs to the lane) */
 	@media (min-width: 1100px) {
 		.hero--page {
 			--wm-top: clamp(96px, 12svh, 132px);
@@ -383,6 +426,244 @@ const wm = `--wm-clear:${G.clear}`;
 
 		.hero--page .hero__text {
 			padding-top: clamp(96px, 12svh, 140px);
+		}
+	}
+	/* ---------------- the home's opening (19/11/2026): the prototype video on the left, the board tested point by point
+	   on the right, the way to the prototype under the video. Phones: one under the other, after the action. */
+	.hero__media {
+		display: grid;
+		gap: 28px;
+		margin-top: 44px;
+	}
+
+	.hm {
+		min-width: 0;
+	}
+
+	.hm__frame {
+		position: relative;
+		display: block;
+		overflow: hidden;
+		background: var(--ink-2);
+	}
+
+	.hm--video .hm__frame {
+		aspect-ratio: 16 / 9;
+	}
+
+	.hm__video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.hm__frame--board {
+		aspect-ratio: 480 / 330;
+		background: none;
+	}
+
+	.hm figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px 16px;
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.4;
+		color: var(--steel-light);
+	}
+
+	.hm__go {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		min-height: 32px;
+		color: var(--paper);
+		font-weight: 600;
+		text-underline-offset: 0.2em;
+	}
+
+	.hm__go svg {
+		width: 16px;
+		height: 16px;
+		transition: transform 0.2s;
+	}
+
+	.hm__go:hover svg {
+		transform: translateX(3px);
+	}
+
+	.hm__pause {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		min-height: 32px;
+		padding: 0 10px;
+		border: 1px solid var(--steel);
+		background: none;
+		color: var(--paper);
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.hm__pause[hidden] {
+		display: none;
+	}
+
+	.hm__pause:hover {
+		border-color: var(--paper);
+	}
+
+	.hm__pause svg {
+		width: 11px;
+		height: 11px;
+	}
+
+	.hm__ico-play,
+	[data-paused] .hm__ico-pause {
+		display: none;
+	}
+
+	[data-paused] .hm__ico-play {
+		display: inline;
+	}
+
+	@media (min-width: 700px) {
+		.hero__media {
+			grid-template-columns: minmax(0, 16fr) minmax(0, 13.09fr);
+			gap: 28px 32px;
+		}
+	}
+
+	/* from 900 px: the R small on the left of the words (its lead drops into the lane right away, as on tablets), the two
+	   pictures across the whole width under them. Desktops (from 1100 px) put the action on the right: all of it in the
+	   first screen at 1440 × 900 and 1280 × 720 (the pictures take the height that is left, between 220 and 400 px) */
+	@media (min-width: 900px) {
+		.hero--home {
+			--s: 1.3px;
+			--top: clamp(84px, 11svh, 112px);
+			--mh: clamp(220px, calc(100svh - 540px), 400px);
+		}
+
+		.hero--home .hero__text {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			column-gap: 40px;
+			align-items: start;
+			padding: var(--top) var(--m) 56px;
+		}
+
+		.hero--home .hero__brand {
+			display: contents;
+		}
+
+		.hero--home .hero__brand :global(.hero-symbol) {
+			grid-column: 1;
+			grid-row: 1 / span 3;
+		}
+
+		.hero--home .hero__descriptor {
+			grid-column: 2;
+			grid-row: 1;
+		}
+
+		.hero--home .hero__title {
+			grid-column: 2;
+			grid-row: 2;
+			max-width: 15em;
+			margin-top: 12px;
+			font-size: clamp(2.5rem, 3.5vw, 3.4rem);
+			text-wrap: balance;
+		}
+
+		.hero--home .hero__sub {
+			grid-column: 2;
+			grid-row: 3;
+			margin-top: 16px;
+		}
+
+		.hero--home .hero__actions {
+			grid-column: 2;
+			grid-row: 4;
+			margin-top: 28px;
+		}
+
+		.hero--home .hero__promise {
+			grid-column: 2;
+			grid-row: 5;
+		}
+
+		.hero--home .hero__facts {
+			position: absolute;
+			top: var(--pad-top);
+			left: var(--m);
+			right: var(--m);
+			margin-top: 0;
+			gap: 8px 22px;
+			font-family: var(--font-mono);
+			font-size: 12px;
+			font-weight: 500;
+			line-height: 1.5;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+		}
+
+		.hero--home .hero__facts li {
+			padding-left: 18px;
+		}
+
+		.hero--home .hero__facts li::before {
+			top: 0.62em;
+			width: 10px;
+			height: 2px;
+		}
+
+		.hero--home .hero__media {
+			grid-column: 1 / -1;
+			grid-row: 6;
+			width: 100%;
+			max-width: calc(var(--mh) * 3.2323 + 32px);
+			margin-top: 40px;
+		}
+
+		/* the lead: from the stem foot (the R's top is the text's top) an S into the lane, then down beside the pictures */
+		.hero--home .hero__lead {
+			--fy: calc(var(--top) + 108.02 * var(--s));
+			--j: min(var(--bend), calc((var(--m) + 6 * var(--s) - var(--lane)) / 2 - 0.5px));
+		}
+
+		.hero--home .hero__lead-a {
+			right: calc(100% - var(--m) - 6 * var(--s) - var(--cw) / 2);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.hero--home .hero__text {
+			grid-template-columns: auto minmax(0, 1fr) auto;
+		}
+
+		.hero--home .hero__actions {
+			grid-column: 3;
+			grid-row: 2;
+			align-self: end;
+			margin-top: 0;
+		}
+
+		.hero--home .hero__promise {
+			grid-column: 3;
+			grid-row: 3;
+			max-width: 17em;
+			margin-top: 16px;
+		}
+
+		.hero--home .hero__media {
+			grid-row: 4;
 		}
 	}
 </style>

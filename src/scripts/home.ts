@@ -98,15 +98,17 @@ function initBrandOnce() {
 	document.body.classList.remove('hero-brand-visible');
 }
 
-/** The prototype video (Proof) starts on its own, muted and in a loop, while at least half of it is on screen, and pauses
- * when it leaves (Alex, 18/11/2026). A visitor who pauses it keeps it paused until it leaves the screen. Nothing
- * starts with reduced motion or with the data saver on: the controls stay there. The file is fetched only on the first
- * play (preload none). */
+/** The prototype videos (Proof, on «How it works»; the home's opening) start on their own, muted and in a loop, while at
+ * least half of them is on screen, and pause when they leave (Alex, 18/11/2026). A visitor who pauses one keeps it paused
+ * until it leaves the screen; the opening's Pause button holds it ([data-paused]) until Play. Nothing starts with reduced
+ * motion or with the data saver on: the poster stays. The file is fetched only on the first play (preload none). */
 function initAutoVideo() {
-	const v = document.querySelector<HTMLVideoElement>('video[data-autoplay]');
-	if (!v || !('IntersectionObserver' in window)) return;
+	if (!('IntersectionObserver' in window)) return;
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 	if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
+	document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach(autoVideo);
+}
+function autoVideo(v: HTMLVideoElement) {
 	let ours = false; // the next pause is ours, not the visitor's
 	let held = false; // the visitor paused it while on screen
 	v.addEventListener('pause', () => {
@@ -117,7 +119,7 @@ function initAutoVideo() {
 		(es) => {
 			const e = es[es.length - 1];
 			if (e.intersectionRatio >= 0.5) {
-				if (!held && v.paused) v.play()?.catch(() => {});
+				if (!held && v.paused && !v.closest('[data-paused]')) v.play()?.catch(() => {});
 			} else if (!e.isIntersecting || e.intersectionRatio < 0.5) {
 				if (!e.isIntersecting) held = false;
 				if (!v.paused) {
@@ -177,9 +179,30 @@ function initDemo() {
 	).observe(fig);
 }
 
+/** The opening's Pause button (WCAG 2.2.2: the video and the drawing move for more than 5 s): it holds both, Play lets
+ * them go again. Shown only where they move (not with reduced motion). */
+function initHeroMedia() {
+	const box = document.querySelector<HTMLElement>('[data-hero-media]');
+	const btn = box?.querySelector<HTMLButtonElement>('[data-hero-pause]');
+	if (!box || !btn || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	const v = box.querySelector<HTMLVideoElement>('video');
+	const label = btn.querySelector('span');
+	btn.hidden = false;
+	btn.addEventListener('click', () => {
+		const stop = !box.hasAttribute('data-paused');
+		box.toggleAttribute('data-paused', stop);
+		btn.setAttribute('aria-label', (stop ? btn.dataset.playLabel : btn.dataset.pauseLabel) ?? '');
+		if (label) label.textContent = (stop ? btn.dataset.play : btn.dataset.pause) ?? '';
+		if (!v) return;
+		if (stop) v.pause();
+		else if (v.getBoundingClientRect().bottom > 0 && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) v.play()?.catch(() => {});
+	});
+}
+
 initShow();
 initNavState();
 initBrandOnce();
 initAutoVideo();
+initHeroMedia();
 initLoopVideo();
 initDemo();

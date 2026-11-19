@@ -9,6 +9,7 @@
  * left to right, as the cable leaves the opening.)
  */
 import Compartment from '../panel/Compartment.astro';
+import BoardDrawing from './BoardDrawing.astro';
 import { copy, type Lang } from '../../i18n/copy';
 
 interface Props {
@@ -17,21 +18,6 @@ interface Props {
 const { lang } = Astro.props;
 const p = copy[lang].process;
 const d = p.demo;
-
-// the test points on the drawing, in the order of the report's rows (viewBox units)
-const PTS = [
-	{ x: 49, y: 205 },
-	{ x: 222, y: 84 },
-	{ x: 133, y: 205 },
-	{ x: 68, y: 84 },
-	{ x: 160, y: 84 },
-	{ x: 318, y: 84 },
-	{ x: 412, y: 205 },
-];
-// terminal blocks on the lower rail: x positions
-const TB = Array.from({ length: 16 }, (_, i) => 42 + i * 14);
-// wires from the terminals up into the middle duct (every other terminal)
-const WIRES = TB.filter((_, i) => i % 2 === 0);
 ---
 
 <Compartment n={3} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
@@ -49,46 +35,7 @@ const WIRES = TB.filter((_, i) => i % 2 === 0);
 
 	<figure class="demo" data-b data-sb aria-label={d.label}>
 		<div class="demo__board">
-			<svg class="sb" viewBox="0 0 480 330" aria-hidden="true" focusable="false">
-				{/* the enclosure and its mounting plate */}
-				<rect x="4" y="4" width="472" height="322" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="2" />
-				<rect x="18" y="18" width="444" height="294" fill="#E2E6EB" stroke="none" />
-				{/* wiring ducts: top, middle, bottom, and the two sides */}
-				<rect x="18" y="18" width="444" height="22" fill="#C3CBD5" stroke="none" />
-				<rect x="18" y="140" width="444" height="22" fill="#C3CBD5" stroke="none" />
-				<rect x="18" y="290" width="444" height="22" fill="#C3CBD5" stroke="none" />
-				<rect x="18" y="40" width="14" height="250" fill="#C3CBD5" stroke="none" />
-				<rect x="448" y="40" width="14" height="250" fill="#C3CBD5" stroke="none" />
-				{/* DIN rails */}
-				<rect x="32" y="94" width="416" height="8" fill="#9AA6B5" stroke="none" />
-				<rect x="32" y="232" width="416" height="8" fill="#9AA6B5" stroke="none" />
-				{/* upper rail: controller, input module, two relays, power supply, breaker */}
-				<rect x="44" y="64" width="92" height="66" fill="#172A44" stroke="none" />
-				<rect x="54" y="74" width="28" height="4" fill="#5A6676" stroke="none" />
-				<rect x="142" y="64" width="38" height="66" fill="#24508F" stroke="none" />
-				<rect x="206" y="68" width="30" height="58" fill="#5A6676" stroke="none" />
-				<rect x="240" y="68" width="30" height="58" fill="#5A6676" stroke="none" />
-				<rect x="290" y="60" width="68" height="74" fill="#9AA6B5" stroke="none" />
-				<rect x="300" y="110" width="48" height="14" fill="#E2E6EB" stroke="none" />
-				<rect x="378" y="66" width="22" height="62" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="1.5" />
-				<rect x="404" y="66" width="22" height="62" fill="#FFFFFF" stroke="#9AA6B5" stroke-width="1.5" />
-				{/* wires up into the top duct */}
-				<path d="M68 64V40M90 64V40M160 64V40M222 68V40M254 68V40M318 60V40M389 66V40M415 66V40" fill="none" stroke="#173C78" stroke-width="2.5" />
-				{/* lower rail: terminal blocks and the earth bar */}
-				{TB.map((x) => <rect x={x} y="196" width="12" height="74" fill="#9AA6B5" stroke="none" />)}
-				{WIRES.map((x) => <path d={`M${x + 6} 196V162`} fill="none" stroke="#173C78" stroke-width="2.5" />)}
-				<rect x="380" y="196" width="64" height="20" fill="#9AA6B5" stroke="none" />
-				<path d="M398 196V162M426 196V162" fill="none" stroke="#5A6676" stroke-width="2.5" />
-				{/* the test points: grey until tested, copper once the connection is verified */}
-				{
-					PTS.map((q, i) => (
-						<g style={`--i:${i}`}>
-							<circle class="sb__ring" cx={q.x} cy={q.y} r="13" fill="none" stroke="#C9632C" stroke-width="2" />
-							<circle class="sb__pt" cx={q.x} cy={q.y} r="6" fill="#C9632C" stroke="#FFFFFF" stroke-width="2" />
-						</g>
-					))
-				}
-			</svg>
+			<BoardDrawing />
 		</div>
 		<div class="rep">
 			<p class="rep__title">{d.reportTitle}</p>
@@ -160,12 +107,6 @@ const WIRES = TB.filter((_, i) => i % 2 === 0);
 		margin-top: 48px;
 		padding: 16px;
 		background: var(--white);
-	}
-
-	.sb {
-		display: block;
-		width: 100%;
-		height: auto;
 	}
 
 	.rep {
@@ -246,56 +187,15 @@ const WIRES = TB.filter((_, i) => i % 2 === 0);
 	}
 
 	/* the run (motion allowed, on screen, the module open): each test point lights, its ring pulses, its row is written */
-	.sb__ring {
-		opacity: 0;
-	}
-
 	@media (prefers-reduced-motion: no-preference) {
 		/* in motion, before its run: untested, the report empty (scripts/home.ts starts it) */
-		:global(html.motion) .demo:not([data-run]) .sb__pt {
-			fill: #9aa6b5;
-		}
-
 		:global(html.motion) .demo:not([data-run]) :is(.rep__row, .rep__sum) {
 			opacity: 0;
-		}
-
-		.demo[data-run] .sb__pt {
-			animation: sb-pt 0.3s calc(0.4s + var(--i) * 0.75s) both;
-		}
-
-		.demo[data-run] .sb__ring {
-			transform-box: fill-box;
-			transform-origin: center;
-			animation: sb-ring 0.7s calc(0.3s + var(--i) * 0.75s) both;
 		}
 
 		.demo[data-run] .rep__row,
 		.demo[data-run] .rep__sum {
 			animation: sb-row 0.35s calc(0.55s + var(--i) * 0.75s) both;
-		}
-	}
-
-	@keyframes sb-pt {
-		from {
-			fill: #9aa6b5;
-		}
-		to {
-			fill: #c9632c;
-		}
-	}
-
-	@keyframes sb-ring {
-		0% {
-			opacity: 0;
-			transform: scale(0.5);
-		}
-		40% {
-			opacity: 1;
-		}
-		100% {
-			opacity: 0;
-			transform: scale(1.5);
 		}
 	}
 
