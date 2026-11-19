@@ -13,17 +13,17 @@ const external = process.env.PANEL_EXTERNAL_JS === '1';
 export default defineConfig({
 	site: 'https://www.robosect.it',
 	integrations: [sitemap()],
-	// The site is one page per language: the old inner pages (still linked from outside) land on the place of the home
-	// page that took them over. Static output: each one becomes a small page with a meta refresh and a canonical link,
+	// Two pages per language (the home and «How it works»): the old inner pages (still linked from outside) land on the
+	// place that took them over. Static output: each one becomes a small page with a meta refresh and a canonical link,
 	// which any static host (FTP included) serves as it is.
 	redirects: {
-		'/technology': '/#how-it-works',
-		'/products': '/#products',
-		'/packaging': '/#products',
+		'/technology': '/how-it-works/',
+		'/products': '/#solutions',
+		'/packaging': '/#solutions',
 		'/work-with-us': '/#work',
-		'/it/tecnologia': '/it/#how-it-works',
-		'/it/prodotti': '/it/#products',
-		'/it/packaging': '/it/#products',
+		'/it/tecnologia': '/it/how-it-works/',
+		'/it/prodotti': '/it/#solutions',
+		'/it/packaging': '/it/#solutions',
 		'/it/lavora-con-noi': '/it/#work',
 		// no news index page: the news are the strip at the foot of the home page
 		'/blog': '/#news',

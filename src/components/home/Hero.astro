@@ -5,17 +5,23 @@ import { R_GEOMETRY as G } from '../../lib/cable-geometry';
 
 interface Props {
 	lang: Lang;
+	/** the «How it works» page: its title («Down to the last wire.»), the R smaller, no facts (the cable starts again from it) */
+	page?: boolean;
 }
-const { lang } = Astro.props;
+const { lang, page = false } = Astro.props;
 const h = copy[lang].hero;
+const hp = copy[lang].howPage;
 const brand = copy[lang].brand;
 const cta = copy[lang].cta;
+const label = page ? hp.metaTitle : brand.descriptor;
+const headline = page ? hp.title : h.headline;
+const sub = page ? hp.sub : h.subheadline;
 // the symbol's measures in logo-grid units (1 unit = var(--s) px), from the geometry (HeroSymbol's box starts 0.5 above G.top):
 // the clear space (the ferrule's length) kept around the R
 const wm = `--wm-clear:${G.clear}`;
 ---
 
-<section class="hero on-dark" data-hero aria-labelledby="hero-title">
+<section class:list={['hero on-dark', page && 'hero--page']} data-hero aria-labelledby="hero-title">
 	{/* the test lead leaves the R's stem foot and runs down the lane (scripts/panel/hero.ts) */}
 	<svg class="hero__wires" aria-hidden="true" focusable="false" data-hero-wires></svg>
 	{/* the same lead laid, in CSS: the static page (no JS, reduced motion, print) shows it; in motion it is the route the script measures */}
@@ -23,10 +29,10 @@ const wm = `--wm-clear:${G.clear}`;
 	<div class="hero__text">
 		<p class="hero__brand" data-hero-brand style={wm}>
 			<HeroSymbol />
-			<span class="hero__descriptor">{brand.descriptor}</span>
+			<span class="hero__descriptor">{label}</span>
 		</p>
-		<h1 id="hero-title" class="hero__title">{h.headline}</h1>
-		<p class="hero__sub">{h.subheadline}</p>
+		<h1 id="hero-title" class="hero__title">{headline}</h1>
+		<p class="hero__sub">{sub}</p>
 		<div class="hero__actions">
 			<a class="btn" href={h.primaryCta.href}>
 				{h.primaryCta.label}
@@ -36,9 +42,13 @@ const wm = `--wm-clear:${G.clear}`;
 			</a>
 		</div>
 		<p class="hero__promise">{cta.promise}</p>
-		<ul class="hero__facts">
-			{h.proofChips.map((c) => <li>{c}</li>)}
-		</ul>
+		{
+			!page && (
+				<ul class="hero__facts">
+					{h.proofChips.map((c) => <li>{c}</li>)}
+				</ul>
+			)
+		}
 	</div>
 </section>
 
@@ -349,6 +359,30 @@ const wm = `--wm-clear:${G.clear}`;
 		.hero__title {
 			margin-top: 32px;
 			font-size: clamp(2.5rem, min(4.4vw, 7.05svh), 4.25rem);
+		}
+	}
+
+	/* the «How it works» page: the same opening, shorter, the R smaller (its lead runs to the lane as on the home page) */
+	@media (min-width: 1100px) {
+		.hero--page {
+			--wm-top: clamp(96px, 12svh, 132px);
+			--s: min(3.2px, calc((100vw - 2 * var(--m) - 520px) / 106));
+			min-height: min(calc(72svh - var(--nav-h)), 640px);
+		}
+
+		.hero--page .hero__text {
+			padding-top: clamp(80px, 11svh, 120px);
+			padding-bottom: 72px;
+		}
+	}
+
+	@media (min-width: 1100px) and (min-height: 860px) {
+		.hero--page {
+			--wm-top: clamp(110px, 13svh, 150px);
+		}
+
+		.hero--page .hero__text {
+			padding-top: clamp(96px, 12svh, 140px);
 		}
 	}
 </style>

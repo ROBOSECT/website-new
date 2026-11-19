@@ -1,9 +1,10 @@
 ---
 /**
- * Proof, before any claim: the prototype video first (#video: it starts on its own, muted and in a loop, when it is on screen; scripts/home.ts), the probe end-effector, then the
- * three verified facts (University of Bologna spin-off, AIRISE.eu funding, IEEE/ASME AIM 2026). (The news has its own
- * section after the panel: HomeNews.astro.)
- * Maturity is said plainly: a working prototype.
+ * The prototype, on the «How it works» page: the video first (#video: it starts on its own, muted and in a loop, when it
+ * is on screen; scripts/home.ts), with one line under its title; then the two arms on one terminal block (a still with
+ * its short loop) beside what changes in a switchboard builder's testing; then the way back (Back to solutions) and the
+ * way in (Write to us, to the form at the foot of this page). Maturity is said plainly: a working prototype.
+ * Who stands behind it is on the home page, in the Team, in one line each (strada A, 19/11/2026).
  * (+C4's vignette: two arms, two probes on the two ends of one wire: the continuity test the prototype does.)
  */
 import { Image, getImage } from 'astro:assets';
@@ -12,23 +13,19 @@ import posterSrc from '../../assets/images/home/demo-poster.jpg';
 import videoSrc from '../../assets/videos/robosect_v4.mp4';
 import loopMp4 from '../../assets/videos/two-arms-loop.mp4';
 import loopWebm from '../../assets/videos/two-arms-loop.webm';
-import logoUnibo from '../../assets/images/logo_unibo.png';
-import logoAirise from '../../assets/images/home/logo-airise.png';
-import Rich from '../ui/Rich.astro';
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
+import { homePath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
 }
 const { lang } = Astro.props;
 const p = copy[lang].proof;
+const ch = copy[lang].changes;
+const hp = copy[lang].howPage;
+const sol = copy[lang].solutions;
 const poster = await getImage({ src: posterSrc, width: 1280, height: 720, format: 'jpg', quality: 78 });
-// logos for the first two facts; the others carry a short mono mark (fact.mark)
-const logos = [
-	{ src: logoUnibo, h: 52 },
-	{ src: logoAirise, h: 22 },
-];
 ---
 
 <Compartment n={4} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
@@ -44,126 +41,51 @@ const logos = [
 			</video>
 			{/* print: the poster in the video's place (a video prints as an empty box) */}
 			<img class="tvid__print" src={poster.src} width="1280" height="720" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-			<figcaption class="tvid__cap"><Rich text={p.video.caption} /></figcaption>
 		</figure>
 	</div>
 
-	<div class="facts">
-		<div class="facts__side">
-			<figure class="tool" data-b>
-				<div class="tool__frame">
-					<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 760]} sizes="(min-width: 1100px) 340px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
-					{/* a 5 s muted loop of the same moment, over the still: it starts from home.ts (not with reduced motion or data saver; without JS the still stays) */}
-					<video class="tool__loop" width="800" height="600" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-loop>
-						<source src={loopWebm} type="video/webm" />
-						<source src={loopMp4} type="video/mp4" />
-					</video>
-				</div>
-				<figcaption>{p.photo.caption}</figcaption>
-			</figure>
-			<div class="targets" data-b>
-				<h3 class="targets__h">{p.targets.title}</h3>
-				<ul class="targets__list">
-					{
-						p.targets.items.map((t) => (
-							<li class="targets__item">
-								<p class="targets__label">{t.label}</p>
-								<p class="targets__val">
-									<span class="targets__from">{t.from}</span>
-									<span aria-hidden="true">→</span>
-									<span class="visually-hidden"> {p.targets.toWord} </span>
-									<span class="targets__to">{t.to}</span>
-								</p>
-							</li>
-						))
-					}
-				</ul>
-				<p class="targets__note">{p.targets.note}</p>
+	<div class="more">
+		<figure class="tool" data-b>
+			<div class="tool__frame">
+				<Image src={imgTool} alt={p.photo.alt} widths={[320, 480, 760]} sizes="(min-width: 1100px) 440px, (min-width: 700px) 40vw, 100vw" loading="lazy" />
+				{/* a 5 s muted loop of the same moment, over the still: it starts from home.ts (not with reduced motion or data saver; without JS the still stays) */}
+				<video class="tool__loop" width="800" height="600" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-loop>
+					<source src={loopWebm} type="video/webm" />
+					<source src={loopMp4} type="video/mp4" />
+				</video>
 			</div>
-		</div>
-		<div class="who" data-b>
-			<h3 class="who__h">{p.factsTitle}</h3>
-			<ul class="who__list">
+			<figcaption>{p.photo.caption}</figcaption>
+		</figure>
+		<div class="chg" data-b>
+			<h3 class="chg__h">{ch.title}</h3>
+			<ul class="chg__list">
 				{
-					p.facts.map((f, i) => (
-						<li class="who__row">
-							<div class="who__logo">
-								{logos[i] ? (
-									<Image src={logos[i]!.src} alt={f.logoAlt} height={logos[i]!.h * 2} style={`height:${logos[i]!.h}px`} loading="lazy" />
-								) : (
-									<span class="who__mark" aria-hidden="true">{f.mark}</span>
-								)}
-							</div>
-							<div>
-								<p class="who__name">{f.name}</p>
-								<p class="who__detail">
-									<Rich text={f.detail} />
-								</p>
-							</div>
+					ch.items.map((it) => (
+						<li class="chg__item">
+							<p class="chg__t">{it.title}</p>
+							<p class="chg__b">{it.body}</p>
 						</li>
 					))
 				}
 			</ul>
 		</div>
 	</div>
+
+	<p class="back" data-b>
+		<a class="btn" href="#contact">
+			{hp.write}
+			<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+				><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+			>
+		</a>
+		<a class="text-link" href={`${homePath(lang)}#${sol.id}`}>
+			<svg class="back__arrow" viewBox="0 0 18 18" aria-hidden="true"><path d="M16 9H4M8.5 4.5 4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+			{hp.back}
+		</a>
+	</p>
 </Compartment>
 
 <style>
-	.facts__side {
-		display: contents;
-	}
-
-	.targets {
-		margin-top: 0;
-	}
-
-	.targets__h {
-		font-size: 24px;
-		line-height: 1.2;
-	}
-
-	.targets__list {
-		list-style: none;
-		display: grid;
-		gap: 4px;
-		margin-top: 20px;
-	}
-
-	.targets__item {
-		display: grid;
-		gap: 6px;
-		padding: 16px;
-		background: var(--white);
-	}
-
-	.targets__label {
-		font-size: 15px;
-		color: var(--steel);
-	}
-
-	.targets__val {
-		display: flex;
-		align-items: baseline;
-		gap: 12px;
-		font-family: var(--font-mono);
-		font-size: 28px;
-		font-weight: 500;
-		color: var(--blue);
-	}
-
-	.targets__from {
-		color: var(--steel);
-	}
-
-	.targets__note {
-		margin-top: 12px;
-		font-size: 15px;
-		line-height: 1.45;
-		color: var(--steel);
-		max-width: 60ch;
-	}
-
-
 	.tvid__print {
 		display: none;
 	}
@@ -220,19 +142,12 @@ const logos = [
 		border-radius: 0 0 0 var(--bend);
 	}
 
-	.tvid__cap,
 	.tool figcaption {
 		margin-top: 12px;
 		font-size: 15px;
 		line-height: 1.45;
 		color: var(--steel);
 		max-width: 80ch;
-	}
-
-	.facts {
-		display: grid;
-		gap: 40px;
-		margin-top: 56px;
 	}
 
 	.tool__frame {
@@ -273,89 +188,77 @@ const logos = [
 		object-position: 50% 40%;
 	}
 
-	/* phones: photo, the facts, then the targets (the side wrapper dissolves into the grid) */
-	.who {
-		order: 1;
+
+	.more {
+		display: grid;
+		gap: 40px;
+		margin-top: 56px;
 	}
 
-	.targets {
-		order: 2;
-	}
-
-	.who__h {
+	.chg__h {
 		font-size: 24px;
 		line-height: 1.2;
 	}
 
-	.who__list {
+	.chg__list {
 		list-style: none;
 		display: grid;
-		gap: 4px;
+		gap: 18px;
 		margin-top: 20px;
 	}
 
-	.who__row {
-		display: grid;
-		gap: 10px;
-		padding: 16px;
-		background: var(--white);
+	.chg__item {
+		padding-top: 12px;
+		border-top: 4px solid var(--blue);
 	}
 
-	.who__logo {
-		display: flex;
-		align-items: center;
-	}
-
-	.who__logo :global(img) {
-		width: auto;
-		max-width: 100%;
-		object-fit: contain;
-	}
-
-	.who__mark {
-		font-family: var(--font-mono);
-		font-size: 13px;
-		font-weight: 500;
-		letter-spacing: 0.04em;
-		color: var(--blue);
-	}
-
-	.who__name {
-		font-size: 17px;
+	.chg__t {
+		font-size: 18px;
 		font-weight: 600;
 		line-height: 1.3;
 	}
 
-	.who__detail {
-		margin-top: 4px;
-		font-size: 15px;
-		line-height: 1.45;
+	.chg__b {
+		margin-top: 6px;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.back {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px 32px;
+		margin-top: 48px;
+	}
+
+	.back .text-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.back__arrow {
+		width: 18px;
+		height: 18px;
+	}
+
+	@media (max-width: 699px) {
+		.back .btn {
+			width: 100%;
+		}
 	}
 
 	@media (min-width: 700px) {
-		.who__row {
-			grid-template-columns: 150px minmax(0, 1fr);
-			gap: 18px;
-			align-items: center;
-		}
-
-		.who,
-		.targets {
-			order: 0;
-		}
-
-		.facts__side {
-			display: block;
-		}
-
-		.targets {
-			margin-top: 24px;
-		}
-
-		.facts {
+		.more {
 			grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
 			column-gap: var(--gap);
 			align-items: start;
+		}
+
+		.chg__list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 24px var(--gap);
 		}
 	}
 
@@ -378,17 +281,25 @@ const logos = [
 			grid-column: 5 / -1;
 		}
 
-		.facts {
+		.more {
 			grid-template-columns: repeat(12, minmax(0, 1fr));
 			margin-top: 80px;
 		}
 
-		.facts__side {
-			grid-column: 1 / span 4;
+		.tool {
+			grid-column: 1 / span 5;
 		}
 
-		.who {
-			grid-column: 6 / -1;
+		.chg {
+			grid-column: 7 / -1;
+		}
+
+		.chg__h {
+			font-size: 28px;
+		}
+
+		.back {
+			margin-top: 64px;
 		}
 	}
 </style>

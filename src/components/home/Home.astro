@@ -2,24 +2,26 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from './Hero.astro';
 import Problem from './Problem.astro';
-import Process from './Process.astro';
-import Benefits from './Benefits.astro';
-import Proof from './Proof.astro';
+import Solutions from './Solutions.astro';
 import AlsoFor from './AlsoFor.astro';
 import Team from './Team.astro';
 import Contact from './Contact.astro';
 import HomeNews from './HomeNews.astro';
-import { type Lang } from '../../i18n/copy';
+import { copy, type Lang } from '../../i18n/copy';
+import { pagePath } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
 }
 const { lang } = Astro.props;
-// The home page is an electrical panel under test: every section is a compartment
-// (+C1…+C7) on one mounting plate, and the copper of the R leads the test cable through all of them.
-// Order (for switchboard builders): problem · how it works · what you get · prototype (proof) · also for you · team ·
-// contact (the tagline, then the form); then the latest news, a plain section.
+// The home page is an electrical panel under test: every section is a compartment on one mounting plate, and the copper
+// of the R leads the test cable through all of them. Strada A (19/11/2026): a short home that says what we solve, and the
+// «How it works» page (HowPage.astro) for whoever wants the details.
+// Order: problem (+C1) · solutions (+C2) · also for you (+C5) · team, with who stands behind it (+C6) · contact; then
+// the latest news, a plain section. The scenes alternate their direction (L→R, R→L…): the cable leaves the hero down the
+// left lane and reaches Contact down the left lane, so the first scene runs L→R and the last R→L.
 // The visitor's scroll drives everything (scripts/panel).
+const how = pagePath(lang, copy[lang].howPage.path);
 ---
 
 <BaseLayout lang={lang} isHome alternates={{ en: '/', it: '/it/' }}>
@@ -28,9 +30,7 @@ const { lang } = Astro.props;
 		<div class="sduct sduct--l" aria-hidden="true"></div>
 		<div class="sduct sduct--r" aria-hidden="true"></div>
 		<Problem lang={lang} />
-		<Process lang={lang} />
-		<Benefits lang={lang} />
-		<Proof lang={lang} />
+		<Solutions lang={lang} />
 		<AlsoFor lang={lang} />
 		<Team lang={lang} />
 		<Contact lang={lang} />
@@ -39,6 +39,15 @@ const { lang } = Astro.props;
 	{/* the latest news: a plain section after the panel */}
 	<HomeNews lang={lang} />
 </BaseLayout>
+
+{/* the old places of the details (/#how-it-works, /#proof, /#video, /#what-you-get) are on the «How it works» page now:
+     a link to one of them lands there, before the panel starts */}
+<script is:inline define:vars={{ how }}>
+	(function () {
+		var h = location.hash.slice(1);
+		if (['how-it-works', 'proof', 'video', 'what-you-get'].indexOf(h) >= 0) location.replace(how + (h === 'what-you-get' ? '#proof' : '#' + h));
+	})();
+</script>
 
 <script>
 	import '../../scripts/home';

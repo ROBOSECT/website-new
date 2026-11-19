@@ -47,7 +47,7 @@ const labels = {
 	sector: f.sector.label,
 	boards: f.boards.label,
 	volumes: f.volumes.label,
-	eplan: f.eplan.label,
+	eplan: f.cad.label,
 	process: f.process.label,
 };
 
@@ -70,8 +70,8 @@ const cfg = {
 <section id={c.id} class="cmp cmp--contact" data-contact data-dir="ltr" aria-labelledby="contact-title">
 	<div class="stage stage--free" data-contact-stage>
 		<div class="contact__wrap">
-			{/* the brand's closing line (the promise opens the page, the tagline closes it), then the form */}
-			<p class="closing-tag">{c.closingTag}</p>
+			{/* the card: one title, one line, the reply time, then the form (Giorgio, 19/11/2026: no text said twice; the
+			     tagline «Down to the last wire.» is the «How it works» page's title now) */}
 			<div class="card on-dark" data-card>
 				<div class="legend__head card__head" data-legend-head>
 					<h2 id="contact-title" class="card__title">{titleQ}</h2>
@@ -80,7 +80,6 @@ const cfg = {
 					{titleA && <p class="card__answer">{titleA}</p>}
 				</div>
 				<div class="card__intro">
-					<p class="card__body">{c.body}</p>
 					<p class="card__time"><Rich text={c.responseTime} /></p>
 				</div>
 
@@ -173,11 +172,11 @@ const cfg = {
 									</div>
 								</div>
 								<div class="field field--half" data-part="eplan">
-									<label for="cf-eplan">{f.eplan.label} <span class="opt">({f.optional})</span></label>
+									<label for="cf-eplan">{f.cad.label} <span class="opt">({f.optional})</span></label>
 									<div class="box select">
 										<select id="cf-eplan" name="eplan" data-box>
-											<option value="">{f.eplan.placeholder}</option>
-											{f.eplan.options.map((o) => <option>{o}</option>)}
+											<option value="">{f.cad.placeholder}</option>
+											{f.cad.options.map((o) => <option>{o}</option>)}
 										</select>
 									</div>
 								</div>
@@ -201,8 +200,7 @@ const cfg = {
 								<button class="btn form__submit" type="submit" data-box><span>{f.submit}</span></button>
 							</div>
 						</div>
-						<p class="form__helper form__helper--js">{ho.helper}</p>
-						<noscript><p class="form__helper">{ho.noscript}</p></noscript>
+							<noscript><p class="form__helper">{ho.noscript}</p></noscript>
 					</form>
 					<div class="receipt" data-receipt hidden>
 						<h3 class="receipt__h" tabindex="-1" data-receipt-h>{ho.receiptHeading}</h3>
@@ -259,23 +257,6 @@ const cfg = {
 		padding-inline: calc(var(--lane) + var(--duct) / 2 + var(--mgap));
 	}
 
-	.closing-tag {
-		margin: 0 0 32px;
-		padding-inline: var(--card-pad);
-		max-width: 16em;
-		font-size: clamp(32px, 8.4vw, 64px);
-		font-weight: 600;
-		line-height: 1.04;
-		letter-spacing: -0.035em;
-		color: var(--ink);
-	}
-
-	@media (min-width: 1100px) {
-		.closing-tag {
-			margin-bottom: 48px;
-		}
-	}
-
 	.card {
 		position: relative;
 		z-index: 1;
@@ -324,13 +305,6 @@ const cfg = {
 			margin-top: 18px;
 			order: 4;
 		}
-	}
-
-	.card__body {
-		font-size: 16px;
-		line-height: 1.55;
-		max-width: 44ch;
-		color: var(--mist);
 	}
 
 	.card__time {
@@ -1518,10 +1492,6 @@ const cfg = {
 			margin-top: 20px;
 		}
 
-		.card__body {
-			max-width: 56ch;
-		}
-
 		.direct {
 			grid-column: 1 / span 7;
 			grid-row: 4;
@@ -1597,10 +1567,6 @@ const cfg = {
 
 		.card__answer {
 			font-size: 20px;
-		}
-
-		.card__body {
-			font-size: 14.5px;
 		}
 
 		.show {

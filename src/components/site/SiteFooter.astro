@@ -6,15 +6,17 @@ import logoSpinoff from '../../assets/images/logo_spinoff_unibo.png';
 import logoCobo from '../../assets/images/logo_cobo.png';
 import logoEit from '../../assets/images/logo_EIT.png';
 import { copy, type Lang } from '../../i18n/copy';
-import { sectionHref } from '../../lib/i18n';
+import { pagePath, sectionHref } from '../../lib/i18n';
 import { R_GEOMETRY as G } from '../../lib/cable-geometry';
 
 interface Props {
 	lang: Lang;
 	isHome?: boolean;
+	/** a page with its own Contact form (homes, «How it works») */
+	panel?: boolean;
 }
 
-const { lang, isHome = false } = Astro.props;
+const { lang, isHome = false, panel = isHome } = Astro.props;
 const t = copy[lang];
 const f = t.footer;
 const partners = [
@@ -28,18 +30,18 @@ const partners = [
 <footer class="footer on-dark" data-ground="dark">
 	<div class="wrap">
 		<div class="footer__top">
-			{/* the home page closes on the tagline right above its form: here it would say it twice */}
-			{!isHome && <p class="footer__tagline">{f.tagline}</p>}
+			{/* not under the panel pages: «Down to the last wire.» is now the title of «How it works» (19/11/2026) */}
+			{!panel && <p class="footer__tagline">{f.tagline}</p>}
 
-			<nav class:list={['footer__cols', isHome && 'footer__cols--wide']} aria-label={lang === 'it' ? 'Piè di pagina' : 'Footer'}>
+			<nav class:list={['footer__cols', panel && 'footer__cols--wide']} aria-label={lang === 'it' ? 'Piè di pagina' : 'Footer'}>
 				<div>
 					<h2 class="footer__h">{f.columns.site}</h2>
 					<ul>
-						<li><a href={sectionHref(lang, 'how-it-works', isHome)}>{f.links.how}</a></li>
-						<li><a href={sectionHref(lang, 'products', isHome)}>{f.links.products}</a></li>
+						<li><a href={sectionHref(lang, 'solutions', isHome)}>{f.links.products}</a></li>
+						<li><a href={pagePath(lang, t.howPage.path)}>{f.links.how}</a></li>
 						<li><a href={sectionHref(lang, 'work', isHome)}>{f.links.work}</a></li>
 						<li><a href={sectionHref(lang, 'team', isHome)}>{f.links.team}</a></li>
-						<li><a href={sectionHref(lang, 'contact', isHome)}>{f.links.contact}</a></li>
+						<li><a href={sectionHref(lang, 'contact', panel)}>{f.links.contact}</a></li>
 						<li>
 							<a href="https://www.linkedin.com/company/robosect" target="_blank" rel="noopener noreferrer"
 								>{f.links.linkedin}<span class="visually-hidden"> {t.a11y.opensInNewTab}</span></a

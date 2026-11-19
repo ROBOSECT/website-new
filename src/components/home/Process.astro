@@ -1,10 +1,12 @@
 ---
 /**
- * How it works: the three pillars applied to switchboard testing (sees the real board · starts from your EPLAN connection
- * list · leaves the test report), then one drawing that shows it: a switchboard whose test points light up one by one
+ * How it works, the first compartment of the «How it works» page: the three pillars applied to switchboard testing (sees
+ * the real board · starts from your connection list · leaves the test report), then one drawing that shows it: a switchboard whose test points light up one by one
  * while the test report fills in line by line beside it. The rows are illustrative, in words (no device codes on screen).
  * The animation runs once when the drawing is on screen and open (scripts/home.ts sets data-run); without JS and with
  * reduced motion the drawing is shown finished: every point tested, the report complete.
+ * (+C3's vignette: the probe tests the last terminals and the printer prints the report: the page's first scene runs from
+ * left to right, as the cable leaves the opening.)
  */
 import Compartment from '../panel/Compartment.astro';
 import { copy, type Lang } from '../../i18n/copy';
@@ -32,7 +34,7 @@ const TB = Array.from({ length: 16 }, (_, i) => 42 + i * 14);
 const WIRES = TB.filter((_, i) => i % 2 === 0);
 ---
 
-<Compartment n={2} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
+<Compartment n={3} lang={lang} id={p.id} name={p.eyebrow} title={p.title} intro={p.intro} ground="light">
 	<ol class="steps">
 		{
 			p.steps.map((s) => (

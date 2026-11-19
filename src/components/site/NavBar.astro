@@ -1,19 +1,28 @@
 ---
 import logoRaw from '../../assets/brand/robosect-logotipo-negativo-stretto.svg?raw';
 import { copy, type Lang } from '../../i18n/copy';
-import { homePath, sectionHref } from '../../lib/i18n';
+import { homePath, pagePath, sectionHref } from '../../lib/i18n';
 
 interface Props {
 	lang: Lang;
 	isHome?: boolean;
+	/** a page with the panel and its own Contact (homes, «How it works»): the action goes to the form on the page */
+	panel?: boolean;
+	/** the nav's own page this is (a link with this `page` is the current page) */
+	page?: string;
+	/** the same page in the other language, when there is one */
+	langHref?: string;
 }
 
-const { lang, isHome = false } = Astro.props;
+const { lang, isHome = false, panel = isHome, page = '', langHref: sameInOther } = Astro.props;
 const t = copy[lang];
 const other: Lang = lang === 'it' ? 'en' : 'it';
-// on a page that exists in one language only (blog, legal), the switch goes to the other homepage
-const langHref = homePath(other);
-const contactHref = sectionHref(lang, 'contact', isHome);
+// the switch goes to the same page in the other language; on a page that exists in one language only (blog, legal), to the
+// other homepage
+const langHref = sameInOther ?? homePath(other);
+const contactHref = sectionHref(lang, 'contact', panel);
+// a link to a place on the home page, or to a page of its own (the bar marks that one as the current page)
+const linkHref = (l: { anchor: string; page: string }) => (l.page ? pagePath(lang, l.page) : sectionHref(lang, l.anchor, isHome));
 // the panel's main connector in miniature, wordless (a visual only): six ring pins,
 // one per compartment whose job the scroll has passed (scripts/panel), the centre pin when the robots have built the Contact
 // form. Literal paint
@@ -27,7 +36,7 @@ const logo = logoRaw
 	.replaceAll('<path fill=', '<path stroke="none" fill=');
 ---
 
-<header class="nav on-dark" data-nav data-x0={isHome ? undefined : '7'}>
+<header class="nav on-dark" data-nav data-x0={panel ? undefined : '7'}>
 	<div class="nav__bar wrap">
 		<a class="nav__brand" href={homePath(lang)} data-ritorno aria-label={t.a11y.homeLink}>
 			<Fragment set:html={logo} />
@@ -38,7 +47,7 @@ const logo = logoRaw
 				{
 					t.nav.links.map((l) => (
 						<li>
-							<a href={sectionHref(lang, l.anchor, isHome)} data-nav-link={l.id}>
+							<a href={linkHref(l)} data-nav-link={l.page ? undefined : l.id} aria-current={l.page && l.page === page ? 'page' : undefined}>
 								{l.label}
 							</a>
 						</li>

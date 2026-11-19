@@ -1,0 +1,65 @@
+---
+/**
+ * Solutions: what ROBOSECT makes, in four cards (title in plain words and one line each), then the way to the details:
+ * «See how it works» opens the «How it works» page; «Bring us a project» stays the one action of the page (strada A,
+ * 19/11/2026: the home says what we solve, the page says how).
+ * (+C2's vignette: the wrist camera looks at the board, the connection list comes out of its feeder, the probe tests the
+ * terminals in the list's order: the products' common thread, your project data and the real board.)
+ */
+import Compartment from '../panel/Compartment.astro';
+import ProductCards from './ProductCards.astro';
+import { copy, type Lang } from '../../i18n/copy';
+import { pagePath } from '../../lib/i18n';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const s = copy[lang].solutions;
+const cta = copy[lang].cta;
+const how = pagePath(lang, copy[lang].howPage.path);
+---
+
+<Compartment n={2} lang={lang} id={s.id} name={s.eyebrow} title={s.title} intro={s.intro} ground="dark">
+	<div id={s.products.id} class="prods" data-b>
+		<ProductCards lang={lang} cards={s.products.cards} dark />
+	</div>
+	<p class="sol__cta" data-b>
+		<a class="btn" href={how}>
+			{s.how}
+			<svg class="btn__arrow" viewBox="0 0 18 18" aria-hidden="true"
+				><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg
+			>
+		</a>
+		<a class="text-link" href="#contact">
+			{cta.label}
+			<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 9h12M9.5 4.5 14 9l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+		</a>
+	</p>
+</Compartment>
+
+<style>
+	.prods :global(.pc) {
+		margin-top: 0;
+	}
+
+	.sol__cta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px 32px;
+		margin-top: 40px;
+	}
+
+	@media (max-width: 699px) {
+		.sol__cta .btn {
+			width: 100%;
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.sol__cta {
+			margin-top: 56px;
+		}
+	}
+</style>

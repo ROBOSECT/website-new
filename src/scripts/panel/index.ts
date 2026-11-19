@@ -529,11 +529,21 @@ export function initPanel() {
 			cab1 += s.cableMs;
 		}
 		morphBusy = busy;
-		// the nav's connector glyph (wordless): one pin per compartment whose power-up the
-		// scroll has passed (both ways), the seventh when the robots have built the Contact form
+		// the nav's connector glyph (wordless): its six ring pins follow the compartments whose power-up the scroll has
+		// passed (both ways), spread over the six when the page has fewer (the home has four, «How it works» two); the
+		// seventh when the robots have built the Contact form
 		let x0 = 0;
 		if (formBuilt) x0 = 7;
-		else for (const s of stages) if (!s.cfg.finale && s.B.powerT > 0 && (s.tr.latched || s.t >= s.B.powerT)) x0++;
+		else {
+			let on = 0,
+				all = 0;
+			for (const s of stages) {
+				if (s.cfg.finale) continue;
+				all++;
+				if (s.B.powerT > 0 && (s.tr.latched || s.t >= s.B.powerT)) on++;
+			}
+			x0 = all ? Math.round((on * 6) / all) : 0;
+		}
 		const x0s = String(x0);
 		if (nav && nav.dataset.x0 !== x0s) nav.dataset.x0 = x0s;
 		if (curS && curS.phaseKey !== root.dataset.panelPhase) root.dataset.panelPhase = curS.phaseKey;

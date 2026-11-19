@@ -1,0 +1,39 @@
+---
+/**
+ * The «How it works» page («Down to the last wire.»), in English and Italian: for whoever wants to know how the
+ * switchboard testing works (strada A, 19/11/2026). The same panel as the home page, shorter: the opening with the R
+ * (smaller), then two compartments, how it works (+C3: the report comes out of the printer) and the prototype (+C4: two
+ * arms on the two ends of one wire), then the same Contact with its form. The cable leaves the R down the left lane, the
+ * first scene runs L→R, the second R→L, and it reaches Contact down the left lane, as on the home page.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../home/Hero.astro';
+import Process from '../home/Process.astro';
+import Proof from '../home/Proof.astro';
+import Contact from '../home/Contact.astro';
+import { copy, type Lang } from '../../i18n/copy';
+import { pagePath } from '../../lib/i18n';
+
+interface Props {
+	lang: Lang;
+}
+const { lang } = Astro.props;
+const hp = copy[lang].howPage;
+const alternates = { en: pagePath('en', hp.path), it: pagePath('it', hp.path) };
+---
+
+<BaseLayout lang={lang} title={hp.metaTitle} description={hp.metaDescription} alternates={alternates} panel page={hp.path}>
+	<Hero lang={lang} page />
+	<div class="cab" data-cab>
+		<div class="sduct sduct--l" aria-hidden="true"></div>
+		<div class="sduct sduct--r" aria-hidden="true"></div>
+		<Process lang={lang} />
+		<Proof lang={lang} />
+		<Contact lang={lang} />
+		<div class="cab__close" aria-hidden="true"></div>
+	</div>
+</BaseLayout>
+
+<script>
+	import '../../scripts/home';
+</script>

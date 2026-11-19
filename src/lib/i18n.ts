@@ -6,6 +6,9 @@ export const LANGS: Lang[] = ['en', 'it'];
 /** Home path for a language: / (English, default) and /it/ */
 export const homePath = (lang: Lang) => (lang === 'it' ? '/it/' : '/');
 
+/** A page of its own in a language: /how-it-works/ and /it/how-it-works/ (the same name in both, like the anchors) */
+export const pagePath = (lang: Lang, page: string) => `${homePath(lang)}${page}/`;
+
 /** Link to a homepage section, in page when we are on that home */
 export const sectionHref = (lang: Lang, id: string, onHome: boolean) =>
 	onHome ? `#${id}` : `${homePath(lang)}#${id}`;

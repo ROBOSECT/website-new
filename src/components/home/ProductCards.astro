@@ -1,8 +1,9 @@
 ---
 /**
- * The four products, one card each, always in the same order: media, stage, name, what it does, who it is for. The one action sits under the cards («Bring us a project», demo requests included).
- * Texts from copy.benefits.products.cards (the reel-change card adds a note on what has been seen so far). The media is a key: the Cable Reader render, a still of the Quality Control Cell,
- * the rebuilt switchboard for schematic conversion, the tape-threading simulation for the reel-change cell.
+ * The four products of the home's «Solutions», one card each: media, the product's name and stage, what it does (a title
+ * in plain words) and one line. Texts from copy.solutions.products.cards. The media is a key: the Cable Reader render, a
+ * still of the Quality Control Cell, the rebuilt switchboard for schematic conversion, the tape-threading simulation for
+ * the reel-change cell.
  */
 import { Image } from 'astro:assets';
 import reader from '../../assets/images/products/cable-reader.jpg';
@@ -16,18 +17,16 @@ interface Card {
 	alt: string;
 	status: string;
 	name: string;
+	title: string;
 	line: string;
-	forWhom: string;
-	note: string;
 }
 interface Props {
 	lang: Lang;
-	forLabel: string;
 	cards: readonly Card[];
-	/** on the dark compartment (the home's «What you get») */
+	/** on the dark compartment (the home's «Solutions») */
 	dark?: boolean;
 }
-const { lang, forLabel, cards, dark = false } = Astro.props;
+const { lang, cards, dark = false } = Astro.props;
 ---
 
 <ul class:list={['pc', dark && 'pc--dark']}>
@@ -41,11 +40,11 @@ const { lang, forLabel, cards, dark = false } = Astro.props;
 					{c.media === 'schemes' && <Image src={schemes} alt={c.alt} widths={[480, 720, 960]} sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw" />}
 				</div>
 				<div class="pc__body">
-					<p class="pc__status">{c.status}</p>
-					<h3 class="pc__name">{c.name}</h3>
+					<p class="pc__status">
+						{c.name} · {c.status}
+					</p>
+					<h3 class="pc__name">{c.title}</h3>
 					<p class="pc__line">{c.line}</p>
-					<p class="pc__for"><span>{forLabel}</span> {c.forWhom}</p>
-					{c.note && <p class="pc__note">{c.note}</p>}
 				</div>
 			</li>
 		))
@@ -116,24 +115,6 @@ const { lang, forLabel, cards, dark = false } = Astro.props;
 		line-height: 1.5;
 	}
 
-	.pc__for {
-		margin-top: 10px;
-		font-size: 15px;
-		line-height: 1.45;
-		color: var(--steel);
-	}
-
-	.pc__for span {
-		font-weight: 600;
-	}
-
-	.pc__note {
-		margin-top: 8px;
-		font-size: 14px;
-		line-height: 1.45;
-		color: var(--steel);
-	}
-
 	/* on the dark compartment */
 	.pc--dark .pc__name,
 	.pc--dark .pc__line {
@@ -141,11 +122,6 @@ const { lang, forLabel, cards, dark = false } = Astro.props;
 	}
 
 	.pc--dark .pc__status {
-		color: var(--steel-light);
-	}
-
-	.pc--dark .pc__for,
-	.pc--dark .pc__note {
 		color: var(--steel-light);
 	}
 

@@ -24,6 +24,10 @@ interface Props {
 	alternates?: Partial<Record<Lang, string>>;
 	/** true on the two homepages: the nav links point in-page and the hero carries the big wordmark */
 	isHome?: boolean;
+	/** a page with the panel (the homes and the «How it works» pages): hero, compartments and Contact with its form */
+	panel?: boolean;
+	/** the nav's own page this is (`how-it-works`): its link is marked as the current page */
+	page?: string;
 }
 
 const SITE_NAME = 'ROBOSECT';
@@ -36,6 +40,8 @@ const {
 	noindex = false,
 	alternates,
 	isHome = false,
+	panel = isHome,
+	page = '',
 } = Astro.props;
 const t = copy[lang];
 
@@ -80,7 +86,7 @@ const organizationSchema = {
 ---
 
 <!doctype html>
-<html lang={t.meta.htmlLang} data-panel-home={isHome ? '' : undefined}>
+<html lang={t.meta.htmlLang} data-panel-home={panel ? '' : undefined}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -155,13 +161,13 @@ const organizationSchema = {
 		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} is:inline />
 		<slot name="head" />
 	</head>
-	<body class:list={[isHome && 'is-home']}>
+	<body class:list={[panel && 'is-home']}>
 		<a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
-		<NavBar lang={lang} isHome={isHome} />
+		<NavBar lang={lang} isHome={isHome} panel={panel} page={page} langHref={alternates?.[lang === 'it' ? 'en' : 'it']} />
 		<main id="main" tabindex="-1">
 			<slot />
 		</main>
-		<SiteFooter lang={lang} isHome={isHome} />
+		<SiteFooter lang={lang} isHome={isHome} panel={panel} />
 		<script>
 			import '../scripts/site';
 		</script>

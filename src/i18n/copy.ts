@@ -1,12 +1,15 @@
 /**
  * ROBOSECT — site copy, EN + IT.
  *
- * Source of truth for every string on the one-page home, nav, footer and news posts.
+ * Source of truth for every string on the home, the «How it works» page, nav, footer and news posts.
+ * Two pages per language (strada A, 19/11/2026): a short home with «Solutions», and /how-it-works/ («Down to the last
+ * wire.») for whoever wants the details. No brand of CAD software is named anywhere: «your electrical CAD project»,
+ * whatever the format (Giorgio Medico, 19/11/2026).
  * Both languages share the exact same key structure (and the same array lengths), so a
  * component can do `const t = copy[lang]` and never branch on language.
  *
  * Rules applied:
- * - The home speaks to switchboard builders first (owner, production and quality managers, the EPLAN office); wiring
+ * - The home speaks to switchboard builders first (owner, production and quality managers, the electrical CAD office); wiring
  *   harnesses, robot cells and other manipulation are «Also for you». «Bring us a project» / «Proponeteci un progetto» is the
  *   main action; «Write to us» / «Scriveteci» in the bar and «Tell us about your process» / «Parlateci del vostro
  *   processo» for every other process (Italian addresses the reader as «voi», except the Team job line, which stays «tu»).
@@ -34,10 +37,10 @@ export const copy = {
 			dateLocale: 'en-GB',
 			title: 'ROBOSECT | Robotics for cables and everything that bends',
 			description:
-				'Robots that test electrical switchboards starting from your EPLAN connection list, with a test report for every board, and robotic manipulation of cables and deformable parts, from wiring harnesses to reel changes on packaging machines. A University of Bologna spin-off.',
+				'Robots that test electrical switchboards starting from your electrical CAD project, with a test report for every board, and robotic manipulation of cables and deformable parts, from wiring harnesses to reel changes on packaging machines. A University of Bologna spin-off.',
 			ogTitle: 'Automation stops at the cable. Ours doesn’t.',
 			ogDescription:
-				'ROBOSECT builds robots that test switchboards starting from your EPLAN project, and takes robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
+				'ROBOSECT builds robots that test switchboards starting from your electrical CAD project, and takes robotic manipulation all the way to cables and deformable parts. A University of Bologna spin-off.',
 			ogImageAlt:
 				'Two collaborative robots testing the wires of an electrical switchboard on the bench',
 		},
@@ -62,14 +65,14 @@ export const copy = {
 		},
 
 		nav: {
-			// every link goes to a place on the home page. `id` is the section the bar marks while it is on screen; `anchor`
-			// is the place the link scrolls to (inside that section, when it is not the section itself)
+			// a link goes to a place on the home page or to a page of its own (`page`: the «How it works» page). `id` is the
+			// section the bar marks while it is on screen; `anchor` is the place the link scrolls to (inside that section, when
+			// it is not the section itself)
 			links: [
-				{ id: 'how-it-works', anchor: 'how-it-works', label: 'How it works' },
-				{ id: 'what-you-get', anchor: 'products', label: 'Products' },
-				{ id: 'proof', anchor: 'proof', label: 'Prototype' },
-				{ id: 'also-for-you', anchor: 'work', label: 'Engineering & R&D' },
-				{ id: 'team', anchor: 'team', label: 'Team' },
+				{ id: 'solutions', anchor: 'solutions', page: '', label: 'Solutions' },
+				{ id: 'how-it-works', anchor: '', page: 'how-it-works', label: 'How it works' },
+				{ id: 'also-for-you', anchor: 'work', page: '', label: 'Engineering & R&D' },
+				{ id: 'team', anchor: 'team', page: '', label: 'Team' },
 			],
 			blog: 'News',
 			// Label and ariaLabel are in the TARGET language: render the link with lang="it" / lang="en".
@@ -100,13 +103,12 @@ export const copy = {
 		hero: {
 			headline: 'Automation stops at the cable. Ours doesn’t.',
 			subheadline:
-				'Robots that test your switchboards starting from your EPLAN project: every connection checked, every switchboard leaves with its test report. Switchboards come first; the same platform takes robotic manipulation all the way to the hardest case, cables and deformable parts.',
+				'Robots that test your switchboards starting from your electrical CAD project, whatever the format.',
 			primaryCta: { label: 'Bring us a project', href: '#contact' },
 			secondaryCta: { label: 'Watch the demo', duration: '1:30' },
 			otherLine: { text: 'Not a switchboard builder?', link: 'Tell us about your process' },
 			proofChips: [
 				'University of Bologna spin-off',
-				'AIRISE.eu-funded project',
 				'Working prototype on a real switchboard',
 			],
 			imageAlt:
@@ -119,21 +121,7 @@ export const copy = {
 			eyebrow: 'The problem',
 			title: 'Switchboard testing is still done by hand, wire by wire.',
 			intro:
-				'A skilled technician, a tester and the connection list: one point at a time, every board. It is the part of the job automation has never reached.',
-			points: [
-				{
-					title: 'Hours of your best people',
-					body: 'Point-by-point testing ties up a skilled technician for hours. The very person you need on the next board.',
-				},
-				{
-					title: 'Every board is a variant',
-					body: 'Built-to-order switchboards change every time. Nobody reprograms a robot for a board that is built once.',
-				},
-				{
-					title: 'No record of what was tested',
-					body: 'At the end there is, at best, a list ticked by hand. Showing your customer which wire was tested, and how, is hard.',
-				},
-			],
+				'Hours of a skilled technician for every board, and at the end no record of what was tested.',
 			vision: {
 				label: 'What the robot sees',
 				found: 'components found',
@@ -145,7 +133,7 @@ export const copy = {
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'How it works',
-			title: 'From your EPLAN project to the test report, in three steps',
+			title: 'From your CAD project to the test report, in three steps',
 			intro:
 				'Nobody programs the robot board by board. It starts from the data you already have and looks at the real switchboard.',
 			steps: [
@@ -158,8 +146,8 @@ export const copy = {
 				{
 					number: '02',
 					kicker: 'Starts',
-					title: 'It starts from your EPLAN connection list',
-					body: 'The system imports the schematic and the connection list you already have and builds the test sequence from them. A new board is not a new robot program.',
+					title: 'It starts from your connection list',
+					body: 'The system imports the schematic and the connection list from your electrical CAD project, whatever the format, and builds the test sequence from them. A new board is not a new robot program.',
 				},
 				{
 					number: '03',
@@ -171,7 +159,7 @@ export const copy = {
 			demo: {
 				label: 'Animated drawing: the terminals of a switchboard light up one by one while a test report fills in line by line beside it.',
 				reportTitle: 'Test report',
-				reportSub: 'Continuity test · from the EPLAN connection list',
+				reportSub: 'Continuity test · from the connection list',
 				to: 'to',
 				result: 'OK',
 				rows: [
@@ -187,18 +175,71 @@ export const copy = {
 				caption: 'Illustrative drawing: made-up board and rows, not a real report.',
 			},
 			techLine: {
-				text: 'Inside: perception, EPLAN and CAD integration, cable-aware planning with a digital twin.',
+				text: 'Inside: perception, CAD integration, cable-aware planning with a digital twin.',
 			},
 		},
 
-		benefits: {
-			id: 'what-you-get',
-			eyebrow: 'What you get',
-			// the one action under the products: a demo request goes through «Bring us a project» too
-			ctaPromise: 'A demo or a project of your own: we will tell you plainly whether a robot can do it, and how.',
+		// the home's «Solutions»: what we make, one line each; the details are on the «How it works» page
+		solutions: {
+			id: 'solutions',
+			eyebrow: 'Solutions',
+			title: 'Robots that test your switchboards and handle cables and other parts that bend.',
+			intro: 'Four products. Each one works on its own.',
+			how: 'See how it works',
+			products: {
+				id: 'products',
+				cards: [
+					{
+						media: 'cell',
+						alt: 'Two collaborative arms over a wired switchboard, one probe touching a terminal',
+						status: 'In validation',
+						name: 'Quality Control Cell',
+						title: 'Test a whole switchboard',
+						line: 'Two collaborative arms probe every connection, starting from your electrical CAD project. The board leaves with its test report.',
+					},
+					{
+						media: 'reader',
+						alt: 'Render of the Cable Reader: a C-shaped bench unit with the camera head above a white base',
+						status: 'Prototype',
+						name: 'Cable Reader',
+						title: 'Read the cable labels for you',
+						line: 'A bench unit: a camera reads the label on each cable and a light tells the operator if it is the right one.',
+					},
+					{
+						media: 'schemes',
+						alt: 'Switchboard rebuilt as data: components, terminals, ducts and wire paths',
+						status: 'In development',
+						name: 'Schematic conversion',
+						title: 'Turn PDF schematics into data',
+						line: 'Schematics that exist only as PDF become structured data that the other tools can use.',
+					},
+					{
+						media: 'reel',
+						alt: 'Simulation: a robot arm carries a tape off a reel, over three rollers and through the exit clamp',
+						status: 'In development',
+						name: 'Reel-change cell',
+						title: 'Change the reel on a packaging machine',
+						line: 'A robot cell that loads the new reel, threads the tape and joins it. Fits a machine you already have.',
+					},
+				],
+			},
+		},
+
+		// the «How it works» page: its opening (the R, small) and the way back
+		howPage: {
+			path: 'how-it-works',
+			metaTitle: 'How it works',
+			metaDescription:
+				'How ROBOSECT robots test an electrical switchboard: they see the real board, start from your electrical CAD project and leave a test report for every connection. The prototype at work, on video.',
+			title: 'Down to the last wire.',
+			sub: 'How a robot tests your switchboard, from your electrical CAD project to the test report.',
+			back: 'Back to solutions',
+			write: 'Write to us',
+		},
+
+		// on the «How it works» page, under the prototype: what changes for a switchboard builder
+		changes: {
 			title: 'What changes in your testing',
-			intro:
-				'The robot does the round of the test points. Your people check the results and decide.',
 			items: [
 				{
 					title: 'Fewer hours of manual testing',
@@ -217,50 +258,6 @@ export const copy = {
 					body: 'The robot takes the repetitive round of the test points. The decisions stay with the people who know the trade.',
 				},
 			],
-			products: {
-				id: 'products',
-				title: 'Four products, from switchboards to reels',
-				intro: 'Three tools for switchboard testing and one for packaging machines. The first three share one thing: your project data. The reel-change cell comes from the same work on deformable objects. Each one works on its own.',
-				forLabel: 'For',
-				cards: [
-					{
-						media: 'reader',
-						alt: 'Render of the Cable Reader: a C-shaped bench unit with the camera head above a white base',
-						status: 'Prototype',
-						name: 'Cable Reader',
-						line: 'A semi-automatic bench unit: a camera reads the cable labels from above and a status light guides the operator.',
-						forWhom: 'Small switchboard builders',
-						note: '',
-					},
-					{
-						media: 'cell',
-						alt: 'Two collaborative arms over a wired switchboard, one probe touching a terminal',
-						status: 'In validation',
-						name: 'Quality Control Cell',
-						line: 'A robot cell with two collaborative arms: it tests every connection from your EPLAN list, and each switchboard leaves with its digital report.',
-						forWhom: 'Larger builders and companies with their own switchboard shop',
-						note: '',
-					},
-					{
-						media: 'schemes',
-						alt: 'Switchboard rebuilt as data: components, terminals, ducts and wire paths',
-						status: 'In development',
-						name: 'Schematic conversion',
-						line: 'Turns schematics that exist only as PDF into the structured data the other products need.',
-						forWhom: 'Builders and maintainers whose schematics exist only as PDF',
-						note: '',
-					},
-					{
-						media: 'reel',
-						alt: 'Simulation: a robot arm carries a tape off a reel, over three rollers and through the exit clamp',
-						status: 'In development',
-						name: 'Reel-change cell',
-						line: 'A robot cell that loads the new reel, threads the tape and splices it, as a retrofit or an option.',
-						forWhom: 'Makers and users of automatic packaging machines',
-						note: 'Seen so far in simulation: find the loose end, take it, thread the tape and join it.',
-					},
-				],
-			},
 		},
 
 		proof: {
@@ -273,63 +270,12 @@ export const copy = {
 			video: {
 				id: 'video',
 				title: 'The prototype at work',
-				caption:
-					'A camera on one arm locates the components of a switchboard, then two collaborative arms probe its wires. The corner of the frame shows when the footage is sped up or slowed down (×0.5 to ×8).',
-				description:
-					'Video, 90 seconds, no sound, English captions: a camera on one collaborative robot locates the 25 components of a switchboard, then two arms probe its wires one by one.',
+				description: 'Ninety seconds on a real switchboard, no sound.',
 				posterAlt: 'Still frame from above: two collaborative robot arms over an open switchboard',
 			},
 			photo: {
 				alt: 'Two collaborative robot arms centimetres apart over a terminal block: on the left a gripper, on the right a test probe pointing down',
 				caption: 'Two arms in one workspace: their tools work centimetres apart on the same terminal block, without touching.',
-			},
-			factsTitle: 'Who stands behind it',
-			facts: [
-				{
-					name: 'University of Bologna spin-off',
-					detail: 'ROBOSECT SRL is a spin-off of the Alma Mater Studiorum – Università di Bologna, founded in 2024 and born from years of academic research and European innovation projects.',
-					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
-					mark: '',
-				},
-				{
-					name: 'AIRISE.eu-funded project: CONTEST',
-					detail: 'Funding to develop an AI-based robotic platform for switchboard quality control: visual inspection of assembly defects, cable-marker reading, continuity testing.',
-					logoAlt: 'AIRISE.eu',
-					mark: '',
-				},
-				{
-					name: 'Patented technology',
-					detail: 'Italian patent 102023000014613, extended to the EU.',
-					logoAlt: '',
-					mark: 'PATENT',
-				},
-				{
-					name: 'Startup awards',
-					detail: 'Emilia-Romagna startCUP 2022, 3rd place. University of Bologna Call for Startup and Business Plan 2022, 1st place.',
-					logoAlt: '',
-					mark: '2022',
-				},
-				{
-					name: 'Incubated at EIT Manufacturing and CTE COBO',
-					detail: 'Two incubation programmes that follow the company as it moves from the lab to its first customers.',
-					logoAlt: '',
-					mark: 'EIT · COBO',
-				},
-				{
-					name: 'Sponsor and exhibitor at IEEE/ASME AIM 2026',
-					detail: 'Genoa, 7–10 July 2026.',
-					logoAlt: '',
-					mark: 'AIM 2026',
-				},
-			],
-			targets: {
-				title: 'What the project is aiming for',
-				toWord: 'to',
-				items: [
-					{ from: '30 s', to: '10 s', label: 'One connection test' },
-					{ from: '45 min', to: '15 min', label: 'The reference switchboard' },
-				],
-				note: 'These are the targets of the AIRISE project, not measurements. Measured figures will be published with their test conditions.',
 			},
 		},
 
@@ -337,47 +283,23 @@ export const copy = {
 			id: 'also-for-you',
 			eyebrow: 'Also for you',
 			title: 'A platform for deformable objects',
-			intro: 'Not a switchboard builder? The same base, perception, planning and execution, works wherever parts are hard to handle: cables, wiring harnesses and other parts that bend.',
-			statusLabel: 'Status',
+			intro: 'Not a switchboard builder? The same perception, planning and execution work wherever parts are hard to handle: cables, wiring harnesses and other parts that bend.',
+			// the third card is engineering and R&D for hire (#work, the bar's «Engineering & R&D»)
+			workId: 'work',
 			items: [
 				{
-					title: 'Wiring harness makers and remanufacturers',
-					body: 'Perception of cables, branches and connectors; grasping and routing of flexible cables. Built for variants and for remanufacturing, where every harness comes back in a different condition.',
-					status: 'Open to collaboration',
+					title: 'Wiring harnesses',
+					body: 'Seeing and handling cables, branches and connectors, also for remanufacturing.',
 				},
 				{
 					title: 'Robot cells and integrators',
-					body: 'Collision-free trajectories that account for cables, including the robot’s own dress pack. We are looking for integrators to work with: partners, not only customers.',
-					status: 'Open to collaboration',
+					body: 'Paths that account for cables, the robot’s own dress pack included. We look for integrators to work with.',
 				},
 				{
-					title: 'Other manipulation tasks',
-					body: 'Processes with flexible parts, inspection tasks or high product variability: robotic systems designed around your process.',
-					status: 'On request',
+					title: 'Engineering and R&D',
+					body: 'Projects on your process, licensable parts of the platform and funded research projects.',
 				},
 			],
-			work: {
-				id: 'work',
-				title: 'Engineering and R&D for what bends',
-				intro: 'We also work for hire: the team that built the platform does the job. Three ways to work together; if none fits, write to us anyway.',
-				items: [
-					{
-						kicker: 'Projects',
-						title: 'Engineering projects',
-						body: 'Custom robotics for deformable objects. We study your process, tell you whether a robot can do it, and build the proof of concept.',
-					},
-					{
-						kicker: 'Licences',
-						title: 'Licensable modules',
-						body: 'Parts of the platform, such as a motion planner that accounts for cables and dress packs, that you can license and build into your own system.',
-					},
-					{
-						kicker: 'Funding',
-						title: 'Funded projects',
-						body: 'We take part in research and innovation projects, like the AIRISE.eu project behind our switchboard robot. Bring a use case and we look at the right call together.',
-					},
-				],
-			},
 			cta: 'Tell us about your process',
 		},
 
@@ -447,6 +369,18 @@ export const copy = {
 					},
 				],
 			},
+			// who stands behind it, one line each (the order is the one of the previous page: chronological order to be confirmed)
+			who: {
+				title: 'Who stands behind it',
+				items: [
+					{ mark: 'UNIBO', name: 'University of Bologna spin-off, founded in 2024' },
+					{ mark: 'AIRISE', name: 'AIRISE.eu-funded project: CONTEST' },
+					{ mark: 'PATENT', name: 'Italian patent, extended to the EU' },
+					{ mark: '2022', name: 'Two startup awards: startCUP Emilia-Romagna and University of Bologna' },
+					{ mark: 'EIT · COBO', name: 'Incubated at EIT Manufacturing and CTE COBO' },
+					{ mark: 'AIM 2026', name: 'Sponsor and exhibitor at IEEE/ASME AIM 2026, Genoa' },
+				],
+			},
 			joinUs: {
 				text: 'Want to build robots that handle what others avoid?',
 				cta: 'Write to us',
@@ -456,10 +390,8 @@ export const copy = {
 		contact: {
 			id: 'contact',
 			eyebrow: 'Contact',
-			closingTag: 'Automation, down to the last wire.',
 			title: 'Bring us a project.',
 			answer: 'We will tell you plainly whether a robot can do it, and how.',
-			body: 'A few lines are enough: what you do, what you would like a robot to handle, how it is done today.',
 			responseTime: 'We reply within two working days.',
 			form: {
 				name: { label: 'Name and surname' },
@@ -469,7 +401,7 @@ export const copy = {
 				sector: {
 					label: 'What do you do?',
 					// the first option is the switchboard builders': it shows the switchboard questions
-					options: ['Electrical switchboards', 'Wiring harnesses', 'Robot cells and integration', 'Packaging machines', 'Other manipulation'],
+					options: ['Switchboard testing', 'Cables and harnesses', 'Reel change on packaging machines', 'Something else'],
 				},
 				sbGroup: 'If you build switchboards',
 				boards: {
@@ -482,10 +414,10 @@ export const copy = {
 					placeholder: 'Choose one',
 					options: ['Fewer than 100', '100–500', 'More than 500'],
 				},
-				eplan: {
-					label: 'Do you use EPLAN?',
+				cad: {
+					label: 'What are your schematics in?',
 					placeholder: 'Choose one',
-					options: ['Yes', 'No', 'Other software'],
+					options: ['An electrical CAD project', 'PDF only', 'Paper'],
 				},
 				process: {
 					label: 'How is it done today, and what would you like a robot to handle?',
@@ -525,7 +457,6 @@ export const copy = {
 				},
 			},
 			handoff: {
-				helper: 'Your email app opens with the request ready. It leaves only when you press Send there.',
 				live: 'Your email app should open with the request filled in. Press Send there to deliver it.',
 				// (the confirmation never claims the mail app opened, and says each thing once)
 				receiptHeading: 'Your request is ready to send.',
@@ -568,7 +499,7 @@ export const copy = {
 			},
 			links: {
 				how: 'How it works',
-				products: 'Products',
+				products: 'Solutions',
 				work: 'Engineering & R&D',
 				team: 'Team',
 				blog: 'News',
@@ -614,10 +545,10 @@ export const copy = {
 			dateLocale: 'it-IT',
 			title: 'ROBOSECT | Robotica per i cavi e per tutto ciò che si piega',
 			description:
-				'Robot che collaudano i quadri elettrici partendo dalla vostra lista collegamenti EPLAN, con un verbale per ogni quadro, e manipolazione robotica di cavi e parti deformabili, dai cablaggi al cambio bobina nelle macchine di confezionamento. Spin-off dell’Università di Bologna.',
+				'Robot che collaudano i quadri elettrici partendo dal vostro progetto CAD elettrico, con un verbale per ogni quadro, e manipolazione robotica di cavi e parti deformabili, dai cablaggi al cambio bobina nelle macchine di confezionamento. Spin-off dell’Università di Bologna.',
 			ogTitle: 'L’automazione si ferma al cavo. La nostra no.',
 			ogDescription:
-				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto EPLAN, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
+				'ROBOSECT sviluppa robot che collaudano i quadri elettrici partendo dal vostro progetto CAD elettrico, e porta la manipolazione robotica fino a cavi e parti deformabili. Spin-off dell’Università di Bologna.',
 			ogImageAlt:
 				'Due robot collaborativi provano i fili di un quadro elettrico sul banco',
 		},
@@ -643,11 +574,10 @@ export const copy = {
 
 		nav: {
 			links: [
-				{ id: 'how-it-works', anchor: 'how-it-works', label: 'Come funziona' },
-				{ id: 'what-you-get', anchor: 'products', label: 'Prodotti' },
-				{ id: 'proof', anchor: 'proof', label: 'Prototipo' },
-				{ id: 'also-for-you', anchor: 'work', label: 'Ingegneria e R&D' },
-				{ id: 'team', anchor: 'team', label: 'Team' },
+				{ id: 'solutions', anchor: 'solutions', page: '', label: 'Soluzioni' },
+				{ id: 'how-it-works', anchor: '', page: 'how-it-works', label: 'Come funziona' },
+				{ id: 'also-for-you', anchor: 'work', page: '', label: 'Ingegneria e R&D' },
+				{ id: 'team', anchor: 'team', page: '', label: 'Team' },
 			],
 			blog: 'News',
 			langSwitch: {
@@ -673,13 +603,12 @@ export const copy = {
 		hero: {
 			headline: 'L’automazione si ferma al cavo. La nostra no.',
 			subheadline:
-				'Robot che collaudano i vostri quadri elettrici partendo dal progetto EPLAN: ogni collegamento verificato, ogni quadro esce con il suo verbale. I quadri vengono per primi; la stessa piattaforma porta la manipolazione robotica fino al caso più difficile, cavi e parti deformabili.',
+				'Robot che collaudano i vostri quadri elettrici partendo dal vostro progetto CAD elettrico, in qualunque formato.',
 			primaryCta: { label: 'Proponeteci un progetto', href: '#contact' },
 			secondaryCta: { label: 'Guardate la demo', duration: '1:30' },
 			otherLine: { text: 'Non costruite quadri?', link: 'Parlateci del vostro processo' },
 			proofChips: [
 				'Spin-off dell’Università di Bologna',
-				'Progetto finanziato da AIRISE.eu',
 				'Prototipo funzionante su un quadro vero',
 			],
 			imageAlt:
@@ -692,21 +621,7 @@ export const copy = {
 			eyebrow: 'Il problema',
 			title: 'Il collaudo dei quadri si fa ancora a mano, filo per filo.',
 			intro:
-				'Un tecnico esperto, un tester e la lista collegamenti: un punto alla volta, quadro dopo quadro. È la parte del lavoro dove l’automazione non è mai arrivata.',
-			points: [
-				{
-					title: 'Ore delle persone più esperte',
-					body: 'Il collaudo punto per punto tiene occupato per ore un tecnico esperto. Proprio la persona che servirebbe sul quadro successivo.',
-				},
-				{
-					title: 'Ogni quadro è una variante',
-					body: 'I quadri su commessa cambiano ogni volta. Nessuno riprogramma un robot per un quadro che si costruisce una volta sola.',
-				},
-				{
-					title: 'Nessuna traccia di cosa è stato provato',
-					body: 'A fine collaudo resta, se va bene, una lista spuntata a mano. Dimostrare al cliente quale filo è stato provato, e come, è difficile.',
-				},
-			],
+				'Ore di un tecnico esperto per ogni quadro, e alla fine nessuna traccia di cosa è stato provato.',
 			vision: {
 				label: 'Cosa vede il robot',
 				found: 'componenti trovati',
@@ -718,7 +633,7 @@ export const copy = {
 		process: {
 			id: 'how-it-works',
 			eyebrow: 'Come funziona',
-			title: 'Dal vostro progetto EPLAN al verbale di collaudo, in tre passi',
+			title: 'Dal vostro progetto CAD al verbale di collaudo, in tre passi',
 			intro:
 				'Nessuno programma il robot quadro per quadro. Parte dai dati che avete già e guarda il quadro vero.',
 			steps: [
@@ -731,8 +646,8 @@ export const copy = {
 				{
 					number: '02',
 					kicker: 'Parte',
-					title: 'Parte dalla vostra lista collegamenti EPLAN',
-					body: 'Il sistema importa lo schema e la lista collegamenti che avete già e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
+					title: 'Parte dalla vostra lista collegamenti',
+					body: 'Il sistema importa lo schema e la lista collegamenti dal vostro progetto CAD elettrico, in qualunque formato, e costruisce da lì la sequenza di prova. Un quadro nuovo non è un nuovo programma robot.',
 				},
 				{
 					number: '03',
@@ -744,7 +659,7 @@ export const copy = {
 			demo: {
 				label: 'Disegno animato: i morsetti di un quadro si accendono uno alla volta mentre accanto un verbale di collaudo si compila riga per riga.',
 				reportTitle: 'Verbale di collaudo',
-				reportSub: 'Prova di continuità · dalla lista collegamenti EPLAN',
+				reportSub: 'Prova di continuità · dalla lista collegamenti',
 				to: 'a',
 				result: 'OK',
 				rows: [
@@ -760,17 +675,68 @@ export const copy = {
 				caption: 'Disegno illustrativo: quadro e righe di fantasia, non un verbale reale.',
 			},
 			techLine: {
-				text: 'Dentro: percezione, integrazione EPLAN e CAD, pianificazione con digital twin che tiene conto dei cavi.',
+				text: 'Dentro: percezione, integrazione CAD, pianificazione con digital twin che tiene conto dei cavi.',
 			},
 		},
 
-		benefits: {
-			id: 'what-you-get',
-			eyebrow: 'Cosa ottenete',
-			ctaPromise: 'Una demo o un vostro progetto: vi diciamo con franchezza se un robot può farlo, e come.',
+		solutions: {
+			id: 'solutions',
+			eyebrow: 'Soluzioni',
+			title: 'Robot che collaudano i vostri quadri e maneggiano cavi e altre parti che si piegano.',
+			intro: 'Quattro prodotti. Ognuno funziona anche da solo.',
+			how: 'Guardate come funziona',
+			products: {
+				id: 'products',
+				cards: [
+					{
+						media: 'cell',
+						alt: 'Due bracci collaborativi sopra un quadro cablato, un puntale tocca un morsetto',
+						status: 'In validazione',
+						name: 'Quality Control Cell',
+						title: 'Collaudare un quadro intero',
+						line: 'Due bracci collaborativi provano ogni collegamento partendo dal vostro progetto CAD elettrico. Il quadro esce con il suo verbale.',
+					},
+					{
+						media: 'reader',
+						alt: 'Render del Cable Reader: un’unità da banco a C con la testa della telecamera sopra una base bianca',
+						status: 'Prototipo',
+						name: 'Cable Reader',
+						title: 'Leggere le etichette dei cavi al posto vostro',
+						line: 'Un’unità da banco: una telecamera legge l’etichetta di ogni cavo e una spia dice all’operatore se è quello giusto.',
+					},
+					{
+						media: 'schemes',
+						alt: 'Quadro ricostruito come dati: componenti, morsetti, canaline e percorsi dei fili',
+						status: 'In sviluppo',
+						name: 'Conversione degli schemi',
+						title: 'Trasformare gli schemi PDF in dati',
+						line: 'Gli schemi che esistono solo in PDF diventano dati strutturati che gli altri strumenti possono usare.',
+					},
+					{
+						media: 'reel',
+						alt: 'Simulazione: un braccio robotico porta il nastro fuori dalla bobina, sopra tre rulli e dentro la pinza d’uscita',
+						status: 'In sviluppo',
+						name: 'Cella cambio bobina',
+						title: 'Cambiare la bobina di una macchina di confezionamento',
+						line: 'Una cella robotizzata che carica la bobina nuova, infila il nastro e fa la giunta. Si monta su una macchina che avete già.',
+					},
+				],
+			},
+		},
+
+		howPage: {
+			path: 'how-it-works',
+			metaTitle: 'Come funziona',
+			metaDescription:
+				'Come i robot ROBOSECT collaudano un quadro elettrico: guardano il quadro vero, partono dal vostro progetto CAD elettrico e lasciano un verbale per ogni collegamento. Il prototipo al lavoro, in video.',
+			title: 'Fino all’ultimo filo.',
+			sub: 'Come un robot collauda il vostro quadro, dal progetto CAD elettrico al verbale di collaudo.',
+			back: 'Torna alle soluzioni',
+			write: 'Scriveteci',
+		},
+
+		changes: {
 			title: 'Cosa cambia nel vostro collaudo',
-			intro:
-				'Il robot fa il giro dei punti di prova. Le vostre persone controllano gli esiti e decidono.',
 			items: [
 				{
 					title: 'Meno ore di collaudo manuale',
@@ -789,52 +755,7 @@ export const copy = {
 					body: 'Il robot si prende il giro ripetitivo dei punti di prova. Le decisioni restano a chi conosce il mestiere.',
 				},
 			],
-			products: {
-				id: 'products',
-				title: 'Quattro prodotti, dai quadri alle bobine',
-				intro: 'Tre strumenti per il collaudo dei quadri e uno per le macchine di confezionamento. I primi tre hanno una cosa in comune: i dati del vostro progetto. La cella cambio bobina nasce dallo stesso lavoro sugli oggetti deformabili. Ognuno funziona anche da solo.',
-				forLabel: 'Per',
-				cards: [
-					{
-						media: 'reader',
-						alt: 'Render del Cable Reader: un’unità da banco a C con la testa della telecamera sopra una base bianca',
-						status: 'Prototipo',
-						name: 'Cable Reader',
-						line: 'Un’unità da banco semiautomatica: una telecamera legge le etichette dei cavi dall’alto e una spia di stato guida l’operatore.',
-						forWhom: 'Piccoli costruttori di quadri',
-						note: '',
-					},
-					{
-						media: 'cell',
-						alt: 'Due bracci collaborativi sopra un quadro cablato, un puntale tocca un morsetto',
-						status: 'In validazione',
-						name: 'Quality Control Cell',
-						line: 'Una cella robotizzata con due bracci collaborativi: prova ogni collegamento della vostra lista EPLAN e ogni quadro esce con il suo verbale digitale.',
-						forWhom: 'Costruttori più grandi e aziende con un reparto quadri interno',
-						note: '',
-					},
-					{
-						media: 'schemes',
-						alt: 'Quadro ricostruito come dati: componenti, morsetti, canaline e percorsi dei fili',
-						status: 'In sviluppo',
-						name: 'Conversione degli schemi',
-						line: 'Trasforma gli schemi che esistono solo in PDF nei dati strutturati che servono agli altri prodotti.',
-						forWhom: 'Costruttori e manutentori con gli schemi solo in PDF',
-						note: '',
-					},
-					{
-						media: 'reel',
-						alt: 'Simulazione: un braccio robotico porta il nastro fuori dalla bobina, sopra tre rulli e dentro la pinza d’uscita',
-						status: 'In sviluppo',
-						name: 'Cella cambio bobina',
-						line: 'Una cella robotizzata che carica la bobina nuova, infila il nastro e fa la giunta, in retrofit o come opzione.',
-						forWhom: 'Costruttori e utilizzatori di macchine automatiche per il confezionamento',
-						note: 'Finora in simulazione: trovare il capo libero, prenderlo, infilare il nastro e giuntarlo.',
-					},
-				],
-			},
 		},
-
 		proof: {
 			id: 'proof',
 			eyebrow: 'Prototipo',
@@ -845,63 +766,12 @@ export const copy = {
 			video: {
 				id: 'video',
 				title: 'Il prototipo al lavoro',
-				caption:
-					'Una telecamera su un braccio trova i componenti di un quadro elettrico, poi due bracci collaborativi ne verificano i fili. Nell’angolo del video compare la velocità quando le riprese sono accelerate o rallentate (da ×0,5 a ×8).',
-				description:
-					'Video di 90 secondi, senza audio, con didascalie in inglese: una telecamera su un robot collaborativo trova i 25 componenti di un quadro elettrico, poi due bracci ne verificano i fili uno per uno.',
+				description: 'Novanta secondi su un quadro vero, senza audio.',
 				posterAlt: 'Fotogramma dall’alto: due bracci robotici collaborativi sopra un quadro elettrico aperto',
 			},
 			photo: {
 				alt: 'Due bracci robotici collaborativi a pochi centimetri sopra una morsettiera: a sinistra una pinza, a destra un puntale di prova rivolto in basso',
 				caption: 'Due bracci nello stesso spazio: i loro attrezzi lavorano a pochi centimetri sulla stessa morsettiera, senza toccarsi.',
-			},
-			factsTitle: 'Chi c’è dietro',
-			facts: [
-				{
-					name: 'Spin-off dell’Università di Bologna',
-					detail: 'ROBOSECT SRL, fondata nel 2024, è uno spin-off dell’Alma Mater Studiorum – Università di Bologna, nato da anni di ricerca accademica e di progetti europei di innovazione.',
-					logoAlt: 'Alma Mater Studiorum – Università di Bologna',
-					mark: '',
-				},
-				{
-					name: 'Progetto finanziato da AIRISE.eu: CONTEST',
-					detail: 'Finanziamento per sviluppare una piattaforma robotica basata su AI per il controllo qualità dei quadri elettrici: ispezione visiva dei difetti di montaggio, lettura delle siglature, prova di continuità.',
-					logoAlt: 'AIRISE.eu',
-					mark: '',
-				},
-				{
-					name: 'Tecnologia brevettata',
-					detail: 'Brevetto italiano 102023000014613, esteso all’UE.',
-					logoAlt: '',
-					mark: 'BREVETTO',
-				},
-				{
-					name: 'Premi per le startup',
-					detail: 'Emilia-Romagna startCUP 2022, terzo posto. Call UniBo per Startup e Business Plan 2022, primo posto.',
-					logoAlt: '',
-					mark: '2022',
-				},
-				{
-					name: 'In incubazione a EIT Manufacturing e CTE COBO',
-					detail: 'Due percorsi di incubazione che accompagnano l’azienda dal laboratorio ai primi clienti.',
-					logoAlt: '',
-					mark: 'EIT · COBO',
-				},
-				{
-					name: 'Sponsor ed espositore a IEEE/ASME AIM 2026',
-					detail: 'Genova, 7–10 luglio 2026.',
-					logoAlt: '',
-					mark: 'AIM 2026',
-				},
-			],
-			targets: {
-				title: 'Dove punta il progetto',
-				toWord: 'a',
-				items: [
-					{ from: '30 s', to: '10 s', label: 'Una prova di collegamento' },
-					{ from: '45 min', to: '15 min', label: 'Il quadro di riferimento' },
-				],
-				note: 'Sono gli obiettivi del progetto AIRISE, non misure. I valori misurati li pubblicheremo con le loro condizioni di prova.',
 			},
 		},
 
@@ -909,47 +779,22 @@ export const copy = {
 			id: 'also-for-you',
 			eyebrow: 'Anche per voi',
 			title: 'Una piattaforma per gli oggetti deformabili',
-			intro: 'Non costruite quadri? La stessa base, percezione, pianificazione ed esecuzione, lavora ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
-			statusLabel: 'Stato',
+			intro: 'Non costruite quadri? La stessa percezione, pianificazione ed esecuzione lavorano ovunque i pezzi siano difficili da maneggiare: cavi, cablaggi e altre parti che si piegano.',
+			workId: 'work',
 			items: [
 				{
-					title: 'Produttori e rigeneratori di cablaggi',
-					body: 'Percezione di cavi, diramazioni e connettori; presa e instradamento di cavi flessibili. Pensato per le varianti e per il rigenerato, dove ogni cablaggio rientra in condizioni diverse.',
-					status: 'Aperto a collaborazioni',
+					title: 'Cablaggi',
+					body: 'Vedere e maneggiare cavi, diramazioni e connettori, anche nel rigenerato.',
 				},
 				{
 					title: 'Celle robotizzate e integratori',
-					body: 'Traiettorie senza collisioni che tengono conto dei cavi, compreso il dress pack del robot. Cerchiamo integratori con cui lavorare: partner, non solo clienti.',
-					status: 'Aperto a collaborazioni',
+					body: 'Traiettorie che tengono conto dei cavi, compreso il dress pack del robot. Cerchiamo integratori con cui lavorare.',
 				},
 				{
-					title: 'Altra manipolazione',
-					body: 'Processi con parti flessibili, compiti di ispezione o grande varietà di prodotto: sistemi robotici progettati attorno al vostro processo.',
-					status: 'Su progetto',
+					title: 'Ingegneria e R&D',
+					body: 'Progetti sul vostro processo, parti della piattaforma in licenza e progetti di ricerca finanziati.',
 				},
 			],
-			work: {
-				id: 'work',
-				title: 'Ingegneria e R&D per ciò che si piega',
-				intro: 'Lavoriamo anche su commissione: il lavoro lo fa il team che ha costruito la piattaforma. Tre modi di lavorare insieme; se nessuno fa al caso vostro, scriveteci lo stesso.',
-				items: [
-					{
-						kicker: 'Progetti',
-						title: 'Progetti di ingegneria',
-						body: 'Robotica su misura per oggetti deformabili. Studiamo il vostro processo, vi diciamo se un robot può farlo e costruiamo la prova di fattibilità.',
-					},
-					{
-						kicker: 'Licenze',
-						title: 'Moduli in licenza',
-						body: 'Parti della piattaforma, come un pianificatore di movimento che tiene conto di cavi e dress pack, che potete prendere in licenza e integrare nel vostro sistema.',
-					},
-					{
-						kicker: 'Finanziamenti',
-						title: 'Progetti finanziati',
-						body: 'Partecipiamo a progetti di ricerca e innovazione, come il progetto AIRISE.eu dietro il nostro robot per quadri. Portate un caso d’uso e guardiamo insieme il bando giusto.',
-					},
-				],
-			},
 			cta: 'Parlateci del vostro processo',
 		},
 
@@ -1019,6 +864,17 @@ export const copy = {
 					},
 				],
 			},
+			who: {
+				title: 'Chi c’è dietro',
+				items: [
+					{ mark: 'UNIBO', name: 'Spin-off dell’Università di Bologna, fondata nel 2024' },
+					{ mark: 'AIRISE', name: 'Progetto finanziato da AIRISE.eu: CONTEST' },
+					{ mark: 'BREVETTO', name: 'Brevetto italiano, esteso all’UE' },
+					{ mark: '2022', name: 'Due premi per le startup: startCUP Emilia-Romagna e Università di Bologna' },
+					{ mark: 'EIT · COBO', name: 'In incubazione a EIT Manufacturing e CTE COBO' },
+					{ mark: 'AIM 2026', name: 'Sponsor ed espositore a IEEE/ASME AIM 2026, Genova' },
+				],
+			},
 			joinUs: {
 				text: 'Vuoi lavorare su robot che fanno ciò che gli altri evitano?',
 				cta: 'Scrivici',
@@ -1028,10 +884,8 @@ export const copy = {
 		contact: {
 			id: 'contact',
 			eyebrow: 'Contatti',
-			closingTag: 'Automazione, fino all’ultimo filo.',
 			title: 'Proponeteci un progetto.',
 			answer: 'Vi diciamo con franchezza se un robot può farlo, e come.',
-			body: 'Bastano poche righe: di cosa vi occupate, cosa vorreste affidare a un robot, come lo fate oggi.',
 			responseTime: 'Rispondiamo entro due giorni lavorativi.',
 			form: {
 				name: { label: 'Nome e cognome' },
@@ -1040,7 +894,7 @@ export const copy = {
 				phone: { label: 'Telefono' },
 				sector: {
 					label: 'Di cosa vi occupate?',
-					options: ['Quadri elettrici', 'Cablaggi', 'Celle robotizzate e integrazione', 'Macchine per il confezionamento', 'Altra manipolazione'],
+					options: ['Collaudo dei quadri', 'Cavi e cablaggi', 'Cambio bobina su macchine di confezionamento', 'Altro'],
 				},
 				sbGroup: 'Se costruite quadri',
 				boards: {
@@ -1053,10 +907,10 @@ export const copy = {
 					placeholder: 'Scegliete',
 					options: ['Meno di 100', 'Da 100 a 500', 'Oltre 500'],
 				},
-				eplan: {
-					label: 'Usate EPLAN?',
+				cad: {
+					label: 'In che forma sono i vostri schemi?',
 					placeholder: 'Scegliete',
-					options: ['Sì', 'No', 'Altro software'],
+					options: ['Un progetto CAD elettrico', 'Solo PDF', 'Carta'],
 				},
 				process: {
 					label: 'Come lo fate oggi, e cosa vorreste affidare a un robot?',
@@ -1094,7 +948,6 @@ export const copy = {
 				},
 			},
 			handoff: {
-				helper: 'Si apre il vostro programma di posta con la richiesta pronta. Parte solo quando premete Invia lì.',
 				live: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta compilata. Premete Invia lì per recapitarcela.',
 				receiptHeading: 'La richiesta è pronta da inviare.',
 				lead: 'Dovrebbe aprirsi il vostro programma di posta con la richiesta, indirizzata a info@robosect.it. Premete Invia lì: non parte nulla finché non lo fate.',
@@ -1136,7 +989,7 @@ export const copy = {
 			},
 			links: {
 				how: 'Come funziona',
-				products: 'Prodotti',
+				products: 'Soluzioni',
 				work: 'Ingegneria e R&D',
 				team: 'Team',
 				blog: 'News',
