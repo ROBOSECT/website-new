@@ -101,7 +101,8 @@ function initLangPlace() {
 	const a = document.querySelector<HTMLAnchorElement>('a.nav__lang');
 	if (!a) return;
 	const base = a.getAttribute('href') ?? '';
-	const bare = (p: string) => p.replace(/^\/it(?=\/)/, '') || '/';
+	// (index.html: the preview copy of the site links its pages as files)
+	const bare = (p: string) => p.replace(/index\.html$/, '').replace(/^\/it(?=\/)/, '') || '/';
 	a.addEventListener('click', () => {
 		a.setAttribute('href', base);
 		if (a.hash || bare(a.pathname) !== bare(location.pathname)) return;
