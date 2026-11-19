@@ -894,7 +894,7 @@ export const copy = {
 				phone: { label: 'Telefono' },
 				sector: {
 					label: 'Di cosa vi occupate?',
-					options: ['Collaudo dei quadri', 'Cavi e cablaggi', 'Cambio bobina su macchine di confezionamento', 'Altro'],
+					options: ['Collaudo dei quadri', 'Cavi e cablaggi', 'Cambio bobina su macchine di imballaggio', 'Altro'],
 				},
 				sbGroup: 'Se costruite quadri',
 				boards: {
