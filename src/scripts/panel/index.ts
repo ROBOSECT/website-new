@@ -885,15 +885,7 @@ export function initPanel() {
 	let restore: Saved | null = null;
 	{
 		const nt = (performance.getEntriesByType?.('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
-		// (a return link of the site, scripts/ritorno.ts, flags the page: the place the visitor left it at, not the top)
-		let flagged = false;
-		try {
-			const w = JSON.parse(sessionStorage.getItem('robosect-want') ?? 'null') as { p: string; t: number } | null;
-			flagged = !!w && w.p === (location.pathname.length > 1 ? location.pathname.replace(/\/+$/, '') : '/') && Date.now() - w.t < 15000;
-		} catch {
-			/* storage blocked */
-		}
-		if (motion && (nt === 'reload' || nt === 'back_forward' || flagged)) {
+		if (motion && (nt === 'reload' || nt === 'back_forward')) {
 			try {
 				restore = JSON.parse(sessionStorage.getItem(POS_KEY) ?? 'null') as Saved | null;
 			} catch {
