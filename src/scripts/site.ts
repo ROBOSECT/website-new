@@ -94,11 +94,30 @@ function initPrint() {
 	addEventListener('beforeprint', () => document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = 'eager')));
 }
 
+/** the language switch keeps the place: the same page in the other language, at the section the visitor is reading
+ * (same anchors in both languages). Only where the other language has the same page (the legal pages exist in English
+ * only: there the switch goes to the Italian home, at its top). */
+function initLangPlace() {
+	const a = document.querySelector<HTMLAnchorElement>('a.nav__lang');
+	if (!a) return;
+	const base = a.getAttribute('href') ?? '';
+	const bare = (p: string) => p.replace(/^\/it(?=\/)/, '') || '/';
+	a.addEventListener('click', () => {
+		a.setAttribute('href', base);
+		if (a.hash || bare(a.pathname) !== bare(location.pathname)) return;
+		const line = (document.querySelector<HTMLElement>('[data-nav]')?.offsetHeight ?? 0) + 0.4 * window.innerHeight;
+		let id = '';
+		for (const s of document.querySelectorAll<HTMLElement>('main section[id]')) if (s.getBoundingClientRect().top <= line) id = s.id;
+		if (id && id !== 'main') a.setAttribute('href', `${base}#${id}`);
+	});
+}
+
 initMenu();
 initBarFocus();
 initReveal();
 initFooterBrand();
 initPrint();
+initLangPlace();
 window.__robosectReady = true;
 root.classList.add('js');
 

@@ -5,12 +5,16 @@
  * - On every click on an internal link the place is saved in sessionStorage, per page: a reference element (the link,
  *   or, when the link sits in the sticky bar, the element at the centre of the screen: its child-index path) and its
  *   distance from the top of the viewport. Not scrollY: the home's height changes with width, fonts and the panel's glide.
- * - On arrival by a normal navigation the page remembers where it came from (history.state.rf). A link to that page
- *   then IS the browser's Back: history.back(), so the entry comes back with its own restoration (the home's panel
- *   restores its program time, other pages the browser's). A link to a precise anchor (/#team) is left alone.
- * - Links marked data-ritorno (Back to home, the logo) that reach a page by a longer way (no rf: the visitor went
- *   home → products → packaging → logo) navigate normally and flag the target (robosect-want, valid 15 s): the panel
- *   restores its saved place for it (panel/index.ts), and this module finishes the job below.
+ * - Only the return links do it: the ones marked data-ritorno (the logo, Back to home). Every other link (the menu,
+ *   See how it works, the buttons) goes forward, and a page reached going forward starts at its top, or at its anchor
+ *   (19/11/2026: «How it works» in the menu used to reopen the page where the visitor had left it, because the page
+ *   was the one the visitor came from and every link to it was turned into Back).
+ * - On arrival by a normal navigation the page remembers where it came from (history.state.rf). A return link to that
+ *   page then IS the browser's Back: history.back(), so the entry comes back with its own restoration (the home's
+ *   panel restores its program time, other pages the browser's). A link to a precise anchor (/#team) is left alone.
+ * - A return link that reaches a page by a longer way (no rf: the visitor went home → products → packaging → logo)
+ *   navigates normally and flags the target (robosect-want, valid 15 s): the panel restores its saved place for it
+ *   (panel/index.ts), and this module finishes the job below.
  * - Safety net, after Back or a flagged return: when the reference element is not where it was (another viewport width,
  *   late images and fonts), the page is moved by the difference, a few times, instantly. A visitor who scrolls first
  *   is never moved.
@@ -113,12 +117,13 @@ function init() {
 		const dest = norm(a.pathname);
 		if (dest === here) return; // same page: anchors and the logo on the home belong to the page itself
 		remember(a);
-		if (a.hash) return; // a precise anchor goes to the anchor
+		// a precise anchor goes to the anchor; a link that is not a return link goes forward, to the top of the page
+		if (a.hash || !a.hasAttribute('data-ritorno')) return;
 		const from = (history.state as { rf?: string } | null)?.rf;
 		if (from === dest) {
 			e.preventDefault();
 			history.back();
-		} else if (a.hasAttribute('data-ritorno')) {
+		} else {
 			try {
 				sessionStorage.setItem(WANT, JSON.stringify({ p: dest, t: Date.now() }));
 			} catch {
