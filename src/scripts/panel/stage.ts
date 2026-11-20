@@ -817,6 +817,7 @@ export class StageView {
 		this.bpDrawn = '';
 		this.bpRoot = null;
 		this.bpGroups = [];
+		this.bpKeepEls = [];
 		// the static page has no runs (and no override of them)
 		if (this.run) this.run.style.height = '';
 		this.n_ = {};
@@ -989,6 +990,9 @@ export class StageView {
 	 * Literal hex paint on every shape.
 	 */
 	private bpShapes: { k: number; svg: string }[] = [];
+	private bpKeep: { k: number; x: number; y: number; w: number; h: number; html: string }[] = [];
+	private bpKeepEls: { k: number; el: SVGElement }[] = [];
+	private bpKeepOp: number[] = [];
 	private bpKey = '';
 	private bpDrawn = '';
 	private bpGroups: (SVGGElement | null)[] = [];
@@ -1046,6 +1050,26 @@ export class StageView {
 				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" rx="${f(rr)}" fill="${C.fill}" fill-opacity="${dark ? 0.05 : 0.12}" stroke="${C.line}" stroke-width="1" stroke-dasharray="4 4"/>`,
 			);
 		}
+		// blocks marked data-keep stay readable while the module is dormant: their text is shown as it is (a copy in the
+		// blueprint layer, same place, gone as the block itself comes in), never as bars
+		this.bpKeep = [];
+		const keepIdx = new Set<number>();
+		top.forEach((b, i) => {
+			if (!b.el.hasAttribute('data-keep')) return;
+			const r = b.el.getBoundingClientRect();
+			if (r.width < 8 || r.height < 8) return;
+			keepIdx.add(i);
+			const pcs = getComputedStyle(b.el.parentElement ?? b.el);
+			const st = ['font-family', 'font-size', 'font-weight', 'line-height', 'letter-spacing', 'color', 'text-align', 'text-wrap']
+				.map((q) => `${q}:${pcs.getPropertyValue(q)}`)
+				.join(';');
+			const c = b.el.cloneNode(true) as HTMLElement;
+			c.removeAttribute('data-b');
+			c.querySelectorAll('[id]').forEach((e) => e.removeAttribute('id'));
+			c.style.opacity = '1';
+			c.style.transform = 'none';
+			this.bpKeep.push({ k: i, x: r.left - mr.left, y: r.top - mr.top - shiftOf(b.el), w: r.width, h: r.height, html: `<div xmlns="http://www.w3.org/1999/xhtml" style="${st.replace(/"/g, "'")};list-style:none;margin:0;padding:0">${c.outerHTML}</div>` });
+		});
 		// every line of text: a bar at its x-height, as long as the line
 		const tw = document.createTreeWalker(body, NodeFilter.SHOW_TEXT);
 		const rg = document.createRange();
@@ -1057,6 +1081,7 @@ export class StageView {
 			rg.selectNodeContents(n);
 			const k = groupOf(pe),
 				dy = shiftOf(pe);
+			if (keepIdx.has(k)) continue;
 			for (const r of Array.from(rg.getClientRects())) {
 				if (r.width < 3 || r.height < 6 || r.right < mr.left || r.left > mr.right) continue;
 				const y = r.top - mr.top - dy;
@@ -1082,7 +1107,7 @@ export class StageView {
 			const y = f(L.y + L.h * 0.56);
 			push(L.k, `<line x1="${f(x0)}" y1="${y}" x2="${f(x1)}" y2="${y}" fill="none" stroke="${C.bar}" stroke-width="${sw}" stroke-linecap="round"/>`);
 		}
-		this.bpKey = `${f(W)}|${f(this.Mh)}|${this.bpShapes.length}|${this.bpShapes.reduce((a, s) => a + s.svg.length, 0)}`;
+		this.bpKey = `${f(W)}|${f(this.Mh)}|${this.bpKeep.map((q) => `${f(q.x)},${f(q.y)},${f(q.w)}`).join(';')}|${this.bpShapes.length}|${this.bpShapes.reduce((a, s) => a + s.svg.length, 0)}`;
 	}
 	/** the blueprint's nodes (a write: the controller calls it with the other persistent nodes) */
 	private writeBlueprint() {
@@ -1099,7 +1124,11 @@ export class StageView {
 			`<svg class="bp" width="${f(W)}" height="${f(H2)}" viewBox="0 0 ${f(W)} ${f(H2)}" aria-hidden="true" focusable="false"><g data-bp-root opacity="0">` +
 			`<rect data-bp-outline x="0.5" y="0.5" width="${f(W - 1)}" height="${f(H2 - 1)}" rx="${f(r)}" fill="${dark ? '#0D1B2E' : '#F4F1EC'}" fill-opacity="${dark ? 0.05 : 0.35}" stroke="${dark ? '#5A6676' : '#9AA6B5'}" stroke-width="1" stroke-dasharray="4 4"/>` +
 			g.map((x, i) => `<g data-bp-g="${i}" opacity="0">${x}</g>`).join('') +
-			`</g></svg>`;
+			`</g>` +
+			`<g data-bp-keep>${this.bpKeep.map((q) => `<foreignObject data-kk="${q.k}" x="${f(q.x)}" y="${f(q.y)}" width="${f(q.w + 2)}" height="${f(q.h + 2)}" style="overflow:visible">${q.html}</foreignObject>`).join('')}</g>` +
+			`</svg>`;
+		this.bpKeepEls = Array.from(this.bp.querySelectorAll<SVGElement>('[data-kk]')).map((el) => ({ k: +el.getAttribute('data-kk')!, el }));
+		this.bpKeepOp = [];
 		this.bpRoot = this.bp.querySelector<SVGGElement>('[data-bp-root]');
 		this.bpOutline = this.bp.querySelector<SVGElement>('[data-bp-outline]');
 		this.bpGroups = Array.from(this.bp.querySelectorAll<SVGGElement>('[data-bp-g]'));
@@ -1112,6 +1141,18 @@ export class StageView {
 	 * drawing out as the block itself comes in */
 	private blueprintAt(t: number, pX: number) {
 		if (!this.bpRoot) return;
+		// the kept text: whole until its block comes in
+		if (this.bpKeepEls.length) {
+			const tb = this.topBlocks();
+			for (const q of this.bpKeepEls) {
+				const bo = tb[q.k]?.o;
+				const v = Math.round((Number.isNaN(bo) || bo == null ? 1 : 1 - smooth(bo * 2.5)) * 100);
+				if (this.bpKeepOp[q.k] !== v) {
+					this.bpKeepOp[q.k] = v;
+					q.el.setAttribute('opacity', String(v / 100));
+				}
+			}
+		}
 		const B = this.B,
 			mt = B.morphT,
 			pw = B.powerT > 0 ? B.powerT : mt;
