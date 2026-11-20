@@ -306,25 +306,6 @@ html:not(.motion) .stage {
 		margin-top: 30px;
 		font-size: 20px;
 	}
-
-	/* R→L compartments (+C2, +C4, +C6: the lead comes down the right lane): the legend is mirrored, so the heading is on the
-	   cable side and the wire-marker sleeve with its bracket frames the heading, not the intro.
-	   The heading takes the right seven columns, set flush right against the bracket; the intro the left five; the status
-	   line moves over the intro. Phones and tablets keep one column (the sleeve beside the heading block already). */
-	.cmp[data-dir='rtl'] .legend__head {
-		grid-column: 6 / -1;
-		grid-row: 2;
-	}
-
-	.cmp[data-dir='rtl'] .legend__title {
-		margin-left: auto;
-		text-align: right;
-	}
-
-	.cmp[data-dir='rtl'] .legend__intro {
-		grid-column: 1 / span 5;
-		grid-row: 2;
-	}
 }
 
 /* ---------------- wire-marker sleeves
