@@ -149,10 +149,6 @@ const devStatic = staticDevice(cfg.dev, cfg.dir, { tested: true, open: true, cuw
 					</p>
 					<div class="legend__head" data-legend-head>
 						<h2 id={titleId} class:list={['legend__title', titleClass]}>{title}</h2>
-						{/* the sleeve where it settles (no JS, reduced motion) and the bracket that frames the heading; in motion mode the
-						     live sleeve below rides the lead down to here */}
-						<span class="sleeve sleeve--static" aria-hidden="true"><span class="sleeve__t">{marker}</span></span>
-						<i class="sleeve-br" aria-hidden="true" data-sleeve-br></i>
 					</div>
 					<p class="legend__intro">{intro}</p>
 				</header>
@@ -200,7 +196,4 @@ const devStatic = staticDevice(cfg.dev, cfg.dir, { tested: true, open: true, cuw
 		{/* the run: extra scroll for the slowdown; the page glides over it, so it never shows */}
 		<div class="pin__run" aria-hidden="true"></div>
 	</div>
-	{/* the wire marker threaded on the lead, motion mode: outside the track's clip, so it can ride the
-	     descending tip down the lane from above the stage before it settles beside the heading (scripts/panel/sleeve.ts) */}
-	<span class="sleeve sleeve--live" aria-hidden="true" data-sleeve><span class="sleeve__t">{marker}</span></span>
 </section>

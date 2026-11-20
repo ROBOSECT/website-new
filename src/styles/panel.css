@@ -308,150 +308,24 @@ html:not(.motion) .stage {
 	}
 }
 
-/* ---------------- wire-marker sleeves
-   Each compartment's name is printed on a sleeve threaded on the test lead, as on a panel wire. It rides the descending
-   tip down the lane and settles beside the heading, which a thin bracket then frames (scripts/panel/sleeve.ts, scrubbed by
-   the scroll). Two copies: the static one where it settles (no JS, reduced motion: positioned by CSS, centred on the
-   heading), the live one in motion mode (outside the track's clip, so it can ride in from above the stage). Paper sleeve,
-   ink print on the plate's blue lead; the inverse (ink sleeve, paper print) on ink grounds. */
 .legend {
-	/* the right lane's offset from the heading is the legend's width away (container units) */
 	container-type: inline-size;
 }
 
 .legend__head {
 	position: relative;
 	margin-top: 14px;
-	/* the sleeve's centre (the lane) and the bracket's gap, from the heading's start edge */
-	--sl-x: calc(var(--lane) - var(--m));
-	--br-gap: 5px;
-	--br-w: 4px;
-}
-
-/* (the heading block's own width: on phones and tablets it is the legend's, on desktop R→L compartments it is the mirrored
-   heading column, whose end edge is the legend's end edge) */
-.cmp[data-dir='rtl'] .legend__head {
-	--sl-x: calc(100% + var(--m) - var(--lane));
-}
-
-.sleeve {
-	position: absolute;
-	z-index: 2;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	box-sizing: border-box;
-	width: calc(var(--cable-w) + 6px);
-	padding: 7px 0;
-	background: #ffffff;
-	color: #0d1b2e;
-	box-shadow: inset 0 0 0 1px #c9d1dc;
-	border-radius: 1px;
-	font-family: var(--font-mono); /* the brand's wire-marker face */
-	font-size: 8.5px;
-	font-weight: 500;
-	line-height: 1;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	white-space: nowrap;
-	pointer-events: none;
-	user-select: none;
-}
-
-.sleeve__t {
-	writing-mode: vertical-rl;
-	transform: rotate(180deg);
-}
-
-/* inverse, on ink grounds */
-.sleeve--ink {
-	background: #0d1b2e;
-	color: #f4f1ec;
-	box-shadow: inset 0 0 0 1px #46546a;
-}
-
-.sleeve--static {
-	z-index: 5;
-	top: 50%;
-	left: var(--sl-x);
-	transform: translate(-50%, -50%);
-}
-
-.sleeve--live {
-	display: none;
-	top: 0;
-	left: var(--lane);
-	transform: translate(-50%, -50%);
-	opacity: 0;
-}
-
-.cmp[data-dir='rtl'] > .sleeve--live {
-	left: calc(100% - var(--lane));
-}
-
-html.motion .sleeve--live {
-	display: flex;
-}
-
-html.motion .sleeve--static {
-	display: none;
-}
-
-/* +C1's twin on the ink nameplate (the hero paints above the cabinet): over the hero's lead */
-.sleeve--twin {
-	z-index: 4;
-}
-
-/* the bracket that frames the heading: a hairline "[" between the lane and the text ("]" on the right lane) */
-.sleeve-br {
-	position: absolute;
-	top: 0.18em;
-	bottom: 0.12em;
-	left: calc(-1 * var(--br-gap) - var(--br-w));
-	width: var(--br-w);
-	border: 1px solid rgb(90 102 118 / 0.6);
-	border-right: 0;
-	transform-origin: 50% 50%;
-	pointer-events: none;
-}
-
-.cmp[data-dir='rtl'] .sleeve-br {
-	left: calc(100% + var(--br-gap));
-	border-right: 1px solid rgb(90 102 118 / 0.6);
-	border-left: 0;
-}
-
-.on-dark .sleeve-br {
-	border-color: rgb(154 166 181 / 0.7);
 }
 
 @media (min-width: 700px) {
 	.legend__head {
 		margin-top: 18px;
-		--br-gap: 9px;
-		--br-w: 6px;
-	}
-
-	.sleeve {
-		width: calc(var(--cable-w) + 8px);
-		padding: 10px 0;
-		font-size: 10.5px;
-		letter-spacing: 0.07em;
 	}
 }
 
 @media (min-width: 1100px) {
 	.legend__head {
 		margin-top: 22px;
-		--br-gap: 12px;
-		--br-w: 7px;
-	}
-
-	.sleeve {
-		width: calc(var(--cable-w) + 10px);
-		padding: 12px 0;
-		font-size: 12px;
-		letter-spacing: 0.08em;
 	}
 }
 
@@ -1071,19 +945,6 @@ html.panel-capture *::after {
 
 	[data-nav] {
 		position: static !important;
-	}
-
-	html.motion .sleeve--static {
-		display: flex !important;
-	}
-
-	.sleeve--live {
-		display: none !important;
-	}
-
-	.sleeve-br {
-		transform: none !important;
-		opacity: 1 !important;
 	}
 
 	.cmp,

@@ -1047,7 +1047,7 @@ export class StageView {
 			// a picture's place: a dashed slot with a faint tone (no diagonals, the wireframe's placeholder sign)
 			push(
 				groupOf(e),
-				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" rx="${f(rr)}" fill="${C.fill}" fill-opacity="${dark ? 0.05 : 0.12}" stroke="${C.line}" stroke-width="1" stroke-dasharray="4 4"/>`,
+				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" rx="${f(rr)}" fill="${C.fill}" fill-opacity="${dark ? 0.08 : 0.35}" stroke="none"/>`,
 			);
 		}
 		// blocks marked data-keep stay readable while the module is dormant: their text is shown as it is (a copy in the
@@ -1122,7 +1122,7 @@ export class StageView {
 		for (const s of this.bpShapes) g[s.k < 0 ? n : s.k] += s.svg;
 		this.bp.innerHTML =
 			`<svg class="bp" width="${f(W)}" height="${f(H2)}" viewBox="0 0 ${f(W)} ${f(H2)}" aria-hidden="true" focusable="false"><g data-bp-root opacity="0">` +
-			`<rect data-bp-outline x="0.5" y="0.5" width="${f(W - 1)}" height="${f(H2 - 1)}" rx="${f(r)}" fill="${dark ? '#0D1B2E' : '#F4F1EC'}" fill-opacity="${dark ? 0.05 : 0.35}" stroke="${dark ? '#5A6676' : '#9AA6B5'}" stroke-width="1" stroke-dasharray="4 4"/>` +
+			`<rect data-bp-outline x="0.5" y="0.5" width="${f(W - 1)}" height="${f(H2 - 1)}" rx="${f(r)}" fill="${dark ? '#0D1B2E' : '#F4F1EC'}" fill-opacity="${dark ? 0.05 : 0.35}" stroke="none"/>` +
 			g.map((x, i) => `<g data-bp-g="${i}" opacity="0">${x}</g>`).join('') +
 			`</g>` +
 			`<g data-bp-keep>${this.bpKeep.map((q) => `<foreignObject data-kk="${q.k}" x="${f(q.x)}" y="${f(q.y)}" width="${f(q.w + 2)}" height="${f(q.h + 2)}" style="overflow:visible">${q.html}</foreignObject>`).join('')}</g>` +

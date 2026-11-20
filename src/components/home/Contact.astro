@@ -75,8 +75,6 @@ const cfg = {
 			<div class="card on-dark" data-card>
 				<div class="legend__head card__head" data-legend-head>
 					<h2 id="contact-title" class="card__title">{titleQ}</h2>
-					<span class="sleeve sleeve--static" aria-hidden="true"><span class="sleeve__t">{c.eyebrow}</span></span>
-					<i class="sleeve-br" aria-hidden="true" data-sleeve-br></i>
 					{titleA && <p class="card__answer">{titleA}</p>}
 				</div>
 				<div class="card__intro">
@@ -240,7 +238,6 @@ const cfg = {
 	</div>
 	{/* the page's cable arriving: down the lane, through the card's edge into the stage's gland (drawn by the panel) */}
 	<svg class="contact-lead" data-contact-lead aria-hidden="true" focusable="false"><path data-cl-ins d="M0 0" fill="none" stroke="#173C78" stroke-linejoin="round" stroke-linecap="butt"></path><path data-cl-card d="M0 0" fill="none" stroke="#F4F1EC" stroke-linejoin="round" stroke-linecap="butt"></path><path data-cl-cu d="M0 0" fill="none" stroke="#C9632C" stroke-linecap="butt"></path></svg>
-	<span class="sleeve sleeve--live" aria-hidden="true" data-sleeve><span class="sleeve__t">{c.eyebrow}</span></span>
 </section>
 
 <style>
@@ -1364,11 +1361,6 @@ const cfg = {
 
 	html:not(.motion) .contact-lead {
 		display: none;
-	}
-
-	/* the Contact sleeve rides over the arriving cable like every other sleeve (else the lead paints over its print) */
-	.cmp--contact > .sleeve--live {
-		z-index: 4;
 	}
 
 	/* ---------------- tablets */
