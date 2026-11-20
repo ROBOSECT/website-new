@@ -41,8 +41,8 @@ const boxes: [number, number, number, number][] = [
 const total = boxes.length;
 
 const alt = {
-	en: `The switchboard as the robot’s vision sees it: each of its ${total} components outlined in green where it was found`,
-	it: `Il quadro come lo vede la visione del robot: ciascuno dei ${total} componenti contornato in verde dove è stato trovato`,
+	en: `The switchboard as the robot’s vision sees it: each of its ${total} components outlined where it was found`,
+	it: `Il quadro come lo vede la visione del robot: ciascuno dei ${total} componenti contornato dove è stato trovato`,
 }[lang];
 ---
 
@@ -130,6 +130,8 @@ const alt = {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		/* the photo carries green outlines from the vision software: in grey they are neutral, the carta boxes above are the marks */
+		filter: grayscale(1) contrast(1.05);
 		transition: filter 0.5s ease;
 	}
 
@@ -141,17 +143,17 @@ const alt = {
 	}
 
 	.vis__box {
-		fill: rgba(80, 255, 160, 0.16);
-		stroke: #5dffa8;
+		fill: rgba(244, 241, 236, 0.1);
+		stroke: #f4f1ec;
 		stroke-width: 3;
-		filter: drop-shadow(0 0 3px rgba(93, 255, 168, 0.9));
+		filter: drop-shadow(0 0 2px rgba(13, 27, 46, 0.8));
 		vector-effect: non-scaling-stroke;
 		pointer-events: all;
 		transition: fill 0.15s ease;
 	}
 
 	.vis__box:hover {
-		fill: rgba(80, 255, 160, 0.38);
+		fill: rgba(244, 241, 236, 0.3);
 	}
 
 	.vis__tag,
@@ -175,7 +177,7 @@ const alt = {
 	.vis__count {
 		bottom: 10px;
 		font-size: 14px;
-		color: #d8ffe9;
+		color: #f4f1ec;
 	}
 
 	.vis__count b {
@@ -183,7 +185,7 @@ const alt = {
 		min-width: 1.4em;
 		font-size: 18px;
 		font-variant-numeric: tabular-nums;
-		color: #5dffa8;
+		color: #f4f1ec;
 	}
 
 	.pts__img figcaption {
@@ -204,7 +206,7 @@ const alt = {
 
 	.vis[data-state='run'] :global(img),
 	.vis[data-state='done'] :global(img) {
-		filter: none;
+		filter: grayscale(1) contrast(1.05);
 		transition-delay: 1.2s;
 	}
 
@@ -216,7 +218,7 @@ const alt = {
 	@keyframes lit {
 		from {
 			opacity: 0;
-			fill: rgba(80, 255, 160, 0.7);
+			fill: rgba(244, 241, 236, 0.7);
 		}
 		to {
 			opacity: 1;

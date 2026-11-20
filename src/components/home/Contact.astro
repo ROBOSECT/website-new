@@ -6,7 +6,7 @@
  * lay it step by step into the R of the logo, then crimp the copper ferrule on its end: a live animation on its own clock
  * (scripts/panel/showpiece), not scroll-driven and not a video, no player chrome, no words on the stage. The finished R is
  * the logo kit's own geometry. The scene stands on the card's own blue; its operator station carries the only controls, as
- * real pushbuttons: RESET (blue, lit when the R is finished) plays it again; STOP (red, latching) halts the robots.
+ * real pushbuttons: RESET (blue, lit when the R is finished) plays it again; STOP (steel, latching) halts the robots.
  *
  * Usability first: the form is a plain, complete form from the start (with or without JS, with reduced motion); the
  * animation never blocks typing or sending, and holds still while the visitor writes. Send just sends: the mail handoff
@@ -462,7 +462,7 @@ const cfg = {
 		pointer-events: none;
 	}
 
-	/* ---------------- the operator station: two real pushbuttons (IEC 60073: blue = reset, red = stop); no tag, no code */
+	/* ---------------- the operator station: two real pushbuttons (IEC 60073: blue = reset, steel = stop); no tag, no code */
 	.station {
 		position: relative;
 		display: flex;
@@ -544,20 +544,20 @@ const cfg = {
 			0 0 16px rgb(126 166 230 / 0.6);
 	}
 
-	/* STOP: a red mushroom; latched it stays pushed in */
+	/* STOP: a steel mushroom (brand colours only); latched it stays pushed in */
 	.pb--stop .pb__cap {
 		width: 34px;
 		height: 34px;
-		background: radial-gradient(circle at 40% 34%, #e8776c, #c23b31 56%, #8f241d);
+		background: radial-gradient(circle at 40% 34%, #e2e6eb, #9aa6b5 56%, #5a6676);
 		box-shadow:
-			0 2px 0 #5e1813,
-			inset 0 0 0 1px #d9564b;
+			0 2px 0 #0d1b2e,
+			inset 0 0 0 1px #e2e6eb;
 	}
 
 	.pb--stop[aria-pressed='true'] .pb__cap {
 		transform: scale(0.9) translateY(1px);
-		background: radial-gradient(circle at 40% 34%, #c95a50, #a3302a 56%, #7a1f19);
-		box-shadow: inset 0 1px 2px #5e1813;
+		background: radial-gradient(circle at 40% 34%, #9aa6b5, #6c7787 56%, #46546a);
+		box-shadow: inset 0 1px 2px #0d1b2e;
 	}
 
 	.pb:active .pb__cap,
