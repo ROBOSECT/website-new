@@ -72,14 +72,14 @@ const SLOW = { pen: 0.7, rampD: 0.16, rampU: 0.25, rMin: 0.45, rMax: 0.9, endGap
 /** tokens for a viewport width (stage width W = cabinet width) */
 export function tokens(W: number, bp: Bp = bpOf(W)): Tok {
 	if (bp === 'phone')
-		return { W, H: 0, lane: 9, duct: 10, jr: 5, cable: 5, band: 112 * 0.88, sc: 0.88, vmax: 1500, acc: 9000, cu: 6.75, cuw: 2.15, gap: 2, rMod: 12, y0: 0, k: 330, startOff: 110, ...SLOW, nav: 52, bp };
+		return { W, H: 0, lane: 9, duct: 10, jr: 5, cable: 5, band: 112 * 0.88, sc: 0.88, vmax: 1500, acc: 9000, cu: 6.75, cuw: 2.15, gap: 2, rMod: 0, y0: 0, k: 330, startOff: 110, ...SLOW, nav: 52, bp };
 	if (bp === 'tablet') {
 		const cable = 7;
-		return { W, H: 0, lane: 56 - 5.054 * cable, duct: 16, jr: 8, cable, band: 112 * 1.8, sc: 1.8, vmax: 2000, acc: 11000, cu: 9.5, cuw: 3.0, gap: 4, rMod: 16, y0: 0, k: 380, startOff: 140, ...SLOW, nav: 64, bp };
+		return { W, H: 0, lane: 56 - 5.054 * cable, duct: 16, jr: 8, cable, band: 112 * 1.8, sc: 1.8, vmax: 2000, acc: 11000, cu: 9.5, cuw: 3.0, gap: 4, rMod: 0, y0: 0, k: 380, startOff: 140, ...SLOW, nav: 64, bp };
 	}
 	const cable = 10;
 	const m = Math.max(96, (W - 1264) / 2);
-	return { W, H: 0, lane: m - 5.054 * cable, duct: 24, jr: 12, cable, band: 112 * 2.4, sc: 2.4, vmax: 2400, acc: 12000, cu: 13.5, cuw: 4.3, gap: 8, rMod: 20, y0: 0, k: 420, startOff: 140, ...SLOW, nav: 64, bp };
+	return { W, H: 0, lane: m - 5.054 * cable, duct: 24, jr: 12, cable, band: 112 * 2.4, sc: 2.4, vmax: 2400, acc: 12000, cu: 13.5, cuw: 4.3, gap: 8, rMod: 0, y0: 0, k: 420, startOff: 140, ...SLOW, nav: 64, bp };
 }
 
 /* ------------------------------------------------------------------ layout */

@@ -1042,12 +1042,10 @@ export class StageView {
 			if (r.width < 8 || r.height < 8) continue;
 			const x = r.left - mr.left,
 				y = r.top - mr.top - shiftOf(e);
-			const cs = getComputedStyle(e);
-			const rr = Math.min(18, parseFloat(cs.borderTopLeftRadius) || parseFloat(cs.borderBottomLeftRadius) || 2);
-			// a picture's place: a dashed slot with a faint tone (no diagonals, the wireframe's placeholder sign)
+			// a picture's place: a toned slot with a faint tone (no diagonals, the wireframe's placeholder sign)
 			push(
 				groupOf(e),
-				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" rx="${f(rr)}" fill="${C.fill}" fill-opacity="${dark ? 0.08 : 0.35}" stroke="none"/>`,
+				`<rect x="${f(x + 0.5)}" y="${f(y + 0.5)}" width="${f(r.width - 1)}" height="${f(r.height - 1)}" fill="${C.fill}" fill-opacity="${dark ? 0.08 : 0.35}" stroke="none"/>`,
 			);
 		}
 		// blocks marked data-keep stay readable while the module is dormant: their text is shown as it is (a copy in the

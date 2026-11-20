@@ -426,7 +426,7 @@ html:not(.motion) .stage {
 
 .mod__rim {
 	inset: -1.5px;
-	border-radius: calc(var(--r-mod) + 1.5px);
+	border-radius: var(--r-mod);
 	background: var(--rim);
 }
 

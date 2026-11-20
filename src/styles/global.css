@@ -62,7 +62,7 @@
 	/* the page's stage scale under another name: a one-arm compartment multiplies it (panel.css .cmp[data-solo]) */
 	--s-g: var(--s);
 	--mgap: 2px; /* module ↔ side duct */
-	--r-mod: 12px; /* module radius */
+	--r-mod: 0px; /* cards and modules: radius 0 (brand: cuts are flat) */
 	--bench: 70svh; /* the pen line: the travelling copper tip rides it between compartments */
 	--pad-top: 36px; /* stage top → legend */
 	--gap-min: 28px; /* legend ↔ H duct, at least */
@@ -103,7 +103,7 @@
 		   at 1.15) */
 		--s: 1.8;
 		--mgap: 4px;
-		--r-mod: 16px;
+		--r-mod: 0px; /* cards and modules: radius 0 (brand: cuts are flat) */
 		--pad-top: 48px;
 		--gap-min: 36px;
 		--bot-pad: 56px;
@@ -139,7 +139,7 @@
 		--jr: 12px;
 		--s: 2.4; /* ≥ 1060 px tall (the focal group ≈ 52 % of the width at 1440; shorter viewports step down, below) */
 		--mgap: 8px;
-		--r-mod: 20px;
+		--r-mod: 0px; /* cards and modules: radius 0 (brand: cuts are flat) */
 		--pad-top: 56px;
 		--gap-min: 40px;
 		--bot-pad: 64px;
